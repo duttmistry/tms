@@ -1,0 +1,10 @@
+path = require('path');
+
+module.exports = {
+  env: 'staging',
+
+  config: path.resolve('src/lib/database/config', 'config.json'),
+  'models-path': path.resolve('src/lib/database', 'models'),
+  'seeders-path': path.resolve('src/lib/database', 'seeders'),
+  'migrations-path': path.resolve('src/lib/database', 'migrations'),
+};

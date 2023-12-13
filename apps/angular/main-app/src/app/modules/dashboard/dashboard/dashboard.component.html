@@ -1,0 +1,59 @@
+<!-- Case 1
+
+<div *ngIf="!hasMyTeamTaskPermission && hasOnlyMyTaskPermission" class="container-wrapper dashboard-wrapper">
+  <div class="container-inner">
+    <mat-card class="container-child">
+      <div class="workspace-blk workspace-border">
+        <strong> {{ greetings + ', ' + loginUserName }}!</strong>
+      </div>
+      <div class="tasks-container-a">
+        <div class="dash-full-card">
+          <main-app-my-tasks [taskPermissionObject]="taskPermissionObject"></main-app-my-tasks>
+        </div>
+      </div>
+      <div class="tasks-container-b project-leave-wrapper">
+        <div class="dash-half-card card-spacing leave-block">
+          <main-app-general-info *ngIf="hasGeneralInfoPermission" [generalInfoPermissionObject]="generalInfoPermissionObject"></main-app-general-info>
+        </div>
+        <div class="dash-half-card card-spacing project-block">
+          <main-app-projects-info *ngIf="hasProjectProgressPermission"></main-app-projects-info>
+        </div>
+      </div>
+    </mat-card>
+  </div>
+</div> -->
+
+<!-- Case 2 -->
+<div class="container-wrapper dashboard-wrapper">
+  <div class="container-inner">
+    <mat-card class="container-child">
+      <div class="workspace-blk workspace-border">
+        <strong>{{ greetings + ', ' + loginUserName }}! </strong>
+      </div>
+      <div class="button-main-class">
+        <!-- <button color="primary" class="floating-button" (click)="navigateToAddTask()"><mat-icon>add</mat-icon> Task</button> -->
+        <button color="primary" class="floating-button" (click)="navigateToAddTask()">Create Task</button>
+    </div>
+      <div class="tasks-container-a" [ngClass]="isMyTeamtasksHidden ? 'task-container-full-wide' : 'task-container-full'">
+        <div class="tasks-container-c task-block task-block-left">
+          <div class="dash-full-card card-spacing my-task-wrapper">
+            <main-app-my-tasks [taskPermissionObject]="taskPermissionObject"></main-app-my-tasks>
+          </div>
+          <div [ngClass]="isMyTeamtasksHidden ? 'tasks-container-b project-leave-wrapper' : 'dash-full-card card-spacing leave-remind-block'">
+            <main-app-general-info
+              *ngIf="hasGeneralInfoPermission"
+              [generalInfoPermissionObject]="generalInfoPermissionObject"
+              [ngClass]="isMyTeamtasksHidden ? 'dash-half-card card-spacing leave-block' : ''"
+            ></main-app-general-info>
+            <div *ngIf="isMyTeamtasksHidden" class="dash-half-card card-spacing project-block">
+              <main-app-projects-info *ngIf="hasProjectProgressPermission"></main-app-projects-info>
+            </div>
+          </div>
+        </div>
+        <div class="dash-half-card card-spacing task-block task-block-right">
+          <main-app-my-team-tasks *ngIf="!isMyTeamtasksHidden"></main-app-my-team-tasks>
+        </div>
+      </div>
+    </mat-card>
+  </div>
+</div>

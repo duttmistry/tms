@@ -1,0 +1,376 @@
+@import 'apps/angular/main-app/src/variables';
+@import 'apps/angular/main-app/src/mixins';
+@import 'apps/angular/main-app/src/assets/fonts/fonts.scss';
+@import url('https://fonts.googleapis.com/icon?family=Material+Icons|Material+Icons+Outlined');
+.profile-page {
+  min-height: 100vh;
+  .border-content {
+    padding: 0 15px 0 0;
+  }
+  .content-item-blk {
+    width: 85%;
+  }
+  mat-divider {
+    margin: 20px 0;
+  }
+  .profile-title {
+    font-size: $theme-main-large-font;
+    font-weight: 600;
+    line-height: 19px;
+    margin-bottom: 25px;
+    @include flex;
+    @include flex-justify-space-between;
+    span {
+      a {
+        color: $theam-color-blue;
+        text-decoration: none;
+        font-size: $theme-main-large-font;
+        font-weight: 400;
+        line-height: 19px;
+      }
+    }
+    img {
+      cursor: pointer;
+    }
+  }
+  .profile-blk {
+    @include flex;
+    @include flex-justify-space-between;
+    margin: 25px 0;
+    gap: 20px;
+    .profile-blk-left {
+      width: 80%;
+    }
+    .profile-blk-left {
+      .profile-blk-left-top {
+        @include flex;
+        gap: 20px;
+      }
+      .profile-wrap {
+        @include flex;
+        gap: 25px;
+        width: 60%;
+      }
+      .profile-wrap-item {
+        background-color: #f7f7f7;
+        border-radius: $card-radius;
+        padding: 15px;
+        text-align: center;
+        min-height: 415px;
+        width: 50%;
+        @include flex;
+        @include flex-align-center;
+        flex-direction: column;
+        @include flex-justify-center;
+        img {
+          width: 140px;
+          height: 140px;
+          border-radius: 50%;
+          object-fit: cover;
+          border: 3px solid #000;
+        }
+        strong {
+          display: block;
+          font-size: 22px;
+          font-weight: 600;
+          line-height: 27px;
+          margin-top: 5px;
+        }
+        p {
+          font-size: $theme-main-large-font;
+          font-weight: 500;
+          line-height: 19px;
+          color: $theme-main-color-light;
+          margin: 8px 0;
+        }
+        span {
+          font-size: $theme-main-medium-font;
+          font-weight: 400;
+          line-height: 17px;
+        }
+      }
+      .profile-contact {
+        width: 50%;
+        .img {
+          width: 32px;
+          height: 32px;
+          background-color: #f7f7f7;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          border-radius: 50%;
+        }
+        p {
+          margin: 0 0 5px 0;
+          font-size: $theme-main-small-font;
+          font-weight: 400;
+          line-height: 15px;
+          color: $theme-main-color-light;
+        }
+        a {
+          font-size: $theme-main-medium-font;
+          font-weight: 400;
+          line-height: 17px;
+          text-decoration: none;
+          display: block;
+          margin-bottom: 5px;
+          word-break: break-all;
+        }
+        .profile-content-item {
+          @include flex;
+          @include flex-align-center;
+          gap: 10px;
+          margin-bottom: 15px;
+        }
+      }
+      .profile-skill {
+        width: 40%;
+        .mat-mdc-form-field {
+          width: 100%;
+        }
+         ::ng-deep .mat-mdc-text-field-wrapper {
+          border-radius: $card-radius;
+        }
+         ::ng-deep .mdc-text-field--no-label:not(.mdc-text-field--textarea) .mat-mdc-form-field-input-control.mdc-text-field__input,
+        .mat-mdc-text-field-wrapper .mat-mdc-form-field-input-control {
+          margin-top: 6px;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+          overflow: hidden;
+          min-height: 20px !important;
+          height: 20px;
+        }
+        .mat-mdc-chip {
+          margin: 0 !important;
+          padding: 10px;
+          height: 37px;
+          border-radius: 50px;
+          gap: 10px;
+          background-color: #f7f7f7 !important;
+        }
+         ::ng-deep .mat-mdc-standard-chip:not(.mdc-evolution-chip--disabled) .mdc-evolution-chip__text-label {
+          color: #5c5c5c !important;
+        }
+         ::ng-deep .mat-mdc-chip-set .mdc-evolution-chip-set__chips {
+          gap: 15px;
+        }
+      }
+      .profile-blk-left-bottom {
+        @include flex;
+        gap: 20px;
+        .profile-bottom-item {
+          width: 50%;
+        }
+        .profile-item-bottom {
+          @include flex;
+          @include flex-justify-space-between;
+          border-bottom: 1px solid $theme-border-color-gray;
+          font-size: $theme-main-medium-font;
+          font-weight: 400;
+          line-height: 17px;
+          margin-bottom: 23px;
+          padding-bottom: 23px;
+          &:last-child {
+            border-bottom: unset;
+          }
+          strong {
+            font-weight: 400;
+          }
+          span {
+            margin: 0;
+            font-size: $theme-main-medium-font;
+            font-weight: 400;
+            line-height: 17px;
+            @include flex;
+            @include flex-align-center;
+            p {
+              width: 70px;
+              margin: 0;
+              text-align: right;
+            }
+          }
+        }
+        .certificatad {
+          @include flex;
+          gap: 15px;
+          flex-wrap: wrap;
+          img {
+            width: 121px;
+            height: 84px;
+            object-fit: cover;
+          }
+        }
+      }
+    }
+    .profile-blk-right {
+      width: 20%;
+      .profile-top-img {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 1px solid #000;
+      }
+      ul {
+        margin: 0;
+        padding: 0;
+        li {
+          list-style: none;
+          background-color: #f7f7f7;
+          border-radius: $card-radius;
+          padding: 15px;
+          @include flex;
+          @include flex-align-center;
+          margin-bottom: 15px;
+          gap: 20px;
+          position: relative;
+          &:last-child::before {
+            display: none;
+          }
+          &::before {
+            position: absolute;
+            background-color: $theme-border-color-gray;
+            content: ' ';
+            width: 1px;
+            height: 15px;
+            bottom: -15px;
+            left: 50%;
+          }
+          span {
+            font-size: $theme-main-large-font;
+            font-weight: 600;
+            line-height: 19px;
+          }
+          p {
+            font-size: $theme-main-medium-font;
+            font-weight: 400;
+            line-height: 17px;
+            color: $theme-main-color-light;
+            margin: 10px 0 0 0;
+          }
+        }
+      }
+      .profile-links {
+        .profile-content-item {
+          background-color: #f7f7f7;
+          text-align: center;
+          padding: 10px 0;
+          margin-bottom: 15px;
+          border-radius: $card-radius;
+          cursor: pointer;
+          a {
+            font-size: 14px;
+            font-weight: 400;
+            line-height: 16px;
+            color: $theam-color-blue;
+            text-decoration: none;
+            cursor: pointer;
+          }
+        }
+      }
+    }
+  }
+   ::ng-deep .mat-mdc-form-field-icon-suffix>.mat-icon {
+    padding: 0 !important;
+    margin-top: -2px;
+    margin-left: 14px;
+    cursor: pointer;
+  }
+}
+
+@media screen and (max-width: $extra-extra-large) {
+  .profile-page {
+    .profile-blk {
+      .profile-blk-left {
+        width: 70%;
+        .profile-blk-left-top {
+          flex-direction: column;
+          .border-content {
+            border-right: unset;
+          }
+        }
+        .profile-wrap {
+          width: 100%;
+        }
+        .profile-skill {
+          width: 100%;
+        }
+      }
+      .profile-blk-right {
+        width: 30%;
+      }
+    }
+    .border-content {
+      border-right: 1px solid #eaeaea;
+    }
+  }
+}
+
+@media screen and (max-width: $lerge-device) {
+  .profile-page {
+    .profile-blk {
+      .profile-blk-left {
+        width: 60%;
+        .profile-wrap {
+          flex-direction: column;
+        }
+        .profile-wrap-item {
+          width: 100%;
+        }
+        .profile-contact {
+          width: 100%;
+        }
+        .profile-blk-left-bottom {
+          flex-direction: column;
+          .border-content {
+            border-right: unset;
+          }
+          .profile-bottom-item {
+            width: 100%;
+          }
+        }
+      }
+      .profile-blk-right {
+        width: 40%;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: $medium-device) {}
+
+@media screen and (max-width: $small-device) {}
+
+.active-project-list {
+  margin-right: 15px !important;
+}
+
+.active-project-container {
+  height: 190px;
+  overflow-y: auto;
+}
+
+.large-dialog-container {
+  padding-top: 5px;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-bottom: 20px;
+}
+
+.large-dialog-container-project-list {
+  padding-top: 5px;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-bottom: 20px;
+  width: 550px;
+}
+
+.reason-confirm-button {
+  margin-left: 0px !important;
+  margin-top: 15px;
+}
+
+.technologies-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+}

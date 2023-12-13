@@ -1,0 +1,213 @@
+@import './../../../../variables.scss';
+@import './../../../../mixins.scss';
+@import './../../../../assets/fonts/fonts.scss';
+.document-round {
+  background-color: $theme-body-color;
+  margin: 0 3px;
+  font-size: $theme-main-small-font;
+  font-weight: 400;
+  border-radius: 50% !important;
+  width: 30px;
+  height: 30px;
+  @include flex;
+  @include flex-align-center;
+  @include flex-justify-center;
+}
+
+.document-form {
+   ::ng-deep .mat-mdc-form-field {
+    width: 100% !important;
+  }
+   ::ng-deep .mdc-text-field--no-label:not(.mdc-text-field--textarea) .mat-mdc-form-field-input-control.mdc-text-field__input,
+  .mat-mdc-text-field-wrapper .mat-mdc-form-field-input-control {
+    height: 100% !important;
+    padding-left: 0;
+  }
+   ::ng-deep .document-editor__editable-container {
+    border: 1px solid $theme-border-color-gray;
+    margin-bottom: 10px;
+    height: 700px;
+    overflow-y: auto;
+    border-radius: $button-radius;
+    p {
+      font-size: $theme-main-medium-font;
+      font-weight: 400;
+      margin-top: 5px;
+    }
+  }
+   ::ng-deep .ck.ck-editor__editable:not(.ck-editor__nested-editable).ck-rounded-corners {
+    height: 700px !important;
+    background-color: $theme-color-white;
+  }
+  .text-danger {
+    color: $theme-color-error;
+    font-size: $theme-main-small-font;
+    font-weight: 500;
+    margin-top: -8px;
+    display: block;
+  }
+}
+
+.share-span {
+  font-size: $theme-main-medium-font;
+  @include flex;
+  @include flex-align-center;
+  font-weight: 400;
+  line-height: 17px;
+}
+
+.mat-dialog-lib {
+  @include flex;
+  @include flex-align-center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  margin-top: 0;
+  padding: 20px 20px 0 20px;
+  h2 {
+    font-size: 18px;
+  }
+}
+
+.next {
+  margin-left: 0 !important;
+  min-width: 76px;
+}
+
+.mat-typography {
+  overflow: hidden;
+  padding: 20px !important;
+  max-height: initial !important;
+}
+
+.ck-editor__editable::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.062);
+  background-color: $theme-color-white;
+}
+
+.ck-editor__editable::-webkit-scrollbar {
+  width: 6px;
+  background-color: $theme-color-white;
+}
+
+.ck-editor__editable::-webkit-scrollbar-thumb {
+  background-color: #cccccce7;
+}
+
+.mat-mdc-input-element {
+  padding-left: 0;
+}
+
+.lib-add-document {
+   ::ng-deep .cdk-overlay-pane {
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+  }
+}
+
+.task-list-modal-wrapper {
+  padding: 0;
+  height: 100%;
+  h2 {
+    margin: 0;
+  }
+  .mat-mdc-dialog-content {
+    padding: 0 !important;
+    height: calc(100% - 64px);
+  }
+  .input-wrapper {
+    position: relative;
+    margin: 0 20px 10px 20px;
+    width: calc(100% - 40px);
+    height: 32px;
+    input {
+      width: 100%;
+      border-radius: $button-radius;
+      outline: none;
+      font-size: $theme-main-small-font;
+      font-weight: 400;
+      font-family: $theme-main-font-family;
+      padding: 8px 10px 8px 32px;
+      min-height: 32px !important;
+      line-height: 16px !important;
+    }
+    img {
+      display: block;
+      position: absolute;
+      top: 7px;
+      left: 10px;
+      z-index: 999;
+      width: 16px;
+      height: 16px;
+    }
+  }
+}
+
+.task-list-popup-wrapper {
+  margin-bottom: 20px !important;
+  overflow-y: auto;
+  height: calc(100% - 62px) !important;
+  .task-list-name {
+    color: $theme-font-color-black;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+    .task-popup-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .task-color {
+      width: 8px;
+      height: 8px;
+      display: block;
+      min-width: 8px;
+      max-width: 8px;
+      border-radius: 2px;
+    }
+    .task-name {
+      font-size: 12px;
+      display: block;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      width: 363px;
+    }
+  }
+  .task-list-name+.task-list-name {
+    margin-top: 8px;
+  }
+}
+
+.load-more {
+  background-color: transparent;
+  margin: 10px 20px 0 20px;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 15px;
+  color: #0052cc;
+  box-shadow: unset;
+  padding: 0;
+  height: auto;
+  &:hover,
+  &:focus {
+    background-color: transparent;
+  }
+}
+
+.task-popup-right {
+  font-size: 12px;
+}
+
+.no-records {
+  padding: 0 21px;
+  margin-top: 0;
+  font-size: 12px;
+}
+
+.task-list-modal-wrapper {
+  .filter-close {
+    top: 8px;
+    right: 8px;
+  }
+}

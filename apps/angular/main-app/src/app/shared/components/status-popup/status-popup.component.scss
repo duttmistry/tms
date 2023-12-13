@@ -1,0 +1,94 @@
+// @import '@angular/cdk/overlay-prebuilt.css';
+@import 'apps/angular/main-app/src/variables';
+@import 'apps/angular/main-app/src/mixins';
+@import 'apps/angular/main-app/src/assets/fonts/fonts.scss';
+.dialog-mat-icon {
+  border: 1px solid #c3c3c3;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: all 0.5s ease;
+  color: #b7b7b7;
+  font-size: $theme-main-extra-extra-large-font;
+  @include flex;
+  @include flex-align-center;
+  @include flex-justify-center;
+  height: 22px;
+  width: 22px;
+  &:hover {
+    background-color: #eeeeee;
+  }
+}
+
+.mdc-button {
+  padding: 5px;
+  min-width: 35px;
+  line-height: 0;
+  height: 35px !important;
+  color: $theme-color-white !important;
+  border-radius: 7px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: $box-shadow-next;
+}
+
+::ng-deep .mat-mdc-raised-button > .mat-icon {
+  margin: auto;
+}
+
+.team-flex {
+  @include flex;
+}
+
+::ng-deep .cdk-overlay-pane {
+  max-width: 100% !important;
+  text-align: left;
+  ::ng-deep .mat-mdc-icon-button.mat-mdc-button-base {
+    width: 25px !important;
+    height: 25px !important;
+    //color: $theme-main-color-light;
+    position: absolute;
+    right: 4px;
+    cursor: pointer;
+    top: 0px;
+    z-index: 99999999999999;
+    padding: 0 !important;
+    @include flex;
+    @include flex-justify-center;
+    @include flex-align-center;
+    .material-icons {
+      font-size: $theme-main-medium-font;
+      font-weight: 400;
+    }
+    .mat-icon {
+      height: 15px !important;
+      width: 15px !important;
+      @include flex;
+      @include flex-justify-center;
+      @include flex-align-center;
+    }
+  }
+}
+
+.mat-select-search-input {
+  margin-top: 0;
+  ::ng-deep .mat-mdc-icon-button.mat-mdc-button-base {
+    width: 30px !important;
+    height: 30px !important;
+    padding: 0 !important;
+  }
+}
+
+.customized-status {
+  font-size: $theme-main-medium-font;
+}
+.status-color-box {
+  width: 8px;
+  height: 8px;
+  display: inline-block;
+  min-width: 8px;
+  max-width: 8px;
+  margin-top: 7px;
+  margin-right: 8px;
+  border-radius: 2px;
+}

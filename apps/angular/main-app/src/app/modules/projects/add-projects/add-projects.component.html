@@ -1,0 +1,499 @@
+<div class="add-workspace">
+  <mat-card>
+    <div class="workspace-blk workspace-border">
+      <div class="double-con-blk">
+        <strong>{{ projectId ? 'Edit' : 'Create' }} Project </strong>
+        <ng-container *ngIf="projectId && editResProjectData">
+          <strong>{{ editResProjectData.name }}</strong>
+        </ng-container>
+      </div>
+
+      <div class="btn-flex">
+        <button class="cancel secondary-button" (click)="redirectToProjectList()">Cancel</button>
+        <button type="submit" color="primary" class="next primary-button" (click)="onSubmit()">Submit</button>
+      </div>
+    </div>
+
+    <form [formGroup]="basicDetailsForm" class="change-form">
+      <div class="add-button pr-form-top-buttons">
+        <h2 class="pr-form-top-header">Basic Details</h2>
+      </div>
+      <div>
+        <div class="add-field add-field-width project-field-width">
+          <div class="mat-form-field-wrapper">
+            <mat-form-field
+              class="project-name big-height-wrapper input-field-wrapper"
+              [ngClass]="_basicDetailsForm['name'].disabled ? 'not-allowed-cursor' : ''"
+            >
+              <mat-label>Project Name</mat-label>
+              <input matInput placeholder="Project Name" formControlName="name" autocomplete="off" />
+
+              <mat-error *ngIf="_basicDetailsForm['name'].errors?.['required']">Please enter a project name. </mat-error>
+              <mat-error *ngIf="_basicDetailsForm['name'].errors?.['pattern']">Please enter a valid project name. </mat-error>
+              <mat-error *ngIf="!_basicDetailsForm['name'].errors?.['pattern'] && _basicDetailsForm['name'].errors?.['minlength']"
+                >Please enter at least 3 characters
+              </mat-error>
+              <mat-error *ngIf="!_basicDetailsForm['name'].errors?.['pattern'] && _basicDetailsForm['name'].errors?.['maxlength']"
+                >Please enter less than 250 characters
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div class="mat-form-field-wrapper close-icon-wrapper">
+            <mat-form-field class="project-name arrow-main-wrapper big-height-wrapper input-field-wrapper" #selectField>
+              <mat-label>Link Workspace</mat-label>
+              <mat-select
+                placeholder="Link Workspace"
+                #selectInput
+                formControlName="linkedWorkspace"
+                (selectionChange)="onLinkWorkspace($event)"
+                [ngClass]="{
+                  'arrow-up': selectInput.panelOpen,
+                  'arrow-down': !selectInput.panelOpen,
+                  'not-allowed-cursor': _basicDetailsForm['linkedWorkspace'].disabled
+                }"
+              >
+                <mat-option *ngFor="let item of workspaceResListData" [value]="item.id">
+                  {{ item.title }}
+                </mat-option>
+              </mat-select>
+              <!-- <mat-icon
+              matSuffix
+              (click)="_basicDetailsForm['linkedWorkspace'].reset()"
+              *ngIf="_basicDetailsForm['linkedWorkspace'].value"
+              class="filter-close"
+              >close</mat-icon
+            > -->
+            </mat-form-field>
+            <svg
+              (click)="_basicDetailsForm['linkedWorkspace'].reset()"
+              *ngIf="_basicDetailsForm['linkedWorkspace'].value"
+              width="16"
+              height="16"
+              viewBox="0 0 16 16"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              class="filter-close"
+            >
+              <path
+                d="M8.00065 1.3335C4.32732 1.3335 1.33398 4.32683 1.33398 8.00016C1.33398 11.6735 4.32732 14.6668 8.00065 14.6668C11.674 14.6668 14.6673 11.6735 14.6673 8.00016C14.6673 4.32683 11.674 1.3335 8.00065 1.3335ZM10.2407 9.5335C10.434 9.72683 10.434 10.0468 10.2407 10.2402C10.1407 10.3402 10.014 10.3868 9.88732 10.3868C9.76065 10.3868 9.63398 10.3402 9.53399 10.2402L8.00065 8.70683L6.46732 10.2402C6.36732 10.3402 6.24065 10.3868 6.11398 10.3868C5.98732 10.3868 5.86065 10.3402 5.76065 10.2402C5.56732 10.0468 5.56732 9.72683 5.76065 9.5335L7.29398 8.00016L5.76065 6.46683C5.56732 6.2735 5.56732 5.9535 5.76065 5.76016C5.95398 5.56683 6.27398 5.56683 6.46732 5.76016L8.00065 7.2935L9.53399 5.76016C9.72732 5.56683 10.0473 5.56683 10.2407 5.76016C10.434 5.9535 10.434 6.2735 10.2407 6.46683L8.70732 8.00016L10.2407 9.5335Z"
+                fill="#86969D"
+              />
+            </svg>
+          </div>
+          <div class="mat-form-field-wrapper">
+            <mat-form-field class="project-name big-height-wrapper input-field-wrapper">
+              <mat-label>Project Key</mat-label>
+              <input
+                matInput
+                placeholder="Project Key"
+                formControlName="projectKey"
+                autocomplete="off"
+                (keyup)="onProjectKeyUp()"
+                (blur)="onProjectKeyBlur()"
+                [disabled]="projectId ? true : false"
+              />
+              <mat-error *ngIf="_basicDetailsForm['projectKey'].errors?.['required']">Please enter a project key</mat-error>
+              <mat-error *ngIf="_basicDetailsForm['projectKey'].errors?.['minlength']">Please enter minimum 3 characters </mat-error>
+              <mat-error *ngIf="_basicDetailsForm['projectKey'].errors?.['maxlength']">Project key should not be more than 8 characters. </mat-error>
+              <mat-error *ngIf="_basicDetailsForm['projectKey'].errors?.['pattern']">Please provide a valid project key.</mat-error>
+              <mat-error *ngIf="_basicDetailsForm['projectKey'].errors?.['duplicateKey']">A project key with the same name already exists.</mat-error>
+            </mat-form-field>
+          </div>
+          <div class="mat-form-field-wrapper">
+            <mat-form-field class="tag-wrapper big-height-wrapper input-field-wrapper" cdkOverlayOrigin #trigger1="cdkOverlayOrigin">
+              <mat-label [ngClass]="isTagsDisabled ? 'not-allowed-cursor' : ''">Tag</mat-label>
+              <div [class.disabled]="isTagsDisabled">
+                <mat-chip-grid
+                  #chipList
+                  aria-label="tag selection"
+                  (click)="isTagsDisabled ? $event.stopPropagation() : (isDialogOpen = true)"
+                  [ngClass]="isTagsDisabled ? 'not-allowed-cursor' : ''"
+                  [ngClass]="isDialogOpen ? 'arrow-up' : 'arrow-down'"
+                >
+                  <ng-container *ngIf="selectedTags && selectedTags.length < 4; else moreThenThreeTags">
+                    <mat-chip-row *ngFor="let tag of selectedTags.slice(0, 3)" (removed)="removeTag(tag)">
+                      {{ tag.name }}
+                      <img src="assets/images/close.svg" alt="homepage" class="close" matChipRemove [disabled]="isTagsDisabled" />
+                    </mat-chip-row>
+                  </ng-container>
+                  <ng-template #moreThenThreeTags>
+                    <mat-chip-row *ngFor="let tag of selectedTags.slice(0, 2)" (removed)="removeTag(tag)">
+                      {{ tag.name }}
+                      <img src="assets/images/close.svg" alt="homepage" class="close" matChipRemove [disabled]="isTagsDisabled" />
+                    </mat-chip-row>
+                    <mat-chip-row> + {{ selectedTags.length - 2 }} more </mat-chip-row>
+                  </ng-template>
+
+                  <input
+                    #tagInput
+                    placeholder="Tag"
+                    formControlName="tags"
+                    [matChipInputFor]="chipList"
+                    [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                    (matChipInputTokenEnd)="addTag($event)"
+                    [disabled]="isTagsDisabled"
+                    autocomplete="off"
+                    [ngClass]="isTagsDisabled ? 'not-allowed-cursor' : ''"
+                  />
+                </mat-chip-grid>
+              </div>
+              <ng-template
+                cdkConnectedOverlay
+                [cdkConnectedOverlayOrigin]="trigger1"
+                [cdkConnectedOverlayOpen]="isDialogOpen"
+                (overlayOutsideClick)="isDialogOpen = false"
+                cdkConnectedOverlayHeight="100"
+                cdkConnectedOverlayWidth="100"
+              >
+                <mat-list class="example-list status-dropdown dropdown-border-input-wrapper multiselect-dropdown">
+                  <div class="dropdown-border-listing-wrapper">
+                    <mat-option (click)="onSelectTag(tag)" *ngFor="let tag of filteredTagsList | async">
+                      <!-- <mat-option [value]="tag"> -->
+                      <mat-checkbox color="primary" [checked]="checkSelectedItem(tag)">
+                        {{ tag.name }}
+                      </mat-checkbox>
+                      <!-- (change)="onChangeTag($event, tag)" -->
+                      <!-- </mat-option> -->
+                    </mat-option>
+                  </div>
+                </mat-list>
+              </ng-template>
+
+              <button [disabled]="isTagsDisabled" (click)="isDialogOpen = true" mat-icon-button matSuffix>
+                <mat-icon>expand_more</mat-icon>
+              </button>
+            </mat-form-field>
+          </div>
+          <div class="mat-form-field-wrapper close-icon-wrapper">
+            <mat-form-field
+              class="project-name calender-icon big-height-wrapper input-field-wrapper"
+              [ngClass]="_basicDetailsForm['startDate'].disabled ? 'not-allowed-cursor' : ''"
+              (click)="startDatepicker.open()"
+            >
+              <mat-label>Start Date </mat-label>
+              <input
+                matInput
+                placeholder="Start Date"
+                [matDatepicker]="startDatepicker"
+                formControlName="startDate"
+                (dateChange)="validateDate()"
+                readonly
+                autocomplete="off"
+              />
+              <!-- <mat-icon
+              matSuffix
+              (click)="_basicDetailsForm['startDate'].reset(); validateDate($event)"
+              *ngIf="_basicDetailsForm['startDate'].value"
+              class="filter-close"
+              >close</mat-icon
+            > -->
+
+              <mat-datepicker-toggle matPrefix [for]="startDatepicker"></mat-datepicker-toggle>
+              <mat-datepicker #startDatepicker></mat-datepicker>
+              <mat-error *ngIf="_basicDetailsForm['startDate'].hasError('isRequired')">Please select a start date </mat-error>
+              <mat-error *ngIf="_basicDetailsForm['startDate'].hasError('isEndDateLessThanStartDate')"
+                >The Start Date must be equal to or earlier than the Estimation End Date.
+              </mat-error>
+            </mat-form-field>
+            <svg
+              (click)="_basicDetailsForm['startDate'].reset(); validateDate($event)"
+              *ngIf="_basicDetailsForm['startDate'].value"
+              width="16"
+              height="16"
+              viewBox="0 0 16 16"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              class="filter-close"
+            >
+              <path
+                d="M8.00065 1.3335C4.32732 1.3335 1.33398 4.32683 1.33398 8.00016C1.33398 11.6735 4.32732 14.6668 8.00065 14.6668C11.674 14.6668 14.6673 11.6735 14.6673 8.00016C14.6673 4.32683 11.674 1.3335 8.00065 1.3335ZM10.2407 9.5335C10.434 9.72683 10.434 10.0468 10.2407 10.2402C10.1407 10.3402 10.014 10.3868 9.88732 10.3868C9.76065 10.3868 9.63398 10.3402 9.53399 10.2402L8.00065 8.70683L6.46732 10.2402C6.36732 10.3402 6.24065 10.3868 6.11398 10.3868C5.98732 10.3868 5.86065 10.3402 5.76065 10.2402C5.56732 10.0468 5.56732 9.72683 5.76065 9.5335L7.29398 8.00016L5.76065 6.46683C5.56732 6.2735 5.56732 5.9535 5.76065 5.76016C5.95398 5.56683 6.27398 5.56683 6.46732 5.76016L8.00065 7.2935L9.53399 5.76016C9.72732 5.56683 10.0473 5.56683 10.2407 5.76016C10.434 5.9535 10.434 6.2735 10.2407 6.46683L8.70732 8.00016L10.2407 9.5335Z"
+                fill="#86969D"
+              />
+            </svg>
+          </div>
+          <div class="mat-form-field-wrapper close-icon-wrapper">
+            <mat-form-field
+              class="project-complate project-name calender-icon big-height-wrapper input-field-wrapper"
+              (click)="endDatepicker.open()"
+              [ngClass]="_basicDetailsForm['estimatedDate'].disabled ? 'not-allowed-cursor' : ''"
+            >
+              <mat-label>Estimate Complete </mat-label>
+              <input
+                matInput
+                placeholder="Estimated Completion Date"
+                [matDatepicker]="endDatepicker"
+                formControlName="estimatedDate"
+                (dateChange)="validateDate()"
+                autocomplete="off"
+                readonly
+              />
+              <!-- <mat-icon
+              matSuffix
+              (click)="_basicDetailsForm['estimatedDate'].reset(); validateDate($event)"
+              *ngIf="_basicDetailsForm['estimatedDate'].value"
+              class="filter-close"
+              >close</mat-icon
+            > -->
+
+              <!-- (dateInput)="validateDate($event)" -->
+
+              <mat-datepicker-toggle matPrefix [for]="endDatepicker"></mat-datepicker-toggle>
+              <mat-datepicker #endDatepicker></mat-datepicker>
+              <mat-error *ngIf="_basicDetailsForm['estimatedDate'].hasError('isRequired')">Please select an estimated completion date. </mat-error>
+              <mat-error *ngIf="_basicDetailsForm['estimatedDate'].hasError('isEndDateLessThanStartDate')"
+                >The estimated completion date cannot be earlier than the start date.
+              </mat-error>
+              <!-- <mat-error>Please select the valid estimation complete date</mat-error> -->
+            </mat-form-field>
+            <svg
+              (click)="_basicDetailsForm['estimatedDate'].reset(); validateDate($event)"
+              *ngIf="_basicDetailsForm['estimatedDate'].value"
+              width="16"
+              height="16"
+              viewBox="0 0 16 16"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              class="filter-close"
+            >
+              <path
+                d="M8.00065 1.3335C4.32732 1.3335 1.33398 4.32683 1.33398 8.00016C1.33398 11.6735 4.32732 14.6668 8.00065 14.6668C11.674 14.6668 14.6673 11.6735 14.6673 8.00016C14.6673 4.32683 11.674 1.3335 8.00065 1.3335ZM10.2407 9.5335C10.434 9.72683 10.434 10.0468 10.2407 10.2402C10.1407 10.3402 10.014 10.3868 9.88732 10.3868C9.76065 10.3868 9.63398 10.3402 9.53399 10.2402L8.00065 8.70683L6.46732 10.2402C6.36732 10.3402 6.24065 10.3868 6.11398 10.3868C5.98732 10.3868 5.86065 10.3402 5.76065 10.2402C5.56732 10.0468 5.56732 9.72683 5.76065 9.5335L7.29398 8.00016L5.76065 6.46683C5.56732 6.2735 5.56732 5.9535 5.76065 5.76016C5.95398 5.56683 6.27398 5.56683 6.46732 5.76016L8.00065 7.2935L9.53399 5.76016C9.72732 5.56683 10.0473 5.56683 10.2407 5.76016C10.434 5.9535 10.434 6.2735 10.2407 6.46683L8.70732 8.00016L10.2407 9.5335Z"
+                fill="#86969D"
+              />
+            </svg>
+          </div>
+        </div>
+        <mat-form-field class="project-description text-area-main-wrapper input-field-wrapper">
+          <mat-label [ngClass]="_basicDetailsForm['description'].disabled ? 'not-allowed-cursor' : ''">Short Description</mat-label>
+          <textarea
+            matInput
+            placeholder="Short Description"
+            formControlName="description"
+            maxlength="1024"
+            autocomplete="off"
+            [ngClass]="_basicDetailsForm['description'].disabled ? 'not-allowed-cursor' : ''"
+          >
+          </textarea>
+        </mat-form-field>
+      </div>
+    </form>
+
+    <mat-divider class="pr-form-divider"></mat-divider>
+
+    <div class="workspace-team-blk">
+      <div class="add-button pr-form-top-buttons">
+        <h2 class="pr-form-top-header">Team</h2>
+      </div>
+
+      <div class="responsibler-person" *ngIf="teamMembersList">
+        <div class="team-flex">
+          <h2 class="add-h2">Responsible Person</h2>
+        </div>
+        <responsible-person
+          #responsiblePersonRef
+          [teammembersList]="teamMembersList"
+          [isDisabledInputControl]="isResponsiblePersonDisabled"
+          (emmitSelectedTeamMates)="getSelectedResponsiblePerson($event)"
+          [dataId]="responsiblePerson"
+        >
+        </responsible-person>
+        <mat-error *ngIf="responsiblePerson == null && isFormSubmitted" class="error-space">Please Select Responsible Person</mat-error>
+      </div>
+      <div class="workspace-team" *ngIf="teamMembersList">
+        <div class="workspace-team-right">
+          <h2 class="add-h2">
+            <team-member-dialog
+              #teamMembersDialogRef
+              [showLabel]="true"
+              [teamMembersList]="teamMembersList"
+              class="workspace-dialog"
+              [isDisabledTeam]="isResponsiblePersonDisabled"
+              [disableSuperAdminUsers]="true"
+              (emmitSelectedTeamMates)="getSelectedTeamMembers($event)"
+              (emmitDeletedTeamMates)="getDeletedTeamMembers($event)"
+              [responsiblePerson]="responsiblePerson"
+            ></team-member-dialog>
+          </h2>
+          <mat-error *ngIf="!teamMembersData.length && isFormSubmitted">Please Add Team Members</mat-error>
+        </div>
+      </div>
+
+      <div class="workspace-table table-responsive" *ngIf="teamMembersData.length && teamMembersList">
+        <table>
+          <thead>
+            <tr>
+              <th class="team">Team</th>
+              <th class="reporting-to">Reporting To</th>
+              <th class="actions">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of teamMembersData; index as i">
+              <td>
+                <div class="workspace-table-img">
+                  <mat-chip-set>
+                    <main-app-mat-chips *ngIf="item && item.user" [data]="item.user" [isCloseButton]="false"> </main-app-mat-chips>
+                  </mat-chip-set>
+                </div>
+              </td>
+              <td>
+                <team-member-dialog
+                  [dataId]="item.report_to"
+                  [teamMembersList]="teamMembersList"
+                  [isDisabledTeam]="isResponsiblePersonDisabled"
+                  (emmitSelectedTeamMates)="getSelectedReportingPerson($event, item.user.id)"
+                  (emmitDeletedTeamMates)="getDeletedReportingPerson($event, item.user.id)"
+                  [currentUser]="item"
+                ></team-member-dialog>
+              </td>
+
+              <td class="table-delete-align">
+                <ng-container *ngIf="item.user.id !== responsiblePerson && item.user.role_id !== 1">
+                  <img src="assets/images/trash.svg" alt="trash" (click)="removeTeamMember(item.user.id)" class="table-delete" matTooltip="Delete" />
+                </ng-container>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <mat-divider class="pr-form-divider"></mat-divider>
+
+    <div class="workspace-documents">
+      <div class="pr-form-top-buttons">
+        <h2 class="pr-form-top-header">Create Documents<span class="document-icon"></span></h2>
+        <div class="file-wrap-blk">
+          <div
+            class="dropzone document-dropzone"
+            [ngClass]="isDisableAddDocuments ? 'not-allowed-cursor' : ''"
+            (click)="isDisableAddDocuments ? $event.stopPropagation() : openDocumentModal()"
+          >
+            <label class="mat-body-2">
+              <svg width="25" height="24" viewBox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <g id="vuesax/linear/document">
+                  <g id="document">
+                    <path
+                      id="Vector"
+                      d="M22.5 10V15C22.5 20 20.5 22 15.5 22H9.5C4.5 22 2.5 20 2.5 15V9C2.5 4 4.5 2 9.5 2H14.5"
+                      stroke="#333366"
+                      stroke-width="1.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                    <path
+                      id="Vector_2"
+                      d="M22.5 10H18.5C15.5 10 14.5 9 14.5 6V2L22.5 10Z"
+                      stroke="#333366"
+                      stroke-width="1.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </g>
+                </g>
+              </svg>
+
+              &nbsp;Add New</label
+            >
+          </div>
+          <pkg-lib-document-list
+            [documentList]="documentList"
+            (editEmitter)="onEditDocument($event)"
+            (deleteEmitter)="onDeleteDocument($event)"
+            [documentData]="documentData"
+            [teamMembersList]="teamMembersData"
+            (emmitSharedTeamMember)="setSharedTeamMember($event)"
+            [loggedInUser]="loggedInUserId || ''"
+            [isDisableEditDocuments]="isDisableEditDocuments"
+          ></pkg-lib-document-list>
+        </div>
+
+        <pkg-lib-add-document
+          *ngIf="isShowDocumentModal"
+          [documentList]="documentList"
+          (emitDocModal)="onModalClose($event)"
+          [documentData]="documentData"
+          [teamMembersList]="teamMembersData"
+          (emmitSharedTeamMember)="setSharedTeamMember($event)"
+          [loggedInUser]="loggedInUserId || ''"
+        ></pkg-lib-add-document>
+      </div>
+
+      <mat-divider class="pr-form-divider"></mat-divider>
+
+      <div class="pr-form-top-buttons">
+        <h2 class="pr-form-top-header">Upload Documents<span class="document-icon"></span></h2>
+        <div
+          (click)="fileDropRef.click()"
+          class="dropzone document-dropzone"
+          [ngClass]="isDisableAddDocuments || isDisableEditDocuments ? 'not-allowed-cursor' : ''"
+          (dragover)="onDragover($event)"
+          (dragleave)="onDragLeave($event)"
+          (drop)="onDrop($event)"
+        >
+          <input
+            [disabled]="isDisableAddDocuments || isDisableEditDocuments"
+            [ngClass]="isDisableAddDocuments || isDisableEditDocuments ? 'not-allowed-cursor' : ''"
+            type="file"
+            #fileDropRef
+            id="fileDropRef"
+            (click)="clearFileInput()"
+            (change)="documentFileBrowseHandler($event)"
+            hidden
+            multiple
+          />
+
+          <label class="mat-body-2" [ngClass]="isDisableAddDocuments || isDisableEditDocuments ? 'not-allowed-cursor' : ''">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="svg">
+              <path
+                d="M16.44 8.90002C20.04 9.21002 21.51 11.06 21.51 15.11V15.24C21.51 19.71 19.72 21.5 15.25 21.5H8.73998C4.26998 21.5 2.47998 19.71 2.47998 15.24V15.11C2.47998 11.09 3.92998 9.24002 7.46998 8.91002"
+                stroke="#333366"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path d="M12 15V3.62" stroke="#333366" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+              <path d="M15.3499 5.85L11.9999 2.5L8.6499 5.85" stroke="#333366" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+            &nbsp; Browse
+            <p>Or Drag and drop file here</p></label
+          >
+        </div>
+        <div class="filezone document-filezone">
+          <ng-container *ngIf="projectId && editUploadedDocumentsData && editUploadedDocumentsData.length">
+            <div *ngFor="let document of editUploadedDocumentsData; index as i">
+              <i class="{{ document.doc_url.split('/').pop() | FileExtension }}"></i>
+
+              <div class="upload-file-blk" (click)="getAndPreviewDocument(document.doc_url)">
+                <span>{{ document.doc_url.split('/').pop() }}</span>
+                <p>
+                  {{ document.created_at | formatdatetime }}
+                </p>
+              </div>
+
+              <button
+                [ngClass]="isDisableAddDocuments || isDisableEditDocuments ? 'not-allowed-cursor' : ''"
+                (click)="removeFileWhileEditWorkspace(document, i)"
+                mat-icon-button
+              >
+                <mat-icon class="clear">clear</mat-icon>
+              </button>
+            </div>
+          </ng-container>
+
+          <ng-container *ngIf="uploadedDocuments && uploadedDocuments.length">
+            <div *ngFor="let document of uploadedDocuments; index as i">
+              <i class="{{ document.name | FileExtension }}"></i>
+              <div (click)="previewFile(document)" class="upload-file-blk">
+                <span>{{ document.name }} </span>
+                <p>{{ (document.size / 1024).toFixed(2) }}kb</p>
+              </div>
+              <button mat-icon-button (click)="removeDocument(i)">
+                <mat-icon class="clear">clear</mat-icon>
+              </button>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+  </mat-card>
+</div>

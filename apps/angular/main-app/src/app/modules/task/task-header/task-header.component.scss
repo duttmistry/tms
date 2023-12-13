@@ -1,0 +1,178 @@
+@import 'apps/angular/main-app/src/variables';
+@import 'apps/angular/main-app/src/mixins';
+@import 'apps/angular/main-app/src/assets/fonts/fonts';
+.task-filter-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0 0 20px 0;
+  .task-filter-left {
+    margin-top: 24px;
+    .search-form-field {
+      margin-bottom: 0;
+    }
+    .search-icon {
+      display: block;
+      height: 18px;
+    }
+    .mat-mdc-form-field {
+      .mdc-text-field__input {
+        width: 90%;
+      }
+    }
+  }
+  .task-filter-right {
+    display: flex;
+    gap: 12px;
+    margin-top: 24px;
+    margin-left: 5px;
+    .mat-mdc-form-field {
+      margin-bottom: 0;
+    }
+    .mat-mdc-select-value {
+      font-size: $theme-main-small-font;
+    }
+    .small-dropdown {
+      width: 180px;
+    }
+    .assignee-wrapper {
+      .small-dropdown {
+        width: 204px;
+      }
+    }
+    .group-by-wrapper {
+      .group-label {
+        color: $theme-main-color-light;
+      }
+    }
+  }
+}
+
+::ng-deep .mdc-menu-surface.mat-mdc-select-panel.group-by-select,
+::ng-deep .mdc-menu-surface.mat-mdc-select-panel.task-type-select {
+  padding: 0 !important;
+  margin-top: 1px;
+  box-shadow: $box-shadow-dropdown;
+  .mat-mdc-option {
+    padding: 0 10px !important;
+    gap: 10px !important;
+  }
+  .mat-mdc-option .mdc-list-item__primary-text {
+    color: $theme-font-color-black !important;
+  }
+}
+
+::ng-deep .mdc-menu-surface.mat-mdc-select-panel.assignee-select {
+  overflow: unset;
+  padding: 0 !important;
+  max-height: 300px;
+  margin-top: 1px;
+  box-shadow: $box-shadow-dropdown;
+  .mat-mdc-option.mdc-list-item {
+    padding: 0 12px !important;
+    gap: 10px !important;
+  }
+  .mat-mdc-option .mdc-list-item__primary-text {
+    color: $theme-font-color-black !important;
+  }
+  .button-container {
+    border-bottom: 1px solid $theme-border-color-gray;
+    margin: 10px;
+    .button-wrapper {
+      padding: 5px 0;
+      display: flex;
+      justify-content: space-between;
+      span {
+        font-size: $theme-main-small-font;
+        font-weight: 500;
+        color: $theme-main-color;
+        cursor: pointer;
+      }
+    }
+  }
+  .input-wrapper {
+    position: relative;
+    input {
+      border: 1px solid $theme-border-color-gray;
+      width: 100%;
+      border-radius: $button-radius;
+      outline: none;
+      font-size: $theme-main-medium-font;
+      font-weight: 400;
+      font-family: $theme-main-font-family;
+      padding: 10px 10px 10px 35px;
+    }
+    img {
+      display: block;
+      position: absolute;
+      top: 11px;
+      left: 10px;
+    }
+  }
+  .mat-option-wrapper {
+    overflow: auto;
+    height: 183px;
+  }
+}
+
+/* DO NOT REMOVE --- Some Classes According Need of Development Will Not Impact Design , In case of Issue Contact Developer First*/
+
+.hiddenOption {
+  display: none;
+}
+
+::ng-deep .assignee-field .mat-mdc-form-field:not(.mat-form-field-no-animations) .mdc-floating-label {
+  transition: none !important;
+}
+
+/* DO NOT REMOVE Ends */
+
+@media screen and (max-width: $extra-extra-large) {
+  .task-filter-wrapper {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    .from-wrapper,
+    .to-wrapper {
+      .small-dropdown {
+        width: 142px;
+      }
+    }
+  }
+  .task-type-wrapper .small-dropdown {
+    width: 162px !important;
+  }
+  .assignee-wrapper .small-dropdown {
+    width: 230px !important;
+  }
+}
+
+::ng-deep .mat-mdc-menu-panel.mat-mdc-menu-panel {
+  max-width: none !important;
+}
+.more-filter-menu{
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.filter-menu{
+  width: auto;
+}
+.label-wrapper {
+  color: $theme-main-extra-color-dark;
+  font-size: $theme-main-small-font;
+  font-weight: 400;
+  line-height: 16px;
+  padding: 3px 10px;
+  border-radius: 20px;
+}
+.disabled-option-color{
+  background-color: #bfc0c0;
+  pointer-events: none;
+   .mat-mdc-option .mdc-list-item__primary-text{
+    font-weight: 300!important;
+    color: #666464 !important;
+
+  }
+}

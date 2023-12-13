@@ -1,0 +1,34 @@
+<div class="project-block-inner">
+  <div class="view-details-button">
+    <h2 class="heading">Projects</h2>
+    <span class="cursor-pointer view-more-link" *ngIf="totalProjectCount > 10" routerLink="/project">View More </span>
+  </div>
+  <ng-container *ngIf="showSpinner; else projectSection">
+    <div [mainAppSpinner]="showSpinner"></div>
+  </ng-container>
+  <ng-template #projectSection>
+    <div [ngClass]="projectsData && projectsData?.length > 0 ? 'project-data-wrapper' : 'no-project-data'">
+      <!-- <div class="project-data-wrapper"  [mainAppSpinner]="projectsData && projectsData.length > 0 ? false : true" > -->
+      <ng-container *ngIf="projectsData && projectsData.length > 0; else noRecordFound">
+        <div *ngFor="let project of projectsData" class="project-list-wrapper">
+          <h3 class="project-name">{{ project.name }}</h3>
+          <div class="percentage-wrapper-outer">
+            <p class="total-wrapper">
+              Task : {{ project.project_complete_task_count - project.project_pending_task_count || 0 }}/{{
+                project.project_complete_task_count || 0
+              }}
+            </p>
+            <div [ngStyle]="{ color: project.color }" class="percentage-wrapper">{{ project.percentage }}%</div>
+          </div>
+          <div>
+            <mat-progress-bar [value]="project.percentage" [ngStyle]="{ color: project.color }"></mat-progress-bar>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+  </ng-template>
+</div>
+
+<ng-template #noRecordFound>
+  <p>No record found</p>
+</ng-template>

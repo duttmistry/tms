@@ -1,0 +1,93 @@
+@import 'apps/angular/main-app/src/variables';
+@import 'apps/angular/main-app/src/mixins';
+@import 'apps/angular/main-app/src/assets/fonts/fonts.scss';
+
+::ng-deep .progress {
+  display: none !important;
+}
+
+// column setting
+::ng-deep .column-setting-button {
+  display: none;
+}
+
+::ng-deep .mat-mdc-footer-cell {
+  margin-left: 10px !important;
+}
+
+// NOTE:- Hide button of save table setting and Clear filter from Menu Action
+::ng-deep .cdk-overlay-pane {
+  .mat-mdc-menu-panel {
+    .mat-mdc-menu-content {
+      button.mat-mdc-menu-item-submenu-trigger:nth-child(2) {
+        display: none;
+      }
+      button:nth-child(3) {
+        display: none;
+      }
+    }
+  }
+}
+
+// NOTE:- Hide filler icon header from column setting options Menu Action
+::ng-deep mat-header-row {
+  mat-header-cell {
+    header-filter {
+      span .mat-mdc-menu-trigger {
+        mat-icon .mat-icon {
+          display: none !important;
+          visibility: hidden !important;
+        }
+      }
+    }
+  }
+}
+
+.task-wrap-width1 {
+  width: 12%;
+  padding: 8px 10px;
+  height: 30px;
+  border-right: 1px solid #efefef;
+  @include flex;
+  @include flex-align-center;
+  h2 {
+    font-size: 14px;
+    color: black;
+    font-weight: 500;
+    @include flex;
+    @include flex-align-center;
+    margin-bottom: 0;
+    p {
+      color: green;
+      margin-bottom: 0;
+    }
+  }
+}
+
+.ios {
+  color: green;
+  background-color: #e8efe4;
+  font-size: 13px;
+  font-weight: 500;
+  border-radius: 5px;
+  padding: 3px 7px;
+  margin-right: 5px;
+}
+.php {
+  color: gray;
+  background-color: #f8eedc;
+  font-size: 13px;
+  font-weight: 500;
+  border-radius: 5px;
+  padding: 3px 7px;
+  margin-right: 5px;
+}
+
+.norecordFound .example-box p
+{
+  font-size: 12px;
+}
+.norecordFound
+{
+  border : 0px !important;
+}

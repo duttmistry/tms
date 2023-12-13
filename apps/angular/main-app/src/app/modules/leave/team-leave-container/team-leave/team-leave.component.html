@@ -1,0 +1,58 @@
+<div class="team-leave-in">
+    <mat-card>
+        <div class="team-right">
+            <div class="leave-img">
+                <div class="fullday"><img src="../../../../assets/images/full-day.png" alt="" />Full Day</div>
+                <div class="firsthalf"><img src="../../../../assets/images/first-half.png" alt="" /> First Half</div>
+                <div class="firsthalf"><img src="../../../../assets/images/second-half.png" alt="" />Second Half</div>
+            </div>
+            <div class="mat-select">
+                <mat-form-field *ngIf="showDropdown === true; else noReportingPerson" [ngClass]="select.panelOpen ? 'arrow-up' : 'arrow-down'" class="assignee-field small-dropdown">
+                    <!-- <mat-label *ngIf="employee?.value?.length === 0">{{ label }}</mat-label>  -->
+                    <span class="select-value" *ngIf="employee?.value?.length !== 0" style="font-size: 14px; margin-top: 8px">
+            <span class="value">{{employee.value?.[0]?.name || ''}}</span>
+                    <span *ngIf="(employee?.value?.length || 0) > 1" class="add-value"> +{{ (employee.value?.length || 0) - 1 }} </span>
+                    </span>
+                    <mat-select #select placeholder="{{ allUsers.length ? 'Reporting Person' : 'No Reporting Person Found' }}" [formControl]="employee" multiple>
+                        <mat-select-trigger style="display: none" class="select-value" [matTooltip]="employee.value?.[0]?.name || ''">
+                            <span class="value">{{employee.value?.[0]?.name || ''}}</span>
+                            <span *ngIf="employee.value?.length > 1" class="add-value">
+                (+{{ employee.value.length - 1 }} {{ employee.value?.length === 2 ? 'other' : 'others' }})
+              </span>
+                        </mat-select-trigger>
+
+                        <div class="button-container">
+                            <div class="input-wrapper">
+                                <input type="text" placeholder="Search" [formControl]="searchTextBoxControl" />
+                                <img src="assets/images/search.svg" alt="search" class="search" />
+                            </div>
+                            <div class="button-wrapper">
+                                <span (click)="selectAllAsignee()">Select All</span>
+                                <span (click)="unselcteAllAsignee()">Clear All</span>
+                            </div>
+                        </div>
+                        <div class="select-container">
+                            <mat-optgroup *ngIf="!(filteredEmployees | async)?.length">
+                                <div>No results found!</div>
+                            </mat-optgroup>
+                            <mat-option *ngFor="let emp of filteredEmployees | async" [value]="emp" (click)="$event.stopPropagation()" (onSelectionChange)="selectionChange($event, emp)">
+                                {{ emp.name }}
+                            </mat-option>
+                        </div>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <ng-template #noReportingPerson>
+                <div class="no-mat-select" style="margin: 20px 0px 65px 0px"></div>
+            </ng-template>
+        </div>
+        <div class="demo-app">
+            <div class="demo-app-main">
+                <full-calendar #calendar [options]="calendarOptions" scrollToTime="{{ currentDate }}" *ngIf="!showSpinner; else spinnerSection"></full-calendar>
+            </div>
+        </div>
+    </mat-card>
+</div>
+<ng-template #spinnerSection>
+    <div [mainAppSpinner]="showSpinner"></div>
+</ng-template>

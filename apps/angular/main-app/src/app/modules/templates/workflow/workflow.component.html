@@ -1,0 +1,73 @@
+<div class="messaging-template container-wrapper">
+    <mat-card>
+        <div class="workspace-blk workspace-border">
+            <strong>Work Flows </strong>
+        </div>
+        <div class="messaging-template-wrap">
+            <div>
+                <div *ngIf="allowAdd">
+                    <form [formGroup]="workflowForm">
+                        <mat-form-field at-form-field class="small-dropdown medium-height-wrapper">
+                            <mat-select placeholder="Templates" formControlName="templateControl" class="arrow-down">
+                                <!--(selectionChange)="onChangeTemplate()"-->
+                                <mat-option *ngFor="let item of templatesList; trackBy: trackByFn; index as i" [value]="item?._id">{{ item.name }}</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                        <mat-form-field class="small-dropdown medium-height-wrapper">
+                            <mat-select placeholder="Actions" formControlName="actionControl" class="arrow-down">
+                                <!--(selectionChange)="onChangeAction()"-->
+                                <mat-option *ngFor="let item of actionsList; trackBy: trackByFn; index as i" [value]="item?._id">
+                                    {{ item.name }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                        <button color="primary" type="submit" class="next primary-button" (click)="onClickSave()">
+              {{ isEditWorkFlow ? 'Update' : 'Save' }}
+            </button>
+                        <button color="next" type="submit" class="next secondary-button" (click)="onClickReset()">Reset</button>
+                    </form>
+                </div>
+                <div class="table-responsive">
+                    <table mat-table [dataSource]="dataSource.data && dataSource.data.length > 0 ? dataSource : emptyData" matSort class="mat-elevation-z8 user-role-table">
+                        <!-- Name Column -->
+                        <ng-container matColumnDef="template">
+                            <th mat-header-cell *matHeaderCellDef>Template</th>
+                            <td mat-cell *matCellDef="let element">{{ element?.emailTemplateId?.name }}</td>
+                        </ng-container>
+
+                        <!-- actions Column -->
+                        <ng-container matColumnDef="actions">
+                            <th mat-header-cell *matHeaderCellDef class="actions">Actions</th>
+                            <td mat-cell *matCellDef="let element">
+                                {{ element.actionId.name }}
+                            </td>
+                        </ng-container>
+
+                        <!-- Action Column -->
+                        <ng-container matColumnDef="action">
+                            <th mat-header-cell *matHeaderCellDef class="table-align action1">Action</th>
+                            <td mat-cell *matCellDef="let element" class="action-column table-align">
+                                <img src="assets/images/edit-bg.svg" class="action-button" (click)="onEditWorkflow(element)" *ngIf="allowEdit" matTooltip="Edit" />
+                                <img src="assets/images/trash.svg" class="action-button" (click)="onDeleteWorkFlow(element)" *ngIf="allowDelete" matTooltip="Delete" />
+                            </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="empty-row">
+                            <ng-template #noRecordSection>
+                                <td mat-cell *matCellDef="let element" style="margin-top: 10px">No records found</td>
+                            </ng-template>
+                            <ng-container *ngIf="showSpinner; else noRecordSection">
+                                <td mat-cell *matCellDef="let element">
+                                    <div mat-row [mainAppSpinner]="showSpinner"></div>
+                                </td>
+                            </ng-container>
+                        </ng-container>
+
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: dataSource.data && dataSource.data.length > 0 ? displayedColumns : ['empty-row']"></tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </mat-card>
+</div>

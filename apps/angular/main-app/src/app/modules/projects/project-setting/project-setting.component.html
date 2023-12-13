@@ -1,0 +1,17 @@
+<div class="container-wrapper project-setting">
+    <mat-card>
+        <div class="workspace-blk workspace-border">
+            <strong>
+        <a (click)="navigateToEditProject()"> Project Settings - {{ projectName }}</a>
+      </strong>
+        </div>
+        <mat-tab-group mat-stretch-tabs="false" class="tabs tab-main-wrapper tab-outer-wrapper">
+            <mat-tab *ngIf="isAllowStatus" label="Project Status">
+                <app-status></app-status>
+            </mat-tab>
+            <mat-tab *ngIf="isAllowCustomFields" label="Custom Fields">
+                <app-custom-fields></app-custom-fields>
+            </mat-tab>
+        </mat-tab-group>
+    </mat-card>
+</div>

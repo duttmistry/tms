@@ -1,0 +1,59 @@
+<div class="team-flex">
+  <h2 *ngIf="showLabel" class="add-h2">Team Members</h2>
+</div>
+<!-- </button> -->
+<div class="chip-wrap">
+  <div>
+    <mat-icon
+      (click)="disabledTeam ? $event.stopPropagation() : openTeamDialog()"
+      cdkOverlayOrigin
+      #trigger1="cdkOverlayOrigin"
+      class="dialog-mat-icon"
+      [ngClass]="disabledTeam ? 'not-allowed-cursor' : ''"
+      >add</mat-icon
+    >
+  </div>
+  <ng-container *ngIf="data && data.length">
+    <mat-chip-set>
+      <main-app-mat-chips
+        *ngFor="let item of data; let i = index"
+        [data]="item"
+        [isCloseButton]="item?.isShowCloseButton == false || (disableSuperAdminUsers && item.role_id == 1) ? false : true"
+        (chipClosed)="remove(item.id)"
+        [disabledTeam]="disabledTeam"
+      >
+      </main-app-mat-chips>
+    </mat-chip-set>
+  </ng-container>
+</div>
+
+<!-- This template displays the overlay content and is connected to the button -->
+
+<ng-template
+  cdkConnectedOverlay
+  [cdkConnectedOverlayOrigin]="trigger1"
+  [cdkConnectedOverlayOpen]="isDialogOpen"
+  (overlayOutsideClick)="onClosePopup()"
+>
+  <button mat-icon-button (click)="onClosePopup()">
+    <mat-icon>close</mat-icon>
+  </button>
+  <mat-list class="example-list">
+    <mat-list-item>
+      <input autoFocusDirective id="myInput" [placeholder]="'Search Names'" [formControl]="searchControl" autocomplete="off" class="team-field" />
+    </mat-list-item>
+    <mat-list-item
+      [disabled]="item.id === currentUser?.user?.id || item.id === responsiblePerson || (disableSuperAdminUsers && item.role_id == 1)"
+      *ngFor="let item of filteredData | async;let i = index"
+      (click)="selected(item)"
+    >
+    <mat-checkbox
+    color="primary"
+    [disabled]="item.id === currentUser?.user?.id || item.id === responsiblePerson || (disableSuperAdminUsers && item.role_id == 1)"
+    [checked]="checkSelectedItem(item)"
+        (change)="selectedCheckbox = i"
+        ></mat-checkbox>
+      {{ item.name }}
+    </mat-list-item>
+  </mat-list>
+</ng-template>

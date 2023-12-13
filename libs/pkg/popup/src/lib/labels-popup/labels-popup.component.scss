@@ -1,0 +1,90 @@
+// @import '@angular/cdk/overlay-prebuilt.css';
+@import './../../../../../../apps/angular/main-app/src/variables.scss';
+@import './../../../../../../apps/angular/main-app/src/mixins.scss';
+@import './../../../../../../apps/angular/main-app/src/assets/fonts/fonts.scss';
+.section-menu-wrapper {
+  .section-dropdown-list {
+    height: unset !important;
+    .label-name {
+      color: $theme-font-color-black;
+      font-size: $theme-main-small-font;
+      font-weight: 400;
+    }
+  }
+  .input-add-wrapper {
+    display: flex;
+    width: calc(100% - 20px);
+    gap: 10px;
+    margin: 10px auto;
+    .mat-mdc-list-item {
+      height: unset !important;
+    }
+    .icon-wrapper {
+      border: 1px solid $theme-border-color-gray;
+      width: 32px;
+      height: 35px;
+      display: block;
+      text-align: center;
+      border-radius: 5px;
+      align-items: center;
+      justify-content: center;
+      display: flex;
+      cursor: pointer;
+    }
+    .icon-wrapper.disable-item {
+      opacity: 0.3;
+    }
+    .add-wrapper {
+      width: 40px;
+    }
+  }
+  .section-dropdown-list-outer {
+    max-height: 250px;
+    overflow: auto;
+    .mat-mdc-list-item {
+      padding: 0 10px !important;
+      cursor: pointer;
+      &:last-child {
+        margin-bottom: 10px;
+      }
+    }
+  }
+  input {
+    border: 1px solid $theme-border-color-gray;
+    width: 100%;
+    border-radius: $button-radius;
+    outline: none;
+    font-size: $theme-main-medium-font;
+    font-weight: 400;
+    font-family: $theme-main-font-family;
+    padding: 10px;
+  }
+  .input-wrapper {
+    position: relative;
+    height: unset;
+    margin: 0;
+    img {
+      display: block;
+      position: absolute;
+      top: 11px;
+      left: 10px;
+    }
+  }
+}
+
+.disable-item {
+  color: grey;
+  pointer-events: none;
+}
+
+.section-menu-wrapper.empty-selection {
+  border-radius: $button-radius;
+  border: 1px solid $theme-border-color-dropdown;
+  background: $theme-color-white;
+  box-shadow: $box-shadow-dropdown;
+  min-width: 276px;
+  width: 276px;
+  .input-add-wrapper {
+    margin-bottom: 10px;
+  }
+}

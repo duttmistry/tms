@@ -1,0 +1,14 @@
+<mat-list class="example-list status-dropdown dropdown-border-input-wrapper">
+  <mat-list-item class="input-wrapper">
+    <input tmsWorkspaceAutoFocusInput id="myInput" [placeholder]="placeholder" [formControl]="searchControl" autocomplete="off" />
+    <img src="assets/images/search.svg" alt="search" class="search" />
+  </mat-list-item>
+  <div class="dropdown-border-listing-wrapper">
+    <mat-list-item *ngFor="let item of filteredData | async" (click)="selected(item)">
+      <div class="status-dropdown-list">
+        <span class="status-color-box" [style.background]="item.groupColor"></span>
+        <span class="name">{{ item.name }}</span>
+      </div>
+    </mat-list-item>
+  </div>
+</mat-list>

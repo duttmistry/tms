@@ -1,0 +1,105 @@
+@import 'apps/angular/main-app/src/variables';
+@import 'apps/angular/main-app/src/mixins';
+@import 'apps/angular/main-app/src/assets/fonts/fonts';
+::ng-deep .assignee-field .mdc-text-field--filled .mdc-floating-label--float-above {
+  .select-value {
+    .value {
+      max-width: 105px;
+    }
+  }
+}
+
+::ng-deep .mdc-menu-surface.mat-mdc-select-panel.assignee-select {
+  overflow: unset;
+  padding: 0 !important;
+  max-height: 300px;
+  margin-top: 1px;
+  box-shadow: $box-shadow-dropdown;
+  .mat-mdc-option.mdc-list-item {
+    padding: 0 12px !important;
+    gap: 10px !important;
+  }
+  .mat-mdc-option .mdc-list-item__primary-text {
+    color: $theme-font-color-black !important;
+  }
+  .button-container {
+    border-bottom: 1px solid $theme-border-color-gray;
+    margin: 10px;
+    .button-wrapper {
+      padding: 5px 0;
+      display: flex;
+      justify-content: space-between;
+      span {
+        font-size: $theme-main-small-font;
+        font-weight: 500;
+        color:$theme-main-color;
+        cursor: pointer;
+      }
+    }
+  }
+  .input-wrapper {
+    position: relative;
+    input {
+      border: 1px solid $theme-border-color-gray;
+      width: 100%;
+      border-radius: $button-radius;
+      outline: none;
+      font-size: $theme-main-medium-font;
+      font-weight: 400;
+      font-family: $theme-main-font-family;
+      padding: 10px 10px 10px 35px;
+    }
+    img {
+      display: block;
+      position: absolute;
+      top: 11px;
+      left: 10px;
+    }
+  }
+  .mat-option-wrapper {
+    overflow: auto;
+    height: 183px;
+  }
+}
+
+::ng-deep .assignee-field .mat-mdc-form-field:not(.mat-form-field-no-animations) .mdc-floating-label {
+  transition: none !important;
+}
+
+.close-icon-wrapper {
+  position: relative;
+  .filter-close {
+    position: absolute;
+    top: 12px;
+    right: 34px;
+    width: 16px;
+    height: 16px;
+    z-index: 99;
+  }
+}
+
+.task-filter-right {
+  display: flex;
+  gap: 12px;
+  margin-top: 17px;
+  margin-left: 5px;
+  .mat-mdc-form-field {
+    margin-bottom: 0;
+  }
+  .mat-mdc-select-value {
+    font-size: $theme-main-small-font;
+  }
+  .small-dropdown {
+    width: 180px;
+  }
+  .assignee-wrapper {
+    .small-dropdown {
+      width: 204px;
+    }
+  }
+  .group-by-wrapper {
+    .group-label {
+      color: $theme-main-color-light;
+    }
+  }
+}

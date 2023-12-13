@@ -1,0 +1,5 @@
+<div id="scrollable-container" class="add-workspace container-wrapper">
+  <ng-container *ngIf="teamMembersList && workspaceResListData && allTags">
+    <app-add-projects [teamMembersList]="teamMembersList" [allTagsList]="allTags" [workspaceResListData]="workspaceResListData"></app-add-projects>
+  </ng-container>
+</div>

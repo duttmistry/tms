@@ -1,0 +1,447 @@
+<div class="custom-button">
+    <button color="accent" (click)="resetData()" class="cancel secondary-button">Cancel</button>
+    <button color="primary" (click)="onAddNewFields()" disabled="{{ !getCustomFieldFormArray.controls.length && !isFieldEdited }}" class="primary-button {{ !getCustomFieldFormArray.controls.length && !isFieldEdited ? 'disable ' : 'next' }}">
+    Save
+  </button>
+</div>
+<div class="flex-parent-element-custom-field custom-field-blk">
+    <div class="flex-child-element left example-list">
+        <!-- <div class="add-button pr-form-top-buttons role-header"></div> -->
+
+        <!-- <div class="role-header">
+      <p>Custom Fields</p>
+      <div>
+        <button color="accent" (click)="resetData()" class="cancel">Cancel</button>
+        <button
+          color="primary"
+          (click)="onAddNewFields()"
+          disabled="{{ !getCustomFieldFormArray.controls.length }}"
+          class="{{ !getCustomFieldformArray.controls.length ? 'disable ' : 'save' }}"
+          matTooltip="Save"
+        >
+          Save
+        </button>
+      </div>
+    </div> -->
+        <div cdkDropListGroup>
+            <div class="description-fields-section">
+                <span class="create-field-wrap pr-form-top-header">Descriptive fields <mat-icon matTooltip="Drag and drop fields from descriptive to context">error_outline</mat-icon></span
+        >
+        <div class="available-items left">
+          <div
+            cdkDropList
+            #descriptionFields
+            id="descriptionContainer"
+            [cdkDropListData]="itemsLeft"
+            class="example-list"
+            (cdkDropListDropped)="drop($event)"
+          >
+            <div class="example-box change-form" *ngFor="let item of itemsLeft" cdkDrag>
+              <mat-form-field *ngIf="item.type === 'input-text'" class="full-width-formfield" >
+                <mat-label>{{ item.label }}</mat-label>
+                <input
+                  matInput
+                  type="{{ item.inputType }}"
+                  name="{{ item.label }}"
+                  id="{{ item.id }}"
+                  placeholder="{{ item.placeholder }}"
+                  required
+                  disabled 
+                />
+                <mat-icon matPrefix [style.background-image]="'url(assets/images/a-icon.svg)'"></mat-icon>
+                <!-- <mat-error>Required field</mat-error> -->
+              </mat-form-field>
+
+              <mat-form-field *ngIf="item.type === 'input-number'" class="full-width-formfield">
+                <mat-label>{{ item.label }}</mat-label>
+                <input
+                  matInput
+                  type="{{ item.inputType }}"
+                  name="{{ item.label }}"
+                  id="{{ item.id }}"
+                  placeholder="{{ item.placeholder }}"
+                  required
+                  disabled 
+                />
+                <mat-icon matPrefix [style.background-image]="'url(assets/images/number.svg)'"></mat-icon>
+                <!-- <mat-error>Required field</mat-error> -->
+              </mat-form-field>
+
+              <mat-form-field *ngIf="item.type === 'input-url'" class="full-width-formfield">
+                <mat-label>{{ item.label }}</mat-label>
+                <input
+                  matInput
+                  type="{{ item.inputType }}"
+                  name="{{ item.label }}"
+                  id="{{ item.id }}"
+                  placeholder="{{ item.placeholder }}"
+                  required
+                  disabled 
+                />
+                <mat-icon matPrefix [style.background-image]="'url(assets/images/url.svg)'"></mat-icon>
+                <!-- <mat-error>Required field</mat-error> -->
+              </mat-form-field>
+
+              <mat-form-field *ngIf="item.type === 'date'" class="full-width-formfield">
+                <mat-label>{{ item.label }}</mat-label>
+                <input matInput [matDatepicker]="picker" disabled  />
+                <mat-datepicker-toggle matIconPrefix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+              </mat-form-field>
+
+              <mat-form-field *ngIf="item.type === 'textarea'" class="full-width-formfield">
+                <mat-label>{{ item.label }}</mat-label>
+                <textarea matInput placeholder="{{ item.placeholder }}" id="{{ item.id }}" disabled></textarea>
+                <mat-icon matPrefix [style.background-image]="'url(assets/images/paragraph.svg)'"></mat-icon>
+              </mat-form-field>
+
+              <mat-form-field *ngIf="item.type === 'dropdown'" class="full-width-formfield arrow-down">
+                <mat-label>{{ item.label }}</mat-label>
+                <mat-select id="{{ item.id }}" >
+                  <mat-option *ngFor="let opt of item.options" [value]="opt.id">
+                    {{ opt.value }}
+                  </mat-option>
+                </mat-select>
+                <!-- <mat-icon matPrefix [style.background-image]="'url(assets/images/dropdown.svg)'"></mat-icon> -->
+              </mat-form-field>
+
+              <mat-checkbox
+                color="primary"
+                *ngIf="item.type === 'checkbox'"
+                class="example-margin example-checkbox"
+                id="{{ item.id }}"
+                (change)="onCheckboxChange($event, item)"
+                [checked]="item.is_required"
+                >{{ item.label }}</mat-checkbox
+              >
+
+              <mat-radio-group *ngIf="item.type === 'radio-btn'" id="{{ item.id }}">
+                <mat-label>{{ item.label }}</mat-label>
+                <mat-radio-button color="primary" *ngFor="let opt of item.options" [value]="opt.id">{{ opt.value }}</mat-radio-button>
+                <mat-error *ngIf="inputOptions.hasError('minimumOption')">Please add atleast one option</mat-error>
+              </mat-radio-group>
+              <mat-label *ngIf="item.type === 'label'" id="{{ item.id }}"></mat-label>
+              <div class="edit-icon-required-section">
+                <img
+                  src="assets/images/edit-2.svg"
+                  alt="profile logo"
+                  class="prefix-icon"
+                  width="20px"
+                  (click)="editField(item)"
+                  matTooltip="Update field"
+                />
+                <mat-checkbox color="primary" class="example-margin" (change)="onClickRequire($event, item)" [checked]="item.is_required"
+                  >Required</mat-checkbox
+                >
+              </div>
+            </div>
+          </div>
+          <ng-container *ngIf="showAddControlSection">
+            <div class="change-wrap">
+              <!-- <mat-card-header style="background-color: #ede0c9; padding: 1px 0 0; justify-content: center">Add Field</mat-card-header> -->
+              <mat-card-content class="change-form">
+                <mat-form-field class="full-width-formfield">
+                  <mat-label>Label for {{ formControlData.label }}</mat-label>
+                  <input matInput [formControl]="inputTextLabel" required (keyup.enter)="onClickAdd(formControlData)" />
+                  <mat-error *ngIf="inputTextLabel.hasError('required')">Please add label text.</mat-error>
+                </mat-form-field>
+                <!-- <mat-form-field class="full-width-formfield" *ngIf="formControlData.placeholder === null">
+                  <mat-label>Placeholder for {{ formControlData.label }}</mat-label>
+                  <input matInput [formControl]="inputPlaceholder" required (keyup.enter)="onClickAdd(formControlData)" />
+                  <mat-error *ngIf="inputPlaceholder.hasError('required')">Please add placeholder.</mat-error>
+                </mat-form-field>
+                <br /> -->
+
+                <div *ngIf="(formControlData.type === 'dropdown' || formControlData.type === 'radio-btn') && formControlData.options">
+                  <div>
+                    <mat-form-field class="full-width-formfield">
+                      <mat-label>Option</mat-label>
+                      <input color="primary" matInput [formControl]="inputOptions" (keyup.enter)="onClickAddOption(formControlData)" />
+                      <!-- <mat-icon matSuffix (click)="onClickAddOption(formControlData)" style="cursor: pointer" matTooltip="Add option"
+                        >add_circle_outline</mat-icon
+                      > -->
+                      <svg
+                        width="20"
+                        height="20"
+                        viewBox="0 0 20 20"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                        (click)="onClickAddOption(formControlData)"
+                        class="filter-close"
+                      >
+                        <path
+                          d="M10.0003 18.3332C14.5837 18.3332 18.3337 14.5832 18.3337 9.99984C18.3337 5.4165 14.5837 1.6665 10.0003 1.6665C5.41699 1.6665 1.66699 5.4165 1.66699 9.99984C1.66699 14.5832 5.41699 18.3332 10.0003 18.3332Z"
+                          stroke="#ADADAD"
+                          stroke-width="1.5"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                        <path d="M7.6416 12.3583L12.3583 7.6416" stroke="#ADADAD" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M12.3583 12.3583L7.6416 7.6416" stroke="#ADADAD" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                      </svg>
+                      <mat-error *ngIf="inputOptions.hasError('sameOption')">Unable to add same option</mat-error>
+                      <mat-error *ngIf="inputOptions.hasError('minimumOption')">Please add atleast one option</mat-error>
+                    </mat-form-field>
+                  </div>
+                  <ng-container *ngFor="let item of formControlData.options">
+                    {{ item.value }}
+                  </ng-container>
+                </div>
+              </mat-card-content>
+              <mat-card-actions>
+                <button (click)="onCancelDialog()" class="cancel">Cancel</button>
+                <button color="primary" (click)="onClickAdd(formControlData)" class="next">Add</button>
+                <!-- <img src="assets/images/cross.png" alt="cross" (click)="onCancelDialog()" class="cross-icon" matTooltip="Cancel" />
+                <img src="assets/images/right.png" alt="right" (click)="onClickAdd(formControlData)" class="right-icon" matTooltip="Save" /> -->
+              </mat-card-actions>
+            </div>
+          </ng-container>
+          <ng-container *ngIf="showUpdateDescriptionControlSection">
+            <div class="change-wrap">
+              <!-- <mat-card-header style="background-color: #ede0c9; padding: 1px 0 0; justify-content: center">Update Field</mat-card-header> -->
+              <mat-card-content class="change-form">
+                <mat-form-field class="full-width-formfield">
+                  <mat-label>Update label of {{ updateField.label }}</mat-label>
+                  <input matInput [formControl]="updateTextLabel" required (keyup.enter)="onClickUpdate()" autoFocusDirective/>
+                  <mat-error *ngIf="updateTextLabel.hasError('required')">Please add the label text.</mat-error>
+                </mat-form-field>
+                <div *ngIf="(updateField.type === 'dropdown' || updateField.type === 'radio-btn') && updateField.options">
+                  <div>
+                    <ng-container *ngFor="let item of updateOptionArray?.controls; let i; as: index">
+                      <mat-form-field class="full-width-formfield">
+                        <mat-label>Update Option Label</mat-label>
+                        <input color="primary" matInput id="{{ removeSpaceFromString(item.value) + i }}" [formControl]="item" autoFocusDirective />
+                        <mat-error *ngIf="item.touched && item.hasError('required')">This field is required</mat-error>
+                        <mat-icon matSuffix (click)="onClickRemoveOption(item); $event.stopPropagation()" matTooltip="Remove option"
+                          >remove_circle_outline</mat-icon
+                        >
+                      </mat-form-field>
+                    </ng-container>
+                    <mat-form-field class="full-width-formfield">
+                      <mat-label>Add New Option</mat-label>
+                      <input
+                        color="primary"
+                        matInput
+                        [formControl]="addOptionControl"
+                        (keyup.enter)="onClickAddNewOption(); $event.stopPropagation()"
+                        autoFocusDirective
+                      />
+                      <mat-icon matSuffix (click)="onClickAddNewOption()" matTooltip="Add option">add_circle_outline</mat-icon>
+
+                      <mat-error *ngIf="addOptionControl.hasError('requiredValue')">Please add an option</mat-error>
+                      <mat-error *ngIf="addOptionControl.hasError('sameOption')">Unable to add same option</mat-error>
+                    </mat-form-field>
+                  </div>
+                </div>
+              </mat-card-content>
+              <mat-card-actions>
+                <img src="assets/images/cross.png" alt="cross" (click)="onCancelUpdate()" class="cross-icon" matTooltip="Cancel" />
+                <img src="assets/images/right.png" alt="right" (click)="onClickUpdate()" class="right-icon" matTooltip="Save" />
+              </mat-card-actions>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+      <div class="context-fields-section">
+        <span class="create-field-wrap pr-form-top-header"
+          >Context fields <mat-icon matTooltip="Drag and drop fields from context to descriptive">error_outline</mat-icon></span
+        >
+        <div class="available-items right">
+          <div
+            cdkDropList
+            #contextFields
+            id="contextContainer"
+            [cdkDropListData]="itemsRight"
+            class="example-list"
+            (cdkDropListDropped)="drop($event)"
+          >
+            <div class="example-box change-form" *ngFor="let item of itemsRight" cdkDrag>
+              <mat-form-field *ngIf="item.type === 'input-text'" class="full-width-formfield">
+                <mat-label>{{ item.label }}</mat-label>
+                <input
+                  matInput
+                  type="{{ item.inputType }}"
+                  name="{{ item.label }}"
+                  id="{{ item.id }}"
+                  placeholder="{{ item.placeholder }}"
+                  required
+                  disabled
+                />
+                <mat-icon matPrefix [style.background-image]="'url(assets/images/a-icon.svg)'"></mat-icon>
+                <!-- <mat-error>Required field</mat-error> -->
+              </mat-form-field>
+
+              <mat-form-field *ngIf="item.type === 'input-number'" class="full-width-formfield">
+                <mat-label>{{ item.label }}</mat-label>
+                <input
+                  matInput
+                  type="{{ item.inputType }}"
+                  name="{{ item.label }}"
+                  id="{{ item.id }}"
+                  placeholder="{{ item.placeholder }}"
+                  required
+                  disabled
+                />
+                <mat-icon matPrefix [style.background-image]="'url(assets/images/number.svg)'"></mat-icon>
+                <!-- <mat-error>Required field</mat-error> -->
+              </mat-form-field>
+
+              <mat-form-field *ngIf="item.type === 'input-url'" class="full-width-formfield">
+                <mat-label>{{ item.label }}</mat-label>
+                <input
+                  matInput
+                  type="{{ item.inputType }}"
+                  name="{{ item.label }}"
+                  id="{{ item.id }}"
+                  placeholder="{{ item.placeholder }}"
+                  required
+                  disabled
+                />
+                <mat-icon matPrefix [style.background-image]="'url(assets/images/url.svg)'"></mat-icon>
+                <!-- <mat-error>Required field</mat-error> -->
+              </mat-form-field>
+
+              <mat-form-field *ngIf="item.type === 'date'" class="full-width-formfield">
+                <mat-label>{{ item.label }}</mat-label>
+                <input matInput [matDatepicker]="picker"  />
+                <mat-datepicker-toggle matIconPrefix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+              </mat-form-field>
+
+              <mat-form-field *ngIf="item.type === 'textarea'" class="full-width-formfield">
+                <mat-label>{{ item.label }}</mat-label>
+                <textarea matInput placeholder="{{ item.placeholder }}" id="{{ item.id }}" disabled></textarea>
+                <mat-icon matPrefix [style.background-image]="'url(assets/images/paragraph.svg)'"></mat-icon>
+              </mat-form-field>
+
+              <mat-form-field *ngIf="item.type === 'dropdown'" class="full-width-formfield arrow-down">
+                <mat-label>{{ item.label }}</mat-label>
+                <mat-select id="{{ item.id }}">
+                  <mat-option *ngFor="let opt of item.options" [value]="opt.id">
+                    {{ opt.value }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+
+              <mat-checkbox
+                *ngIf="item.type === 'checkbox'"
+                class="example-margin example-checkbox"
+                id="{{ item.id }}"
+                color="primary"
+                (change)="onCheckboxChange($event, item)"
+                [checked]="item.is_required"
+                >{{ item.label }}</mat-checkbox
+              >
+
+              <mat-radio-group *ngIf="item.type === 'radio-btn'" id="{{ item.id }}">
+                <mat-label>{{ item.label }}</mat-label>
+                <mat-radio-button *ngFor="let opt of item.options" [value]="opt.id">{{ opt.value }}</mat-radio-button>
+              </mat-radio-group>
+              <mat-label *ngIf="item.type === 'label'" id="{{ item.id }}"></mat-label>
+              <div class="edit-icon-required-section">
+                <img
+                  src="assets/images/edit-2.svg"
+                  alt="profile logo"
+                  class="prefix-icon"
+                  width="20px"
+                  (click)="editField(item)"
+                  matTooltip="Edit field"
+                />
+                <mat-checkbox class="example-margin" color="primary" (change)="onClickRequire($event, item)" [checked]="item.is_required"
+                  >Required</mat-checkbox
+                >
+              </div>
+            </div>
+          </div>
+          <div *ngIf="showUpdateContextControlSection">
+            <div class="change-wrap">
+              <!-- <mat-card-header>Update Form Control</mat-card-header> -->
+              <mat-card-content class="change-form">
+                <mat-form-field class="full-width-formfield">
+                  <mat-label>Update label of {{ updateField.label }}</mat-label>
+                  <input matInput [formControl]="updateTextLabel" required (keyup.enter)="onClickUpdate()" autoFocusDirective />
+                  <mat-error *ngIf="updateTextLabel.hasError('required')">Please add the label text.</mat-error>
+                </mat-form-field>
+                <div *ngIf="(updateField.type === 'dropdown' || updateField.type === 'radio-btn') && updateField.options">
+                  <div>
+                    <ng-container *ngFor="let item of updateOptionArray?.controls; let i; as: index">
+                      <mat-form-field class="full-width-formfield">
+                        <mat-label>Update Option Label</mat-label>
+                        <input color="primary" matInput id="{{ removeSpaceFromString(item.value) + i }}" [formControl]="item" required autoFocusDirective />
+                        <mat-error *ngIf="item.touched && item.hasError('required')">This field is required</mat-error>
+                        <mat-icon matSuffix (click)="onClickRemoveOption(item); $event.stopPropagation()" matTooltip="Remove option"
+                          >remove_circle_outline</mat-icon
+                        >
+                      </mat-form-field>
+                    </ng-container>
+                    <mat-form-field class="full-width-formfield">
+                      <mat-label>Add New Option</mat-label>
+                      <input
+                        color="primary"
+                        matInput
+                        [formControl]="addOptionControl"
+                        (keyup.enter)="onClickAddNewOption(); $event.stopPropagation()"
+                      />
+                      <mat-icon matSuffix (click)="onClickAddNewOption()" matTooltip="Add option">add_circle_outline</mat-icon>
+                      <mat-error *ngIf="addOptionControl.hasError('requiredValue')">Please add an option</mat-error>
+                      <mat-error *ngIf="addOptionControl.hasError('sameOption')">Unable to add same option</mat-error>
+                    </mat-form-field>
+                  </div>
+                </div>
+              </mat-card-content>
+              <mat-card-actions>
+               
+                <img src="assets/images/cross.png" alt="cross" (click)="onCancelUpdate()" class="cross-icon" matTooltip="Cancel" />
+                <img src="assets/images/right.png" alt="right" (click)="onClickUpdate()" class="right-icon" matTooltip="Save" />
+              </mat-card-actions>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="flex-child-element right-wrap example-list">
+    <span class="create-field-wrap pr-form-top-header"
+      >Create field <mat-icon matTooltip="Click on field to create new one">error_outline</mat-icon></span
+    >
+    <div class="create-field-container">
+      <ng-container *ngFor="let item of formControlList">
+        <div class="field-box" (click)="onClickFormControl(item)">
+          <div class="form-control-list">
+            <img src="assets/images/{{ item.icon }}.svg" alt="a" />
+            <label class="form-control-title">
+              {{ item.label }}
+            </label>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+
+    <div class="create-field-container search-custom">
+      <span>Search for available fields</span>
+                <ng-container>
+                    <mat-form-field appearance="fill" class="full-width-formfield change-form">
+                        <mat-label>Type to search all fields</mat-label>
+                        <input matInput placeholder="Search field" id="searchField" (input)="searchAvailableField($event)" />
+                        <!-- <mat-icon matPrefix>search</mat-icon> -->
+                        <img matPrefix src="assets/images/search.svg" alt="search" class="search" />
+                        <mat-hint class="custom-hint">Reuse {{ customFieldList.length || '' }} fields of other projects</mat-hint>
+                    </mat-form-field>
+                </ng-container>
+            </div>
+            <span class="create-field-wrap pr-form-top-header">Suggested field <mat-icon matTooltip="Add other suggested field">error_outline</mat-icon></span
+    >
+    <div class="create-field-container">
+      <ng-container *ngFor="let item of filteredFields">
+        <div class="field-box" (click)="onClickSuggestedField(item)">
+          <div class="form-control-list">
+            <img src="assets/images/{{ item.icon }}.svg" alt="a" />
+            <label class="form-control-title">
+              {{ item.label }}
+            </label>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</div>

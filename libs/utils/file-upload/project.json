@@ -1,0 +1,35 @@
+{
+  "name": "utils-file-upload",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/utils/file-upload/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/utils/file-upload",
+        "tsConfig": "libs/utils/file-upload/tsconfig.lib.json",
+        "packageJson": "libs/utils/file-upload/package.json",
+        "main": "libs/utils/file-upload/src/index.ts",
+        "assets": ["libs/utils/file-upload/*.md"]
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/utils/file-upload/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "libs/utils/file-upload/jest.config.ts",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": ["node"]
+}

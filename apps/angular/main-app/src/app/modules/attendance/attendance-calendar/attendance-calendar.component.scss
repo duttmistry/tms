@@ -1,0 +1,200 @@
+@import 'apps/angular/main-app/src/variables';
+@import 'apps/angular/main-app/src/mixins';
+@import 'apps/angular/main-app/src/assets/fonts/fonts.scss';
+.attendance-calender-wrapper {
+  .mat-mdc-card {
+    padding-bottom: 0;
+  }
+  .holiday-height {
+    max-height: 280px;
+    overflow-x: auto;
+  }
+  .leaves-holiday-wrap:last-child {
+    margin-top: 20px;
+  }
+  .workspace-table {
+    gap: 15px;
+    @include flex;
+    height: 100%;
+    .holiday-day {
+      font-size: $theme-main-large-font;
+      font-weight: 600;
+      color: $theme-font-color-black;
+      line-height: 20px;
+    }
+    .holiday-blk {
+      padding: 0 0 20px 0;
+      @include flex-justify-space-between;
+      @include flex;
+      @include flex-align-center;
+      span {
+        color:$theme-main-color;
+        text-decoration: underline;
+        font-size: $theme-main-small-font;
+        line-height: 16px;
+        cursor: pointer;
+      }
+    }
+     ::ng-deep .fc .fc-toolbar {
+      margin-bottom: 115px !important;
+    }
+    .leave-count-attedance {
+      position: absolute;
+      top: 75px;
+    }
+  }
+  .attendance-calender {
+    width: 75%;
+    border-right: 1px solid $theme-border-color-gray;
+    padding: 15px 15px 15px 0;
+     ::ng-deep .fc-day {
+      position: relative;
+      border: 1px solid #adadad;
+      border-bottom: 0;
+    }
+     ::ng-deep .fc .fc-scroller-harness {
+      overflow: unset;
+    }
+  }
+  .leaves-holiday {
+    width: 24%;
+    padding: 23px 0;
+     ::ng-deep .mat-mdc-list-item-unscoped-content {
+      @include flex;
+      font-size: $theme-main-medium-font;
+    }
+     ::ng-deep .mat-mdc-list-item {
+      height: initial !important;
+    }
+    p {
+      color: $theme-main-color-light;
+      font-size: $theme-main-small-font;
+      font-weight: 400;
+      line-height: 20px;
+      margin: 0;
+    }
+    .no-record {
+      margin-bottom: 12px;
+    }
+    .holiday-img {
+      margin-right: 15px;
+      margin-top: -22px;
+    }
+    h2 {
+      font-size: $theme-main-medium-font;
+      font-weight: 500;
+      line-height: 23px;
+      margin: 0;
+      color: $theme-font-color-black;
+      white-space: break-spaces;
+    }
+    .days {
+      width: 100%;
+      padding-bottom: 16px;
+      border-bottom: 1px solid $theme-border-color-gray;
+      margin-bottom: 16px;
+    }
+  }
+}
+
+.attendance-calender {
+  position: relative;
+}
+
+.holiday-color {
+  position: absolute;
+  top: 28px;
+  right: 17px;
+  @include flex;
+  gap: 42px;
+}
+
+::ng-deep .bg-present {
+  background-color: $theme-color-bg-present;
+}
+
+::ng-deep .bg-absent {
+  background-color: $theme-color-bg-absent;
+}
+
+::ng-deep .bg-leave-day {
+  background-color: $theme-color-bg-leave-day;
+}
+
+::ng-deep .bg-holiday {
+  background-color: $theme-color-bg-holiday;
+}
+
+::ng-deep .bg-weekend {
+  background-color: $theme-color-bg-weekend;
+}
+
+::ng-deep .present-bg::before {
+  background-color: $theme-color-bg-present;
+}
+
+.absent-bg::before {
+  background-color: $theme-color-bg-absent;
+}
+
+.leave-day-bg::before {
+  background-color: $theme-color-bg-leave-day;
+}
+
+.holiday-bg::before {
+  background-color: $theme-color-bg-holiday;
+}
+
+.weekend-bg::before {
+  background-color: $theme-color-bg-weekend;
+}
+
+@media screen and (max-width: $extra-large-device) {
+  .attendance-calender-wrapper {
+    .workspace-table {
+      flex-direction: column;
+      .attendance-calender {
+        width: 100%;
+        border-right: unset;
+        padding-right: 0;
+      }
+      .leaves-holiday {
+        width: 100%;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: $lerge-device) {
+  .attendance-calender-wrapper {
+    .holiday-color {
+      gap: 30px;
+    }
+     ::ng-deep .fc .fc-daygrid-day-frame {
+      min-height: auto;
+    }
+  }
+}
+
+.leaves-holiday {
+  .leaves-holiday-wrap {
+    position: relative;
+  }
+  .leaves-holiday-wrap:after {
+    content: '';
+    position: absolute;
+    border-bottom: 1px solid #DFDFDF;
+    bottom: -4px;
+    width: 100%;
+  }
+}
+
+.holiday-height {
+  .holiday-item:last-child {
+    .days {
+      border-bottom: 0;
+      margin-bottom: 0;
+      padding-bottom: 12px;
+    }
+  }
+}

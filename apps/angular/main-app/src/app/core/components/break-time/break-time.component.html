@@ -1,0 +1,28 @@
+<div class="break-time">
+  <!-- <button (click)="openDialogWithTemplateRef()" [disabled]="isDialogOpen">click</button> -->
+  <div class="carousel-section" style="width: 50%; height: 100%">
+    <!-- <div [mainAppSpinner]="showSpinner" class="login-spinner" *ngIf="showSpinner" ></div> -->
+    <div *ngIf="showSpinner" class="login-spinner">
+      <mat-spinner diameter="50" color="accent"></mat-spinner>
+    </div>
+    <div class="break-time-items" *ngIf="!showSpinner">
+      <!-- <p class="login-desc">{{ greetingMessage }}</p> -->
+      <img src="assets/images/break_time_gif.gif" alt="locklogo" class="break-time-gif" />
+      <div class="timer">
+        <div style="font-size: xxx-large; font-weight: bold; color: white; margin: 20px; padding: 20px">{{ formatTime(timeInSeconds) }}</div>
+
+        <!-- <button (click)="startTimer()" [disabled]="isRunning">Start</button>
+        <button (click)="resetTimer()">Reset</button> -->
+      </div>
+      <!-- <img src="assets/images/spinner_white.gif" alt="" style="width: 50px; height: 50px" *ngIf="showBackFromBackSpinner" /> -->
+      <h3 class="break-heading" (click)="BackFromBreak()">
+        <span *ngIf="!showBackFromBackSpinner">
+          <span class="material-icons" style="margin-right: 10px; color: white; font-size: 18px">arrow_back</span>Back from break
+        </span>
+        <ng-container *ngIf="showBackFromBackSpinner">
+          <div [mainAppSpinner]="showBackFromBackSpinner" [border]="'4px solid white'" [border_Top]="'4px solid rgb(71 82 147)'"></div>
+        </ng-container>
+      </h3>
+    </div>
+  </div>
+</div>

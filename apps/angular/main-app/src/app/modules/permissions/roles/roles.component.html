@@ -1,0 +1,67 @@
+<div class="role">
+  <div class="role-header">
+    <div>
+      <div class="role-form" *ngIf="allowAdd || isEdit">
+        <mat-form-field class="medium-height-wrapper input-field-wrapper">
+          <mat-label>{{ isEdit ? 'Edit' : 'Add' }} User Role</mat-label>
+          <input #searchRole matInput [formControl]="title" (keydown.enter)="onSave()" />
+        </mat-form-field>
+        <div *ngIf="title.invalid && title.touched" class="error-wrap">
+          <mat-error *ngIf="title.errors && title.errors['required']">Please enter a role name </mat-error>
+          <mat-error *ngIf="title.errors && title.errors['minlength']">Minimum length should be 2 characters </mat-error>
+          <mat-error *ngIf="title.errors && title.errors['maxlength']">Maximum 50 characters are allowed </mat-error>
+          <mat-error
+            *ngIf="title.hasError('specialCharacters') && !(title.errors && title.errors['required']) && !(title.errors && title.errors['minlength'])"
+            >Role name is not valid. Please try again.</mat-error
+          >
+        </div>
+      </div>
+    </div>
+    <div *ngIf="allowAdd || isEdit" class="button">
+      <button color="accent" class="cancel secondary-button" (click)="onCancel()">Cancel</button>
+      <button color="primary" class="next primary-button" (click)="onSave()">Save</button>
+    </div>
+  </div>
+
+  <div class="role-table table-responsive">
+    <table mat-table [dataSource]="userRoles.data.length > 0 ? userRoles : emptyData" class="mat-elevation-z8">
+      <ng-container matColumnDef="roles">
+        <th mat-header-cell *matHeaderCellDef>Roles</th>
+        <td mat-cell *matCellDef="let element" [ngClass]="element?.id === editRole?.id ? 'highlightRecord' : ''">
+          {{ element.title }}
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef class="table-align">Actions</th>
+        <td mat-cell *matCellDef="let element" [ngClass]="element?.id === editRole?.id ? 'highlightRecord' : ''" class="table-align tag-center">
+          <img
+            src="assets/images/edit-bg.svg"
+            (click)="onEditRole(element)"
+            *ngIf="element.title.toLowerCase() !== 'super admin' && allowEdit"
+            matTooltip="Edit"
+          />
+          <img
+            src="assets/images/trash.svg"
+            (click)="onDeleteRole(element.id, element.title)"
+            *ngIf="element.title.toLowerCase() !== 'super admin' && allowDelete"
+            matTooltip="Delete"
+          />
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="empty-row">
+        <ng-template #noRecordSection>
+          <td mat-cell *matCellDef="let element">No records found</td>
+        </ng-template>
+        <ng-container *ngIf="showSpinner; else noRecordSection">
+          <td mat-cell *matCellDef="let element">
+            <div mat-row [mainAppSpinner]="showSpinner"></div>
+          </td>
+        </ng-container>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: userRoles.data.length > 0 ? displayedColumns : ['empty-row']"></tr>
+    </table>
+  </div>
+</div>

@@ -1,0 +1,116 @@
+@import 'apps/angular/main-app/src/variables';
+@import 'apps/angular/main-app/src/mixins';
+@import 'apps/angular/main-app/src/assets/fonts/fonts.scss';
+
+.billing-details-form {
+  .pr-form-top-header {
+    margin-bottom: 15px;
+  }
+  .details-text {
+    margin-bottom: 30px;
+
+    .text-item {
+      font-size: $theme-main-medium-font;
+      font-weight: 400;
+      line-height: 17px;
+      margin-bottom: 20px;
+      span {
+        font-size: $theme-main-small-font;
+        font-weight: 400;
+        line-height: 15px;
+        width: 145px;
+        color: $theme-main-extra-color-dark;
+        display: inline-block;
+      }
+    }
+  }
+  .details-chip {
+    ::ng-deep .mat-mdc-chip {
+      background-color: unset !important;
+      border: 1px solid $theme-border-color-gray;
+      padding: 5px;
+      height: 40px;
+      margin-bottom: 12px;
+      width: 220px;
+    }
+  }
+  .details-radio {
+    margin-top: 25px;
+    ::ng-deep .mdc-radio {
+      padding: 0;
+    }
+    ::ng-deep .mdc-form-field > label {
+      padding-left: 10px;
+    }
+    .mat-mdc-radio-group {
+      @include flex;
+      gap: 30px;
+      margin-bottom: 25px;
+    }
+    .radio-form {
+      display: flex;
+      margin-bottom: 30px;
+      gap: 15px;
+      mat-error {
+        margin-top: 5px;
+      }
+      label {
+        display: block;
+      }
+      .add-h2 {
+        margin-bottom: 5px;
+      }
+      .next {
+        width: 104px;
+        height: 40px !important;
+        margin-left: 0 !important;
+        margin-top: 20px;
+      }
+      input {
+        font-family: 'Inter', 'sans-serif';
+        width: 300px;
+        height: 40px;
+        padding: 0 10px;
+        border-radius: 5px;
+        border: 1px solid $theme-border-color-gray;
+        font-weight: 400 !important;
+        font-size: 14px !important;
+        line-height: 18px !important;
+        outline: none;
+      }
+      .bg-input {
+        background-color: $theme-bg-color-drawer-container !important;
+      }
+    }
+  }
+}
+::ng-deep .mat-mdc-radio-button .mdc-form-field {
+  color: #adadad !important;
+  font-weight: 500;
+}
+::ng-deep .mat-mdc-radio-button .mdc-radio .mdc-radio__native-control:enabled:not(:checked) + .mdc-radio__background .mdc-radio__outer-circle {
+  border-color: #adadad !important;
+}
+::ng-deep .mat-mdc-radio-checked .mdc-form-field {
+  color: $theme-main-color !important;
+}
+
+@media screen and (max-width: $lerge-device) {
+  .radio-form {
+    input {
+      width: 200px !important;
+    }
+  }
+}
+
+.not-allowed-cursor {
+  cursor: not-allowed;
+}
+
+.title-details {
+  font-size: $theme-main-small-font;
+  font-weight: 400;
+  line-height: 15px;
+  color: $theme-main-extra-color-dark;
+  margin-top: -10px;
+}

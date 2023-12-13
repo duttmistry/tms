@@ -1,0 +1,65 @@
+<div class="messaging-template container-wrapper">
+    <mat-card>
+        <div class="workspace-blk workspace-border">
+            <strong>Messaging Template</strong>
+            <div class="btn-flex">
+                <div class="tertiary-button" (click)="goBack()">Back</div>
+                <button color="primary" class="next primary-button" type="submit" (click)="onClickSaveTemplate()">
+          {{ isEditTemplate ? 'Update' : 'Save' }}
+        </button>
+                <button color="accent" class="cancel secondary-button" (click)="onClickPreviewTemplate()">Preview</button>
+
+                <button color="accent" class="cancel secondary-button" type="submit" (click)="resetControls()">Reset</button>
+            </div>
+        </div>
+        <div class="messaging-template-wrap">
+            <form class="form-section change-form">
+                <div class="message-form">
+                    <mat-form-field class="big-height-wrapper input-field-wrapper">
+                        <mat-label>Template title</mat-label>
+                        <input matInput [formControl]="templateTitleControl" name="title" />
+                        <mat-error *ngIf="templateTitleControl.touched && templateTitleControl.hasError('required')">Please provide a template title</mat-error>
+                    </mat-form-field>
+                    <mat-form-field class="big-height-wrapper input-field-wrapper">
+                        <mat-label>Email subject</mat-label>
+                        <input matInput name="subject" [formControl]="templateSubjectControl" />
+                        <mat-error *ngIf="templateTitleControl.touched && templateSubjectControl.hasError('required')">Please provide an email subject</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="side-toggle-blk">
+                    <strong class="Disable">Disable</strong>
+                    <mat-slide-toggle name="enable" [formControl]="templateEnableControl">
+                        <strong class="enable">Enable</strong>
+                    </mat-slide-toggle>
+                </div>
+                <div class="ckeditor-section" style="margin-bottom: 20px">
+                    <!-- <quill-editor
+            placeholder="Template content.."
+            [modules]="quillConfiguration"
+            [formControl]="templateContentControl"
+            (onContentChanged)="onEditorContentChange($event)"
+            (onBlur)="checkContentOnBlur()"
+            [ngModelOptions]="{ standalone: true }"
+          ></quill-editor> -->
+
+                    <ckeditor [(ngModel)]="templateData" #ckeditor="ngModel" name="ckeditor" required [config]="ckeConfig" debounce="500" (ngModelChange)="onChange($event)" (onContentChanged)="onEditorContentChange($event)" (onBlur)="checkContentOnBlur()">
+                    </ckeditor>
+                    <!-- <mat-error *ngIf="isTemplateData || (templateContentControl.hasError('required') && templateContentControl.touched)">Please provide an Template content.</mat-error> -->
+                    <!-- [(ngModel)]="templateData" -->
+                </div>
+                <div class="message-form">
+                    <mat-form-field class="big-height-wrapper input-field-wrapper">
+                        <mat-label>Notification title</mat-label>
+                        <input matInput [formControl]="notificationTitleControl" name="title" />
+                        <mat-error *ngIf="notificationTitleControl.hasError('required')">Please provide a notification title.</mat-error>
+                    </mat-form-field>
+                    <mat-form-field class="big-height-wrapper input-field-wrapper">
+                        <mat-label>Chat content</mat-label>
+                        <input matInput [formControl]="chatContentControl" name="title" />
+                        <mat-error *ngIf="chatContentControl.hasError('required')">Please provide an chat content.</mat-error>
+                    </mat-form-field>
+                </div>
+            </form>
+        </div>
+    </mat-card>
+</div>

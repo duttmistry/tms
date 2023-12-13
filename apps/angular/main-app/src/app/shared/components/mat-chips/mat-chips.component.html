@@ -1,0 +1,67 @@
+<div (mouseenter)="openDialog(data)" (mouseleave)="closeDialog()" class="hover-chip mat-chip-wrapper">
+  <!-- <mat-chip #itemRef [removable]="true" [disabled]="disabledTeam" placeholder="User Details" [id]="data?.uid" [disableRipple]="true">-->
+  <mat-chip
+    #itemRef
+    [removable]="true"
+    [disabled]="disabledTeam"
+    placeholder="User Details"
+    [id]="data?.uid"
+    [matTooltip]="viewTooltip ? (data?.name ? data?.name : data?.first_name + ' ' + data?.last_name) : null"
+    [disableRipple]="true"
+  >
+    <img
+      #img
+      (error)="img.src = 'assets/images/default.png'"
+      [src]="baseUrl + (data?.avatar || data?.employee_image) || 'assets/images/default.png'"
+      alt="Image"
+      class="person cursor-pointer"
+      [ngClass]="[
+        indicateUserWorkingLocation ? 'user-indication' : '',
+        data && data?.login_capture_data
+          ? data?.login_capture_data?.isWfo === true
+            ? 'user-wfo'
+            : data?.login_capture_data?.isWfo === false
+            ? 'user-wfh'
+            : 'user-not-loggedIn'
+          : 'user-not-loggedIn'
+      ]"
+    />
+    <p *ngIf="!viewAvatarOnly" [ngClass]="showOrangeChip ? 'chip-orange' : ''" class="leave-name">
+      {{ data?.name ? data?.name : data?.first_name + ' ' + data?.last_name }}
+    </p>
+    <p *ngIf="data?.role_id == 1">Super Admin</p>
+
+    <img src="assets/images/close.svg" alt="homepage" class="close" *ngIf="isCloseButton" matChipRemove (click)="closeChip()" />
+  </mat-chip>
+
+  <mat-card class="loading-card1 chip-position" *ngIf="loading">
+    <mat-card-content>
+      <div class="loader-container">
+        <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card *ngIf="!loading && showPopup && data?.uid === userDetails?.uid" class="chip-position">
+    <div class="chip-flex">
+      <img
+        #img
+        (error)="img.src = 'assets/images/default.png'"
+        [src]="baseUrl + (userDetails?.avatar || userDetails?.employee_image)"
+        alt="employee image"
+      />
+
+      <div class="chip-text">
+        <div for="name">
+          <span> {{ userDetails?.name ? userDetails?.name : userDetails?.first_name + ' ' + userDetails?.last_name }} </span>
+        </div>
+        <div for="designation">
+          <p>{{ userDetails?.designation }}</p>
+        </div>
+        <div *ngIf="isRedirectToProfile">
+          <button (click)="redirectToProfile(userDetails?.id)">View profile</button>
+        </div>
+      </div>
+    </div>
+  </mat-card>
+</div>

@@ -1,0 +1,122 @@
+@import './../../../../../../apps/angular/main-app/src/variables.scss';
+@import './../../../../../../apps/angular/main-app/src/mixins.scss';
+@import './../../../../../../apps/angular/main-app/src/assets/fonts/fonts.scss';
+.document-round {
+  background-color: $theme-body-color;
+  margin: 0 3px;
+  font-size: $theme-main-small-font;
+  font-weight: 400;
+  border-radius: 50% !important;
+  width: 30px;
+  height: 30px;
+  @include flex;
+  @include flex-align-center;
+  @include flex-justify-center;
+}
+
+.document-form {
+  .common-gap-wrapper {
+    margin-bottom: 20px;
+  }
+   ::ng-deep .mat-mdc-form-field {
+    width: 100% !important;
+    margin-bottom: 0;
+  }
+   ::ng-deep .mdc-text-field--no-label:not(.mdc-text-field--textarea) .mat-mdc-form-field-input-control.mdc-text-field__input,
+  .mat-mdc-text-field-wrapper .mat-mdc-form-field-input-control {
+    height: 100% !important;
+    padding-left: 0;
+  }
+   ::ng-deep .document-editor__editable-container {
+    border: 0;
+    margin-bottom: 10px;
+    max-height: 700px;
+    height: 600px;
+    overflow-y: auto;
+    border-radius: $button-radius;
+    form,
+    ckeditor,
+    .cke_inner {
+      height: 100%;
+      display: block;
+    }
+    .cke_chrome {
+      height: calc(100% - 58px) !important;
+    }
+    .cke_contents {
+      height: calc(100% - 135px) !important;
+    }
+    p {
+      font-size: $theme-main-medium-font;
+      font-weight: 400;
+      margin-top: 5px;
+    }
+  }
+   ::ng-deep .ck.ck-editor__editable:not(.ck-editor__nested-editable).ck-rounded-corners {
+    height: 700px !important;
+    background-color: $theme-color-white;
+  }
+  .text-danger {
+    color: $theme-color-error;
+    font-size: $theme-main-small-font;
+    font-weight: 500;
+    margin-top: 4px;
+    line-height: 14px;
+    display: block;
+    margin-bottom: 0;
+  }
+}
+
+.share-span {
+  font-size: $theme-main-medium-font;
+  @include flex;
+  @include flex-align-center;
+  font-weight: 400;
+  line-height: 17px;
+}
+
+.mat-dialog-lib {
+  @include flex;
+  @include flex-align-center;
+  justify-content: flex-end;
+  padding-right: 20px;
+  padding-top: 20px;
+  gap: 10px;
+}
+
+.next {
+  margin-left: 0 !important;
+  min-width: 76px;
+}
+
+.mat-typography {
+  overflow: hidden;
+  padding: 20px !important;
+  height: 100vh;
+  max-height: initial !important;
+}
+
+.ck-editor__editable::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.062);
+  background-color: $theme-color-white;
+}
+
+.ck-editor__editable::-webkit-scrollbar {
+  width: 6px;
+  background-color: $theme-color-white;
+}
+
+.ck-editor__editable::-webkit-scrollbar-thumb {
+  background-color: #cccccce7;
+}
+
+.mat-mdc-input-element {
+  padding-left: 0;
+}
+
+.lib-add-document {
+   ::ng-deep .cdk-overlay-pane {
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+  }
+}

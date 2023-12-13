@@ -1,0 +1,538 @@
+@import 'apps/angular/main-app/src/variables';
+@import 'apps/angular/main-app/src/mixins';
+@import 'apps/angular/main-app/src/assets/fonts/fonts.scss';
+.add-workspace {
+  min-height: 100vh;
+  ::ng-deep .angular-editor {
+    max-width: 783px;
+  }
+  .disable-workspace {
+    a {
+      color: $theme-color-error;
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 17px;
+      cursor: pointer;
+    }
+  }
+  .workspace-documents {
+    margin-bottom: 20px;
+  }
+  .change-form {
+    margin-top: 25px;
+    margin-bottom: 15px;
+  }
+  ::ng-deep .mdc-text-field--no-label:not(.mdc-text-field--textarea) .mat-mdc-form-field-input-control.mdc-text-field__input,
+  .mat-mdc-text-field-wrapper .mat-mdc-form-field-input-control {
+    margin-left: 10px;
+    font-size: $theme-main-medium-font;
+    font-weight: 400;
+    line-height: 17px;
+    min-height: 48px !important;
+  }
+  ::ng-deep .mdc-evolution-chip-set .mdc-evolution-chip {
+    background-color: $theme-border-color-gray !important;
+    padding: 0 2px;
+    border-radius: 2px;
+  }
+  ::ng-deep .mat-mdc-chip {
+    .mdc-evolution-chip__text-label {
+      p {
+        color: $theme-main-color-light !important;
+        font-size: $theme-main-small-font !important;
+      }
+    }
+  }
+  ::ng-deep .mat-mdc-form-field:not(.mat-form-field-no-animations) .mdc-text-field__input {
+    min-height: 50px !important;
+  }
+  .dropzone {
+    padding: 12px;
+    border: 1px dashed #dfdfdf;
+  }
+  .mat-mdc-select {
+    font-size: $theme-main-medium-font;
+    line-height: 17px;
+    .mat-mdc-select-trigger {
+      height: 100%;
+    }
+  }
+  ::ng-deep .mat-mdc-select-value {
+    color: $theme-font-color-black;
+    font-weight: 400;
+    margin-top: 14px;
+  }
+  .workspace-team-blk {
+    margin-top: 5px;
+    margin-bottom: 25px;
+  }
+  .add-title {
+    font-size: $theme-main-large-font;
+    font-weight: 400;
+  }
+  ::ng-deep .mat-horizontal-stepper-header-container {
+    width: 700px;
+  }
+  ::ng-deep .mat-step-header {
+    border: 1px solid $theme-border-color-gray;
+    height: 40px;
+    width: 155px;
+    padding: 0 15px;
+    border-radius: 5px;
+    box-shadow: $box-shadow-card;
+  }
+  ::ng-deep .mat-stepper-horizontal-line {
+    border-top-width: 2px;
+    border-top-style: dotted;
+    margin: 0 -0px;
+  }
+  ::ng-deep .mat-step-header .mat-step-icon {
+    background-color: $theme-color-grey;
+  }
+  ::ng-deep .mat-step-header .mat-step-icon-selected {
+    background-color: $theme-color-white;
+    color: $theme-main-color !important;
+  }
+  ::ng-deep .mat-step-header .mat-step-label .mat-step-text-label {
+    font-size: $theme-main-large-font;
+    font-weight: 500;
+    font-family: $theme-main-font-family;
+  }
+  ::ng-deep .mat-step-header .mat-step-label.mat-step-label-active {
+    color: $theme-color-white;
+  }
+  ::ng-deep .mat-step-header:not([aria-disabled]) {
+    transition: all 0.5s ease;
+  }
+  .workspace-table {
+    .workspace-table-img {
+      img {
+        height: 24px !important;
+        width: 24px !important;
+      }
+      ::ng-deep .mat-mdc-chip {
+        margin-left: 0 !important;
+      }
+      ::ng-deep .mdc-evolution-chip-set .mdc-evolution-chip {
+        margin: 0 7px 0px 0 !important;
+      }
+    }
+    table {
+      th:last-child {
+        border-right: unset;
+      }
+      td:last-child {
+        border-right: unset;
+      }
+    }
+  }
+  .add-h2 {
+    .document-icon {
+      mat-icon {
+        font-size: $theme-main-medium-font;
+        line-height: 1;
+        margin-left: 2px;
+        height: 12px;
+      }
+    }
+  }
+  ::ng-deep .mat-mdc-form-field .mdc-text-field--outlined .mdc-notched-outline--upgraded .mdc-floating-label--float-above {
+    font-size: 14px !important;
+    color: $theme-main-color !important;
+    margin-top: 10px;
+  }
+  ::ng-deep .mat-mdc-form-field-error-wrapper {
+    padding: 0;
+  }
+  .add-button {
+    @include flex;
+    @include flex-justify-space-between;
+    @include flex-align-center;
+  }
+  .project-submit {
+    @include flex;
+    @include flex-align-center;
+    @include flex-justify-center;
+    color: $theme-color-white;
+    font-size: $theme-main-medium-font;
+    font-weight: 400;
+    transition: all 2s ease;
+    box-shadow: $box-shadow-next;
+    min-width: 40px;
+    padding: 0;
+    background-color: $theme-main-color;
+  }
+  ::ng-deep .mat-form-field-appearance-outline .mat-select-arrow-wrapper {
+    margin-top: 0px;
+  }
+  .add-field {
+    @include flex;
+    @include flex-align-center;
+    @include flex-justify-space-between;
+    margin-bottom: 20px;
+  }
+  ::ng-deep .mat-form-field-appearance-outline .mat-form-field-flex {
+    padding: 10px 15px 0px;
+    margin-top: -0.25em;
+    position: relative;
+    font-size: $theme-main-medium-font;
+    font-weight: 400;
+  }
+  ::ng-deep mat-divider {
+    border-top-color: rgb(0 0 0 / 5%);
+  }
+  .document-filezone {
+    padding: 0;
+  }
+  .document-dropzone.drag-over {
+    border-color: #aaa;
+    background-color: #f5f5f5;
+  }
+  .document-dropzone {
+    width: 515px;
+  }
+  .document-filezone {
+    display: block;
+  }
+  .filezone-blk {
+    width: 100%;
+    padding: 7px;
+    display: flex;
+    border-radius: 5px !important;
+    border: 1px dashed #eaeaea;
+  }
+  .filezone .ng-star-inserted {
+    padding: 5px;
+    width: 515px;
+    margin-bottom: 10px;
+    border: 1px dashed #eaeaea;
+  }
+  .filezone {
+    .clear {
+      right: 3px;
+      top: 6px;
+    }
+  }
+  .add-field-blk {
+    @include flex;
+    margin-bottom: 5px;
+    align-items: flex-start;
+    @include flex-justify-space-between;
+    gap: 13px;
+    .add-field-blk-left {
+      width: 50%;
+    }
+    .add-field-blk-right {
+      width: 50%;
+      .mat-mdc-form-field {
+        height: 120px;
+        margin-bottom: 0;
+      }
+    }
+    .add-field-blk-child {
+      @include flex;
+      gap: 13px;
+    }
+  }
+  ::ng-deep .mat-mdc-text-field-wrapper.mdc-text-field--outlined .mat-mdc-form-field-infix {
+    padding-top: 0;
+    padding-bottom: 0;
+    @include flex;
+    @include flex-align-center;
+  }
+  ::ng-deep .mat-form-field-appearance-outline .mat-form-field-subscript-wrapper {
+    padding: 0 !important;
+  }
+  .mat-mdc-icon-button.mat-mdc-button-base {
+    padding: 0;
+  }
+  .mdc-icon-button {
+    width: 30px !important;
+    height: 30px !important;
+  }
+  .workspace-team {
+    @include flex;
+    @include flex-justify-space-between;
+    ::ng-deep .mat-mdc-icon-button.mat-mdc-button-base {
+      padding: 0;
+      @include flex;
+      @include flex-justify-center;
+      @include flex-align-center;
+    }
+    .workspace-team-right {
+      width: 100%;
+      ::ng-deep .mdc-evolution-chip--with-avatar .mdc-evolution-chip__icon--primary {
+        height: 24px !important;
+        width: 24px !important;
+      }
+      ::ng-deep .mdc-evolution-chip-set .mdc-evolution-chip-set__chips {
+        margin-left: 0 !important;
+        gap: 8px;
+      }
+    }
+    .workspace-team-left {
+      width: 60%;
+      ::ng-deep .mdc-evolution-chip--with-avatar .mdc-evolution-chip__icon--primary {
+        height: 24px !important;
+        width: 24px !important;
+      }
+    }
+  }
+  ::ng-deep .mat-form-field-wrapper {
+    padding-bottom: 0;
+  }
+  .mat-error {
+    margin-top: 15px;
+  }
+  .workspace-table {
+    background-color: $theme-color-white;
+    margin-top: 10px;
+    border-radius: 5px;
+    ::ng-deep .mdc-evolution-chip-set .mdc-evolution-chip-set__chips {
+      margin-left: 0 !important;
+      gap: 8px;
+    }
+    table {
+      width: 100%;
+      text-align: left;
+      border-collapse: collapse;
+      font-family: $theme-main-font-family;
+      ::ng-deep .mat-mdc-form-field-subscript-wrapper {
+        display: none;
+      }
+      ::ng-deep .mdc-text-field--no-label:not(.mdc-text-field--textarea) .mat-mdc-form-field-input-control.mdc-text-field__input,
+      .mat-mdc-text-field-wrapper .mat-mdc-form-field-input-control {
+        font-size: $theme-main-medium-font;
+        font-weight: 500;
+        &::placeholder {
+          font-weight: 500;
+          font-size: $theme-main-medium-font;
+        }
+      }
+      ::ng-deep .mat-mdc-icon-button.mat-mdc-button-base {
+        padding: 0;
+        @include flex;
+        @include flex-justify-center;
+        @include flex-align-center;
+      }
+      th,
+      td {
+        padding: 0px 10px;
+        font-weight: 500;
+        font-size: $theme-main-medium-font;
+        border-top: 1px solid $theme-border-color-gray;
+      }
+      th {
+        border-top: initial;
+      }
+    }
+    .workspace-table-img {
+      @include flex;
+      @include flex-align-center;
+      img {
+        margin-right: 7px;
+      }
+    }
+    .mat-focus-indicator {
+      color: $theme-main-color;
+      border: 1px solid $theme-main-color;
+    }
+    ::ng-deep .mat-form-field-flex {
+      padding: 4px 15px 0;
+    }
+  }
+  .responsible-field {
+    ::ng-deep .mat-mdc-form-field:not(.mat-form-field-no-animations) .mdc-text-field__input {
+      margin-top: 0 !important;
+    }
+  }
+}
+
+.mat-mdc-text-field-wrapper.mdc-text-field--outlined .mat-mdc-form-field-infix {
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+::ng-deep .mat-primary .mat-mdc-option.mdc-list-item--selected:not(.mdc-list-item--disabled) .mdc-list-item__primary-text {
+  color: $theme-main-color;
+}
+
+::ng-deep .cdk-overlay-pane {
+  ::ng-deep .mat-mdc-icon-button.mat-mdc-button-base {
+    position: absolute;
+    right: 10px;
+    cursor: pointer;
+    top: 12px;
+    z-index: 99999999999999;
+    padding: 0 !important;
+    @include flex;
+    @include flex-justify-center;
+    @include flex-align-center;
+    width: auto;
+    height: auto;
+    .material-icons {
+      font-size: $theme-main-medium-font;
+      font-weight: 400;
+    }
+    .mat-icon {
+      height: 15px !important;
+      width: 15px !important;
+      @include flex;
+      @include flex-justify-center;
+      @include flex-align-center;
+    }
+  }
+  ::ng-deep .example-list {
+    width: 320px !important;
+    overflow-y: auto !important;
+  }
+}
+
+::ng-deep .mat-mdc-chip-avatar {
+  height: 24px !important;
+  width: 24px !important;
+}
+
+::ng-deep .workspace-dialog {
+  width: 100%;
+}
+
+.not-allowed-cursor {
+  cursor: not-allowed !important;
+}
+
+::ng-deep .mat-step-header[aria-selected='true'],
+::ng-deep .mat-step-header[ng-reflect-state='edit'] {
+  background-color: $theme-main-color !important;
+}
+
+::ng-deep .mat-step-header[ng-reflect-state='edit'] .mat-step-icon {
+  color: $theme-main-color;
+  background-color: $theme-color-white !important;
+}
+
+.cursor-not-allowed {
+  cursor: not-allowed;
+}
+
+@media screen and (max-width: $extra-large-device) {
+  .add-workspace {
+    .workspace-table {
+      overflow-x: auto;
+      table {
+        width: 1300px;
+      }
+    }
+    .workspace-table::-webkit-scrollbar-track {
+      -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+      background-color: $theme-bg-color-drawer-container;
+    }
+    .workspace-table::-webkit-scrollbar {
+      height: 5px;
+      background-color: $theme-bg-color-drawer-container;
+    }
+    .workspace-table::-webkit-scrollbar-thumb {
+      background-color: $theme-bg-color-scrollbar-thumb;
+      border-radius: 50px;
+    }
+    .workspace-team {
+      .workspace-team-left {
+        width: 100%;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: $lerge-device) {
+  .workspace-team {
+    flex-direction: column;
+    .add-h2 {
+      margin: 0 0 10px 0;
+    }
+    .workspace-team-right {
+      width: 100% !important;
+    }
+    .workspace-team-left {
+      width: 100% !important;
+    }
+  }
+  .add-workspace {
+    .add-field-blk {
+      flex-direction: column;
+      .add-field-blk-left {
+        width: 100%;
+      }
+      .add-field-blk-right {
+        width: 100%;
+      }
+    }
+    .document-dropzone {
+      width: 100%;
+    }
+    .filezone {
+      .ng-star-inserted {
+        width: 100%;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: $medium-device) {
+  .add-workspace {
+    ::ng-deep .mat-step-header {
+      width: 140px;
+    }
+    .add-field-blk {
+      flex-direction: column;
+      margin-bottom: 15px;
+      .mat-mdc-form-field {
+        width: 100%;
+      }
+      .filezone-blk {
+        width: 100%;
+      }
+    }
+    .dropzone {
+      width: 100% !important;
+      padding: 10px 0;
+    }
+  }
+  ::ng-deep .mat-horizontal-stepper-header-container {
+    width: 625px !important;
+  }
+  .add-field {
+    display: block !important;
+  }
+  .mat-form-field {
+    margin-right: 0 !important;
+  }
+  .dropzone {
+    width: initial !important;
+    margin-bottom: 5px;
+  }
+  .filezone-blk {
+    margin-bottom: 5px;
+  }
+  ::ng-deep .mat-form-field-appearance-outline .mat-form-field-wrapper {
+    margin: 10px 0;
+    padding-bottom: 0;
+  }
+}
+
+.add-field-blk-child {
+  .mat-mdc-form-field-type-mat-select {
+    cursor: pointer;
+    .arrow-down::after,
+    .arrow-up::after {
+      right: 0;
+    }
+  }
+}
+
+////  CK Editor  /////////
+.ck-editor-data {
+  width: auto;
+  max-width: 1000px;
+}
+
+/////////

@@ -1,0 +1,116 @@
+<div class="container-wrapper">
+    <div class="container-inner">
+        <mat-card class="container-child">
+            <div class="workspace-blk workspace-border">
+                <strong class="pr-form-top-header">Timing Report </strong>
+            </div>
+            <div class="administration-wrap">
+                <div class="administration-flex autocomplete-blk">
+                    <user-filter *ngIf="allUsersList && allUsersList.length > 0" [allSelected]="true" [label]="'Employee'" [allUsersList]="allUsersList" (getSelectedUsers)="getSelectedUsersFromFilter($event)"></user-filter>
+
+                    <user-filter *ngIf="allLeadUsersList && allLeadUsersList.length > 0" [allSelected]="true" [label]="'Lead'" [allUsersList]="allLeadUsersList" (getSelectedUsers)="getSelectedLeadUsersFromFilter($event)"></user-filter>
+                    <div class="input-wrapper calender-icon">
+                        <input type="text" [showCustomRangeLabel]="true" [alwaysShowCalendars]="true" [linkedCalendars]="true" ngxDaterangepickerMd [maxDate]="maxDate" [locale]="{ format: 'DD/MM/YYYY' }" (datesUpdated)="onFilterByDate()" [ranges]="ranges" [(ngModel)]="filterByDate"
+                            class="form-control" readonly />
+                    </div>
+
+                    <div>
+                        <button (click)="exportExcel()" class="next primary-button">Export as excel</button>
+                    </div>
+                </div>
+                <p class="result-number">No. of Results : {{ timingHistoryData.length }}</p>
+                <div class="table-responsive">
+                    <ng-container *ngIf="showSpinner === true; else timingHistoryTable">
+                        <div [mainAppSpinner]="showSpinner"></div>
+                    </ng-container>
+                    <ng-template #timingHistoryTable>
+                        <table *ngIf="timingHistoryData.length > 0; else noRecordsFound">
+                            <thead>
+                                <tr>
+                                    <th *ngFor="let header of headerRow">
+                                        {{ header }}
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <ng-container *ngFor="let user of timingHistoryData">
+                                    <tr class="cursor-pointer" (click)="showMore(user)">
+                                        <td>
+                                            {{ user.first_name + ' ' + user.last_name }}
+                                        </td>
+                                        <td>
+                                            {{ user.dateFromTo || '-' }}
+                                        </td>
+                                        <td [ngClass]="user.isLatelogin ? 'red-text' : ''">
+                                            {{ user.dateFromTo == '-' ? 'NA' : user.averageLoginTime }}
+                                        </td>
+                                        <td>
+                                            {{ user.dateFromTo == '-' ? 'NA' : user.averageLogoutTime }}
+                                        </td>
+                                        <td>
+                                            {{ user.averageBreakTimeCount }}
+                                        </td>
+                                        <td>
+                                            {{ user.avgIdealTime || '-' }}
+                                        </td>
+                                        <td [ngClass]="
+                        user.avgAdjustmentHHMM && user.avgAdjustmentHHMM.includes('+')
+                          ? 'green-text'
+                          : user.avgAdjustmentHHMM && user.avgAdjustmentHHMM.includes('-')
+                          ? 'red-text'
+                          : ''
+                      ">
+                                            {{ user.avgAdjustmentHHMM || '-' }}
+                                        </td>
+                                        <td>
+                                            {{ user.avgWorkedTime || '-' }}
+                                        </td>
+                                        <td [ngClass]="user.avgDeviationHHMM && user.avgDeviationHHMM.includes('+') ? 'green-text' : ''">
+                                            {{ user.avgDeviationHHMM || '-' }}
+                                        </td>
+                                    </tr>
+                                    <ng-container *ngIf="user.showMoreDetails">
+                                        <tr class="light-blue-bg" *ngFor="let day of user.actions; index as i">
+                                            <td *ngIf="i == 0" [rowSpan]="user.actions.length"></td>
+                                            <td>
+                                                {{ day.dateFromTo || '-' }}
+                                            </td>
+                                            <td [ngClass]="day.isLatelogin ? 'red-text' : ''">
+                                                {{ day.loginTimeAMPM || '-' }}
+                                            </td>
+                                            <td>
+                                                {{ day.logoutTimeAMPM || '-' }}
+                                            </td>
+                                            <td>
+                                                {{ day.breakTimeCount }}
+                                            </td>
+                                            <td>
+                                                {{ day.idealTimeHHMM || '-' }}
+                                            </td>
+                                            <td [ngClass]="
+                          day.adjustment && day.adjustment.includes('+')
+                            ? 'green-text'
+                            : day.adjustment && day.adjustment.includes('-')
+                            ? 'red-text'
+                            : ''
+                        ">
+                                                {{ day.adjustment }}
+                                            </td>
+                                            <td>
+                                                {{ day.workingTimeHHMM || '-' }}
+                                            </td>
+                                            <td [ngClass]="day.deviationHHMM && day.deviationHHMM.includes('+') ? 'green-text' : ''">{{ day.deviationHHMM || '-' }}</td>
+                                        </tr>
+                                    </ng-container>
+                                </ng-container>
+                            </tbody>
+                        </table>
+                        <ng-template #noRecordsFound>
+                            <div class="no-rerocord-section">No Records Found</div>
+                        </ng-template>
+                    </ng-template>
+                </div>
+            </div>
+        </mat-card>
+    </div>
+</div>

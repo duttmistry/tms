@@ -1,0 +1,21 @@
+<div class="example-list user-dialog-wrapper dropdown-border-input-wrapper">
+  <mat-list>
+    <mat-list-item *ngIf="isShowSearchBox" class="input-wrapper">
+      <form (ngSubmit)="onSelectUser()">
+        <input
+          tmsWorkspaceAutoFocusInput
+          id="myInput"
+          [placeholder]="searchText ? searchText : 'Search...'"
+          [formControl]="searchControl"
+          autocomplete="off"
+        />
+        <img src="assets/images/search.svg" alt="search" class="search" />
+      </form>
+    </mat-list-item>
+    <div class="project-lisitng-wrapper dropdown-border-listing-wrapper">
+      <mat-list-item *ngFor="let user of filteredData | async" (click)="onSelectUser(user)">
+        {{ user.name }} <span *ngIf="loggedInUser && user?.id === loggedInUser?.id">{{ isUsers ? '(Me)' : '' }}</span>
+      </mat-list-item>
+    </div>
+  </mat-list>
+</div>

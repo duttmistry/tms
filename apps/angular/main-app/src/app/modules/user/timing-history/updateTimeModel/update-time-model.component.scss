@@ -1,0 +1,28 @@
+.fields {
+  display: flex;
+  justify-content: space-between;
+}
+
+.textarea {
+  width: 100% !important;
+  border: 1px solid #dadada !important;
+  border-radius: 3px;
+  margin-bottom: 0;
+  //   color: $theme-main-color-light;
+  //   font-family: $theme-main-font-family;
+  &:focus {
+    border: 1px solid #333366 !important;
+  }
+}
+
+.button-wrapper {
+  padding-bottom: 20px;
+}
+
+.super-admin {
+  .fields {
+    .mat-mdc-form-field {
+      width: 206px;
+    }
+  }
+}

@@ -1,0 +1,42 @@
+@import 'apps/angular/main-app/src/variables';
+@import 'apps/angular/main-app/src/mixins';
+@import 'apps/angular/main-app/src/assets/fonts/fonts.scss';
+
+.approval-dialog {
+  padding: 15px;
+  h1 {
+    margin-bottom: 15px;
+    padding: 0;
+    font-weight: 600;
+    font-size: $theme-main-extra-extra-large-font;
+    &::before {
+      display: none;
+    }
+  }
+  .mat-mdc-dialog-actions {
+    padding: 0;
+    min-height: unset;
+    @include flex-justify-center;
+    margin-bottom: 10px;
+    margin-top: 20px;
+  }
+  ::ng-deep mat-form-field {
+    width: 100%;
+  }
+
+  ::ng-deep .mat-mdc-text-field-wrapper {
+    height: 100px !important;
+  }
+
+  ::ng-deep .mdc-dialog .mdc-dialog__content {
+    padding: 0 15px 0;
+  }
+
+  mat-error {
+    font-size: $theme-main-small-font;
+    margin-top: -20px;
+  }
+}
+::ng-deep .mdc-dialog .mdc-dialog__content {
+  padding: 0;
+}

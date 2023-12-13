@@ -1,0 +1,72 @@
+<div class="group-container" *ngIf="taskList && taskList.length > 0; else noDataFound">
+    <div class="group" *ngFor="let group of taskList">
+        <p>
+            {{ group?.groupTitle || '-' }} <span>({{ group?.groupTaskCount || 0 }})</span>
+        </p>
+        <div class="group-task-container">
+            <div class="group-task" [ngStyle]="{
+          'border-left-color': getTaskColor(task),
+          background: task?._other_user_working_status ? '#eef7ee' : 'transparent'
+        }" *ngFor="let task of group?.groupTasks; let taskIndex = index">
+                <div class="group-task-row cursor-pointer">
+                    <div class="card-item">
+                        <span (click)="navigateToTaskDetail(task.id)">{{ task?.task_key }} | {{ task?.title || '' }}</span>
+                        <div (click)="toggleOverlayTaskStatusSelection(task)">
+                            <span>
+                <span class="cursor-pointer" cdkOverlayOrigin #triggerStatusSelection="cdkOverlayOrigin">
+                  <ng-container *ngIf="!task?.state; else selectedStatusTemplate"></ng-container>
+                  <ng-template #selectedStatusTemplate>
+                    <span [ngStyle]="{ 'background-color': task?.task_status?.color }">{{ task?.task_status?.title || '+' }}</span>
+                            </ng-template>
+                            </span>
+                            <ng-template cdkConnectedOverlay (overlayOutsideClick)="isOverlayTaskStatus[task] = false" [cdkConnectedOverlayOrigin]="triggerStatusSelection" [cdkConnectedOverlayOpen]="selectedItem === task && isOverlayTaskStatus[task]">
+                                <main-app-status-popup [listInput]="projectStatusList" [placeholder]="'Search Status'" (statusEmmiter)="getSelectedTaskStatus($event, task)"></main-app-status-popup>
+                            </ng-template>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="group-task-row">
+                    <div class="card-item res-person-resize">
+                        <responsible-person #responsiblePersonRef [teammembersList]="task.team" [dataId]="task?.assignee" (emmitSelectedTeamMates)="getSelectedResponsiblePerson($event, task)" [placeHolderLabel]="'Assignee'">
+                        </responsible-person>
+                    </div>
+                    <div class="card-item" [ngClass]="task.state.toLowerCase() === 'completed' || this.userIsIntBreak ? 'disabled-timer-container' : ''">
+                        <small *ngIf="timerStartedTaskId === task.id">{{ timerCount }}</small>
+
+                        <div class="task-list-right">
+                            <img src="assets/images/play-circle.png" matTooltip="Start task" class="cursor-pointer" *ngIf="timerStartedTaskId !== task.id || !task._user_working_status" (click)="toogleTimer(task)" [ngClass]="task.state.toLowerCase() === 'completed' || this.userIsIntBreak ? 'disabled-timer' : ''"
+                            />
+                            <img src="assets/images/play.svg" matTooltip="Stop task" class="cursor-pointer" *ngIf="task._user_working_status && timerStartedTaskId" (click)="toogleTimer(task)" [ngClass]="task.state.toLowerCase() === 'completed' || this.userIsIntBreak ? 'disabled-timer' : ''"
+                            />
+                            <i class="fa fa-group user-group-icon" *ngIf="task._other_user_working_status" [matMenuTriggerFor]="userWorkingList"></i>
+                            <mat-menu #userWorkingList="matMenu" yPosition="below">
+                                <ng-container *ngFor="let user of task?.working_users">
+                                    <main-app-mat-chips *ngIf="
+                      user.userDetails &&
+                      user.user_id !== loggedinUserid &&
+                      user.running_status?.toLowerCase() === TASK_TIMER_CONSTANTS_local.ONGOING.toLowerCase()
+                    " [data]="user.userDetails" [isCloseButton]="false">
+                                    </main-app-mat-chips>
+                                </ng-container>
+                            </mat-menu>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="group-task-footer">
+            <div *ngIf="alloAddTask">
+                <a *ngIf="!group.isShowNewTask" (click)="onNewTaskClick(group)" class="new-task-blk">+ New Task</a>
+                <main-app-tms-workspace-quick-add-task [selectedProjectId]="group.groupId" [newTaskStateAndStatus]="newTaskStateAndStatus" [groupByFilterValue]="group.groupType" [groupInput]="group" [showAsListItem]="false" *ngIf="group.isShowNewTask" (emitTaskStatusEvent)="onEmmitTaskStatusEventChanged($event, group)"></main-app-tms-workspace-quick-add-task>
+            </div>
+            <a *ngIf="group?.showViewAll" (click)="viewAllTask(group.groupType, group.groupId)" class="view-all-task">View All</a>
+        </div>
+    </div>
+</div>
+<ng-template #noDataFound class="">
+    <div class="group-container">
+        <p>No records found</p>
+    </div>
+</ng-template>
+<button *ngIf="alloAddTask" color="primary" (click)="navigateToAddTask()">+ Task</button>

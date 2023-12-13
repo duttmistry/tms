@@ -1,0 +1,148 @@
+// @import '@angular/cdk/overlay-prebuilt.css';
+@import 'apps/angular/main-app/src/variables';
+@import 'apps/angular/main-app/src/mixins';
+@import 'apps/angular/main-app/src/assets/fonts/fonts.scss';
+
+.example-list {
+  width: 300px;
+  border: solid 1px $theme-border-color-gray;
+  border-radius: $card-radius;
+  background-color: $theme-color-white;
+  padding: 10px;
+  margin: 0;
+}
+.dialog-mat-icon {
+  border: 1px solid $theme-border-color-gray;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: all 0.5s ease;
+  color: $theme-font-color-black;
+  font-size: $theme-main-extra-extra-large-font;
+  @include flex;
+  @include flex-align-center;
+  @include flex-justify-center;
+  height: 34px;
+  width: 34px;
+  margin-right: 14px;
+
+  &:hover {
+    background-color: $theme-bg-color-gray;
+  }
+}
+.mdc-button {
+  padding: 5px;
+  min-width: 35px;
+  line-height: 0;
+  height: 35px !important;
+  color: $theme-color-white !important;
+  border-radius: 7px;
+  @include flex;
+  @include flex-align-center;
+  @include flex-justify-center;
+  box-shadow: $theme-main-color;
+}
+::ng-deep .mat-mdc-raised-button > .mat-icon {
+  margin: auto;
+}
+.team-flex {
+  @include flex;
+}
+
+::ng-deep .cdk-overlay-pane {
+  margin-top: 5px;
+  max-width: 100% !important;
+  margin-bottom: 10px !important;
+
+  ::ng-deep .mat-mdc-icon-button.mat-mdc-button-base {
+    width: 25px;
+    height: 25px;
+    position: absolute;
+    right: 18px;
+    cursor: pointer;
+    top: 5px;
+    z-index: 99999999999999;
+    padding: 0;
+    @include flex;
+    @include flex-justify-center;
+    @include flex-align-center;
+    .material-icons {
+      font-size: $theme-main-medium-font;
+      font-weight: 400;
+    }
+    .mat-icon {
+      height: 15px !important;
+      width: 15px !important;
+      @include flex;
+      @include flex-justify-center;
+      @include flex-align-center;
+      font-size: $theme-main-medium-font !important;
+    }
+  }
+
+  .mdc-list-item {
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+  }
+  input {
+    height: 40px;
+    max-width: 100%;
+    border: 1px solid $theme-border-color-gray;
+    width: 100%;
+    border-radius: 8px;
+    outline: none;
+    font-size: $theme-main-medium-font;
+    padding-left: 10px;
+    font-weight: 400;
+    font-family: $theme-main-font-family;
+    color: $theme-font-color-black;
+  }
+  ::ng-deep .example-list {
+    width: 320px !important;
+
+    height: 400px;
+    overflow-y: scroll !important;
+  }
+  .mdc-list-item.mdc-list-item--with-one-line:first-child {
+    height: 76px !important;
+    padding: 0px 20px !important;
+  }
+  .mdc-list-item.mdc-list-item--with-one-line {
+    height: 40px;
+  }
+  .mat-mdc-list-item .mdc-list-item__primary-text {
+    font-size: 14px !important;
+    font-weight: 400 !important;
+    cursor: pointer;
+  }
+}
+::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.062);
+  background-color: $theme-color-white;
+}
+
+::-webkit-scrollbar {
+  width: 4px;
+  background-color: $theme-color-white;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #cccccce7;
+}
+::placeholder {
+  color: $theme-font-color-black;
+}
+.not-allowed-cursor {
+  cursor: not-allowed;
+}
+.chip-wrap {
+  @include flex;
+  ::ng-deep .mdc-evolution-chip-set .mdc-evolution-chip {
+    margin-right: 0 !important;
+    margin-left: 0 !important;
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+  }
+}
+input::placeholder {
+  color: $theme-main-color-light;
+}

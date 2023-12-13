@@ -1,0 +1,464 @@
+<div class="container-wrapper add-leave">
+    <mat-card class="padding-remove">
+        <div class="workspace-blk workspace-border">
+            <strong (click)="goBack()"><a>{{ leaveId ? 'Edit' : 'Add' }} Leave</a></strong
+      >
+      <div (click)="goBack()" class="tertiary-button">Back</div>
+    </div>
+
+    <div class="add-leave-blk">
+      <div class="leave-blk-left-flex border-content">
+        <div class="change-form">
+          <mat-form-field
+            *ngIf="isUserLeaveResponsiblePerson || userRole == 'Super Admin'"
+            class="request-leave-field request-leave-position arrow-down-remove big-height-wrapper"
+          >
+            <mat-chip-grid #chipList [ngClass]="auto.isOpen ? 'arrow-up' : 'arrow-down'">
+              <main-app-mat-chips *ngIf="selectedLeaveUser" [data]="selectedLeaveUser" [isCloseButton]="false"> </main-app-mat-chips>
+
+              <input
+                #userInput
+                #autocompleteTrigger="matAutocompleteTrigger"
+                [formControl]="userInputCtrl"
+                [matAutocomplete]="auto"
+                [matChipInputFor]="chipList"
+                [disabled]="leaveId ? true : false"
+              />
+            </mat-chip-grid>
+
+            <mat-autocomplete #auto="matAutocomplete" (closed)="closeAuto()" (optionSelected)="selected($event)">
+              <mat-option *ngFor="let user of filteredUsersResData | async" [value]="user" class="option-flex">
+                <img matChipAvatar crossorigin="anonymous" [src]="_base_url + user.avatar" alt="employee image" /> {{ user.name }}
+              </mat-option>
+              <mat-option *ngIf="(filteredUsersResData | async)?.length == 0" disabled>
+                <div>Name doesnt exists in the list</div>
+              </mat-option>
+            </mat-autocomplete>
+            <button mat-icon-button [disabled]="leaveId ? true : false" matSuffix (click)="openAuto(autocompleteTrigger)">
+              <mat-icon>expand_more</mat-icon>
+            </button>
+          </mat-form-field>
+          <form [formGroup]="addLeaveForm">
+            <div class="select-date-wrapper">
+              <mat-form-field appearance="fill" class="big-height-wrapper input-field-wrapper">
+                <mat-label>Start Date</mat-label>
+                <input
+                  matInput
+                  placeholder="Start Date"
+                  formControlName="startDate"
+                  [min]="_minDate"
+                  (dateChange)="handleDateChange()"
+                  (click)="fromDatePicker.open()"
+                  [matDatepicker]="fromDatePicker"
+                  readonly
+                />
+                <mat-datepicker-toggle matIconSuffix [for]="fromDatePicker"></mat-datepicker-toggle>
+                <mat-datepicker #fromDatePicker></mat-datepicker>
+                <mat-error *ngIf="_addLeaveForm['startDate']?.hasError('required')">Please added start date.</mat-error>
+                <mat-error *ngIf="_addLeaveForm['startDate']?.hasError('isEndDateLessThanStartDate')"
+                  >Leave start date must be before end date.</mat-error
+                >
+              </mat-form-field>
+              <div class="leave-count-middle">
+                <p [ngClass]="leaveNoOfDaysCount !== 0 ? 'days-dark' : ''">
+                  {{ leaveNoOfDaysCount !== 0 ? leaveNoOfDaysCount + ' ' + (leaveNoOfDaysCount <= 1 ? 'Day' : 'Days') : 'No Of Days' }}
+                </p>
+              </div>
+              <mat-form-field appearance="fill" class="end-date-wrapper big-height-wrapper input-field-wrapper">
+                <mat-label>End Date</mat-label>
+                <input
+                  matInput
+                  placeholder="End Date"
+                  formControlName="endDate"
+                  [min]="_minDate"
+                  (dateChange)="handleDateChange()"
+                  (click)="toDatePicker.open()"
+                  [matDatepicker]="toDatePicker"
+                  readonly
+                />
+                <mat-datepicker-toggle matIconSuffix [for]="toDatePicker"></mat-datepicker-toggle>
+                <mat-datepicker #toDatePicker [startAt]="endDateStartAt"></mat-datepicker>
+                <mat-error *ngIf="_addLeaveForm['endDate']?.hasError('required')">Please add end date.</mat-error>
+              </mat-form-field>
+            </div>
+            <div class="leave-count">
+              <ng-container *ngIf="showLeaveSlotFields">
+                <div class="leave-count-first" *ngIf="!isSingleDayLeave">
+                  <div class="date-select">
+                    {{ fromDateString }}
+                  </div>
+                  <mat-button-toggle-group formControlName="leaveFromSlot" (change)="handleSlotChange($event)">
+                    <mat-button-toggle *ngFor="let item of fromDateSlotOptions" [value]="item.value">{{ item.option }}</mat-button-toggle>
+                  </mat-button-toggle-group>
+
+                  <div class="leave-count-middle">To</div>
+
+                  <div class="date-select">
+                    {{ toDateString }}
+                  </div>
+                  <mat-button-toggle-group formControlName="leaveToSlot" (change)="handleSlotChange($event)">
+                    <mat-button-toggle *ngFor="let item of toDateSlotOptions" [value]="item.value">{{ item.option }}</mat-button-toggle>
+                  </mat-button-toggle-group>
+                </div>
+                <div class="leave-count-second" *ngIf="isSingleDayLeave">
+                  <div>
+                    {{ leaveDateString }}
+                  </div>
+                  <mat-button-toggle-group formControlName="leaveFromSlot" (change)="handleSingleDaySlotChange($event)">
+                    <mat-button-toggle *ngFor="let item of singleDateOptions" [value]="item.value">{{ item.option }}</mat-button-toggle>
+                  </mat-button-toggle-group>
+                </div>
+              </ng-container>
+            </div>
+            <ng-container *ngIf="!isSingleDayLeave && !isHoliday && !isWeekend">
+              <div class="error-leave" *ngIf="!isFromSlotAvailable">
+                <img src="assets/images/error.svg" alt="error" />
+                <p>
+                  A leave has already been applied on
+                  {{
+                    (fromDate | formatdate) +
+                      ' ' +
+                      'for the' +
+                      ' ' +
+                      (_addLeaveForm['leaveFromSlot'].value == 'FH'
+                        ? 'First Half'
+                        : _addLeaveForm['leaveFromSlot'].value == 'SH'
+                        ? 'Second Half'
+                        : 'Full Day')
+                  }}
+                </p>
+              </div>
+              <div class="error-leave" *ngIf="!isToSlotAvailable">
+                <img src="assets/images/error.svg" alt="error" />
+                <p>
+                  A leave has already been applied on
+                  {{
+                    (toDate | formatdate) +
+                      ' ' +
+                      'for the' +
+                      ' ' +
+                      (_addLeaveForm['leaveToSlot'].value == 'FH'
+                        ? 'First Half'
+                        : _addLeaveForm['leaveToSlot'].value == 'SH'
+                        ? 'Second Half'
+                        : 'Full Day')
+                  }}
+                </p>
+              </div>
+            </ng-container>
+            <ng-container *ngIf="isSingleDayLeave && !isHoliday && !isWeekend">
+              <div class="error-leave" *ngIf="!isFromSlotAvailable">
+                <img src="assets/images/error.svg" alt="error" />
+                <p>
+                  A leave has already been applied on
+                  {{
+                    (fromDate | formatdate) +
+                      ' ' +
+                      'for the' +
+                      ' ' +
+                      (_addLeaveForm['leaveFromSlot'].value == 'FH'
+                        ? 'First Half'
+                        : _addLeaveForm['leaveFromSlot'].value == 'SH'
+                        ? 'Second Half'
+                        : 'Full Day')
+                  }}
+                </p>
+              </div>
+            </ng-container>
+            <div class="error-leave" *ngIf="isWeekend && !isFromSlotAvailable">
+              <img src="assets/images/error.svg" alt="error" />
+              <p>Leave cannot be applied on a week off day that is {{ fromDate | formatdate }}.</p>
+            </div>
+            <div class="error-leave" *ngIf="isWeekend && !isToSlotAvailable">
+              <img src="assets/images/error.svg" alt="error" />
+              <p>Leave cannot be applied on a week off day that is {{ toDate | formatdate }}.</p>
+            </div>
+            <div class="error-leave" *ngIf="isHoliday && !isFromSlotAvailable">
+              <img src="assets/images/error.svg" alt="error" />
+              <p>Leave cannot be applied on a holiday that is {{ fromDate | formatdate }}.</p>
+            </div>
+            <div class="error-leave" *ngIf="isHoliday && !isToSlotAvailable">
+              <img src="assets/images/error.svg" alt="error" />
+              <p>Leave cannot be applied on a holiday that is {{ toDate | formatdate }}.</p>
+            </div>
+            <div class="error-leave" *ngIf="isLeaveInBetweenAvailable">
+              <img src="assets/images/error.svg" alt="error" />
+              <p>A leave has already been applied within this date range.</p>
+            </div>
+            <div class="sandwish-leave" *ngIf="isSandwichLeave">
+              <img src="assets/images/sandwich.svg" alt="sandwish" />
+              <p>This leave request will be considered as a sandwich leave.</p>
+            </div>
+
+            <mat-form-field
+              appearance="fill"
+              [ngClass]="subjectAuto.isOpen ? 'arrow-up' : 'arrow-down'"
+              #autocompleteField
+              class="big-height-wrapper input-field-wrapper"
+            >
+              <mat-label>Leave Subject</mat-label>
+              <input
+                matInput
+                placeholder="Leave Subject"
+                type="text"
+                aria-label="subject"
+                formControlName="leaveSubject"
+                [matAutocomplete]="subjectAuto"
+                autocomplete="off"
+              />
+              <mat-autocomplete #subjectAuto="matAutocomplete">
+                <!-- <div *ngIf="(filteredLeaveSubjectResData | async)?.length == 0">No Results Found</div> -->
+                <mat-option *ngFor="let option of filteredLeaveSubjectResData | async" [value]="option.title">
+                  {{ option.title }}
+                </mat-option>
+              </mat-autocomplete>
+              <!-- <mat-icon matSuffix (click)="_addLeaveForm['leaveSubject'].reset()" *ngIf="_addLeaveForm['leaveSubject'].value" class="filter-close"
+                >close</mat-icon
+              > -->
+              <svg
+                (click)="_addLeaveForm['leaveSubject'].reset()"
+                *ngIf="_addLeaveForm['leaveSubject'].value"
+                width="16"
+                height="16"
+                viewBox="0 0 16 16"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                class="filter-close"
+              >
+                <path
+                  d="M8.00065 1.3335C4.32732 1.3335 1.33398 4.32683 1.33398 8.00016C1.33398 11.6735 4.32732 14.6668 8.00065 14.6668C11.674 14.6668 14.6673 11.6735 14.6673 8.00016C14.6673 4.32683 11.674 1.3335 8.00065 1.3335ZM10.2407 9.5335C10.434 9.72683 10.434 10.0468 10.2407 10.2402C10.1407 10.3402 10.014 10.3868 9.88732 10.3868C9.76065 10.3868 9.63398 10.3402 9.53399 10.2402L8.00065 8.70683L6.46732 10.2402C6.36732 10.3402 6.24065 10.3868 6.11398 10.3868C5.98732 10.3868 5.86065 10.3402 5.76065 10.2402C5.56732 10.0468 5.56732 9.72683 5.76065 9.5335L7.29398 8.00016L5.76065 6.46683C5.56732 6.2735 5.56732 5.9535 5.76065 5.76016C5.95398 5.56683 6.27398 5.56683 6.46732 5.76016L8.00065 7.2935L9.53399 5.76016C9.72732 5.56683 10.0473 5.56683 10.2407 5.76016C10.434 5.9535 10.434 6.2735 10.2407 6.46683L8.70732 8.00016L10.2407 9.5335Z"
+                  fill="#86969D"
+                />
+              </svg>
+              <!-- <mat-error *ngIf="_addLeaveForm['leaveSubject'].errors"> -->
+              <mat-error *ngIf="_addLeaveForm['leaveSubject'].hasError('required')">Please add the leave subject </mat-error>
+              <mat-error *ngIf="_addLeaveForm['leaveSubject'].hasError('minlength')">Minimum length should be 5 characters </mat-error>
+              <mat-error *ngIf="_addLeaveForm['leaveSubject'].hasError('maxlength')">Maximum length can be 30 characters </mat-error>
+
+              <mat-error
+                *ngIf="
+                  !_addLeaveForm['leaveSubject'].hasError('required') &&
+                  !_addLeaveForm['leaveSubject'].hasError('minlength') &&
+                  !_addLeaveForm['leaveSubject'].hasError('maxlength') &&
+                  _addLeaveForm['leaveSubject'].hasError('pattern')
+                "
+                >Please enter valid text
+              </mat-error>
+
+              <!-- </mat-error> -->
+            </mat-form-field>
+
+            <mat-form-field class="textarea">
+              <mat-label>Reason</mat-label>
+              <textarea
+                matInput
+                placeholder="Reason"
+                formControlName="description"
+                autocomplete="off"
+                style="max-height: 70px !important; min-height: 70px !important"
+              ></textarea>
+            </mat-form-field>
+
+            <div
+              (click)="fileInput.click()"
+              class="dropzone document-filezone"
+              (dragover)="onDragover($event)"
+              (dragleave)="onDragLeave($event)"
+              (drop)="onDrop($event)"
+            >
+              <input type="file" #fileInput id="fileDropRef" multiple (click)="clearFileInput()" (change)="fileBrowseHandler($event)" hidden />
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="svg">
+                <path
+                  d="M16.44 8.90002C20.04 9.21002 21.51 11.06 21.51 15.11V15.24C21.51 19.71 19.72 21.5 15.25 21.5H8.73998C4.26998 21.5 2.47998 19.71 2.47998 15.24V15.11C2.47998 11.09 3.92998 9.24002 7.46998 8.91002"
+                  stroke="#333366"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path d="M12 15V3.62" stroke="#333366" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                <path d="M15.3499 5.85L11.9999 2.5L8.6499 5.85" stroke="#333366" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+              <label class="mat-body-2">Browse &nbsp;<span> or drag and drop files here</span></label>
+            </div>
+
+            <div class="filezone">
+              <ng-container *ngIf="attachedDocumentsResData && attachedDocumentsResData.length">
+                <div *ngFor="let document of attachedDocumentsResData; index as i" (click)="getAndPreviewDocument(document)">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="svg">
+                    <path
+                      d="M22 10V15C22 20 20 22 15 22H9C4 22 2 20 2 15V9C2 4 4 2 9 2H14"
+                      stroke="#333366"
+                      stroke-width="1.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                    <path d="M22 10H18C15 10 14 9 14 6V2L22 10Z" stroke="#333366" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                  <div class="upload-file-blk">
+                    <span>{{ document.path.split('/').pop() }}</span>
+                    <p class="filezone-leave">{{ ((document.size || 0) / 1024).toFixed(2) }}kb</p>
+                  </div>
+                  <button mat-icon-button (click)="removeAttachedFileWhileEdit(i)">
+                    <mat-icon class="clear">clear</mat-icon>
+                  </button>
+                </div>
+              </ng-container>
+              <div *ngFor="let document of attachedDocuments; index as i" (click)="previewDocument(document)">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="svg">
+                  <path
+                    d="M22 10V15C22 20 20 22 15 22H9C4 22 2 20 2 15V9C2 4 4 2 9 2H14"
+                    stroke="#333366"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                  <path d="M22 10H18C15 10 14 9 14 6V2L22 10Z" stroke="#333366" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+                <div class="upload-file-blk">
+                  <span>{{ document.name }}</span>
+                  <p class="filezone-leave">{{ (document.size / 1024).toFixed(2) }}kb</p>
+                </div>
+
+                <button mat-icon-button (click)="removeAttachedFile(i)">
+                  <mat-icon class="clear">clear</mat-icon>
+                </button>
+              </div>
+            </div>
+            <div class="form-btn btn-flex">
+              <button type="reset" (click)="navigateToLeaveDashboard()" class="cancel secondary-button">
+                <span> Cancel</span>
+              </button>
+              <button
+                color="primary"
+                type="submit"
+                class="next primary-button"
+                [ngClass]="isLeaveUpdated && addLeaveForm.pristine ? 'workspace-disable' : ''"
+                (click)="onSubmit()"
+                [disabled]="isLeaveUpdated && addLeaveForm.pristine"
+              >
+                <span> Submit</span>
+              </button>
+            </div>
+          </form>
+        </div>
+        <mat-divider></mat-divider>
+
+        <div class="add-leave-blk-bottom" *ngIf="teamAlsoOnLeave">
+          <h2 class="pr-form-top-header">Colleague Leaves: Concurrent Dates</h2>
+          <mat-list *ngIf="teamAlsoOnLeave.length; else notFound">
+            <mat-list-item *ngFor="let teamMember of teamAlsoOnLeave">
+              <div class="person-header">
+                <div>
+                  <img
+                    #img
+                    (error)="img.src = 'assets/images/default.png'"
+                    class="img-circle"
+                    [src]="_base_url + teamMember.user.employee_image"
+                    alt="Image"
+                  />
+                </div>
+                <div class="mat-subheading-2">
+                  <strong>
+                    {{ teamMember.user.first_name + ' ' + teamMember.user.last_name }}
+                    <span
+                      >{{
+                        (teamMember.fromDate == teamMember.toDate ? teamMember.fromDate : teamMember.fromDate + ' to ' + teamMember.toDate) +
+                          ' (' +
+                          (teamMember.noOfDays == 1 ? teamMember.noOfDays + ' Day Leave' : teamMember.noOfDays + ' Days Leave') +
+                          ')'
+                      }}
+                    </span></strong
+                  >
+                </div>
+              </div>
+            </mat-list-item>
+          </mat-list>
+          <ng-template #notFound>
+            <p class="bottom-text">There are no scheduled leaves for your team in this period.</p>
+          </ng-template>
+        </div>
+      </div>
+
+      <div class="leave-blk-right-flex border-content">
+        <div>
+          <div class="available-balance">
+            <span class="pr-form-top-header">Available balance</span>
+            <div class="available-balance-blk">
+              <div class="available-balance-item">
+                <h4>{{ availableBalance.CL }}</h4>
+                <span>Casual Leave</span>
+              </div>
+              <div class="available-balance-item">
+                <h4>{{ availableBalance.PL }}</h4>
+                <span>Privilege Leave</span>
+              </div>
+            </div>
+          </div>
+          <mat-divider></mat-divider>
+          <div *ngIf="balanceAfterBookLeave" class="after-book-leave">
+            <span class="pr-form-top-header">Balance Post Reserved Leave(s)</span>
+            <div class="responsive-table">
+              <table cellpadding="0">
+                <thead>
+                  <tr>
+                    <th>Leave Type</th>
+                    <th>Leave Balance</th>
+                    <th>Reserved</th>
+                    <th>Remaining</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let element of balanceAfterBookLeave">
+                    <td>{{ element.leave_type }}</td>
+                    <td>
+                      {{ element.balance }}
+                    </td>
+                    <td [ngClass]="element.used !== 0 ? 'highlight' : ''">
+                      {{ element.used }}
+                    </td>
+                    <td>
+                      {{ element.remaining }}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="add-leave-blk-right">
+        <div class="calander">
+          <div *ngIf="holidayList && holidayList.length >= 0">
+            <custom-calendar [holidayList]="holidayList" [fromDate]="fromDate" [toDate]="toDate"></custom-calendar>
+          </div>
+        </div>
+        <mat-divider></mat-divider>
+        <div class="add-leave-bottom" *ngIf="approverUsers">
+          <h2 class="pr-form-top-header">Leave Approvers</h2>
+
+          <mat-list>
+            <mat-list-item *ngFor="let user of approverUsers">
+              <div class="person-header">
+                <div>
+                  <img
+                    #img
+                    (error)="img.src = 'assets/images/default.png'"
+                    [src]="user.employee_image ? _base_url + user.employee_image : 'assets/images/default.png'"
+                    class="img-circle"
+                    alt="Image"
+                  />
+                </div>
+                <div class="mat-subheading-2">
+                  <strong
+                    >{{ user.first_name + ' ' + user.last_name }} <span>{{ user.designation }}</span></strong
+                  >
+                </div>
+              </div>
+            </mat-list-item>
+          </mat-list>
+        </div>
+      </div>
+    </div>
+  </mat-card>
+</div>

@@ -1,0 +1,5 @@
+<button color="primary" style="float: right; margin: 15px" (click)="addDocument()">
+  <mat-icon aria-hidden="false" aria-label="Share" fontIcon="add" class="cursor-pointer" matTooltip="Create Document"></mat-icon>
+</button>
+<pkg-lib-document-list [documentList]="documentList" (editEmitter)="onEditDocument($event)"></pkg-lib-document-list>
+<pkg-lib-add-document *ngIf="isShowDocumentModal" (emitDocModal)="onModalClose($event)" [documentData]="documentData"></pkg-lib-add-document>

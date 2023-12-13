@@ -1,0 +1,188 @@
+<div class="billing-configuration container-wrapper">
+    <mat-card>
+        <div class="workspace-blk workspace-border">
+            <strong>Billing Configuration</strong>
+            <div class="tertiary-button" routerLink="/reports">Back</div>
+        </div>
+
+        <div class="billing-field">
+            <div class="close-icon-wrapper input-close-wrapper">
+                <mat-form-field class="small-dropdown medium-height-wrapper input-field-wrapper">
+                    <mat-label>Search by Project Title or Tag</mat-label>
+                    <input matInput [formControl]="searchProjectControl" (keyup)="onSearchKeyUp($event)" (keydown.enter)="getProjectsData()" />
+                    <img matPrefix (click)="getProjectsData()" src="assets/images/search.svg" alt="search" class="search" />
+                    <!-- <mat-icon matSuffix *ngIf="searchProjectControl.value" (click)="searchProjectControl.reset(); getProjectsData()" class="filter-close"
+          >close</mat-icon
+        > -->
+                </mat-form-field>
+                <svg *ngIf="searchProjectControl.value" (click)="searchProjectControl.reset(); getProjectsData()" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" class="filter-close">
+          <path
+            d="M8.00065 1.3335C4.32732 1.3335 1.33398 4.32683 1.33398 8.00016C1.33398 11.6735 4.32732 14.6668 8.00065 14.6668C11.674 14.6668 14.6673 11.6735 14.6673 8.00016C14.6673 4.32683 11.674 1.3335 8.00065 1.3335ZM10.2407 9.5335C10.434 9.72683 10.434 10.0468 10.2407 10.2402C10.1407 10.3402 10.014 10.3868 9.88732 10.3868C9.76065 10.3868 9.63398 10.3402 9.53399 10.2402L8.00065 8.70683L6.46732 10.2402C6.36732 10.3402 6.24065 10.3868 6.11398 10.3868C5.98732 10.3868 5.86065 10.3402 5.76065 10.2402C5.56732 10.0468 5.56732 9.72683 5.76065 9.5335L7.29398 8.00016L5.76065 6.46683C5.56732 6.2735 5.56732 5.9535 5.76065 5.76016C5.95398 5.56683 6.27398 5.56683 6.46732 5.76016L8.00065 7.2935L9.53399 5.76016C9.72732 5.56683 10.0473 5.56683 10.2407 5.76016C10.434 5.9535 10.434 6.2735 10.2407 6.46683L8.70732 8.00016L10.2407 9.5335Z"
+            fill="#86969D"
+          />
+        </svg>
+            </div>
+            <div class="close-icon-wrapper">
+                <mat-form-field class="small-dropdown medium-height-wrapper input-field-wrapper">
+                    <mat-label>Project Status</mat-label>
+                    <mat-label class="select-value" *ngIf="projectStatusFilterControl?.value?.length !== 0">
+                        <span class="value">{{projectStatusFilterControl.value?.[0]?.title || ''}}</span>
+                        <span *ngIf="(projectStatusFilterControl.value?.length || 0) > 1" class="add-value">
+              +{{ (projectStatusFilterControl.value?.length || 0) - 1 }}
+            </span>
+                    </mat-label>
+                    <mat-select #statusSelect [formControl]="projectStatusFilterControl" multiple (selectionChange)="getProjectsData()" panelClass="custome-width" [ngClass]="statusSelect.panelOpen ? 'arrow-up' : 'arrow-down'">
+                        <div class="menu-container">
+                            <div class="button-wrapper">
+                                <label class="count"> {{ projectStatusFilterControl.value?.length ? projectStatusFilterControl.value?.length : 0 }} Selected </label>
+                                <div>
+                                    <span (click)="selectAllProjectStatus(); statusSelect.close()">Select All</span>
+                                    <span (click)="clearAllProjectStatus(); statusSelect.close()">Clear All</span>
+                                </div>
+                            </div>
+                        </div>
+                        <mat-select-trigger class="select-value">
+                            <span class="value">{{projectStatusFilterControl.value?.[0]?.title || ''}}</span>
+                            <span *ngIf="(projectStatusFilterControl.value?.length || 0) > 1" class="add-value">
+                +{{ (projectStatusFilterControl.value?.length || 0) - 1 }}
+              </span>
+                        </mat-select-trigger>
+                        <mat-option *ngFor="let status of projectStatusOptions" [value]="status">{{ status.title }}</mat-option>
+                    </mat-select>
+                    <!-- <mat-icon
+          matSuffix
+          *ngIf="projectStatusFilterControl.value"
+          (click)="projectStatusFilterControl.reset(); removeFilter($event)"
+          class="filter-close"
+          >close</mat-icon
+        > -->
+                </mat-form-field>
+
+                <svg *ngIf="projectStatusFilterControl.value" (click)="projectStatusFilterControl.reset(); removeFilter($event)" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" class="filter-close">
+          <path
+            d="M8.00065 1.3335C4.32732 1.3335 1.33398 4.32683 1.33398 8.00016C1.33398 11.6735 4.32732 14.6668 8.00065 14.6668C11.674 14.6668 14.6673 11.6735 14.6673 8.00016C14.6673 4.32683 11.674 1.3335 8.00065 1.3335ZM10.2407 9.5335C10.434 9.72683 10.434 10.0468 10.2407 10.2402C10.1407 10.3402 10.014 10.3868 9.88732 10.3868C9.76065 10.3868 9.63398 10.3402 9.53399 10.2402L8.00065 8.70683L6.46732 10.2402C6.36732 10.3402 6.24065 10.3868 6.11398 10.3868C5.98732 10.3868 5.86065 10.3402 5.76065 10.2402C5.56732 10.0468 5.56732 9.72683 5.76065 9.5335L7.29398 8.00016L5.76065 6.46683C5.56732 6.2735 5.56732 5.9535 5.76065 5.76016C5.95398 5.56683 6.27398 5.56683 6.46732 5.76016L8.00065 7.2935L9.53399 5.76016C9.72732 5.56683 10.0473 5.56683 10.2407 5.76016C10.434 5.9535 10.434 6.2735 10.2407 6.46683L8.70732 8.00016L10.2407 9.5335Z"
+            fill="#86969D"
+          />
+        </svg>
+            </div>
+            <div class="close-icon-wrapper">
+                <mat-form-field class="small-dropdown medium-height-wrapper input-field-wrapper" #billableFormField>
+                    <mat-label> Is Billable </mat-label>
+                    <mat-select #billableSelect [formControl]="isBillableFilterControl" (selectionChange)="getProjectsData()" [ngClass]="billableSelect.panelOpen ? 'arrow-up' : 'arrow-down'">
+                        <mat-option [value]="true">Yes</mat-option>
+                        <mat-option [value]="false">No</mat-option>
+                    </mat-select>
+                    <!-- <mat-icon
+          matSuffix
+          *ngIf="isBillableFilterControl.value !== null"
+          (click)="isBillableFilterControl.reset(); removeFilter($event)"
+          class="filter-close"
+          >close</mat-icon
+        > -->
+                </mat-form-field>
+
+                <svg *ngIf="isBillableFilterControl.value !== null" (click)="isBillableFilterControl.reset(); removeFilter($event)" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" class="filter-close">
+          <path
+            d="M8.00065 1.3335C4.32732 1.3335 1.33398 4.32683 1.33398 8.00016C1.33398 11.6735 4.32732 14.6668 8.00065 14.6668C11.674 14.6668 14.6673 11.6735 14.6673 8.00016C14.6673 4.32683 11.674 1.3335 8.00065 1.3335ZM10.2407 9.5335C10.434 9.72683 10.434 10.0468 10.2407 10.2402C10.1407 10.3402 10.014 10.3868 9.88732 10.3868C9.76065 10.3868 9.63398 10.3402 9.53399 10.2402L8.00065 8.70683L6.46732 10.2402C6.36732 10.3402 6.24065 10.3868 6.11398 10.3868C5.98732 10.3868 5.86065 10.3402 5.76065 10.2402C5.56732 10.0468 5.56732 9.72683 5.76065 9.5335L7.29398 8.00016L5.76065 6.46683C5.56732 6.2735 5.56732 5.9535 5.76065 5.76016C5.95398 5.56683 6.27398 5.56683 6.46732 5.76016L8.00065 7.2935L9.53399 5.76016C9.72732 5.56683 10.0473 5.56683 10.2407 5.76016C10.434 5.9535 10.434 6.2735 10.2407 6.46683L8.70732 8.00016L10.2407 9.5335Z"
+            fill="#86969D"
+          />
+        </svg>
+            </div>
+        </div>
+        <div class="table-top table-responsive">
+            <ng-container *ngIf="showSpinner; else tableContent">
+                <div [mainAppSpinner]="showSpinner"></div>
+            </ng-container>
+            <ng-template #tableContent>
+                <table mat-table [dataSource]="dataSource.data.length > 0 ? dataSource : emptyData">
+                    <ng-container matColumnDef="projectTitle">
+                        <th mat-header-cell *matHeaderCellDef class="project-title cursor">Project Title</th>
+                        <td mat-cell *matCellDef="let element" (click)="redirectToBillingForm(element.id)" class="project-title">
+                            {{ element.project_title }}
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="projectTags">
+                        <th mat-header-cell *matHeaderCellDef class="project-tag">Project Tags</th>
+                        <td mat-cell *matCellDef="let element">
+                            <div class="button-wrap">
+                                <ng-container *ngIf="element.project_tags?.length > 10; else lessThan10Tags">
+                                    <button *ngFor="let tag of element.project_tags.slice(0, 9); let i = index" [ngClass]="(i + 1) % 4 == 0 ? 'orange-l' : (i + 1) % 3 == 0 ? 'light-gray-l' : (i + 1) % 2 == 0 ? 'sky-l' : 'tometo-l'">
+                    {{ tag }}
+                  </button>
+                                    <button class="light-gray-l" [matMenuTriggerFor]="menu">+ {{ element.project_tags.length - 9 }}more</button>
+
+                                    <mat-menu #menu="matMenu" class="ios-mat-menu">
+                                        <button *ngFor="let tag of element.project_tags.slice(9)" class="orange-l">
+                      {{ tag }}
+                    </button>
+                                    </mat-menu>
+                                </ng-container>
+                                <ng-template #lessThan10Tags>
+                                    <button *ngFor="let tag of element.project_tags; let i = index" [ngClass]="(i + 1) % 4 == 0 ? 'orange-l' : (i + 1) % 3 == 0 ? 'light-gray-l' : (i + 1) % 2 == 0 ? 'sky-l' : 'tometo-l'">
+                    {{ tag }}
+                  </button>
+                                </ng-template>
+
+                                <!-- <button  class="tometo-l" *ngIf="element.project_tags[0]">
+                {{ element.project_tags[0] }}
+              </button>
+              <button  *ngIf="element.project_tags[1]" class="sky-l">
+                {{ element.project_tags[1] }}
+              </button> -->
+                            </div>
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="totalWorked">
+                        <th mat-header-cell *matHeaderCellDef class="project-title cursor">Total Worked</th>
+                        <td mat-cell *matCellDef="let element">
+                            <ng-container *ngIf="element.total_worked_hours; else showSpinner">
+                                {{ element.total_worked_hours }}
+                            </ng-container>
+                            <ng-template #showSpinner>
+                                <mat-spinner diameter="20" color="white"></mat-spinner>
+                            </ng-template>
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="projectStatus">
+                        <th mat-header-cell *matHeaderCellDef class="project-status">Project Status</th>
+                        <td mat-cell *matCellDef="let element">
+                            <!-- <select (change)="updateBillingCongfigurationStatus($event, element)" class="select-td" [disabled]="!allowToUpdate">
+            <option *ngFor="let status of projectStatusOptions" [value]="status.value" [selected]="element.projectStatus == status.value">
+              {{ status.title }}
+            </option>
+          </select> -->
+                            <mat-form-field class="small-dropdown medium-height-wrapper input-field-wrapper">
+                                <mat-label>Select Status</mat-label>
+                                <mat-select #statusselect [disabled]="!allowToUpdate" (selectionChange)="updateBillingCongfigurationStatus($event, element)" [value]="element.projectStatus" [ngClass]="{
+                    'arrow-up': statusselect.panelOpen,
+                    'arrow-down': !statusselect.panelOpen,
+                    'no-cursor': !allowToUpdate
+                  }">
+                                    <mat-option *ngFor="let status of projectStatusOptions" [value]="status.value"> {{ status.title }} </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="empty-row">
+                        <td mat-cell *matCellDef="let element">No records found</td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row [ngClass]="
+              row.project_estimated_end_date
+                ? (row.project_estimated_end_date.isBefore(_todaysDate, 'day') ||
+                    (row.projectBillable && +row.projectQuotedHours < row.totalWorkedHours)) &&
+                  row.projectStatus == onGoing
+                  ? 'tometo-bg'
+                  : ''
+                : ''
+            " *matRowDef="let row; columns: dataSource.data.length > 0 ? displayedColumns : ['empty-row']"></tr>
+                </table>
+            </ng-template>
+        </div>
+        <mat-paginator *ngIf="dataSource.data.length > 0" [pageSize]="limit" [pageIndex]="page - 1" [length]="totalRecords" [pageSizeOptions]="[5, 10, 25, 100]" (page)="onPageSelectionChange($event)" aria-label="Select page of users" class="pagination"></mat-paginator>
+    </mat-card>
+</div>

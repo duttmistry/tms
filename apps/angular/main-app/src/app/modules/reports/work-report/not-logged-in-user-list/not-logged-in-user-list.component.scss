@@ -1,0 +1,61 @@
+@import 'apps/angular/main-app/src/variables';
+@import 'apps/angular/main-app/src/mixins';
+@import 'apps/angular/main-app/src/assets/fonts/fonts';
+table {
+  width: 100%;
+}
+
+.report-table {
+  margin-top: 30px;
+  .report-table-wrap {
+    margin-bottom: 20px;
+  }
+  .table-align {
+    width: 120px;
+    .next {
+      font-size: $theme-main-small-font !important;
+      font-weight: 500;
+      line-height: 14px !important;
+      margin-left: 0 !important;
+      padding: 0 10px !important;
+      height: 26px !important;
+    }
+  }
+   ::ng-deep .mat-mdc-table .mdc-data-table__row {
+    height: 46px;
+  }
+  .reason {
+    width: 982px;
+  }
+}
+
+@media screen and (max-width: $extra-extra-large-device) {
+  .report-table {
+    .reason {
+      width: 550px;
+    }
+  }
+}
+
+@media screen and (max-width: $extra-large-device) {
+  .report-table {
+    .reason {
+      width: 360px;
+    }
+  }
+}
+
+@media screen and (max-width: $lerge-device) {
+  .table-responsive {
+    overflow-x: auto;
+    table {
+      width: 900px;
+    }
+  }
+}
+
+table {
+  td {
+    padding: 5px 5px !important;
+  }
+}

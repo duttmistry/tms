@@ -1,0 +1,38 @@
+@import 'apps/angular/main-app/src/variables';
+@import 'apps/angular/main-app/src/mixins';
+@import 'apps/angular/main-app/src/assets/fonts/fonts';
+table {
+  width: 100%;
+}
+
+.report-table {
+  margin-top: 30px;
+  .report-table-wrap {
+    margin-bottom: 20px;
+  }
+  .table-align {
+    width: 50px;
+  }
+   ::ng-deep .mat-mdc-table .mdc-data-table__row {
+    height: 46px;
+  }
+}
+
+.bg-orange {
+  background-color: rgb(240, 196, 115);
+}
+
+.bg-yellow {
+  background-color: rgb(238, 238, 112);
+}
+
+table {
+  td {
+    padding: 5px 5px !important;
+    height: 46px;
+  }
+}
+
+.report-table-wrap {
+  padding-bottom: 20px;
+}

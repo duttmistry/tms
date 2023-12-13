@@ -1,0 +1,317 @@
+<div class="container-wrapper leave-details">
+  <mat-card class="padding-remove">
+    <div class="workspace-blk workspace-border">
+      <strong (click)="goBack()">
+        <a>Leave Details</a>
+      </strong>
+      <div class="approval-btn">
+        <div
+          matTooltip="Update leave"
+          class="edit-btn"
+          *ngIf="
+            isUserLeaveResponsiblePerson &&
+            !leaveDetails?.isDatePassed &&
+            (leaveDetails?.status == APPROVED || leaveDetails?.approvarStatus == PENDING)
+          "
+          alt="edit"
+          (click)="redirectToEditLeave(leaveDetails?.id)"
+        >
+          <span>Edit</span>
+        </div>
+
+        <div
+          matTooltip="Approve leave"
+          class="approve-btn"
+          *ngIf="leaveDetails && leaveDetails?.status === PENDING && leaveDetails.approvarStatus === PENDING"
+          alt="edit"
+          (click)="ApproveRejectLeave(APPROVED, leaveDetails?.id)"
+        >
+          <span>Approve</span>
+        </div>
+
+        <div
+          matTooltip="Reject leave"
+          class="reject-btn"
+          *ngIf="leaveDetails && leaveDetails?.status === PENDING && leaveDetails.approvarStatus === PENDING"
+          alt="edit"
+          (click)="ApproveRejectLeave(REJECTED, leaveDetails?.id)"
+        >
+          <span>Reject</span>
+        </div>
+        <div (click)="goBack()" class="tertiary-button">Back</div>
+      </div>
+      <!-- <span *ngIf="leaveDetails && leaveDetails.status === PENDING && showApprovalButtons"> </span> -->
+    </div>
+    <div class="leaves-details-blk">
+      <div class="details-left border-content">
+        <div *ngIf="leaveDetails && !showSpinner; else spinnerSection" class="details-left-blk">
+          <div class="details-left-items">
+            <main-app-mat-chips [data]="leaveDetails.user" [isCloseButton]="false"> </main-app-mat-chips>
+            <h4>{{ leaveDetails.leaveSubject }}</h4>
+            <p *ngIf="leaveDetails.description">
+              {{ leaveDetails.description }}
+            </p>
+            <div class="attachment" *ngIf="attachments && attachments.length">
+              <h2>Attachment(s)</h2>
+              <div class="attachment-blk">
+                <div class="filezone" *ngFor="let document of attachments; index as i">
+                  <div (click)="getAndPreviewDocument(document.path)" class="filezone-flex">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path
+                        d="M22 10V15C22 20 20 22 15 22H9C4 22 2 20 2 15V9C2 4 4 2 9 2H14"
+                        stroke="#333366"
+                        stroke-width="1.5"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                      <path
+                        d="M22 10H18C15 10 14 9 14 6V2L22 10Z"
+                        stroke="#333366"
+                        stroke-width="1.5"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                    </svg>
+                    <div class="upload-file-blk">
+                      <a>{{ document.name }}</a>
+                      <p>{{ document.size }}</p>
+                    </div>
+                  </div>
+                  <img src="assets/images/download12.svg" matTooltip="Download File" (click)="downloadDocument(document.path)" alt="Image" />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div
+            class="details-blk"
+            [ngClass]="leaveDetails.status === PENDING ? 'pending-blk' : leaveDetails.status === APPROVED ? 'approved-blk' : 'cancel-blk'"
+          >
+            <div class="pending-left">
+              <div class="pending-item">
+                <h5>Start Date</h5>
+                <p>{{ leaveDetails.startDate }}</p>
+              </div>
+              <div class="pending-item">
+                <h5>No. of Leave(s)</h5>
+                <p>{{ leaveDetails.noOfDays }}</p>
+              </div>
+              <div class="pending-item">
+                <h5>Applied Date</h5>
+                <p>{{ leaveDetails.appliedDate }}</p>
+              </div>
+            </div>
+            <div class="pending-right">
+              <div class="pending-item">
+                <h5>End Date</h5>
+                <p>{{ leaveDetails.endDate }}</p>
+              </div>
+              <div class="pending-item">
+                <h5>Leave Type</h5>
+                <p>{{ leaveDetails.leaveType }}</p>
+              </div>
+
+              <div class="pending-item">
+                <h5>Leave Status</h5>
+                <p
+                  class="pending"
+                  [ngClass]="
+                    leaveDetails.status === PENDING
+                      ? 'pending-report-second'
+                      : leaveDetails.status === APPROVED
+                      ? 'completed-report-second'
+                      : 'Declined-report-second'
+                  "
+                >
+                  {{ leaveDetails.status | titlecase }}
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div *ngIf="leaveDetails.reasonForCancellation" class="details-description">
+            <h5>Reason for cancellation</h5>
+            <p>{{ leaveDetails.reason }}</p>
+          </div>
+        </div>
+
+        <mat-divider></mat-divider>
+
+        <div class="details-bottom">
+          <div class="details-bottom-text">
+            <h2 class="pr-form-top-header">Leave Status Updates by Approvers</h2>
+            <ng-container>
+              <!-- {{ leaveDetails?.user?.id == this.userId ? 'My' : leaveDetails?.user?.first_name +"'s"}} -->
+              <div (click)="navigateToLeaveHistory()" class="tertiary-button">Leave History</div>
+            </ng-container>
+          </div>
+          <div class="table-responsive">
+            <table mat-table [dataSource]="dataSource.data.length > 0 ? dataSource : emptyData" *ngIf="!showSpinner; else spinnerSection">
+              <ng-container matColumnDef="user">
+                <th mat-header-cell *matHeaderCellDef>Name</th>
+                <td mat-cell *matCellDef="let element">
+                  <div class="details-table">
+                    <img #img (error)="img.src = 'assets/images/default.png'" [src]="base_url + element.user.employee_image" alt="person" />
+                    {{ element.user.first_name + ' ' + element.user.last_name }}
+                  </div>
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="status">
+                <th mat-header-cell *matHeaderCellDef class="status table-align">Status</th>
+                <td mat-cell *matCellDef="let element">
+                  <div [ngClass]="element.status === PENDING ? 'pending-btn' : element.status === APPROVED ? 'approve-btn' : 'reject-btn'">
+                    {{ element.status | titlecase }}
+                  </div>
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="comment">
+                <th mat-header-cell *matHeaderCellDef class="comment">Comment</th>
+                <td mat-cell *matCellDef="let element">
+                  {{ element.comment || '-' }}
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="time">
+                <th mat-header-cell *matHeaderCellDef>Updated On</th>
+                <td mat-cell *matCellDef="let element">
+                  {{ element.time }}
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="empty-row">
+                <td mat-cell *matCellDef="let element">No records found</td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: dataSource.data.length > 0 ? displayedColumns : ['empty-row']"></tr>
+            </table>
+          </div>
+        </div>
+        <mat-divider></mat-divider>
+
+        <div class="period-blk">
+          <h2 class="pr-form-top-header">Colleague Leaves: Concurrent Dates</h2>
+          <div class="add-leave-blk-bottom" *ngIf="!showSpinner; else spinnerSection">
+            <mat-list *ngIf="teamAlsoOnLeave && teamAlsoOnLeave.length; else notFound">
+              <mat-list-item *ngFor="let teamMember of teamAlsoOnLeave">
+                <div class="person-header">
+                  <div>
+                    <img
+                      #img
+                      (error)="img.src = 'assets/images/default.png'"
+                      class="img-circle"
+                      [src]="base_url + teamMember.user.employee_image"
+                      alt="Image"
+                    />
+                  </div>
+                  <div class="mat-subheading-2">
+                    <strong class="bottom-text">
+                      {{ teamMember.user.first_name + ' ' + teamMember.user.last_name }}
+                      <span
+                        >{{
+                          (teamMember.fromDate == teamMember.toDate ? teamMember.fromDate : teamMember.fromDate + ' to ' + teamMember.toDate) +
+                            ' (' +
+                            (teamMember.noOfDays == 1
+                              ? teamMember.noOfDays + ' Day Leave'
+                              : teamMember.noOfDays +
+                                ' Days
+                        Leave') +
+                            ')'
+                        }}
+                      </span></strong
+                    >
+                  </div>
+                </div>
+              </mat-list-item>
+            </mat-list>
+          </div>
+        </div>
+        <ng-template #notFound>
+          <p class="bottom-text">There are no scheduled leaves for your team in this period.</p>
+        </ng-template>
+        <mat-divider> </mat-divider>
+        <div class="change-log" *ngIf="leaveHistoryLogs && leaveHistoryLogs.length > 0">
+          <h2 class="pr-form-top-header">Change Log</h2>
+          <div class="changed-log-leave" *ngFor="let log of leaveHistoryLogs">
+            <ng-container *ngIf="log.updated_values && log.updated_values.length > 0">
+              <ng-container *ngFor="let updatedValue of log.updated_values">
+                <div class="updated-value-block">
+                  <div>
+                    <ng-container *ngIf="updatedValue?.key == 'attachments'">
+                      <ng-container>
+                        <span class="bottom-text-bold">{{ log.actionBy.first_name + ' ' + log.actionBy.last_name }}</span>
+                        <span class="bottom-text-main">&nbsp;modified &nbsp;</span>
+                      </ng-container>
+                      <span class="">{{ updatedValue?.description }}</span>
+                      <div class="attachment-blk">
+                        <div class="filezone" *ngFor="let document of updatedValue?.newValue; index as i">
+                          <div (click)="getAndPreviewDocument(document.path)" class="filezone-flex">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                              <path
+                                d="M22 10V15C22 20 20 22 15 22H9C4 22 2 20 2 15V9C2 4 4 2 9 2H14"
+                                stroke="#333366"
+                                stroke-width="1.5"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                              />
+                              <path
+                                d="M22 10H18C15 10 14 9 14 6V2L22 10Z"
+                                stroke="#333366"
+                                stroke-width="1.5"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                              />
+                            </svg>
+                            <div class="upload-file-blk">
+                              <a>{{ document.name }}</a>
+                              <p>{{ document.size }}</p>
+                            </div>
+                          </div>
+                          <img src="assets/images/download12.svg" matTooltip="Download File" (click)="downloadDocument(document.path)" alt="Image" />
+                        </div>
+                        <p class="bottom-text-bold left-mr">{{ log?.updated_at }}</p>
+                      </div>
+                    </ng-container>
+                    <ng-container *ngIf="updatedValue?.key != 'attachments'">
+                      <div class="fields-block">
+                        <div>
+                          <span class="bottom-text-bold">{{ log.actionBy.first_name + ' ' + log.actionBy.last_name }}</span>
+                          <span class="bottom-text-main">&nbsp;changed &nbsp;</span>
+                          <span class="">{{ updatedValue?.description }}</span>
+                          <span class="bottom-text-main">&nbsp;from &nbsp;</span>
+                          <span class="">{{ updatedValue?.oldValue }}</span>
+                          <span class="bottom-text-main">&nbsp;to &nbsp;</span>
+                          <span class="">{{ updatedValue?.newValue }}</span>
+                        </div>
+                        <p class="bottom-text-bold left-mr">{{ log?.updated_at }}</p>
+                      </div>
+                    </ng-container>
+                  </div>
+                </div>
+              </ng-container>
+            </ng-container>
+            <ng-container *ngIf="!log.updated_values">
+              <div class="updated-value-block">
+                <span class="bottom-text-bold">{{ log?.actionBy?.first_name + ' ' + log?.actionBy?.last_name }} {{ log?.action }}</span>
+                <p class="bottom-text-bold left-mr">{{ log?.updated_at }}</p>
+              </div>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+      <div class="details-right">
+        <div>
+          <div *ngIf="fromDate && toDate && holidayList && fromDate && toDate" class="calander">
+            <custom-calendar [holidayList]="holidayList" [fromDate]="fromDate" [toDate]="toDate"></custom-calendar>
+          </div>
+          <mat-divider></mat-divider>
+        </div>
+      </div>
+    </div>
+  </mat-card>
+</div>
+
+<ng-template #spinnerSection>
+  <div [mainAppSpinner]="showSpinner"></div>
+</ng-template>

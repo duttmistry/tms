@@ -1,0 +1,66 @@
+@import 'apps/angular/main-app/src/variables';
+@import 'apps/angular/main-app/src/mixins';
+@import 'apps/angular/main-app/src/assets/fonts/fonts.scss';
+
+.role {
+  .role-header {
+    margin: 20px 0 20px;
+    @include flex;
+    justify-content: end;
+    gap: 15px;
+
+    .mat-mdc-form-field {
+      width: 400px;
+      margin-bottom: 0;
+    }
+    .button {
+      @include flex;
+      gap: 15px;
+    }
+    .cancel,
+    .next {
+      min-width: 79px;
+      height: 38px !important;
+      margin-left: 0 !important;
+    }
+  }
+  .role-form {
+    position: relative;
+    .error-wrap {
+      position: absolute;
+      top: 39px;
+    }
+  }
+  .table-align {
+    width: 110px;
+    img {
+      width: 25px;
+      height: 25px;
+      border: 1px solid $theme-border-color-gray;
+      margin: 0 5px;
+      border-radius: 5px;
+      padding: 3px;
+    }
+  }
+  .tag-center {
+    @include flex;
+    @include flex-justify-center;
+    @include flex-align-center;
+    height: 52px;
+    img {
+      cursor: pointer;
+    }
+  }
+}
+
+.highlightRecord {
+  background-color: #d8d7d73f !important;
+}
+
+@media screen and (max-width: $lerge-device) {
+  .role {
+    .role-header {
+      justify-content: flex-start;
+    }
+  }
+}

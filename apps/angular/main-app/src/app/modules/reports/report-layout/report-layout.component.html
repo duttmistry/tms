@@ -1,0 +1,37 @@
+<div class="administration-dashboard container-wrapper">
+  <div class="container-inner">
+    <mat-card class="container-child">
+      <div class="workspace-blk workspace-border">
+        <strong>Reports</strong>
+      </div>
+      <div class="report-section-container">
+        <mat-accordion multi>
+          <mat-expansion-panel
+            [expanded]="true"
+            *ngFor="let section of boxData"
+            (opened)="section.panelOpen = true"
+            (closed)="section.panelOpen = false"
+            class="expandable-row"
+          >
+            <mat-expansion-panel-header>
+              <mat-panel-title> {{ section.title }} </mat-panel-title>
+            </mat-expansion-panel-header>
+            <div class="administration-dashboard-wrap">
+              <ng-container *ngFor="let item of section.reports">
+                <div class="box-item" (click)="onClickBox(item)" *ngIf="item.showItem">
+                  <div class="icon">
+                    <img src="{{ item.icon }}" alt="icon" />
+                    <h3 class="box-title">{{ item.title }}</h3>
+                  </div>
+                  <div class="content">
+                    <p class="box-description">{{ item.description }}</p>
+                  </div>
+                </div>
+              </ng-container>
+            </div>
+          </mat-expansion-panel>
+        </mat-accordion>
+      </div>
+    </mat-card>
+  </div>
+</div>

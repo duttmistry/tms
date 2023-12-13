@@ -1,0 +1,31 @@
+<div class="change-form">
+  <mat-form-field class="responsibleperson" #autocompleteField>
+    <mat-label>
+      <ng-container *ngIf="!showHtmlContentAsPlaceHolder">{{ data ? '' : placeHolderLabel }}</ng-container>
+      <ng-container *ngIf="showHtmlContentAsPlaceHolder && !data">
+        <i class="fa fa-plus"></i>
+      </ng-container>
+    </mat-label>
+
+    <mat-chip-grid #chipList [ngClass]="auto.isOpen ? 'arrow-up' : 'arrow-down'">
+      <main-app-mat-chips [viewAvatarOnly]="viewAvatarOnly" *ngIf="data" [data]="data" [isCloseButton]="false"> </main-app-mat-chips>
+      <input
+        #dataInput
+        #autocompleteTrigger="matAutocompleteTrigger"
+        placeholder="Search..."
+        [formControl]="dataCtrl"
+        [matAutocomplete]="auto"
+        [matChipInputFor]="chipList"
+        [disabled]="isDisabledInputControl"
+        [ngClass]="isDisabledInputControl ? 'not-allowed-cursor' : ''"
+        (blur)="markAsTouched()"
+      />
+    </mat-chip-grid>
+
+    <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+      <mat-option *ngFor="let item of filteredData | async" [value]="item">
+        {{ item.name }}
+      </mat-option>
+    </mat-autocomplete>
+  </mat-form-field>
+</div>

@@ -1,0 +1,64 @@
+@import 'apps/angular/main-app/src/variables';
+@import 'apps/angular/main-app/src/mixins';
+@import 'apps/angular/main-app/src/assets/fonts/fonts.scss';
+.example-container {
+  width: 100%;
+  margin: 10px;
+}
+
+.settings {
+  min-height: 100vh;
+  .mat-drawer-content {
+    margin-left: 190px !important;
+  }
+  mat-list-item.active {
+    color: $theme-main-color !important;
+    border-bottom: 1px solid $theme-main-color;
+    span {
+      color: $theme-main-color !important;
+    }
+  }
+  mat-nav-list {
+    padding: 0 !important;
+    border-radius: $card-radius;
+    box-shadow: $box-shadow-card;
+    background-color: $theme-color-white;
+    margin-right: 1px;
+    margin-left: 1px;
+  }
+  .mat-drawer {
+    width: 190px !important;
+    border-right: initial;
+    background-color: initial !important;
+    margin-left: 1px;
+  }
+   ::ng-deep .mat-mdc-list-item .mdc-list-item__primary-text {
+    font-size: 14px !important;
+    font-weight: 400 !important;
+    transition: all 0.5s ease;
+  }
+  .setting-item {
+    height: 40px !important;
+    //color: $theme-main-color-light;
+    padding: 10px 15px;
+    transition: all 0.5s ease;
+    cursor: pointer;
+    border-bottom: 1px solid #e9e9e9;
+    &:hover {
+      color:$theme-main-color;
+      border-bottom: 1px solid $theme-main-color;
+    }
+  }
+  .workspace-blk {
+    margin-bottom: 20px;
+    strong {
+      font-weight: 600;
+      font-size: $theme-main-large-font;
+      margin-bottom: 0;
+    }
+  }
+}
+
+.permission-class {
+  overflow: hidden;
+}

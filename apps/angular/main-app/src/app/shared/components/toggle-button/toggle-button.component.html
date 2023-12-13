@@ -1,0 +1,8 @@
+<div class="toggle-button-component">
+  <input type="checkbox" id="{{ toggleValue.id }}" [checked]="toggleValue.is_notify" (change)="onToggleChange(toggleValue)" />
+  <label class="toggle-button-switch" for="{{ toggleValue.id }}"></label>
+  <div class="toggle-button-text">
+    <div class="toggle-button-text-on">ON</div>
+    <div class="toggle-button-text-off">OFF</div>
+  </div>
+</div>

@@ -1,0 +1,23 @@
+{
+  "development": {
+    "username": "cccsql",
+    "password": "ccc123",
+    "database": "tms_development",
+    "host": "192.168.0.204",
+    "dialect": "mysql"
+  },
+  "staging": {
+    "username": "cccsql",
+    "password": "ccc123",
+    "database": "tms_production_backup",
+    "host": "192.168.0.204",
+    "dialect": "mysql"
+  },
+  "production": {
+    "username": "cccsql",
+    "password": "ccc123",
+    "database": "tms_production",
+    "host": "192.168.0.204",
+    "dialect": "mysql"
+  }
+}

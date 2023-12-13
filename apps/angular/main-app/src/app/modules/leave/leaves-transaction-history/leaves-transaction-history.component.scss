@@ -1,0 +1,118 @@
+@import 'apps/angular/main-app/src/variables';
+@import 'apps/angular/main-app/src/mixins';
+@import 'apps/angular/main-app/src/assets/fonts/fonts.scss';
+
+.leave-history {
+  min-height: 100vh;
+  .fc {
+    max-width: 100%;
+    margin: 0 auto;
+  }
+  .mat-mdc-form-field {
+    margin-bottom: 0;
+  }
+  .filter-section {
+    margin: 25px 0 !important;
+    justify-content: flex-end;
+    .mat-mdc-form-field {
+      width: 240px;
+    }
+    .history-filter {
+      @include flex;
+      @include flex-align-center;
+      gap: 13px;
+    }
+  }
+  .history-1 {
+    width: 9%;
+  }
+  .history-2 {
+    width: 52%;
+  }
+  .history-3 {
+    width: 12%;
+  }
+  mat-divider {
+    margin-top: 20px;
+  }
+  .user-info {
+    font-size: $theme-main-small-font;
+    margin-top: 20px;
+    @include flex;
+    @include flex-justify-space-between;
+    .user-info-flex {
+      @include flex;
+      @include flex-align-center;
+      gap: 15px;
+      span {
+        font-size: 18px;
+        line-height: 21px;
+        font-weight: 600;
+        color: $theme-font-color-black;
+        margin-bottom: 3px;
+        display: block;
+      }
+      p {
+        font-size: 16px;
+        line-height: 19px;
+        font-weight: 400;
+        color: $theme-main-color-light;
+        font-style: italic;
+        margin: 0;
+      }
+      img {
+        width: 75px;
+        border-radius: 50%;
+        height: 75px;
+        object-fit: cover;
+      }
+    }
+  }
+}
+@media screen and (max-width: $extra-large-device) {
+  .leave-history {
+    .team-right {
+      justify-content: center;
+      margin-bottom: 35px;
+    }
+    .leave-img {
+      width: initial !important;
+      & div {
+        margin-right: 60px;
+        margin-left: 0;
+      }
+    }
+    .leave-img div:last-child {
+      margin-right: 0;
+    }
+    ::ng-deep .fc .fc-toolbar.fc-header-toolbar {
+      top: 89px;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+  }
+}
+
+@media screen and (max-width: $lerge-device) {
+  .leave-history {
+    .leave-img {
+      & div {
+        margin-right: 20px;
+        &::before {
+          right: -11px;
+        }
+        img {
+          height: 20px !important;
+          width: 20px !important;
+        }
+      }
+    }
+    .user-info {
+      flex-direction: column;
+      gap: 15px;
+    }
+    .filter-section {
+      justify-content: flex-start;
+    }
+  }
+}

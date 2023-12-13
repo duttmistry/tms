@@ -1,0 +1,60 @@
+@import 'apps/angular/main-app/src/variables';
+@import 'apps/angular/main-app/src/mixins';
+@import 'apps/angular/main-app/src/assets/fonts/fonts.scss';
+.not-allowed-cursor {
+  cursor: not-allowed;
+}
+
+.responsibleperson {
+  width: 515px;
+  cursor: pointer;
+  ::ng-deep .mat-mdc-text-field-wrapper .mat-mdc-form-field-infix {
+    min-height: 52px !important;
+    .mat-mdc-floating-label {
+      transform: unset;
+      top: unset;
+      pointer-events: none !important;
+      color: $theme-color-placeholder;
+      line-height: 16px !important;
+      font-weight: 500;
+      font-size: 14px;
+      letter-spacing: 0;
+      height: 100%;
+      display: flex;
+      align-items: center;
+    }
+    .mat-mdc-floating-label.mdc-floating-label--float-above {
+      display: none;
+    }
+    .mdc-evolution-chip-set {
+      height: 52px;
+      input {
+        color: $theme-font-color-black;
+        line-height: 16px !important;
+        font-weight: 500;
+        font-size: 14px;
+        height: 100%;
+        display: flex;
+        align-items: center;
+      }
+    }
+  }
+  .arrow-up:after,
+  .arrow-down:after {
+    right: 0;
+    top: 15px;
+  }
+  .mdc-evolution-chip-set {
+    .mdc-text-field__input,
+    main-app-mat-chips,
+    .mat-mdc-floating-label {
+      cursor: pointer;
+    }
+  }
+}
+
+@media screen and (max-width: $lerge-device) {
+  .responsibleperson {
+    width: 100%;
+  }
+}

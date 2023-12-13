@@ -1,0 +1,113 @@
+@import 'apps/angular/main-app/src/variables';
+@import 'apps/angular/main-app/src/mixins';
+@import 'apps/angular/main-app/src/assets/fonts/fonts';
+.comment-box {
+  padding: 0;
+  margin-bottom: 12px;
+  box-shadow: unset;
+  border-radius: $button-radius !important;
+  .mat-mdc-card-content {
+    padding: 0 0 0 10px;
+    @include flex;
+    @include flex-justify-space-between;
+    align-items: flex-start;
+    margin-left: 27px;
+  }
+  ::ng-deep .ql-snow * {
+    padding: 0 !important;
+  }
+  .comment-options {
+    float: right;
+  }
+}
+
+.cursor-not-allowed {
+  cursor: not-allowed;
+}
+
+::ng-deep .commit-container {
+  display: block !important;
+  margin-top: 15px;
+  clear: both;
+  .mat-mdc-chip {
+    margin: 0 0 10px 0 !important;
+  }
+  .icon-hour-wrapper {
+    display: flex;
+    align-items: flex-start;
+  }
+  .comment-on {
+    color: #86969d;
+    font-size: 14px;
+    font-weight: 400;
+    margin-left: 12px;
+    margin-right: 12px;
+    margin-top: 12px;
+  }
+  .icon-add-wrapper {
+    margin-top: 6px;
+    display: flex;
+    gap: 10px;
+  }
+}
+
+::ng-deep .commit-container + ::ng-deep .commit-container {
+  margin-top: 0;
+  border-top: 1px solid #dfdfdf;
+  margin-top: 10px;
+  padding-top: 10px;
+}
+
+.comment-box-blk {
+  display: block !important;
+  padding: 0;
+  box-shadow: unset;
+  .mat-mdc-card-content {
+    padding: 0;
+  }
+  .comments-btn {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 10px;
+    button {
+      margin-top: 0 !important;
+    }
+  }
+}
+
+small {
+  margin-bottom: 10px;
+  display: block;
+}
+
+.comments-btn {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.commits-quill-editor {
+  width: 100% !important;
+}
+
+.commit-view-html {
+  margin-bottom: 10px;
+}
+
+////View All Button ////
+.view-all-task {
+  font-size: $theme-main-small-font;
+  font-weight: 500;
+  line-height: 15px;
+  color: $theam-color-blue;
+  cursor: pointer;
+  margin-top: 0;
+  // position: absolute;
+  right: 5px;
+  top: 3px;
+  z-index: 99;
+}
+
+/////////////

@@ -1,0 +1,78 @@
+<div class="wrapper leave-admin">
+  <div class="leave-admin-blk">
+    <form>
+      <div *ngIf="teamMembersList && teamMembersList.length && !showSpinner; else spinnerSection" class="admin-field">
+        <span class="add-h2">Leave Responsible Person</span>
+        <!-- <tms-workspace-ceo-select
+      (emmitSelectedTeamMates)="selectLeaveresponsiblePerson($event)"
+      (emmitDeletedTeamMates)="deleteLeaveResponsiblePerson($event)"
+      [isDisabledTeam]="false"
+      [dataId]="leaveResponsiblePersons"
+      [teamMembersList]="teamMembersList"
+      [module] = "module"	
+      class="site-chip"
+    ></tms-workspace-ceo-select> -->
+        <team-member-dialog
+          (emmitSelectedTeamMates)="selectLeaveresponsiblePerson($event)"
+          (emmitDeletedTeamMates)="deleteLeaveResponsiblePerson($event)"
+          [isDisabledTeam]="false"
+          [dataId]="leaveResponsiblePersons"
+          [teamMembersList]="teamMembersList"
+          class="site-chip"
+        ></team-member-dialog>
+      </div>
+      <mat-divider></mat-divider>
+      <mat-error *ngIf="!(leaveResponsiblePersons?.length > 0) && !showError"> Please select a User </mat-error>
+      <div class="date-time-picker">
+        <span class="add-h2">Date to Execute the CRON Job</span>
+        <div class="time-picker-flex">
+          <mat-form-field class="medium-height-wrapper input-field-wrapper">
+            <mat-label>Day of the month</mat-label>
+            <input matInput [formControl]="cronJobDay" placeholder="DD" autocomplete="off" />
+            <mat-error *ngIf="cronJobDay.invalid && (cronJobDay.errors?.['min'] || cronJobDay.errors?.['max'])"
+              >Please enter a value within the range of 1 to 31.</mat-error
+            >
+            <mat-error *ngIf="cronJobDay.invalid && cronJobDay.errors?.['pattern'] && !(cronJobDay.errors?.['min'] || cronJobDay.errors?.['max'])"
+              >Enter a valid input.</mat-error
+            >
+          </mat-form-field>
+          <mat-form-field class="medium-height-wrapper input-field-wrapper">
+            <mat-label>Time</mat-label>
+            <input matInput placeholder="Time" [ngxTimepicker]="timePicker" [formControl]="cronJobTime" />
+            <mat-icon (click)="timePicker.open()" matSuffix>access_time</mat-icon>
+            <ngx-material-timepicker #timePicker></ngx-material-timepicker>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="balance-flex">
+        <div>
+          <span class="add-h2">CL Balance to Credit</span>
+          <mat-form-field class="medium-height-wrapper input-field-wrapper">
+            <mat-label></mat-label>
+            <input type="text" matInput [formControl]="CLBalance" autocomplete="off" />
+            <mat-error *ngIf="CLBalance.errors?.['min']">Please enter a value.</mat-error>
+            <mat-error *ngIf="CLBalance.errors?.['pattern'] && !(CLBalance.errors?.['min'] )">Enter a valid input.</mat-error>
+          </mat-form-field>
+        </div>
+        <div>
+          <span class="add-h2">PL Balance to Credit</span>
+          <mat-form-field class="medium-height-wrapper input-field-wrapper">
+            <mat-label></mat-label>
+            <input type="text" matInput [formControl]="PLBalance" autocomplete="off" />
+            <mat-error *ngIf="PLBalance.errors?.['min']">Please enter a value.</mat-error>
+            <mat-error *ngIf="PLBalance.errors?.['pattern'] && !(PLBalance.errors?.['min'])">Enter a valid input.</mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <mat-divider class="divider-bm"></mat-divider>
+
+      <div class="leave-admin-button btn-flex common-button-wrapper">
+        <button color="primary" class="next primary-button" type="submit" (click)="onSave()">Save</button>
+        <button (click)="onCancel()" class="cancel secondary-button">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>
+<ng-template #spinnerSection>
+  <div [mainAppSpinner]="showSpinner"></div>
+</ng-template>

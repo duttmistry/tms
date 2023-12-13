@@ -1,0 +1,33 @@
+{
+  "name": "pkg-project-documents",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "library",
+  "sourceRoot": "libs/pkg/project-documents/src",
+  "prefix": "pkg",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/angular:ng-packagr-lite",
+      "outputs": ["{workspaceRoot}/dist/{projectRoot}"],
+      "options": {
+        "project": "libs/pkg/project-documents/ng-package.json"
+      },
+      "configurations": {
+        "production": {
+          "tsConfig": "libs/pkg/project-documents/tsconfig.lib.prod.json"
+        },
+        "development": {
+          "tsConfig": "libs/pkg/project-documents/tsconfig.lib.json"
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/pkg/project-documents/**/*.ts", "libs/pkg/project-documents/**/*.html"]
+      }
+    }
+  },
+  "tags": ["angular"]
+}

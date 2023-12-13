@@ -1,0 +1,42 @@
+<!-- <button (click)="openTeamDialog()" color="primary" cdkOverlayOrigin #trigger1="cdkOverlayOrigin"> -->
+<div class="team-flex">
+    <p style="margin: 0px 0px 0 0; width: 110px" *ngIf="showLabel" class="pr-form-top-header">Team Members</p>
+</div>
+<ng-container>
+    <span cdkOverlayOrigin #trigger1="cdkOverlayOrigin">
+    <!-- <img matTooltip="Share" *ngIf="shareIconColor == 'white'" (click)="openTeamDialog()" src="assets/images/share-1.svg" /> -->
+    <button class="cancel" *ngIf="shareIconColor == 'white'" (click)="openTeamDialog()" [class]="">Share</button>
+    <img matTooltip="Share" *ngIf="shareIconColor == 'gray'" (click)="openTeamDialog()" src="assets/images/share.svg" class="share-icon" />
+  </span>
+</ng-container>
+
+<ng-template cdkConnectedOverlay [cdkConnectedOverlayOrigin]="trigger1" [cdkConnectedOverlayOpen]="isDialogOpen" (overlayOutsideClick)="resetTeamData()">
+    <mat-list class="example-list dropdown-border-input-wrapper document-popup-wrapper">
+        <button mat-icon-button (click)="resetTeamData()" class="close-button-wrapper">
+      <mat-icon>close</mat-icon>
+    </button>
+        <div class="button-container">
+            <input autoFocusDirective id="myInput" [placeholder]="'Start Typing'" [formControl]="searchControl" autocomplete="off" class="team-field" />
+            <button cdkFocusInitial [disabled]="createdByProperty && loggedInUserIdProperty ? (createdByProperty === loggedInUserIdProperty ? false : true) : false" (click)="
+          createdByProperty && loggedInUserIdProperty
+            ? createdByProperty === loggedInUserIdProperty
+              ? onSaveSharedDocument()
+              : ''
+            : onSaveSharedDocument()
+        " class="next btn-margin" color="primary" matTooltip="Save">
+        Share
+      </button>
+        </div>
+
+        <div class="mat-option-wrapper">
+            <mat-list-item (click)="onToggleSelectAll()" *ngIf="isShowSelectAll">
+                <mat-checkbox (click)="$event.stopPropagation(); onToggleSelectAll()" color="primary" [checked]="isSelectAllChecked" [disabled]="createdByProperty && loggedInUserIdProperty ? (createdByProperty === loggedInUserIdProperty ? false : true) : false"></mat-checkbox>Select All
+            </mat-list-item>
+
+            <mat-list-item *ngFor="let item of filteredData | async" (click)="createdByProperty && loggedInUserIdProperty ? (createdByProperty === loggedInUserIdProperty ? selected(item) : '') : selected(item)">
+                <mat-checkbox color="primary" [checked]="checkSelectedItem(item)" [disabled]="createdByProperty && loggedInUserIdProperty ? (createdByProperty === loggedInUserIdProperty ? false : true) : false"></mat-checkbox>
+                {{ item.name }}
+            </mat-list-item>
+        </div>
+    </mat-list>
+</ng-template>

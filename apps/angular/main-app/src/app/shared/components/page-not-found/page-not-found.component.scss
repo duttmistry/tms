@@ -1,0 +1,16 @@
+@import 'apps/angular/main-app/src/variables';
+@import 'apps/angular/main-app/src/mixins';
+@import 'apps/angular/main-app/src/assets/fonts/fonts.scss';
+
+.page-notfound {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  h2 {
+    font-size: 25px;
+    margin-top: 0;
+    margin-bottom: 10px;
+    font-weight: 400;
+  }
+}

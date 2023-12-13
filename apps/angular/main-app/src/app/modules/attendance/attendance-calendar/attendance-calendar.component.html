@@ -1,0 +1,106 @@
+<div class="attendance-calender-wrapper container-wrapper">
+  <mat-card *ngIf="calendarOptions">
+    <div class="workspace-blk workspace-border">
+      <strong>Attendance</strong>
+    </div>
+    <div class="workspace-table">
+      <div class="attendance-calender">
+        <div class="attendance-calender-first-row">
+          <full-calendar #Calendar [options]="calendarOptions"></full-calendar>
+          <div class="leave-count-attedance">
+            <div class="leave-count-green">
+              <strong>{{ attendedCounts || 0 }}</strong>
+              <span>Total Present Days</span>
+            </div>
+            <div class="leave-count-red">
+              <strong>{{ leavesCounts || 0 }}</strong>
+              <span>Total Leave Days</span>
+            </div>
+            <div class="leave-count-gray">
+              <strong>{{ (attendancePercentage || 0) + '%' }}</strong>
+              <span>Attendance</span>
+            </div>
+          </div>
+          <div class="holiday-color">
+            <div class="holiday-color-item bg-circle present-bg">Present</div>
+            <div class="holiday-color-item bg-circle absent-bg">Absent</div>
+            <div class="holiday-color-item bg-circle leave-day-bg">On Leave</div>
+            <div class="holiday-color-item bg-circle holiday-bg">Holiday</div>
+            <div class="holiday-color-item bg-circle weekend-bg">Weekend</div>
+          </div>
+        </div>
+      </div>
+      <div class="leaves-holiday">
+        <div class="leaves-holiday-wrap">
+          <div class="holiday-blk">
+            <!-- <p class="holiday-day pr-form-top-header">Public Holidays</p> -->
+            <!-- <p class="holiday-day pr-form-top-header">Public Holidays {{ !showAllHoliday ? getMonthAndYear() : '' }}</p> -->
+            <p class="holiday-day pr-form-top-header">Public Holidays</p>
+            <span (click)="!showAllHoliday ? getHolidayList(1) : getHolidayList(3)">{{
+              !showAllHoliday ? 'View All Holidays' : 'Hide All Holidays'
+            }}</span>
+          </div>
+          <div class="holiday-height">
+            <ng-container *ngIf="showSpinnerHolidays">
+              <div [mainAppSpinner]="showSpinnerHolidays"></div>
+            </ng-container>
+            <mat-list *ngIf="holidayList && holidayList?.length > 0 && !showSpinnerHolidays; else noDataOnMonthChangeHolidays">
+              <mat-list-item *ngFor="let holiday of holidayList" ngClass="holiday-item">
+                <img src="assets/images/holiday.svg" alt="holiday" class="holiday-img" />
+                <div class="days">
+                  <h2>{{ holiday.holidayName }}</h2>
+                  <p>{{ holiday.holidayDate ? holiday.holidayDate : '' }} {{ holiday.day ? ' - ' + holiday.day : '' }}</p>
+                </div>
+              </mat-list-item>
+            </mat-list>
+          </div>
+        </div>
+        <div class="leaves-holiday-wrap">
+          <div class="holiday-blk">
+            <!-- <p class="holiday-day pr-form-top-header">Special Days </p> -->
+            <!-- <p class="holiday-day pr-form-top-header">Special Days {{ !showAllSpecialDay ? getMonthAndYear() : '' }}</p> -->
+            <p class="holiday-day pr-form-top-header">Special Days</p>
+            <span (click)="!showAllSpecialDay ? getHolidayList(2) : getHolidayList(4)">{{
+              !showAllSpecialDay ? 'View All Special Days' : 'Hide All Special Days'
+            }}</span>
+          </div>
+          <div class="holiday-height">
+            <ng-container *ngIf="showSpinnerSpecialDays">
+              <div [mainAppSpinner]="showSpinnerSpecialDays"></div>
+            </ng-container>
+            <mat-list *ngIf="specialDayList && specialDayList?.length > 0 && !showSpinnerSpecialDays; else noDataOnMonthChangeSpecialDays">
+              <mat-list-item *ngFor="let holiday of specialDayList" [ngClass]="holiday.isHoliday === true ? 'holiday-item' : 'special-day-item'">
+                <img
+                  [src]="
+                    holiday.isHoliday === 0
+                      ? 'assets/images/special-day.svg'
+                      : holiday.isHoliday === 2
+                      ? 'assets/images/cake.svg'
+                      : 'assets/images/anniversary.svg'
+                  "
+                  alt="holiday"
+                  class="holiday-img"
+                />
+                <div class="days">
+                  <h2>{{ holiday.holidayName }}</h2>
+                  <p>{{ holiday.holidayDate ? holiday.holidayDate : '' }} {{ holiday.day ? ' - ' + holiday.day : '' }}</p>
+                </div>
+              </mat-list-item>
+            </mat-list>
+          </div>
+        </div>
+
+        <ng-template #noDataOnMonthChangeHolidays>
+          <mat-list-item *ngIf="!(holidayList?.length > 0) && !showSpinnerHolidays">
+            <div class="no-record">No records found</div>
+          </mat-list-item>
+        </ng-template>
+        <ng-template #noDataOnMonthChangeSpecialDays>
+          <mat-list-item *ngIf="!(specialDayList?.length > 0) && !showSpinnerSpecialDays">
+            <div class="no-record">No records found</div>
+          </mat-list-item>
+        </ng-template>
+      </div>
+    </div>
+  </mat-card>
+</div>

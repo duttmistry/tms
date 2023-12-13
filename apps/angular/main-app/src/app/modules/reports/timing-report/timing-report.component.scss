@@ -1,0 +1,425 @@
+@import 'apps/angular/main-app/src/variables';
+@import 'apps/angular/main-app/src/mixins';
+@import 'apps/angular/main-app/src/assets/fonts/fonts.scss';
+.red-text {
+  color: $theme-color-error !important;
+}
+
+.green-text {
+  color: $theam-color-green !important;
+}
+
+.light-blue-bg {
+  background-color: aliceblue;
+}
+
+.no-rerocord-section {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+  align-items: center;
+  border-radius: $button-radius !important;
+  padding: 10px;
+  background-color: $card-background;
+}
+
+.input-wrapper {
+  position: relative;
+  input {
+    border: 1px solid $theme-border-color-gray;
+    border-radius: $button-radius;
+    outline: none;
+    font-size: $theme-main-medium-font;
+    font-weight: 400;
+    font-family: $theme-main-font-family;
+    padding: 13px 10px 13px 13px;
+  }
+}
+
+.leaves {
+  min-height: 100vh;
+  .mat-mdc-form-field {
+    margin-bottom: 0;
+  }
+  .leave-form {
+    @include flex;
+    gap: 13px;
+    @include flex-align-center;
+    margin-bottom: 15px;
+    .mat-mdc-form-field {
+      width: 180px;
+    }
+    .mat-mdc-icon-button.mat-mdc-button-base {
+      width: 28px;
+      height: 28px;
+      padding: 0;
+    }
+  }
+  .leave-balance {
+    .balance-top {
+      @include flex;
+      @include flex-justify-space-between;
+      @include flex-align-center;
+      button {
+        padding: 0 !important;
+        height: 23px;
+        width: 23px;
+      }
+    }
+     ::ng-deep canvas {
+      height: 118px !important;
+      width: unset !important;
+    }
+    mat-icon {
+      color: $theme-main-color-light;
+    }
+  }
+  .leave-bottom {
+    @include flex;
+    gap: 15px;
+    .leaves-holiday {
+      width: 24%;
+      padding-top: 20px;
+      strong {
+        padding: 15px 15px;
+        display: block;
+        position: absolute;
+        top: -40px;
+        width: 100%;
+      }
+      p {
+        margin: 0;
+      }
+       ::ng-deep .mat-mdc-list-item-unscoped-content {
+        @include flex;
+        @include flex-justify-space-between;
+        @include flex-align-center;
+        padding: 0 20px 15px 20px;
+        margin-bottom: 15px;
+        border-bottom: 1px solid $theme-border-color-gray;
+        p {
+          font-size: $theme-main-medium-font;
+          font-weight: 400;
+          line-height: 20px;
+        }
+        span {
+          color: $theme-main-color-light;
+          font-size: $theme-main-small-font;
+          font-weight: 400;
+        }
+         ::ng-deep .mat-mdc-chip {
+          background-color: $theme-bg-color-darkgray !important;
+          border-radius: $card-radius;
+        }
+         ::ng-deep .mdc-evolution-chip__text-label {
+          font-size: $theme-main-medium-font;
+          font-weight: 400;
+        }
+      }
+       ::ng-deep .mat-mdc-list-item {
+        height: initial !important;
+      }
+    }
+  }
+  .mat-grid-list {
+    padding-bottom: 160px !important;
+  }
+  .leaves-image {
+    width: 120px;
+    text-align: left !important;
+    img {
+      margin-right: 7px;
+      cursor: pointer;
+      vertical-align: middle;
+      &:last-child {
+        margin-right: 0;
+      }
+    }
+  }
+   ::ng-deep .mat-form-field-wrapper {
+    padding-bottom: 0 !important;
+  }
+  .tertiary-button {
+    padding: 8px 15px;
+    font-size: $theme-main-medium-font;
+    width: unset;
+  }
+}
+
+.leave-bottom-balance {
+  width: 75%;
+}
+
+.table-top {
+  margin-top: 15px;
+}
+
+@media screen and (max-width: $extra-extra-large-device) {
+  .leaves {
+    .leaves-graph {
+      .leaves-graph-item {
+        width: 49%;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: $extra-large-device) {
+  .leaves {
+    .leave-bottom {
+      display: block;
+      .leaves-holiday {
+        width: 100%;
+      }
+      .leave-bottom-balance {
+        width: 100%;
+      }
+    }
+    .leave-table {
+      p {
+        display: none;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: $lerge-device) {
+  .leaves {
+    .leaves-graph {
+      .leaves-graph-item {
+        width: 48.5%;
+      }
+    }
+  }
+}
+
+//////////////////////////////
+///
+///
+///
+///
+.administration-wrap {
+  margin-top: 24px;
+  display: inline-block;
+  width: 100%;
+  .administration-wrap-top {
+    @include flex;
+    gap: 15px;
+    @include flex-justify-space-between;
+    @include flex-align-center;
+    .tollbar {
+      @include flex;
+      @include flex-align-center;
+      img {
+        cursor: pointer;
+      }
+      p {
+        font-size: $theme-main-extra-large-font;
+        font-weight: 600;
+        text-align: center;
+        width: 153px;
+        margin: 0;
+      }
+    }
+    .administration-color {
+      @include flex;
+      @include flex-align-center;
+      gap: 42px;
+      span {
+        font-size: $theme-main-small-font;
+        font-weight: 400;
+        position: relative;
+        word-wrap: break-word;
+      }
+      .wo-day {
+        background-color: unset;
+        position: relative;
+        &:before {
+          background-color: #e5e5e5;
+          position: absolute;
+          width: 10px;
+          height: 10px;
+          content: ' ';
+          top: 7px;
+          left: -18px;
+          border-radius: 50%;
+        }
+      }
+      .p-day {
+        background-color: unset;
+        position: relative;
+        &:before {
+          background-color: $theme-color-bg-present;
+          position: absolute;
+          width: 10px;
+          height: 10px;
+          content: ' ';
+          top: 7px;
+          left: -18px;
+          border-radius: 50%;
+        }
+      }
+      .upl-day {
+        background-color: unset;
+        position: relative;
+        &:before {
+          background-color: #ffdede;
+          position: absolute;
+          width: 10px;
+          height: 10px;
+          content: ' ';
+          top: 7px;
+          left: -18px;
+          border-radius: 50%;
+        }
+      }
+      .h-day {
+        background-color: unset;
+        position: relative;
+        &:before {
+          background-color: #cdecfa;
+          position: absolute;
+          width: 10px;
+          height: 10px;
+          content: ' ';
+          top: 7px;
+          left: -18px;
+          border-radius: 50%;
+        }
+      }
+      .a-day {
+        background-color: unset;
+        position: relative;
+        &:before {
+          background-color: #ffdcc3;
+          position: absolute;
+          width: 10px;
+          height: 10px;
+          content: ' ';
+          top: 7px;
+          left: -18px;
+          border-radius: 50%;
+        }
+      }
+    }
+  }
+  .administration-flex {
+    gap: 15px;
+    @include flex;
+    margin-top: 0;
+    margin-bottom: 0;
+    flex-wrap: wrap;
+    .cancel {
+      height: 37px !important;
+      padding: 0 14px !important;
+      &:hover {
+        background-color: $theme-main-color !important;
+        color: $theme-color-white !important;
+      }
+    }
+    .mat-mdc-form-field {
+      margin-bottom: 0;
+      width: 180px;
+    }
+  }
+  .result-number {
+    margin-top: 0;
+  }
+   ::ng-deep .mat-card-header-text {
+    display: none !important;
+  }
+}
+
+.table-responsive {
+  border: 1px solid #f0f0f0 !important;
+  table {
+    width: 100% !important;
+    border-collapse: collapse;
+    thead {
+      tr {
+        background-color: #efefef !important;
+        height: 41px !important;
+      }
+      .ng-star-inserted {
+        text-align: center;
+        width: 45px;
+      }
+    }
+    th {
+      font-size: $theme-main-medium-font !important;
+      font-weight: 500 !important;
+      line-height: 17px;
+      padding: 0 13px !important;
+      text-align: left;
+      border-bottom: 1px solid #f0f0f0;
+      &:last-child {
+        border-right: unset;
+      }
+    }
+    td {
+      text-align: center;
+      border-top: 1px solid #f0f0f0;
+      height: 46px;
+      &:first-child {
+        padding: 0 10px !important;
+        cursor: pointer;
+      }
+      &:last-child {
+        border-right: unset;
+      }
+    }
+  }
+}
+
+// table {
+//   width: 100%;
+//   border-collapse: collapse;
+//   td {
+//     border: 1px solid #ccc;
+//     text-align: center;
+//     // padding: 0 !important;
+//   }
+// }
+tr.example-detail-row {
+  height: 0;
+}
+
+tr.example-element-row:not(.example-expanded-row):hover {
+  background: whitesmoke;
+}
+
+tr.example-element-row:not(.example-expanded-row):active {
+  background: #efefef;
+}
+
+.example-element-row td {
+  border-bottom-width: 0;
+}
+
+.example-element-detail {
+  overflow: hidden;
+  display: flex;
+}
+
+.example-element-diagram {
+  min-width: 80px;
+  border: 2px solid black;
+  padding: 8px;
+  font-weight: lighter;
+  margin: 8px 0;
+  height: 104px;
+}
+
+.example-element-symbol {
+  font-weight: bold;
+  font-size: 40px;
+  line-height: normal;
+}
+
+.example-element-description {
+  padding: 16px;
+}
+
+.example-element-description-attribution {
+  opacity: 0.5;
+}

@@ -1,0 +1,486 @@
+@import 'apps/angular/main-app/src/variables';
+@import 'apps/angular/main-app/src/mixins';
+@import 'apps/angular/main-app/src/assets/fonts/fonts.scss';
+.add-leave {
+  min-height: 100vh;
+  .mat-mdc-form-field {
+    margin-bottom: 25px;
+  }
+  .request-leave-field {
+    width: 100% !important;
+  }
+  .request-leave-img {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+  }
+  .mat-divider {
+    margin-top: 20px;
+  }
+  .border-content {
+    padding: 0px 15px 15px 0;
+  }
+  .add-leave-bottom {
+    margin-top: 23px;
+    .pr-form-top-header {
+      margin-bottom: 20px;
+    }
+  }
+  .leave-blk-left-flex {
+    padding-top: 25px;
+    padding-bottom: 25px;
+    width: 50%;
+  }
+  .leave-blk-right-flex {
+    padding-top: 25px;
+    padding-bottom: 25px;
+    width: 26%;
+  }
+  .available-balance {
+    .pr-form-top-header {
+      margin-bottom: 15px;
+      display: block;
+    }
+    .available-balance-blk {
+      @include flex;
+      @include flex-justify-space-between;
+      gap: 15px;
+      .available-balance-item {
+        border: 1px solid $theme-border-color-gray;
+        background-color: $theme-bg-color-gray;
+        border-radius: $button-radius;
+        padding: 10px;
+        width: 50%;
+        h4 {
+          margin: 0 0 5px 0;
+          line-height: 24px;
+          font-weight: 600;
+          font-size: 20px;
+        }
+        span {
+          line-height: 14px;
+          font-size: $theme-main-small-font;
+          font-weight: 400;
+          color: $theme-main-color-light;
+        }
+      }
+    }
+  }
+  .after-book-leave {
+    margin-top: 25px;
+    .pr-form-top-header {
+      margin-bottom: 15px;
+      display: block;
+    }
+  }
+  .add-leave-blk-right {
+    width: 24%;
+    box-shadow: unset;
+    padding-top: 25px;
+    padding-bottom: 25px;
+  }
+  .form-btn {
+    margin-top: 5px;
+    justify-content: end;
+  }
+  .add-leave-blk {
+    @include flex;
+    @include flex-justify-space-between;
+    gap: 15px;
+    .add-leave-blk-left {
+      width: 76%;
+      @include flex;
+      @include flex-justify-space-between;
+      h2 {
+        margin: 0;
+        display: block;
+      }
+      .add-leave-button {
+        @include flex;
+        @include flex-justify-end;
+        margin-top: 20px;
+        .next {
+          margin-left: 10px;
+          color: $theme-color-white !important;
+        }
+      }
+      .add-leave-bottom {
+        margin-top: 20px;
+        padding: 20px;
+        border: 1px solid #e7e7e7;
+        border-radius: $card-radius;
+        & div {
+          @include flex;
+          @include flex-align-center;
+          font-size: $theme-main-medium-font;
+          font-weight: 400;
+          img {
+            width: 35px;
+            height: 35px;
+            object-fit: cover;
+            margin-right: 7px;
+            vertical-align: middle;
+          }
+          ::ng-deep .mat-mdc-standard-chip .mdc-evolution-chip__icon--primary {
+            width: 30px !important;
+            height: 30px !important;
+          }
+          padding: 0 0 15px 0 !important;
+          margin-bottom: 15px;
+          border-bottom: 1px solid #e7e7e7;
+          &:last-child {
+            border-bottom: initial;
+            padding: 0 !important;
+            margin-bottom: 0;
+          }
+        }
+      }
+      ::ng-deep .mat-mdc-text-field-wrapper .mat-mdc-form-field-flex .mat-mdc-floating-label {
+        top: 19px !important;
+      }
+      ::ng-deep .mat-date-range-input-container {
+        margin-top: 12px;
+        font-size: $theme-main-medium-font;
+        font-weight: 400;
+      }
+      .form-wrap {
+        @include flex;
+        @include flex-align-center;
+        @include flex-justify-space-between;
+        flex-wrap: wrap;
+        ::ng-deep mat-form-field {
+          width: 49%;
+        }
+      }
+    }
+  }
+  .filezone {
+    padding: 15px 0 0 0;
+    flex-wrap: wrap;
+    .mat-mdc-icon-button.mat-mdc-button-base {
+      width: unset !important;
+    }
+  }
+  .person-header {
+    @include flex;
+    @include flex-align-center;
+    img {
+      width: 35px;
+      height: 35px;
+      object-fit: cover;
+      margin-right: 7px;
+      vertical-align: middle;
+      border-radius: 50%;
+      margin-top: -20px;
+    }
+    .mat-subheading-2 {
+      line-height: initial;
+      width: 100%;
+      border-bottom: 1px solid $theme-border-color-gray;
+      padding-bottom: 10px;
+      margin-bottom: 10px;
+      span {
+        display: block;
+        color: $theme-main-color-light;
+        font-size: 12px;
+        font-weight: 400;
+      }
+      strong {
+        white-space: initial;
+        color: $theme-font-color-black;
+      }
+    }
+    strong {
+      font-size: $theme-main-medium-font;
+      font-weight: 400;
+      line-height: 20px;
+    }
+  }
+  .add-leave-blk-bottom {
+    margin-top: 20px;
+    h2 {
+      margin: 0;
+      display: block;
+    }
+    ::ng-deep .mat-mdc-list-item {
+      margin-bottom: 10px;
+      height: initial;
+      &:last-child {
+        border-bottom: initial;
+        margin-bottom: 0 !important;
+        padding-bottom: 0 !important;
+      }
+    }
+    .mat-mdc-list {
+      margin-top: 20px;
+    }
+  }
+  .leave-count {
+    width: 100%;
+    @include flex;
+    @include flex-justify-space-between;
+    @include flex-align-center;
+    .leave-count-second {
+      @include flex;
+      @include flex-align-center;
+      @include flex-justify-space-between;
+      margin-bottom: 20px;
+      div {
+        color: $theme-main-color-light;
+        margin-right: 20px;
+        font-size: $theme-main-small-font;
+      }
+      .mat-button-toggle-group {
+        width: 80%;
+      }
+    }
+    .leave-count-first {
+      @include flex;
+      @include flex-align-center;
+      @include flex-justify-space-between;
+      width: 100%;
+      margin-bottom: 20px;
+    }
+  }
+  .mdc-list-item.mdc-list-item--with-one-line {
+    height: unset !important;
+  }
+  .date-select {
+    font-size: 12px;
+    line-height: 15px;
+    font-weight: 500;
+    color: $theme-main-color-light;
+  }
+  ::ng-deep .mat-mdc-standard-chip:not(.mdc-evolution-chip--disabled) .mdc-evolution-chip__icon--primary {
+    width: 25px;
+    height: 25px;
+    object-fit: cover;
+  }
+  ::ng-deep .mat-button-toggle-appearance-standard .mat-button-toggle-label-content {
+    font-size: $theme-main-medium-font;
+  }
+  .leave-count-middle {
+    text-align: center;
+    color: $theme-main-color-light;
+    font-size: 14px;
+  }
+  ::ng-deep .mat-button-toggle-checked {
+    background-color: $theme-main-color;
+    width: 100%;
+    color: $theme-color-white !important;
+  }
+  ::ng-deep .mat-button-toggle {
+    width: 100%;
+    font-weight: 400;
+    min-width: 112px;
+    color: $theme-main-color-light;
+  }
+  ::ng-deep .mat-button-toggle-appearance-standard .mat-button-toggle-label-content {
+    line-height: 42px !important;
+  }
+  .bottom-text {
+    font-size: $theme-main-small-font;
+    font-weight: 400;
+    line-height: 14px;
+    color: $theme-main-color-light;
+    margin: 6px 0 0 0;
+  }
+  .mat-mdc-raised-button > .mat-icon {
+    margin-right: 0 !important;
+    margin-left: 0 !important;
+  }
+}
+
+.demo-inline-calendar-card {
+  width: 100%;
+}
+
+.select-date-wrapper {
+  display: flex;
+  position: relative;
+  z-index: 0;
+  .mat-mdc-form-field:first-child {
+    ::ng-deep .mat-mdc-text-field-wrapper {
+      border-right: unset;
+      border-top-right-radius: unset !important;
+      border-bottom-right-radius: unset !important;
+    }
+  }
+  .mat-mdc-form-field:last-child {
+    ::ng-deep .mat-mdc-text-field-wrapper {
+      border-top-left-radius: unset !important;
+      border-bottom-left-radius: unset !important;
+    }
+  }
+  .leave-count-middle {
+    padding: 10px;
+    border-radius: 4px;
+    border: 1px solid $theme-border-color-gray;
+    background-color: $theme-bg-color-drawer-container;
+    width: 99px;
+    height: 35px;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 21px;
+    margin: 0 auto;
+    z-index: 999;
+    p {
+      font-size: 12px;
+      line-height: 14px;
+      color: $theme-main-color-light;
+      margin: 0;
+    }
+  }
+}
+
+.days-dark {
+  color: $theme-font-color-black !important;
+  font-size: $theme-main-large-font !important;
+  line-height: 13px !important;
+  font-weight: 500;
+}
+
+@media screen and (max-width: $extra-extra-large-device) {
+  .add-leave {
+    .add-leave-blk {
+      .add-leave-blk-right {
+        width: 30%;
+      }
+      .add-leave-blk-left {
+        width: 68.7%;
+        h2 {
+          font-size: $theme-main-medium-font;
+        }
+        .add-leave-bottom {
+          padding: 15px;
+        }
+      }
+    }
+    .leave-count-second {
+      display: block;
+    }
+  }
+  ::ng-deep .mat-mdc-form-field .mat-mdc-floating-label.mdc-floating-label {
+    font-size: 14px !important;
+    font-weight: 400;
+    color: $theme-font-color-black !important;
+  }
+  .mat-button-toggle-group {
+    width: 100% !important;
+  }
+  .leave-count {
+    flex-direction: column;
+  }
+  // .leave-count-middle {
+  //   width: 100% !important;
+  //   text-align: center;
+  //   margin: 10px 0;
+  // }
+  .add-leave {
+    .leave-count {
+      .leave-count-first {
+        display: block;
+      }
+      .leave-count-second {
+        display: block;
+      }
+      .date-select {
+        margin-bottom: 10px;
+      }
+      .leave-count-middle {
+        margin-top: 10px;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: $extra-large-device) {
+  .add-leave {
+    .border-content:first-child {
+      border-right: 1px solid $theme-border-color-gray;
+    }
+    .add-leave-blk {
+      flex-wrap: wrap;
+      .add-leave-blk-right {
+        width: 100%;
+        padding-top: 0;
+      }
+      .add-leave-blk-left {
+        width: 68.7%;
+      }
+    }
+    .leave-blk-left-flex {
+      width: 70%;
+      form {
+        width: 100%;
+      }
+      .calander {
+        margin-top: 20px;
+        width: 100%;
+        margin-left: 0;
+      }
+    }
+    .leave-blk-right-flex {
+      width: 28%;
+    }
+  }
+}
+
+@media screen and (max-width: $lerge-device) {
+  .add-leave {
+    .border-content:first-child {
+      border-right: unset;
+    }
+    .leave-blk-left-flex {
+      width: 100%;
+    }
+    .leave-blk-right-flex {
+      padding-top: 0;
+      width: 100%;
+    }
+    .add-leave-blk {
+      display: block;
+      .add-leave-blk-right {
+        width: 100%;
+        margin-top: 20px;
+      }
+      .add-leave-blk-left {
+        width: 100%;
+      }
+    }
+    .leave-count {
+      flex-direction: column;
+      align-items: unset;
+      .leave-count-second {
+        div {
+          margin-bottom: 10px;
+        }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: $medium-device) {
+  .add-leave {
+    .mat-button-toggle-group {
+      width: 100% !important;
+    }
+    .leave-count {
+      flex-direction: column;
+    }
+    .leave-count-middle {
+      width: 100% !important;
+      margin: 10px 0;
+    }
+    .add-leave-blk {
+      .add-leave-blk-left {
+        .form-wrap {
+          ::ng-deep mat-form-field {
+            width: 100% !important;
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,154 @@
+// @import '@angular/cdk/overlay-prebuilt.css';
+@import 'apps/angular/main-app/src/variables';
+@import 'apps/angular/main-app/src/mixins';
+@import 'apps/angular/main-app/src/assets/fonts/fonts.scss';
+.example-list {
+  border: solid 1px $theme-border-color-gray;
+  border-radius: $card-radius;
+  background-color: $theme-color-white;
+  padding: 10px;
+  margin: 0;
+}
+
+.dialog-mat-icon {
+  border: 1px solid $theme-border-color-gray;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: all 0.5s ease;
+  color: $theme-font-color-black;
+  font-size: $theme-main-extra-extra-large-font;
+  @include flex;
+  @include flex-align-center;
+  @include flex-justify-center;
+  height: 34px;
+  width: 34px;
+  margin-right: 14px;
+  &:hover {
+    background-color: $theme-bg-color-gray;
+  }
+}
+
+.mdc-button {
+  padding: 5px;
+  min-width: 35px;
+  line-height: 0;
+  height: 35px !important;
+  color: $theme-color-white !important;
+  border-radius: 7px;
+  @include flex;
+  @include flex-align-center;
+  @include flex-justify-center;
+  box-shadow: $theme-main-color;
+}
+
+::ng-deep .mat-mdc-raised-button > .mat-icon {
+  margin: auto;
+}
+
+.team-flex {
+  @include flex;
+}
+
+::ng-deep .cdk-overlay-pane {
+  input {
+    height: 40px;
+    max-width: 100%;
+    border: 1px solid $theme-border-color-gray;
+    width: 100%;
+    border-radius: 8px;
+    outline: none;
+    font-size: $theme-main-medium-font;
+    padding-left: 10px;
+    font-weight: 400;
+    font-family: $theme-main-font-family;
+    color: $theme-font-color-black;
+  }
+  .mdc-list-item.mdc-list-item--with-one-line {
+    height: 40px;
+  }
+  .mat-mdc-list-item .mdc-list-item__primary-text {
+    font-size: 14px !important;
+    font-weight: 400 !important;
+    cursor: pointer;
+    width: 100%;
+    display: inline-block;
+    position: relative;
+    .team-field {
+      padding-right: 30px;
+    }
+    img.search {
+      top: 50% !important;
+      transform: translateY(-50%);
+    }
+    .mdc-icon-button {
+      width: auto;
+      height: auto;
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      right: 0;
+    }
+  }
+}
+
+::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.062);
+  background-color: $theme-color-white;
+}
+
+::-webkit-scrollbar {
+  width: 4px;
+  background-color: $theme-color-white;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #cccccce7;
+}
+
+::placeholder {
+  color: $theme-font-color-black;
+}
+
+.not-allowed-cursor {
+  cursor: not-allowed;
+}
+
+.chip-wrap {
+  @include flex;
+  ::ng-deep .mdc-evolution-chip-set .mdc-evolution-chip {
+    margin-right: 0 !important;
+    margin-left: 0 !important;
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+  }
+}
+
+input::placeholder {
+  color: $theme-main-color-light;
+}
+
+.team-member-wrapper {
+  .mdc-list-item__content {
+    position: relative;
+    .mdc-list-item__primary-text {
+      width: 100%;
+      display: inline-block;
+      position: relative;
+      img.search {
+        top: 50%;
+        transform: translateY(-50%);    
+      }
+      .mdc-icon-button {
+        width: auto;
+        height: auto;
+        position: absolute;
+        right: 0;
+        top: 50%;
+        transform: translateY(-50%);
+      }
+    }
+  }
+}
+.input-wrapper img.search {
+  top: 18px;
+}

@@ -1,0 +1,35 @@
+{
+  "name": "utils-apis-core",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/utils/apis-core/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/utils/apis-core",
+        "tsConfig": "libs/utils/apis-core/tsconfig.lib.json",
+        "packageJson": "libs/utils/apis-core/package.json",
+        "main": "libs/utils/apis-core/src/index.ts",
+        "assets": ["libs/utils/apis-core/*.md"]
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/utils/apis-core/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "libs/utils/apis-core/jest.config.ts",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": ["node"]
+}

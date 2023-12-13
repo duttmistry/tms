@@ -1,0 +1,42 @@
+<div class="user-role">
+    <div class="role-header">
+        <p class="pr-form-top-header" style="margin-top: 0">Preference / Project</p>
+        <div>
+            <button class="cancel" (click)="onCancelClick()">Cancel</button>
+            <button color="primary" class="save" (click)="onSaveClick()">Save</button>
+        </div>
+    </div>
+    <form>
+        <mat-form-field>
+            <mat-label>Receive Tasks Updates from selected projects</mat-label>
+            <mat-select formControlName="projectControl" multiple>
+                <mat-option *ngFor="let item of projectList" [value]="item?.project_title" (onSelectionChange)="onSelectProject()">{{ item.project_title }}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+    </form>
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+        <ng-container matColumnDef="module_name">
+            <th mat-header-cell *matHeaderCellDef>
+                <span [style.paddingLeft.px]="40"> Module </span>
+            </th>
+            <td mat-cell *matCellDef="let data">
+                <button mat-icon-button [style.visibility]="!data.expandable ? 'hidden' : ''" [style.marginLeft.px]="data.level * 32" (click)="treeControl.toggle(data)">
+          <mat-icon class="mat-icon-rtl-mirror">
+            {{ treeControl.isExpanded(data) ? 'expand_more' : 'chevron_right' }}
+          </mat-icon>
+        </button> {{ data.name }}
+            </td>
+        </ng-container>
+
+        <ng-container matColumnDef="notify">
+            <th mat-header-cell *matHeaderCellDef>Notification</th>
+            <td mat-cell *matCellDef="let data">
+                <main-app-toggle-button [toggleValue]="data" (changed)="onChangeStatus($event)"></main-app-toggle-button>
+            </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+</div>

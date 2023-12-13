@@ -1,0 +1,60 @@
+<div class="lib-add-document">
+    <ng-template #callAPIDialog>
+        <mat-dialog-title class="mat-dialog-lib">
+            <span class="share-span">Shared with :
+        <ng-container *ngIf="displayAuthorizedUsers && displayAuthorizedUsers.length > 0; else noAuthorizedUsersTemplate">
+          <ng-container *ngIf="displayAuthorizedUsers.length > 3; else lessUsersTemplate">
+            <div class="document-round" [matTooltip]="displayAuthorizedUsers[0].name">{{ displayAuthorizedUsers[0].initials }}</div>
+            <div class="document-round" [matTooltip]="displayAuthorizedUsers[1].name">{{ displayAuthorizedUsers[1].initials }}</div>
+
+            <div class="document-round cursor-pointer" customToolTip [contentTemplate]="moreUsers">+{{ displayAuthorizedUsers.length - 2 }}</div>
+            <ng-template #moreUsers>
+              <div class="user-list-wrapper custom-tooltip">
+                <p *ngFor="let user of displayAuthorizedUsers.slice(2)">{{ user.name }}</p>
+              </div>
+            </ng-template>
+          </ng-container>
+          <ng-template #lessUsersTemplate>
+            <ng-container *ngFor="let user of displayAuthorizedUsers">
+              <div class="document-round" [matTooltip]="user?.name">{{ user?.initials }}</div>
+            </ng-container>
+          </ng-template>
+        </ng-container>
+        <ng-template #noAuthorizedUsersTemplate> Only me </ng-template>
+      </span>
+            <tms-workspace-list-popup [teamMembersList]="teamMembersList" [authorizedUsers]="documentData.authorized_users || []" (emmitSelectedTeamMates)="emmitSharedTeam($event)" [loggedInUserId]="loggedInUserProp" [createdBy]="documentData?.created_by" (emitIfPopupCancelled)="onPopupCancelled($event)"
+                [shareIconColor]="'white'" class="share-btn" *ngIf="isShowShareWithTeam"></tms-workspace-list-popup>
+            <button cdkFocusInitial (click)="onSaveDocument()" class="next" color="primary" matTooltip="Save">Save</button>
+            <button aria-hidden="false" aria-label="Share" fontIcon="close" class="cursor-pointer cancel cancel-btn" (click)="onCancelClick()" mat-dialog-close>
+        Cancel
+      </button>
+        </mat-dialog-title>
+        <mat-dialog-content class="mat-typography">
+            <form [formGroup]="documentForm" class="document-form">
+                <div class="common-gap-wrapper">
+                    <mat-form-field>
+                        <mat-label>Document Title</mat-label>
+                        <input matInput formControlName="docTitle" maxlength="64" />
+
+                        <mat-error *ngIf="_form['docTitle'].errors && _form['docTitle']?.touched">
+                            <ng-container *ngIf="_form['docTitle'].errors?.['required']">Please enter the document title </ng-container>
+                        </mat-error>
+                        <div class="text-danger" *ngIf="titleAlreadyExist">This title already exists</div>
+                    </mat-form-field>
+                </div>
+                <div class="document-editor__editable-container">
+                    <!-- <ckeditor [editor]="Editor" [data]="editorData" (ready)="onReady($event)" (change)="onChange($event)" formControlName="documentControl">
+            <input type="text" class="form-control" />
+          </ckeditor> -->
+                    <form role="form" #myForm="ngForm" accept-charset="UTF-8">
+                        <ckeditor [(ngModel)]="mycontent" #ckeditor="ngModel" name="ckeditor" required [config]="ckeConfig" debounce="500" (ngModelChange)="onChange($event)">
+                        </ckeditor>
+                    </form>
+                </div>
+                <ng-container *ngIf="isFormSubmitted || (documentFormGetter['documentControl'].errors && documentFormGetter['documentControl'].touched)">
+                    <ng-container *ngIf="documentFormGetter['documentControl'].errors?.['required']"><span class="text-danger">Please enter content</span></ng-container>
+                </ng-container>
+            </form>
+        </mat-dialog-content>
+    </ng-template>
+</div>

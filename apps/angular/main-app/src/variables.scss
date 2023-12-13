@@ -1,0 +1,71 @@
+// color
+$theme-color-placeholder: #929292;
+$theme-font-color-black: #000;
+$theme-font-color-white: #fff;
+$theme-primary-button-bg: #fd822e;
+$theme-secondary-button-bg: #fff;
+$theme-bg-color-black: #000;
+$theme-main-color: #fd822e;
+$theme-color-white: #fff;
+$theme-font-color-dark-grey: #495057;
+$theme-border-color-gray: #dfdfdf;
+$theme-main-color-light: #929292;
+$theme-tertiary-button-bg: #fff0e6;
+
+/*---*/
+
+$theme-color-error: #ea6060;
+$theme-main-extra-color-dark: #5c5c5c;
+$theme-color-grey: #f2f2f2;
+$theam-color-green: #5ead56;
+$theam-color-orange: #f7a02f;
+$theam-color-navy-light: #3333661a;
+$theam-color-blue: #0052cc;
+// background color
+$theme-body-color: #f5f5f5;
+$theme-bg-color-drawer-container: #f9f9f9;
+$theme-bg-color-scrollbar-thumb: #c4c4c4;
+$theme-bg-color-gray: #fcfcfc;
+$theme-bg-color-darkgray: #636363;
+$theme-bg-color-error: #ff59591a;
+$theme-bg-color-green: #5ead560d;
+// border-radius
+$card-radius: 10px !important;
+$button-radius: 5px;
+$small-card-radius: 4px;
+$card-background: #fafafb;
+// box-shadow
+$box-shadow-card: 0px 4px 12px rgba(0, 0, 0, 0.03);
+$box-shadow-header: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+$box-shadow-dropdown: 0px 4px 8px 0px rgba(0, 0, 0, 0.16);
+$box-shadow-cancel: 0px 0px 0px #636363;
+$box-shadow-next: 0px 0px 2px #333366d1;
+// calender color
+$theme-color-purple: #9b89b9;
+$theme-color-yellowish-brown: #cbac8f;
+$theme-color-babypink: #f1a5c9;
+$theme-color-skyblue: #58c1ee;
+//attendenace calender
+$theme-color-bg-present: #cee7cb;
+$theme-color-bg-absent: #bed4f4;
+$theme-color-bg-leave-day: #ffb2b2;
+$theme-color-bg-holiday: #d3c4ed;
+$theme-color-bg-weekend: #e6e6e6;
+// font
+$theme-main-font-family: 'Inter', 'sans-serif';
+$theme-main-extra-extra-large-font: 24px;
+$theme-main-extra-large-font: 18px;
+$theme-main-large-font: 16px;
+$theme-main-medium-font: 14px;
+$theme-main-small-font: 12px;
+$theme-main-extra-small-font: 10px;
+// border color variable
+$theme-border-color-dropdown: #86969d;
+//media
+$extra-extra-large-device: 1902px;
+$extra-extra-large: 1600px;
+$extra-large-device: 1400px;
+$lerge-device: 1200px;
+$medium-device: 990px;
+$small-device: 768px;
+$extra-small-device: 500px;

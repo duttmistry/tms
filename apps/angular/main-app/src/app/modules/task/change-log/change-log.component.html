@@ -1,0 +1,36 @@
+<ng-container *ngFor="let logItem of taskChangeLogBindList">
+    <div class="chang-log-wrapper">
+        <div class="chang-log" *ngIf="logItem?.key !== 'description'">
+            <p [innerHTML]="logItem?.logStatement"></p>
+            <span class="log-time">{{ logItem?.logTime }}</span>
+            <span class="log-time">{{ logItem?.key }}</span>
+        </div>
+        <div class="chang-log" *ngIf="logItem?.key === 'description'">
+            <div>
+                <div style="display: flex">
+                    <span [innerHTML]="logItem?.logStatement"></span>
+                    <span (click)="modelOnDescription(logItem?.logStatement, logItem?.old_value, logItem?.new_value)" style="cursor: pointer; color: #0000ee">&nbsp;(view)</span
+          >
+        </div>
+        <div>
+          <span class="log-time">{{ logItem?.logTime }}</span>
+                    <!-- <span class="log-time">{{ logItem?.key }}</span> -->
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-container>
+<ng-container *ngIf="isShowLoadMoreRecords">
+    <button color="secondary" type="button" (click)="onLoadMoreChangeLogs()">Load More...</button>
+</ng-container>
+<ng-template #description>
+    <div class="large-dialog-container-description">
+        <!-- <mat-divider></mat-divider> -->
+        <div [innerHTML]="descriptionStatement" style="height: 160px; overflow: auto"></div>
+        <div style="display: flex; justify-content: end; margin-top: 15px">
+            <button color="primary" type="submit" class="cancel reason-confirm-button pointer cursor-pointer" (click)="closeModel()">
+        <span>Close</span>
+      </button>
+        </div>
+    </div>
+</ng-template>

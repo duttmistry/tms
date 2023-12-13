@@ -1,0 +1,45 @@
+<ng-container *ngIf="documentList && documentList.length > 0">
+  <ng-container *ngFor="let doc of documentList">
+    <!-- </mat-menu> -->
+    <mat-card>
+      <mat-card-header>
+        <div class="workspace-header-item">
+          <mat-card-title>{{ doc?.doc_title }} </mat-card-title>
+          <p>{{ doc?.created_at | formatdatetime }}</p>
+        </div>
+        <div class="documents-card-wrap">
+          <img
+            matTooltip="Edit"
+            [ngClass]="isEditDocumentDisabled ? 'not-allowed-cursor' : 'cursor-pointer'"
+            (click)="isEditDocumentDisabled ? '' : onEditDoc(doc)"
+            src="assets/images/edit-bg.svg"
+          />
+
+          <tms-workspace-list-popup
+            [shareIconColor]="'gray'"
+            [teamMembersList]="teamMembersList"
+            [authorizedUsers]="doc?.authorized_users || []"
+            [createdBy]="doc?.created_by"
+            [loggedInUserId]="loggedInUser"
+            (emmitSelectedTeamMates)="emmitSharedTeam($event, doc)"
+            (emitIfPopupCancelled)="onPopupCancelled($event)"
+            class="share-icon"
+            *ngIf="isShowShareWithTeam"
+          ></tms-workspace-list-popup>
+
+          <img
+            matTooltip="Delete"
+            [ngClass]="isEditDocumentDisabled ? 'not-allowed-cursor' : 'cursor-pointer'"
+            (click)="isEditDocumentDisabled ? '' : onDeleteDocument(doc)"
+            src="assets/images/trash.svg"
+            class="trash"
+          />
+        </div>
+      </mat-card-header>
+      <!-- <div class="item-title"></div>
+      <div>
+        <div class="workspace-bottom"></div>
+      </div> -->
+    </mat-card>
+  </ng-container>
+</ng-container>

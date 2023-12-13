@@ -1,0 +1,27 @@
+<div class="tms-tasktime-right-wrapper dropdown-border-input-single-wrapper">
+  <mat-list>
+    <mat-list-item>
+      <form (ngSubmit)="onSelectETA()" class="eta-popup-form">
+        <input
+          tmsWorkspaceAutoFocusInput
+          id="myInput"
+          [placeholder]="'Type Time'"
+          [formControl]="estimatedTime"
+          autocomplete="off"
+          (keypress)="omitCharacters($event)"
+          class="single-input"
+        />
+        <img
+          src="assets/images/help-icon.svg"
+          matTooltip="Use natural language to add Time Estimates in hours and minutes. Try things like '1h' or '1m'"
+        />
+        <div *ngIf="estimatedTime.errors && (estimatedTime.touched || estimatedTime.dirty)" class="mat-error">
+          <ng-container *ngIf="estimatedTime.errors?.['required']" class="mat-error">Please enter ETA</ng-container>
+        </div>
+      </form>
+    </mat-list-item>
+    <mat-list-item *ngFor="let eta of filteredETAOptions | async" (click)="onSelectETA()" class="eta-high">
+      {{ eta }}
+    </mat-list-item>
+  </mat-list>
+</div>

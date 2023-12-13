@@ -1,0 +1,1354 @@
+<div class="add-button">
+    <div class="button-main-class">
+        <!-- <button color="primary" class="floating-button" (click)="navigateToAddTask()"><mat-icon>add</mat-icon> Task</button> -->
+        <button color="primary" class="floating-button" (click)="navigateToAddTask()">Create Task</button>
+    </div>
+    <div class="task-list">
+        <ng-container *ngIf="showSpinner">
+            <div [mainAppSpinner]="showSpinner"></div>
+        </ng-container>
+        <ng-container *ngIf="taskList && taskList.length > 0 && !showSpinner; else noDataFound">
+            <div class="bulk-op-container" *ngIf="selectedTasks?.length > 0">
+                <!-- Priority -->
+                <div class="task-key" [ngClass]="permissionDetails.allowUpdate && permissionDetails.priority.edit ? '' : 'disable-container'">
+                    <img [ngClass]="permissionDetails.allowUpdate && permissionDetails.priority.edit ? '' : 'disable-item'" [matMenuTriggerFor]="blkPriorityMenu" class="cursor-pointer" [src]="
+              bulkOpValues[taskContstants.PRIORITY] ? 'assets/images/' + bulkOpValues[taskContstants.PRIORITY]?.priorityImg : 'assets/images/flag.svg'
+            " matTooltip="Priority" />
+                </div>
+                <mat-menu #blkPriorityMenu="matMenu" yPosition="below" class="priority-menu-wrapper dropdown-border-input-wrapper">
+                    <div class="prirority-dropdown-list" mat-menu-item *ngFor="let priority of priorityList; let i = index" (click)="bulkOpValues[taskContstants.PRIORITY] = priority">
+                        <img [src]="'assets/images/' + priority.priorityImg" />
+                        <span class="priority-name">{{ priority.name }}</span>
+                    </div>
+                    <div class="prirority-dropdown-list clear-list" mat-menu-item (click)="bulkOpValues[taskContstants.PRIORITY] = null">
+                        <img [src]="'assets/images/clear.svg'" />
+                        <span class="priority-name">Clear</span>
+                    </div>
+                </mat-menu>
+
+                <!-- Task type -->
+                <div [ngClass]="permissionDetails.allowUpdate && permissionDetails.taskType.edit ? '' : 'disable-container'">
+                    <span matTooltip="Task type" class="task-key cursor-pointer" [matMenuTriggerFor]="blkTaskTypeMenu" *ngIf="bulkOpValues[taskContstants.TYPE]" [ngClass]="permissionDetails.allowUpdate && permissionDetails.taskType.edit ? '' : 'disable-item'">{{ bulkOpValues[taskContstants.TYPE] || '' }}</span
+          >
+          <mat-icon *ngIf="bulkOpValues[taskContstants.TYPE]" class="remove-selectedItems" (click)="bulkOpValues[taskContstants.TYPE] = null"
+            >close</mat-icon
+          >
+          <svg
+            [ngClass]="permissionDetails.allowUpdate && permissionDetails.taskType.edit ? '' : 'disable-item'"
+            matTooltip="Task type"
+            class="cursor-pointer"
+            width="18"
+            height="18"
+            viewBox="0 0 18 18"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            class="cursor-pointer set-icon"
+            [matMenuTriggerFor]="blkTaskTypeMenu"
+            *ngIf="!bulkOpValues[taskContstants.TYPE]"
+          >
+            <path
+              d="M6.75 16.5H11.25C15 16.5 16.5 15 16.5 11.25V6.75C16.5 3 15 1.5 11.25 1.5H6.75C3 1.5 1.5 3 1.5 6.75V11.25C1.5 15 3 16.5 6.75 16.5Z"
+              stroke="#86969D"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+            <path
+              d="M7.19957 6.72754L5.33207 8.59504C5.11457 8.81254 5.11457 9.18004 5.33207 9.39754L7.19957 11.265"
+              stroke="#86969D"
+              stroke-width="1.5"
+              stroke-miterlimit="10"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+            <path
+              d="M10.7998 6.72754L12.6673 8.59504C12.8848 8.81254 12.8848 9.18004 12.6673 9.39754L10.7998 11.265"
+              stroke="#86969D"
+              stroke-width="1.5"
+              stroke-miterlimit="10"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+          <mat-menu #blkTaskTypeMenu="matMenu" yPosition="below" class="task-menu-wrapper dropdown-border-input-wrapper">
+            <div
+              mat-menu-item
+              *ngFor="let taskTypeObject of taskTypeList; let i = index"
+              (click)="bulkOpValues[taskContstants.TYPE] = taskTypeObject"
+            >
+              <span>{{ taskTypeObject }}</span>
+                </div>
+                </mat-menu>
+            </div>
+
+            <!-- Due Date -->
+            <div [ngClass]="permissionDetails.allowUpdate && permissionDetails.dueDate.edit ? '' : 'disable-container'">
+                <span [ngClass]="permissionDetails.allowUpdate && permissionDetails.dueDate.edit ? '' : 'disable-item'" matTooltip="Due Date" *ngIf="bulkOpValues[taskContstants.DUE_DATE]" class="task-key cursor-pointer" (click)="blkDueDatePicker.open()">{{ bulkOpValues[taskContstants.DUE_DATE]?.format('DD/MM/YYYY') }}</span
+          ><mat-icon *ngIf="bulkOpValues[taskContstants.DUE_DATE]" class="remove-selectedItems" (click)="bulkOpValues[taskContstants.DUE_DATE] = null"
+            >close</mat-icon
+          >
+
+          <svg
+            [ngClass]="permissionDetails.allowUpdate && permissionDetails.dueDate.edit ? '' : 'disable-item'"
+            (click)="blkDueDatePicker.open()"
+            *ngIf="!bulkOpValues[taskContstants.DUE_DATE]"
+            matTooltip="Due Date"
+            class="cursor-pointer set-icon"
+            width="18"
+            height="18"
+            viewBox="0 0 18 18"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path d="M6 1.5V3.75" stroke="#6C757D" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M12 1.5V3.75" stroke="#6C757D" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+            <path
+              d="M2.625 6.81738H15.375"
+              stroke="#6C757D"
+              stroke-width="1.5"
+              stroke-miterlimit="10"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+            <path
+              d="M15.75 6.375V12.75C15.75 15 14.625 16.5 12 16.5H6C3.375 16.5 2.25 15 2.25 12.75V6.375C2.25 4.125 3.375 2.625 6 2.625H12C14.625 2.625 15.75 4.125 15.75 6.375Z"
+              stroke="#6C757D"
+              stroke-width="1.5"
+              stroke-miterlimit="10"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+            <path d="M11.7713 10.2754H11.778" stroke="#6C757D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M11.7713 12.5254H11.778" stroke="#6C757D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M8.99686 10.2754H9.00359" stroke="#6C757D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M8.99686 12.5254H9.00359" stroke="#6C757D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M6.22049 10.2754H6.22723" stroke="#6C757D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M6.22049 12.5254H6.22723" stroke="#6C757D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+
+          <svg
+            width="18"
+            height="18"
+            viewBox="0 0 18 18"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            [ngClass]="permissionDetails.allowUpdate && permissionDetails.dueDate.edit ? '' : 'disable-item'"
+            (click)="blkDueDatePicker.open()"
+            *ngIf="!bulkOpValues[taskContstants.DUE_DATE]"
+            matTooltip="Due Date"
+          >
+            <path d="M6 1.5V3.75" stroke="#6C757D" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M12 1.5V3.75" stroke="#6C757D" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+            <path
+              d="M2.625 6.81738H15.375"
+              stroke="#6C757D"
+              stroke-width="1.5"
+              stroke-miterlimit="10"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+            <path
+              d="M15.75 6.375V12.75C15.75 15 14.625 16.5 12 16.5H6C3.375 16.5 2.25 15 2.25 12.75V6.375C2.25 4.125 3.375 2.625 6 2.625H12C14.625 2.625 15.75 4.125 15.75 6.375Z"
+              stroke="#6C757D"
+              stroke-width="1.5"
+              stroke-miterlimit="10"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+            <path d="M11.7713 10.2754H11.778" stroke="#6C757D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M11.7713 12.5254H11.778" stroke="#6C757D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M8.99686 10.2754H9.00359" stroke="#6C757D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M8.99686 12.5254H9.00359" stroke="#6C757D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M6.22049 10.2754H6.22723" stroke="#6C757D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M6.22049 12.5254H6.22723" stroke="#6C757D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+
+          <input
+            matInput
+            [value]="bulkOpValues[taskContstants.DUE_DATE] || ''"
+            class="hidden-date-picker-input"
+            readonly
+            [matDatepicker]="blkDueDatePicker"
+            (dateChange)="bulkOpValues[taskContstants.DUE_DATE] = $event?.value"
+          />
+          <mat-datepicker #blkDueDatePicker></mat-datepicker>
+        </div>
+
+        <!-- ETA -->
+        <div [ngClass]="permissionDetails.allowUpdate && permissionDetails.eta.edit ? '' : 'disable-container'">
+          <div
+            cdkOverlayOrigin
+            #triggerBlkETAOverlay="cdkOverlayOrigin"
+            (click)="isBlkEtaOverlayOpen = true"
+            [ngClass]="permissionDetails.allowUpdate && permissionDetails.eta.edit ? '' : 'disable-item'"
+          >
+            <span matTooltip="ETA" *ngIf="bulkOpValues[taskContstants.ETA]" class="task-key cursor-pointer">{{
+              bulkOpValues[taskContstants.ETA]
+            }}</span
+            ><mat-icon *ngIf="bulkOpValues[taskContstants.ETA]" class="remove-selectedItems" (click)="bulkOpValues[taskContstants.ETA] = null"
+              >close</mat-icon
+            >
+
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 18 18"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              *ngIf="!bulkOpValues[taskContstants.ETA]"
+              matTooltip="ETA"
+            >
+              <path
+                d="M11.4298 1.5H6.56978C3.74978 1.5 3.53228 4.035 5.05478 5.415L12.9448 12.585C14.4673 13.965 14.2498 16.5 11.4298 16.5H6.56978C3.74978 16.5 3.53228 13.965 5.05478 12.585L12.9448 5.415C14.4673 4.035 14.2498 1.5 11.4298 1.5Z"
+                stroke="#6C757D"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </div>
+        </div>
+        <ng-template
+          cdkConnectedOverlay
+          (overlayOutsideClick)="isBlkEtaOverlayOpen = false"
+          (detach)="isBlkEtaOverlayOpen = false"
+          (backdropClick)="isBlkEtaOverlayOpen = false"
+          [cdkConnectedOverlayOrigin]="triggerBlkETAOverlay"
+          [cdkConnectedOverlayOpen]="isBlkEtaOverlayOpen"
+          [cdkConnectedOverlayHasBackdrop]="true"
+          cdkConnectedOverlayBackdropClass="cdk-overlay-transparent-backdrop"
+        >
+          <tms-workspace-eta-popup
+            [ETAInput]="bulkOpValues[taskContstants.ETA] || ''"
+            (ETAEmmiter)="bulkOpValues[taskContstants.ETA] = fetchEtaDetails($event); isBlkEtaOverlayOpen = false"
+          ></tms-workspace-eta-popup>
+        </ng-template>
+
+        <!-- Assignee -->
+        <div [ngClass]="permissionDetails.allowUpdate && permissionDetails.assignee.edit ? '' : 'disable-container'">
+          <div
+            [ngClass]="permissionDetails.allowUpdate && permissionDetails.assignee.edit ? '' : 'disable-item'"
+            cdkOverlayOrigin
+            #triggerBlkAssigneeOverlay="cdkOverlayOrigin"
+            (click)="_onBlkTaskAssigneeSelection()"
+            class="assignee-container"
+          >
+            <main-app-mat-chips
+              disableRipple
+              [viewAvatarOnly]="true"
+              [viewTooltip]="true"
+              [indicateUserWorkingLocation]="true"
+              class="assignee-list"
+              [stopViewFullProfileOption]="true"
+              *ngIf="bulkOpValues[taskContstants.ASIGNEE]"
+              [data]="bulkOpValues[taskContstants.ASIGNEE]"
+              [isCloseButton]="false"
+            ></main-app-mat-chips>
+            <mat-icon *ngIf="bulkOpValues[taskContstants.ASIGNEE]" class="remove-selectedItems" (click)="bulkOpValues[taskContstants.ASIGNEE] = null"
+              >close</mat-icon
+            >
+
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 18 18"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              *ngIf="!bulkOpValues[taskContstants.ASIGNEE]"
+              [ngClass]="permissionDetails.allowUpdate && permissionDetails.assignee.edit ? '' : 'disable-item'"
+              matTooltip="Assignee"
+              class="cursor-pointer set-icon"
+            >
+              <path
+                d="M8.59529 10.297C9.75923 10.297 10.7028 9.35347 10.7028 8.18953C10.7028 7.02559 9.75923 6.08203 8.59529 6.08203C7.43135 6.08203 6.48779 7.02559 6.48779 8.18953C6.48779 9.35347 7.43135 10.297 8.59529 10.297Z"
+                stroke="#6C757D"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M12.4876 15.1491C12.4876 13.4016 10.7476 11.9766 8.59514 11.9766C6.44264 11.9766 4.70264 13.3941 4.70264 15.1491"
+                stroke="#6C757D"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M15.75 9.375C15.75 13.3125 12.5625 16.5 8.625 16.5C4.6875 16.5 1.5 13.3125 1.5 9.375C1.5 5.4375 4.6875 2.25 8.625 2.25C9.6075 2.25 10.545 2.44499 11.4 2.80499C11.3025 3.10499 11.25 3.42 11.25 3.75C11.25 4.3125 11.4075 4.845 11.685 5.295C11.835 5.55 12.03 5.78248 12.255 5.97748C12.78 6.45748 13.4775 6.75 14.25 6.75C14.58 6.75 14.895 6.69748 15.1875 6.59248C15.5475 7.44748 15.75 8.3925 15.75 9.375Z"
+                stroke="#6C757D"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M17.25 3.75C17.25 3.99 17.22 4.22249 17.16 4.44749C17.0925 4.74749 16.9725 5.04 16.815 5.295C16.455 5.9025 15.8775 6.37498 15.1875 6.59248C14.895 6.69748 14.58 6.75 14.25 6.75C13.4775 6.75 12.78 6.45748 12.255 5.97748C12.03 5.78248 11.835 5.55 11.685 5.295C11.4075 4.845 11.25 4.3125 11.25 3.75C11.25 3.42 11.3025 3.10499 11.4 2.80499C11.5425 2.36999 11.7825 1.98002 12.0975 1.65752C12.645 1.09502 13.41 0.75 14.25 0.75C15.135 0.75 15.9375 1.13251 16.4775 1.74751C16.9575 2.28001 17.25 2.985 17.25 3.75Z"
+                stroke="#6C757D"
+                stroke-width="1.5"
+                stroke-miterlimit="10"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M15.3673 3.73438H13.1323"
+                stroke="#6C757D"
+                stroke-width="1.5"
+                stroke-miterlimit="10"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M14.25 2.63965V4.88214"
+                stroke="#6C757D"
+                stroke-width="1.5"
+                stroke-miterlimit="10"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+
+            <ng-template
+              class="ios"
+              cdkConnectedOverlay
+              [cdkConnectedOverlayOrigin]="triggerBlkAssigneeOverlay"
+              [cdkConnectedOverlayOpen]="isBlkAssigneePopupOpen"
+              (detach)="isBlkAssigneePopupOpen = false"
+              (backdropClick)="isBlkAssigneePopupOpen = false"
+              (overlayOutsideClick)="isBlkAssigneePopupOpen = false"
+              cdkConnectedOverlayBackdropClass="cdk-overlay-transparent-backdrop"
+              [cdkConnectedOverlayHasBackdrop]="true"
+            >
+              <div class="assignee-dropdown dropdown-border-input-wrapper">
+                <div class="warning-message-container">
+                  <label *ngIf="includeDiffrentProjects" class="warning-message">Only showing assignees shared between all tasks you selected </label>
+                </div>
+                <div class="input-wrapper">
+                  <input type="text" placeholder="Assignee" (keyup)="_onBlkAssigneeSerchchanges($event)" tmsWorkspaceAutoFocusInput />
+                  <img src="assets/images/search.svg" alt="search" class="search" />
+                </div>
+                <div class="assignee-list-wrapper dropdown-border-listing-wrapper">
+                  <ng-container *ngFor="let teamMember of blkUserFilterList">
+                    <main-app-mat-chips
+                      [indicateUserWorkingLocation]="true"
+                      class="assignee-list"
+                      [stopViewFullProfileOption]="true"
+                      *ngIf="teamMember"
+                      [data]="teamMember"
+                      [isCloseButton]="false"
+                      (click)="bulkOpValues[taskContstants.ASIGNEE] = teamMember; isBlkAssigneePopupOpen = false"
+                    ></main-app-mat-chips>
+                  </ng-container>
+                </div>
+              </div>
+            </ng-template>
+          </div>
+        </div>
+
+        <!-- Task Status / Sub Status -->
+        <div
+          cdkOverlayOrigin
+          #triggerBlkStatusSelection="cdkOverlayOrigin"
+          [ngClass]="permissionDetails.allowUpdate && permissionDetails.substatus.edit ? '' : 'disable-container'"
+        >
+          <span
+            [ngClass]="permissionDetails.allowUpdate && permissionDetails.substatus.edit ? '' : 'disable-item'"
+            matTooltip="Status"
+            *ngIf="includeDiffrentProjects"
+            class="task-key cursor-pointer"
+            (click)="isBlkTaskStatusOpen = true"
+          >
+            {{ bulkOpValues[taskContstants.STATE]?.name || '' }}
+          </span>
+                <span [ngClass]="permissionDetails.allowUpdate && permissionDetails.substatus.edit ? '' : 'disable-item'" matTooltip="Status" *ngIf="!includeDiffrentProjects" class="task-key cursor-pointer" (click)="isBlkTaskStatusOpen = true">
+            {{ bulkOpValues[taskContstants.STATUS]?.name || '' }}
+          </span>
+                <mat-icon *ngIf="bulkOpValues[taskContstants.STATE]" class="remove-selectedItems" (click)="bulkOpValues[taskContstants.STATE] = null; bulkOpValues[taskContstants.STATUS] = null">close</mat-icon>
+                <svg [ngClass]="permissionDetails.allowUpdate && permissionDetails.substatus.edit ? '' : 'disable-item'" (click)="includeDiffrentProjects ? (isBlkTaskStatusOpen = true) : _blkGetStatusForSelectProject()" matTooltip="Status" *ngIf="!bulkOpValues[this.taskContstants.STATE]"
+                    width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg" class="cursor-pointer set-icon">
+            <path d="M9.27734 6.66016H13.2148" stroke="#86969D" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+            <path
+              d="M4.78516 6.66016L5.34766 7.22266L7.03516 5.53516"
+              stroke="#86969D"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+            <path d="M9.27734 11.9102H13.2148" stroke="#86969D" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+            <path
+              d="M4.78516 11.9102L5.34766 12.4727L7.03516 10.7852"
+              stroke="#86969D"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+            <path
+              d="M6.75 16.5H11.25C15 16.5 16.5 15 16.5 11.25V6.75C16.5 3 15 1.5 11.25 1.5H6.75C3 1.5 1.5 3 1.5 6.75V11.25C1.5 15 3 16.5 6.75 16.5Z"
+              stroke="#86969D"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+            </div>
+            <ng-template *ngIf="includeDiffrentProjects" cdkConnectedOverlay (overlayOutsideClick)="isBlkTaskStatusOpen = false" (detach)="isBlkTaskStatusOpen = false" (backdropClick)="isBlkTaskStatusOpen = false" [cdkConnectedOverlayOrigin]="triggerBlkStatusSelection"
+                [cdkConnectedOverlayOpen]="isBlkTaskStatusOpen" [cdkConnectedOverlayHasBackdrop]="true" cdkConnectedOverlayBackdropClass="cdk-overlay-transparent-backdrop">
+                <main-app-state-popup [listInput]="taskStateList" (selectionEmmiter)="_blkSelectionStatusChange($event)"></main-app-state-popup>
+            </ng-template>
+            <ng-template *ngIf="!includeDiffrentProjects" cdkConnectedOverlay (overlayOutsideClick)="isBlkTaskStatusOpen = false" (detach)="isBlkTaskStatusOpen = false" (backdropClick)="isBlkTaskStatusOpen = false" [cdkConnectedOverlayOrigin]="triggerBlkStatusSelection"
+                [cdkConnectedOverlayOpen]="isBlkTaskStatusOpen" [cdkConnectedOverlayHasBackdrop]="true" cdkConnectedOverlayBackdropClass="cdk-overlay-transparent-backdrop">
+                <main-app-status-popup [listInput]="blkProjectStausList" (statusEmmiter)="_onSelectBlkStatus($event)"></main-app-status-popup>
+            </ng-template>
+
+            <!-- Labels -->
+
+            <div class="task-bulk-select-label-wrapper" [ngClass]="permissionDetails.allowUpdate && permissionDetails.labels.edit ? '' : 'disable-container'">
+                <div class="align-center label-outer-wrapper" [ngClass]="permissionDetails.allowUpdate && permissionDetails.labels.edit ? '' : 'disable-item'">
+                    <div class="task-label-outer-wrapper" (click)="_onSelectBulkLabelList()" cdkOverlayOrigin #triggerBlkLabelOverLay="cdkOverlayOrigin">
+                        <span *ngIf="bulkOpValues[taskContstants.LABELS] && bulkOpValues[taskContstants.LABELS]?.length > 0" class="task-label-outer task-key" [ngClass]="permissionDetails.allowUpdate && permissionDetails.labels.edit ? 'cursor-pointer' : 'disable-item'" cdkOverlayOrigin
+                            #triggerTaskLabels="cdkOverlayOrigin">
+                <div
+                  *ngFor="let label of bulkOpValues[taskContstants.LABELS]?.slice(0, 1)"
+                  class="task-info label-wrapper"
+                  [ngStyle]="{ 'background-color': label?.color?.bgColor, color: label?.color?.color }"
+                >
+                  {{ label.title }}
+                </div>
+
+                <div class="count task-count" *ngIf="bulkOpValues[taskContstants.LABELS]?.length > 1">
+                  +{{ bulkOpValues[taskContstants.LABELS]?.length - 1 }}
+                </div>
+              </span>
+
+                        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg" *ngIf="!(bulkOpValues[taskContstants.LABELS] && bulkOpValues[taskContstants.LABELS]?.length > 0)" class="cursor-pointer set-icon" [ngClass ]="includeDiffrentProjects ? 'disable-container' : ''">
+                <path
+                  d="M3.12779 11.4749L6.52529 14.8724C7.92029 16.2674 10.1853 16.2674 11.5878 14.8724L14.8803 11.5799C16.2753 10.1849 16.2753 7.91985 14.8803 6.51735L11.4753 3.12735C10.7628 2.41485 9.78029 2.03235 8.77529 2.08485L5.02529 2.26485C3.52529 2.33235 2.33279 3.52485 2.25779 5.01735L2.07779 8.76735C2.03279 9.77985 2.41529 10.7624 3.12779 11.4749Z"
+                  stroke="#6C757D"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M7.125 9C8.16053 9 9 8.16053 9 7.125C9 6.08947 8.16053 5.25 7.125 5.25C6.08947 5.25 5.25 6.08947 5.25 7.125C5.25 8.16053 6.08947 9 7.125 9Z"
+                  stroke="#6C757D"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                />
+              </svg>
+                    </div>
+                    <ng-template class="ios" cdkConnectedOverlay [cdkConnectedOverlayOrigin]="triggerBlkLabelOverLay" [cdkConnectedOverlayOpen]="blkLabelSelectionOpen" (detach)="blkLabelSelectionOpen = false" (backdropClick)="blkLabelSelectionOpen = false" cdkConnectedOverlayBackdropClass="cdk-overlay-transparent-backdrop"
+                        [cdkConnectedOverlayHasBackdrop]="true">
+                        <span class="task-right-label custom-overlay">
+                <div class="section-menu-wrapper-outer">
+                  <div
+                    class="section-menu-wrapper-outer-inner"
+                    [ngClass]="bulkOpValues[taskContstants.LABELS] && bulkOpValues[taskContstants.LABELS]?.length > 0 ? '' : 'empty-labels-selection'"
+                  >
+                    <ng-container
+                      *ngIf="bulkOpValues[taskContstants.LABELS] && bulkOpValues[taskContstants.LABELS]?.length > 0"
+                      style="display: flex; width: 100%"
+                    >
+                      <span
+                        *ngFor="let item of bulkOpValues[taskContstants.LABELS]"
+                        [ngStyle]="{ 'background-color': item?.color?.bgColor, color: item?.color?.color }"
+                        class="label-wrapper"
+                      >
+                        {{ item?.title || '' }}
+                        <mat-icon (click)="$event.stopPropagation(); _onRemoveBlkTaskLabel(item)">cancel</mat-icon>
+                      </span>
+        </ng-container>
+        </div>
+
+        <tms-workspace-labels-popup [placeHolder]="'Search or Create New'" [isIntaskList]="true" [listInput]="filteredBlkLabels" (itemEmmiter)="_onBlkTaskLabelSelect($event)" [messageToCreateNewItem]="createLabelForMessage" [hasSelctedLables]="((bulkOpValues[taskContstants.LABELS] && bulkOpValues[taskContstants.LABELS]?.length) || 0) > 0"></tms-workspace-labels-popup>
+        </div>
+        </span>
+        </ng-template>
+    </div>
+    <mat-icon *ngIf="bulkOpValues[taskContstants.LABELS]" class="remove-selectedItems" (click)="bulkOpValues[taskContstants.LABELS] = null">close</mat-icon>
+</div>
+<div>
+    <mat-label class="selected-items">{{ selectedTasks?.length }} - Selected</mat-label>
+    <mat-icon class="remove-selectedItems" (click)="_deSelectAllItems()">close</mat-icon>
+</div>
+
+<button *ngIf="
+            (permissionDetails.allowUpdate && permissionDetails.priority.edit) ||
+            (permissionDetails.allowUpdate && permissionDetails.taskType.edit) ||
+            (permissionDetails.allowUpdate && permissionDetails.dueDate.edit) ||
+            (permissionDetails.allowUpdate && permissionDetails.eta.edit) ||
+            (permissionDetails.allowUpdate && permissionDetails.assignee.edit) ||
+            (permissionDetails.allowUpdate && permissionDetails.substatus.edit) ||
+            (permissionDetails.allowUpdate && permissionDetails.labels.edit)
+          " color="primary" (click)="_onApplyBulkUpdate()" class="bulk-container-save-button">
+          Save
+        </button>
+
+<!-- Copy -->
+<div matTooltip="Copy task details" class="copy-clipboard-container" cdkOverlayOrigin (click)="isCopyBulkDataOpen = true" #copyBulkTaskDetails="cdkOverlayOrigin">
+    <img src="assets/images/clipboard.svg" class="set-icon outer-copy-icon" width="19" height="19" />
+    <label class="clipboard-text">Copy to clipboard</label>
+</div>
+<ng-template class="ios" cdkConnectedOverlay [cdkConnectedOverlayOrigin]="copyBulkTaskDetails" [cdkConnectedOverlayOpen]="isCopyBulkDataOpen" (detach)="isCopyBulkDataOpen = false; _onCopySeletedTasks()" (backdropClick)="isCopyBulkDataOpen = false" cdkConnectedOverlayBackdropClass="cdk-overlay-transparent-backdrop"
+    [cdkConnectedOverlayHasBackdrop]="true">
+    <div class="dropdown-border-input-wrapper copy-field-selection">
+        <div class="copy-container-header">
+            <span class="copy-field-selection-header">What to Copy</span>
+            <div class="copy-clipboard-container-inner" (click)="_onCopySeletedTasks(); isCopyBulkDataOpen = false">
+                <img src="assets/images/clipboard.svg" class="set-icon" width="19" height="19" />
+                <!-- <label class="clipboard-text">Copy to clipboard</label> -->
+            </div>
+        </div>
+        <span class="copy-list-item task-key" *ngFor="let field of cpTaskFields"><input type="checkbox" (change)="field.checked = !field.checked" [checked]="field.checked" />{{ field.text }}</span
+            >
+          </div>
+        </ng-template>
+      </div>
+
+      <ng-container *ngFor="let projectObject of taskList; let projectIndex = index">
+        <div class="task-list-table-outer">
+          <mat-accordion togglePosition="before" class="task-wrap title">
+            <mat-expansion-panel #taskGroupPanel [expanded]="true">
+              <mat-expansion-panel-header *ngIf="!taskGroupPanel.expanded" class="task-wrap-header">
+                <span [matTooltip]="projectObject?.groupTitle" class="heading"
+                  >{{ projectObject?.groupTitle }} <span>({{ projectObject?.groupTaskCount || 0 }})</span>
+        </span>
+        </mat-expansion-panel-header>
+        <table class="task-list-table-wrapper" [ngClass]="projectObject.isShowNewTask ? 'view-all-bottom' : 'no-view'">
+            <tr (mouseenter)="_onMouseOverGroup(projectObject)" (mouseleave)="_onMouseOutGroup(projectObject)">
+                <th class="title title-wrapper customized-header">
+                    <input type="checkbox" class="selectall-checkbox" [ngClass]="{ 'checkbox-hidden': !(projectObject['allSelected'] || (projectObject['moueOver'] && selectedTasks?.length != 25)) }" (change)="_onSelecteAllTaskChange($event, projectObject)" [checked]="projectObject['allSelected']"
+                    />
+                    <mat-expansion-panel-header *ngIf="taskGroupPanel.expanded" class="task-wrap-header">
+                        <span [matTooltip]="projectObject?.groupTitle" class="heading">{{ projectObject?.groupTitle }} <span>({{ projectObject?.groupTaskCount || 0 }})</span>
+                        </span>
+                    </mat-expansion-panel-header>
+                    <!-- <input
+                    type="checkbox"
+                    (change)="_onSelecteAllTaskChange($event, projectObject)"
+                    *ngIf="projectObject['moueOver'] || projectObject['allSelected']"
+                    [checked]="projectObject['allSelected']"
+                  /> -->
+                </th>
+                <th class="subtask-wrapper">Status</th>
+                <!-- <th class="priority-wrapper">Priority</th> -->
+                <th class="project-wrapper">Project</th>
+                <th class="label-wrapper-th">Labels</th>
+                <th class="assignee-wrapper-th">Assignee</th>
+                <th class="due-wrapper">Due Date</th>
+                <th class="eta-wrapper">ETA</th>
+                <th class="time-wrapper">Time Worked</th>
+                <th class="clock-wrapper"></th>
+            </tr>
+            <tbody>
+                <tr class="green-border example-box" [ngStyle]="{
+                      background: taskObject?._other_user_working_status
+                        ? '#FFF6EA'
+                        : taskObject?._user_working_status
+                        ? '#F3F7FD'
+                        : currentTaskIdToEdit === taskObject?.id
+                        ? 'rgba(230, 229, 229, 0.37)'
+                        : '#fff'
+                    }" [ngClass]="taskObject['itemChecked'] ? 'item-bulk-selected' : ''" *ngFor="let taskObject of projectObject?.groupTasks; let taskIndex = index" (mouseenter)="_onMouseOverRow(taskObject)" (mouseleave)="_onMouseOutRow(taskObject)">
+                    <!-- Task Key, Status, type, title -->
+                    <td class="task-name-outer-wrapper">
+                        <div class="task-name-wrapper">
+                            <!-- <input
+                        *ngIf="taskObject['rowFocused'] || taskObject['itemChecked']"
+                        type="checkbox"
+                        (change)="_onSelectedtaskChange($event, taskObject, projectObject)"
+                        [checked]="taskObject['itemChecked']"
+                      /> -->
+
+                            <input type="checkbox" [ngClass]="{
+                            'checkbox-hidden': !(taskObject['itemChecked'] || (taskObject['rowFocused'] && selectedTasks?.length != 25))
+                          }" (change)="_onSelectedtaskChange($event, taskObject, projectObject)" [checked]="taskObject['itemChecked']" />
+                            <!-- Priority -->
+                            <span class="task-cell priority-name-block" [ngClass]="permissionDetails.allowUpdate && permissionDetails.priority.edit ? '' : 'disable-item-container'">
+                          <img
+                            *ngIf="taskObject.priorityImg; else clearPriorityImg"
+                            #img
+                            [ngClass]="permissionDetails.allowUpdate && permissionDetails.priority.edit ? '' : 'disable-item'"
+                            [matMenuTriggerFor]="priorityMenu"
+                            (click)="currentTaskIdToEdit = taskObject?.id"
+                            (error)="img.src = 'assets/images/flag.svg'"
+                            [src]="'assets/images/' + taskObject.priorityImg"
+                            class="cursor-pointer"
+                            [matTooltip]="taskObject.priority"
+                          />
+                          <ng-template #clearPriorityImg>
+                            <img
+                              [ngClass]="permissionDetails.allowUpdate && permissionDetails.priority.edit ? '' : 'disable-item'"
+                              [matMenuTriggerFor]="priorityMenu"
+                              [src]="'assets/images/flag.svg'"
+                            />
+                          </ng-template>
+                          <mat-menu
+                            (closed)="currentTaskIdToEdit = null"
+                            #priorityMenu="matMenu"
+                            yPosition="below"
+                            class="priority-menu-wrapper dropdown-border-input-wrapper"
+                          >
+                            <div
+                              class="prirority-dropdown-list"
+                              mat-menu-item
+                              *ngFor="let priority of priorityList; let i = index"
+                              (click)="onPriorityChange(priority, taskObject)"
+                            >
+                              <img [src]="'assets/images/' + priority.priorityImg" />
+                              <span class="priority-name">{{ priority.name }}</span>
+                        </div>
+                        <div class="prirority-dropdown-list clear-list" mat-menu-item (click)="clearPriority(taskObject)">
+                            <img [src]="'assets/images/clear.svg'" />
+                            <span class="priority-name">Clear</span>
+                        </div>
+                        </mat-menu>
+                        </span>
+                        <!-- Task Key Preffix -->
+                        <span class="task-key" [matTooltip]="taskObject?.task_key_prefix + '-' + taskObject?.task_unique_key" *ngIf="taskObject?.task_key_prefix && taskObject?.task_unique_key">{{ taskObject?.task_key_prefix + '-' + taskObject?.task_unique_key }}</span
+                        >
+                        <!-- Task Key -->
+                        <span
+                          class="task-key"
+                          [matTooltip]="taskObject?.task_key"
+                          *ngIf="!(taskObject?.task_key_prefix && taskObject?.task_unique_key) && taskObject?.task_key"
+                          >{{ taskObject?.task_key }}</span
+                        >
+                        <!-- Task type -->
+                        <span
+                          class="task-type task-info"
+                          [ngClass]="permissionDetails.allowUpdate && permissionDetails.taskType.edit ? '' : 'disable-item-container'"
+                        >
+                          <div
+                            [ngClass]="permissionDetails.allowUpdate && permissionDetails.taskType.edit ? '' : 'disable-item'"
+                            [matMenuTriggerFor]="belowMenu"
+                            (click)="currentTaskIdToEdit = taskObject?.id"
+                          >
+                            <span
+                              [ngClass]="permissionDetails.allowUpdate && permissionDetails.taskType.edit ? '' : 'disable-item'"
+                              [matTooltip]="taskObject?.type"
+                              class="task-cell task-color"
+                              [ngStyle]="{ 'background-color': taskObject?.taskTypeIndicator }"
+                            ></span>
+    </div>
+    <mat-menu (closed)="currentTaskIdToEdit = null" #belowMenu="matMenu" yPosition="below" class="task-menu-wrapper dropdown-border-input-wrapper">
+        <div mat-menu-item *ngFor="let taskTypeObject of taskTypeList; let i = index" (click)="onTaskTypeChange(taskTypeObject, taskObject)">
+            <span>{{ taskTypeObject }}</span>
+        </div>
+    </mat-menu>
+    </span>
+    <!-- Copy Link -->
+    <span class="task-cell">
+                          <img
+                            matTooltip="Copy link"
+                            src="/assets/images/copy_task.svg"
+                            class="cpy-task-link-img"
+                            alt="copy_link"
+                            (click)="copyTaskLink(taskObject.id)"
+                          />
+                        </span>
+
+    <!-- <span class="task-cell task-color" [ngStyle]="{ 'background-color': getTaskColor(taskObject) }"></span> -->
+    <!-- Sub Task Image -->
+    <!-- (click)="navigateToTaskDetail(taskObject?.parent_task_id)" -->
+    <a [routerLink]="['/tasks/view', EncryptId(taskObject?.parent_task_id)]" [queryParams]="{ r_url: 'list' }" *ngIf="taskObject?.parent_task_id" class="task-cell subtask-link">
+        <img class="subtask-image" src="assets/images/subtask-grey.svg" />
+    </a>
+    <!-- Task Title -->
+    <!-- (click)="navigateToTaskDetail(taskObject.id)" -->
+    <a [matTooltip]="taskObject?.title || ''" class="cursor-pointer task-name task-info" [routerLink]="['/tasks/view', EncryptId(taskObject?.id)]" [queryParams]="{ r_url: 'list' }">{{ taskObject?.title || '' }}</a
+                        >
+                      </div>
+                    </td>
+                    <!-- Task Sub-Status -->
+                    <td
+                      class="align-center task-status-wrapper-outer"
+                      [ngClass]="permissionDetails.allowUpdate && permissionDetails.substatus.edit ? '' : 'disable-item-container'"
+                    >
+                      <div
+                        class="task-status-wrapper"
+                        (click)="toggleOverlayTaskStatusSelection(taskObject)"
+                        [ngClass]="permissionDetails.allowUpdate && permissionDetails.substatus.edit ? '' : 'disable-item'"
+                      >
+                        <span class="cursor-pointer" cdkOverlayOrigin #triggerStatusSelection="cdkOverlayOrigin">
+                          <ng-container *ngIf="!taskObject?.state; else selectedStatusTemplate"></ng-container>
+                          <ng-template #selectedStatusTemplate>
+                            <span *ngIf="taskObject?.task_status?.title; else setStatus" class="task-info">{{ taskObject?.task_status?.title }}</span>
+                            <ng-template #setStatus>
+                              <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                  d="M9.27734 6.66016H13.2148"
+                                  stroke="#86969D"
+                                  stroke-width="1.5"
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                />
+                                <path
+                                  d="M4.78516 6.66016L5.34766 7.22266L7.03516 5.53516"
+                                  stroke="#86969D"
+                                  stroke-width="1.5"
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                />
+                                <path
+                                  d="M9.27734 11.9102H13.2148"
+                                  stroke="#86969D"
+                                  stroke-width="1.5"
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                />
+                                <path
+                                  d="M4.78516 11.9102L5.34766 12.4727L7.03516 10.7852"
+                                  stroke="#86969D"
+                                  stroke-width="1.5"
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                />
+                                <path
+                                  d="M6.75 16.5H11.25C15 16.5 16.5 15 16.5 11.25V6.75C16.5 3 15 1.5 11.25 1.5H6.75C3 1.5 1.5 3 1.5 6.75V11.25C1.5 15 3 16.5 6.75 16.5Z"
+                                  stroke="#86969D"
+                                  stroke-width="1.5"
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                />
+                              </svg>
+                            </ng-template>
+                          </ng-template>
+                        </span>
+                        <ng-template
+                          cdkConnectedOverlay
+                          (overlayOutsideClick)="isOverlayTaskStatus[taskObject] = false; currentTaskIdToEdit = null"
+                          (detach)="isOverlayTaskStatus[taskObject] = false; currentTaskIdToEdit = null"
+                          (backdropClick)="isOverlayTaskStatus[taskObject] = false; currentTaskIdToEdit = null"
+                          [cdkConnectedOverlayOrigin]="triggerStatusSelection"
+                          [cdkConnectedOverlayOpen]="selectedItem === taskObject && isOverlayTaskStatus[taskObject]"
+                          cdkConnectedOverlayBackdropClass="cdk-overlay-transparent-backdrop"
+                          [cdkConnectedOverlayHasBackdrop]="true"
+                        >
+                          <main-app-status-popup
+                            [listInput]="projectStatusList"
+                            [placeholder]="'Search Status'"
+                            (statusEmmiter)="getSelectedTaskStatus($event, taskObject)"
+                          ></main-app-status-popup>
+                        </ng-template>
+                      </div>
+                    </td>
+                    <!-- Priority -->
+
+                    <!-- Projects -->
+                    <td class="align-center project-wrapper-outer">
+                      <!-- <div
+                      
+                      (click)="loadChangeSectionData(taskObject?.project_id, taskObject?.id)"
+                      cdkOverlayOrigin
+                      #trigger="cdkOverlayOrigin"
+                    >
+                      <span *ngIf="taskObject?.task_section?.title; else setSection"></span>
+                      <span class="section-name task-info">
+                        {{ taskObject?.task_section?.title }}
+                      </span>
+                    </div>
+                    <mat-icon *ngIf="taskObject?.section" (click)="removeSectionFromTask(taskObject)" class="filter-close">close</mat-icon>
+                    <ng-template #setSection>
+                      <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                          d="M7.16992 13.5V9.75"
+                          stroke="#86969D"
+                          stroke-width="1.5"
+                          stroke-miterlimit="10"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                        <path
+                          d="M9 11.625H5.25"
+                          stroke="#86969D"
+                          stroke-width="1.5"
+                          stroke-miterlimit="10"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                        <path
+                          d="M6 1.5V3.75"
+                          stroke="#86969D"
+                          stroke-width="1.5"
+                          stroke-miterlimit="10"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                        <path
+                          d="M12 1.5V3.75"
+                          stroke="#86969D"
+                          stroke-width="1.5"
+                          stroke-miterlimit="10"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                        <path
+                          d="M11.8579 2.56494C14.3629 2.65494 15.6304 3.57744 15.7054 7.10244L15.8029 11.7299C15.8629 14.8199 15.1504 16.3724 11.4004 16.4549L6.90036 16.5449C3.15036 16.6199 2.37036 15.0899 2.31036 12.0074L2.20536 7.37244C2.13036 3.84744 3.36786 2.87244 5.85786 2.68494L11.8579 2.56494Z"
+                          stroke="#86969D"
+                          stroke-width="1.5"
+                          stroke-miterlimit="10"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                      </svg>
+                    </ng-template>
+                    <ng-template
+                      cdkConnectedOverlay
+                      cdkConnectedOverlayBackdropClass="cdk-overlay-transparent-backdrop"
+                      [cdkConnectedOverlayHasBackdrop]="true"
+                      [cdkConnectedOverlayOrigin]="trigger"
+                      [cdkConnectedOverlayOpen]="taskToEdit === taskObject?.id"
+                      (detach)="taskToEdit = null"
+                      (backdropClick)="taskToEdit = null"
+                    >
+                      <tms-workspace-labels-popup
+                        [listInput]="sectionsList"
+                        [messageToCreateNewItem]="createSectionForMessage"
+                        (itemEmmiter)="onChangeSection($event, taskObject)"
+                      ></tms-workspace-labels-popup>
+                    </ng-template> -->
+                      <div class="task-info">{{ taskObject.project_name }}</div>
+                    </td>
+                    <!-- Labels -->
+                    <td
+                      [ngClass]="permissionDetails.allowUpdate && permissionDetails.labels.edit ? 'cursor-pointer' : 'disable-item-container'"
+                      class="align-center label-outer-wrapper"
+                    >
+                      <div class="task-label-outer-wrapper">
+                        <span
+                          class="task-label-outer"
+                          [ngClass]="permissionDetails.allowUpdate && permissionDetails.labels.edit ? 'cursor-pointer' : 'disable-item'"
+                          cdkOverlayOrigin
+                          #triggerTaskLabels="cdkOverlayOrigin"
+                          (click)="editTaskLables(taskObject)"
+                        >
+                          <div
+                            *ngFor="let label of taskObject?.task_labels?.slice(0, 1)"
+                            class="task-info label-wrapper"
+                            [ngStyle]="{ 'background-color': label?.color?.bgColor, color: label?.color?.color }"
+                          >
+                            {{ label.title }}
+                          </div>
+                          <div *ngIf="!taskObject?.task_labels || taskObject?.task_labels?.length === 0" class="task-table-wrapper">
+                            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg" class="cursor-pointer">
+                              <path
+                                d="M3.12779 11.4749L6.52529 14.8724C7.92029 16.2674 10.1853 16.2674 11.5878 14.8724L14.8803 11.5799C16.2753 10.1849 16.2753 7.91985 14.8803 6.51735L11.4753 3.12735C10.7628 2.41485 9.78029 2.03235 8.77529 2.08485L5.02529 2.26485C3.52529 2.33235 2.33279 3.52485 2.25779 5.01735L2.07779 8.76735C2.03279 9.77985 2.41529 10.7624 3.12779 11.4749Z"
+                                stroke="#6C757D"
+                                stroke-width="1.5"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                              />
+                              <path
+                                d="M7.125 9C8.16053 9 9 8.16053 9 7.125C9 6.08947 8.16053 5.25 7.125 5.25C6.08947 5.25 5.25 6.08947 5.25 7.125C5.25 8.16053 6.08947 9 7.125 9Z"
+                                stroke="#6C757D"
+                                stroke-width="1.5"
+                                stroke-linecap="round"
+                              />
+                            </svg>
+                          </div>
+                          <div class="count task-count" *ngIf="taskObject?.task_labels?.length > 1">+{{ taskObject?.task_labels?.length - 1 }}</div>
+                        </span>
+                      </div>
+                      <!-- <mat-menu #menu="matMenu" class="task-count-wrapper">
+                      <div
+                      
+                        class="label-wrapper"
+                        *ngFor="let label of taskObject?.task_labels?.slice(1)"
+                        [ngStyle]="{ 'background-color': label?.color }"
+                      >
+                        {{ label.title }}
+                      </div>
+                    </mat-menu> -->
+                      <ng-template
+                        class="ios"
+                        cdkConnectedOverlay
+                        [cdkConnectedOverlayOrigin]="triggerTaskLabels"
+                        [cdkConnectedOverlayOpen]="editLabels?.id === taskObject?.id"
+                        (detach)="editLabels = null; saveLabels(taskObject); currentTaskIdToEdit = null"
+                        (backdropClick)="editLabels = null; currentTaskIdToEdit = null"
+                        cdkConnectedOverlayBackdropClass="cdk-overlay-transparent-backdrop"
+                        [cdkConnectedOverlayHasBackdrop]="true"
+                      >
+                        <span class="task-right-label custom-overlay">
+                          <div class="section-menu-wrapper-outer">
+                            <div
+                              class="section-menu-wrapper-outer-inner"
+                              [ngClass]="taskLabels.value && taskLabels.value.length > 0 ? '' : 'empty-labels-selection'"
+                            >
+                              <ng-container *ngIf="taskLabels.value && taskLabels.value.length > 0">
+                                <span
+                                  *ngFor="let item of taskLabels.value"
+                                  [ngStyle]="{ 'background-color': item?.color?.bgColor, color: item?.color?.color }"
+                                  class="label-wrapper"
+                                >
+                                  {{ item?.title || '' }}
+                                  <mat-icon (click)="$event.stopPropagation(); onRemoveTaskLabel(item)">cancel</mat-icon>
+                                </span>
+
+                                <span
+                                  [cpFallbackColor]="'#800101'"
+                                  [cpPresetColors]="presetColors"
+                                  [(cpToggle)]="toggle"
+                                  [(colorPicker)]="color"
+                                  (colorPickerChange)="onLabelColorChange($event)"
+                                ></span>
+                              </ng-container>
+                            </div>
+                            <!--  <button  cdkOverlayOrigin #triggerAddTask="cdkOverlayOrigin" (click)="isOverlayOpenForTaskLabels = true">+</button>
+                        <button  (click)="saveLabels(taskObject)">&#9989;</button>-->
+
+                            <!-- <ng-template
+                          cdkConnectedOverlay
+                          (overlayOutsideClick)="isOverlayOpenForTaskLabels = false"
+                          [cdkConnectedOverlayOrigin]="triggerAddTask"
+                          [cdkConnectedOverlayOpen]="isOverlayOpenForTaskLabels"
+                        >
+                          <tms-workspace-labels-popup
+                            [listInput]="availableProjectLabels"
+                            (itemEmmiter)="onTaskLabelSelect($event)"
+                            [messageToCreateNewItem]="createLabelForMessage"
+                          ></tms-workspace-labels-popup>
+                        </ng-template>-->
+                            <tms-workspace-labels-popup
+                              [placeHolder]="'Search or Create New'"
+                              [isIntaskList]="true"
+                              [listInput]="filteredAvailableLabels"
+                              (itemEmmiter)="onTaskLabelSelect($event)"
+                              [messageToCreateNewItem]="createLabelForMessage"
+                              [hasSelctedLables]="((taskLabels && taskLabels.value?.length) || 0) > 0"
+                            ></tms-workspace-labels-popup>
+                          </div>
+                        </span>
+                      </ng-template>
+                    </td>
+                    <!-- Assignee -->
+                    <td
+                      class="assignee-outer-wrapper"
+                      [ngClass]="permissionDetails.allowUpdate && permissionDetails.assignee.edit ? '' : 'disable-item-container'"
+                    >
+                      <div
+                        class="assignee-wrapper-task"
+                        (mouseenter)="taskObject?.assignee ? onMouseOverRemoveableItem(taskObject, 1) : null"
+                        (mouseleave)="onMouseOutItem()"
+                      >
+                        <!-- <responsible-person
+                        #responsiblePersonRef
+                        [teammembersList]="taskObject.team"
+                        [dataId]="taskObject?.assignee"
+                        (emmitSelectedTeamMates)="getSelectedResponsiblePerson($event, taskObject)"
+                        [placeHolderLabel]="'Assignee'"
+                        [viewAvatarOnly]="true"
+                        [showHtmlContentAsPlaceHolder]="true"
+                      >
+                      </responsible-person> -->
+
+                        <div
+                          class="assignee-wrapper-task-inner"
+                          cdkOverlayOrigin
+                          #assigneeSelection="cdkOverlayOrigin"
+                          [ngClass]="permissionDetails.allowUpdate && permissionDetails.assignee.edit ? '' : 'disable-item'"
+                          (click)="assigneeSelectionTaskId = taskObject.id; selectedAssignees = taskObject.team; currentTaskIdToEdit = taskObject?.id"
+                        >
+                          <main-app-mat-chips
+                            [indicateUserWorkingLocation]="true"
+                            [viewAvatarOnly]="true"
+                            *ngIf="taskObject?.assignee; else addAssignee"
+                            [data]="taskObject.task_assignee"
+                            [isCloseButton]="false"
+                            [stopViewFullProfileOption]="true"
+                            [matTooltip]="
+                              taskObject.task_assignee?.name
+                                ? taskObject.task_assignee?.name
+                                : taskObject.task_assignee?.first_name + ' ' + taskObject.task_assignee?.last_name
+                            "
+                            disableRipple
+                          >
+                          </main-app-mat-chips>
+                          <ng-template #addAssignee>
+                            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg" class="cursor-pointer">
+                              <path
+                                d="M8.59529 10.297C9.75923 10.297 10.7028 9.35347 10.7028 8.18953C10.7028 7.02559 9.75923 6.08203 8.59529 6.08203C7.43135 6.08203 6.48779 7.02559 6.48779 8.18953C6.48779 9.35347 7.43135 10.297 8.59529 10.297Z"
+                                stroke="#6C757D"
+                                stroke-width="1.5"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                              />
+                              <path
+                                d="M12.4876 15.1491C12.4876 13.4016 10.7476 11.9766 8.59514 11.9766C6.44264 11.9766 4.70264 13.3941 4.70264 15.1491"
+                                stroke="#6C757D"
+                                stroke-width="1.5"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                              />
+                              <path
+                                d="M15.75 9.375C15.75 13.3125 12.5625 16.5 8.625 16.5C4.6875 16.5 1.5 13.3125 1.5 9.375C1.5 5.4375 4.6875 2.25 8.625 2.25C9.6075 2.25 10.545 2.44499 11.4 2.80499C11.3025 3.10499 11.25 3.42 11.25 3.75C11.25 4.3125 11.4075 4.845 11.685 5.295C11.835 5.55 12.03 5.78248 12.255 5.97748C12.78 6.45748 13.4775 6.75 14.25 6.75C14.58 6.75 14.895 6.69748 15.1875 6.59248C15.5475 7.44748 15.75 8.3925 15.75 9.375Z"
+                                stroke="#6C757D"
+                                stroke-width="1.5"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                              />
+                              <path
+                                d="M17.25 3.75C17.25 3.99 17.22 4.22249 17.16 4.44749C17.0925 4.74749 16.9725 5.04 16.815 5.295C16.455 5.9025 15.8775 6.37498 15.1875 6.59248C14.895 6.69748 14.58 6.75 14.25 6.75C13.4775 6.75 12.78 6.45748 12.255 5.97748C12.03 5.78248 11.835 5.55 11.685 5.295C11.4075 4.845 11.25 4.3125 11.25 3.75C11.25 3.42 11.3025 3.10499 11.4 2.80499C11.5425 2.36999 11.7825 1.98002 12.0975 1.65752C12.645 1.09502 13.41 0.75 14.25 0.75C15.135 0.75 15.9375 1.13251 16.4775 1.74751C16.9575 2.28001 17.25 2.985 17.25 3.75Z"
+                                stroke="#6C757D"
+                                stroke-width="1.5"
+                                stroke-miterlimit="10"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                              />
+                              <path
+                                d="M15.3673 3.73438H13.1323"
+                                stroke="#6C757D"
+                                stroke-width="1.5"
+                                stroke-miterlimit="10"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                              />
+                              <path
+                                d="M14.25 2.63965V4.88214"
+                                stroke="#6C757D"
+                                stroke-width="1.5"
+                                stroke-miterlimit="10"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                              />
+                            </svg>
+                          </ng-template>
+                        </div>
+                        <ng-template
+                          class="ios"
+                          cdkConnectedOverlay
+                          [cdkConnectedOverlayOrigin]="assigneeSelection"
+                          [cdkConnectedOverlayOpen]="assigneeSelectionTaskId === taskObject.id"
+                          (detach)="assigneeSelectionTaskId = null; currentTaskIdToEdit = null"
+                          (backdropClick)="assigneeSelectionTaskId = null; currentTaskIdToEdit = null"
+                          cdkConnectedOverlayBackdropClass="cdk-overlay-transparent-backdrop"
+                          [cdkConnectedOverlayHasBackdrop]="true"
+                        >
+                          <div class="assignee-dropdown dropdown-border-input-wrapper">
+                            <div class="input-wrapper">
+                              <input
+                                type="text"
+                                placeholder="Assignee"
+                                (keyup)="onAssigneeSerchchanges($event, taskObject.team)"
+                                tmsWorkspaceAutoFocusInput
+                              />
+                              <img src="assets/images/search.svg" alt="search" class="search" />
+                            </div>
+                            <div class="assignee-list-wrapper dropdown-border-listing-wrapper">
+                              <ng-container *ngFor="let teamMember of selectedAssignees">
+                                <main-app-mat-chips
+                                  [indicateUserWorkingLocation]="true"
+                                  class="assignee-list"
+                                  [stopViewFullProfileOption]="true"
+                                  *ngIf="teamMember"
+                                  [data]="teamMember"
+                                  [isCloseButton]="false"
+                                  (click)="getSelectedResponsiblePerson(teamMember, taskObject)"
+                                ></main-app-mat-chips>
+                              </ng-container>
+                            </div>
+                          </div>
+                        </ng-template>
+                        <mat-icon
+                          *ngIf="
+                            permissionDetails.allowUpdate &&
+                            permissionDetails.assignee.edit &&
+                            taskObject?.assignee &&
+                            displayAssigneeCloseIcon &&
+                            hoverId === taskObject.id
+                          "
+                          (click)="onMouseOutItem(); removeAssigneeFromTask(taskObject)"
+                          class="filter-close"
+                          >close</mat-icon
+                        >
+                      </div>
+                    </td>
+                    <!-- Due Date -->
+                    <td
+                      class="align-center due-date-outer-wrapper"
+                      [ngClass]="permissionDetails.allowUpdate && permissionDetails.dueDate.edit ? '' : 'disable-item-container'"
+                    >
+                      <span
+                        [ngStyle]="{ color: taskObject.alertIndicate ? 'red' : '' }"
+                        class="task-info cursor-pointer"
+                        (click)="dueDatePicker.open(); currentTaskIdToEdit = taskObject?.id"
+                        *ngIf="taskObject?.due_date; else setDueDate"
+                        [ngClass]="permissionDetails.allowUpdate && permissionDetails.dueDate.edit ? '' : 'disable-item'"
+                        >{{ taskObject?.forMattedDueDate }}</span
+                      >
+                      <ng-template #setDueDate>
+                        <svg
+                          width="18"
+                          height="18"
+                          viewBox="0 0 18 18"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                          (click)="dueDatePicker.open(); currentTaskIdToEdit = taskObject?.id"
+                          [ngClass]="permissionDetails.allowUpdate && permissionDetails.dueDate.edit ? '' : 'disable-item'"
+                          class="cursor-pointer"
+                        >
+                          <path
+                            d="M6 1.5V3.75"
+                            stroke="#6C757D"
+                            stroke-width="1.5"
+                            stroke-miterlimit="10"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          />
+                          <path
+                            d="M12 1.5V3.75"
+                            stroke="#6C757D"
+                            stroke-width="1.5"
+                            stroke-miterlimit="10"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          />
+                          <path
+                            d="M2.625 6.81738H15.375"
+                            stroke="#6C757D"
+                            stroke-width="1.5"
+                            stroke-miterlimit="10"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          />
+                          <path
+                            d="M15.75 6.375V12.75C15.75 15 14.625 16.5 12 16.5H6C3.375 16.5 2.25 15 2.25 12.75V6.375C2.25 4.125 3.375 2.625 6 2.625H12C14.625 2.625 15.75 4.125 15.75 6.375Z"
+                            stroke="#6C757D"
+                            stroke-width="1.5"
+                            stroke-miterlimit="10"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          />
+                          <path d="M11.7713 10.2754H11.778" stroke="#6C757D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                          <path d="M11.7713 12.5254H11.778" stroke="#6C757D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                          <path d="M8.99686 10.2754H9.00359" stroke="#6C757D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                          <path d="M8.99686 12.5254H9.00359" stroke="#6C757D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                          <path d="M6.22049 10.2754H6.22723" stroke="#6C757D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                          <path d="M6.22049 12.5254H6.22723" stroke="#6C757D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                      </ng-template>
+                      <input
+                        matInput
+                        [value]="taskObject?.due_date || ''"
+                        class="hidden-date-picker-input"
+                        readonly
+                        [matDatepicker]="dueDatePicker"
+                        (dateChange)="updateDueDate($event, taskObject)"
+                      />
+                      <mat-datepicker (closed)="currentTaskIdToEdit = null" #dueDatePicker></mat-datepicker>
+                    </td>
+                    <!-- ETA -->
+                    <td
+                      class="align-center eta-outer-wrapper"
+                      [ngClass]="permissionDetails.allowUpdate && permissionDetails.eta.edit ? '' : 'disable-item-container'"
+                    >
+                      <span
+                        class="eta-value-wrapper"
+                        [ngClass]="permissionDetails.allowUpdate && permissionDetails.eta.edit ? '' : 'disable-item'"
+                        (mouseenter)="taskObject?.eta ? onMouseOverRemoveableItem(taskObject, 2) : null"
+                        (mouseleave)="onMouseOutItem()"
+                      >
+                        <span
+                          (click)="toggleETAOverlay(taskObject)"
+                          [ngClass]="permissionDetails.allowUpdate && permissionDetails.eta.edit ? '' : 'disable-item'"
+                          cdkOverlayOrigin
+                          #triggerETAOverlay="cdkOverlayOrigin"
+                        >
+                          <span class="task-info cursor-pointer" *ngIf="taskObject?.eta; else setEta">
+                            {{ taskObject?.eta }}
+                          </span>
+                          <ng-template #setEta>
+                            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg" class="cursor-pointer">
+                              <path
+                                d="M11.4298 1.5H6.56978C3.74978 1.5 3.53228 4.035 5.05478 5.415L12.9448 12.585C14.4673 13.965 14.2498 16.5 11.4298 16.5H6.56978C3.74978 16.5 3.53228 13.965 5.05478 12.585L12.9448 5.415C14.4673 4.035 14.2498 1.5 11.4298 1.5Z"
+                                stroke="#6C757D"
+                                stroke-width="1.5"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                              />
+                            </svg>
+                          </ng-template>
+                        </span>
+                        <!-- <mat-icon
+                        *ngIf="taskObject?.eta && displayEtaCloseIcon && hoverId === taskObject.id"
+                        (click)="onMouseOutItem(); removeEtaFromTask(taskObject)"
+                        class="filter-close"
+                        >close</mat-icon
+                      > -->
+                        <ng-template
+                          cdkConnectedOverlay
+                          (overlayOutsideClick)="taskIdToUpdateETA = null; currentTaskIdToEdit = null"
+                          (detach)="taskIdToUpdateETA = null; currentTaskIdToEdit = null"
+                          (backdropClick)="taskIdToUpdateETA = null; currentTaskIdToEdit = null"
+                          [cdkConnectedOverlayOrigin]="triggerETAOverlay"
+                          [cdkConnectedOverlayOpen]="taskIdToUpdateETA === taskObject.id"
+                          cdkConnectedOverlayBackdropClass="cdk-overlay-transparent-backdrop"
+                          [cdkConnectedOverlayHasBackdrop]="true"
+                        >
+                          <tms-workspace-eta-popup
+                            [ETAInput]="taskObject?.eta || ''"
+                            (ETAEmmiter)="getSelectedETA($event, taskObject)"
+                          ></tms-workspace-eta-popup>
+                        </ng-template>
+                      </span>
+                    </td>
+                    <!-- Worked hrs -->
+                    <td class="align-center worked-outer-wrapper">
+                      <span [ngStyle]="{ color: taskObject.workHrsAlertIndication ? 'red' : '' }" class="task-info">{{
+                        taskObject.total_worked_hours || '00h 00m'
+                      }}</span>
+                    </td>
+                    <!-- Timer And Time -->
+                    <td class="timer-outer-wrapper">
+                      <div class="timer-wrapper">
+                        <span *ngIf="timerStartedTaskId === taskObject.id" class="task-info timer-count">{{ timerCount }}</span>
+                        <span *ngIf="timerStartedTaskId !== taskObject.id" class="task-info timer-count">00:00</span>
+                        <div
+                          class="timer-icon-wrapper"
+                          [ngClass]="taskObject.state.toLowerCase() === 'completed' || this.userIsIntBreak ? 'disable-item-container' : ''"
+                        >
+                          <img
+                            src="assets/images/timer-start.svg"
+                            matTooltip="Start task"
+                            class="cursor-pointer"
+                            *ngIf="timerStartedTaskId !== taskObject.id || !taskObject._user_working_status"
+                            (click)="toogleTimer(taskObject)"
+                            [ngClass]="taskObject.state.toLowerCase() === 'completed' || this.userIsIntBreak ? 'disable-item' : ''"
+                          />
+                          <img
+                            src="assets/images/timer-pause.svg"
+                            matTooltip="Stop task"
+                            class="cursor-pointer"
+                            *ngIf="taskObject._user_working_status && timerStartedTaskId"
+                            (click)="toogleTimer(taskObject)"
+                            [ngClass]="taskObject.state.toLowerCase() === 'completed' || this.userIsIntBreak ? 'disable-item' : ''"
+                          />
+
+                          <svg
+                            width="18"
+                            height="18"
+                            viewBox="0 0 18 18"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                            *ngIf="taskObject._other_user_working_status"
+                            [matMenuTriggerFor]="userWorkingList"
+                            matTooltip="Work in progress"
+                            class="cursor-pointer"
+                          >
+                            <path
+                              d="M13.4996 5.37C13.4546 5.3625 13.4021 5.3625 13.3571 5.37C12.3221 5.3325 11.4971 4.485 11.4971 3.435C11.4971 2.3625 12.3596 1.5 13.4321 1.5C14.5046 1.5 15.3671 2.37 15.3671 3.435C15.3596 4.485 14.5346 5.3325 13.4996 5.37Z"
+                              stroke="#86969D"
+                              stroke-width="1.5"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                            />
+                            <path
+                              d="M12.7266 10.8301C13.7541 11.0026 14.8866 10.8226 15.6816 10.2901C16.7391 9.58512 16.7391 8.43012 15.6816 7.72512C14.8791 7.19262 13.7316 7.01262 12.7041 7.19262"
+                              stroke="#86969D"
+                              stroke-width="1.5"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                            />
+                            <path
+                              d="M4.47785 5.37C4.52285 5.3625 4.57535 5.3625 4.62035 5.37C5.65535 5.3325 6.48035 4.485 6.48035 3.435C6.48035 2.3625 5.61785 1.5 4.54535 1.5C3.47285 1.5 2.61035 2.37 2.61035 3.435C2.61785 4.485 3.44285 5.3325 4.47785 5.37Z"
+                              stroke="#86969D"
+                              stroke-width="1.5"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                            />
+                            <path
+                              d="M5.25008 10.8301C4.22258 11.0026 3.09008 10.8226 2.29508 10.2901C1.23758 9.58512 1.23758 8.43012 2.29508 7.72512C3.09758 7.19262 4.24508 7.01262 5.27258 7.19262"
+                              stroke="#86969D"
+                              stroke-width="1.5"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                            />
+                            <path
+                              d="M8.99957 10.9725C8.95457 10.965 8.90207 10.965 8.85707 10.9725C7.82207 10.935 6.99707 10.0875 6.99707 9.03754C6.99707 7.96504 7.85957 7.10254 8.93207 7.10254C10.0046 7.10254 10.8671 7.97254 10.8671 9.03754C10.8596 10.0875 10.0346 10.9425 8.99957 10.9725Z"
+                              stroke="#86969D"
+                              stroke-width="1.5"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                            />
+                            <path
+                              d="M6.81754 13.335C5.76004 14.04 5.76004 15.195 6.81754 15.9C8.01754 16.7025 9.98254 16.7025 11.1825 15.9C12.24 15.195 12.24 14.04 11.1825 13.335C9.99004 12.54 8.01754 12.54 6.81754 13.335Z"
+                              stroke="#86969D"
+                              stroke-width="1.5"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                            />
+                          </svg>
+
+                          <mat-menu
+                            #userWorkingList="matMenu"
+                            yPosition="below"
+                            class="dropdown-border-input-wrapper assignee-dropdown multi-user-icon-dropdown"
+                          >
+                            <div class="assignee-list-wrapper dropdown-border-listing-wrapper">
+                              <ng-container *ngFor="let user of taskObject?.working_users">
+                                <main-app-mat-chips
+                                  *ngIf="
+                                    user.userDetails &&
+                                    user.user_id !== loggedinUserid &&
+                                    user.running_status?.toLowerCase() === TASK_TIMER_CONSTANTS_local.ONGOING.toLowerCase()
+                                  "
+                                  [indicateUserWorkingLocation]="true"
+                                  [data]="user.userDetails"
+                                  [isCloseButton]="false"
+                                  [stopViewFullProfileOption]="true"
+                                  class="assignee-list"
+                                >
+                                </main-app-mat-chips>
+                              </ng-container>
+                            </div>
+                          </mat-menu>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <div
+                *ngIf="alloAddTask"
+                [ngClass]="projectObject.isShowNewTask ? 'add-new-task-wrapper view-all-bottom' : 'add-new-task-wrapper no-view'"
+              >
+                <a *ngIf="!projectObject.isShowNewTask" (click)="onNewTaskClick(projectObject)" class="new-task-blk">+ Add Task</a>
+    <main-app-tms-workspace-quick-add-task class="quick-add-task-wrapper" [selectedProjectId]="projectObject.groupId" [newTaskStateAndStatus]="newTaskStateAndStatus" [groupByFilterValue]="projectObject.groupType" [projectObjectInput]="projectObject" *ngIf="projectObject.isShowNewTask"
+        (emitTaskStatusEvent)="onEmmitTaskStatusEventChanged($event, projectObject)"></main-app-tms-workspace-quick-add-task>
+    <a *ngIf="projectObject?.showViewAll" class="view-all-task" [ngClass]="projectObject.isShowNewTask ? 'view-all-bottom' : ''"><label (click)="viewAllTask(projectObject.groupType, projectObject.groupId)">View All</label></a
+                >
+              </div>
+            </mat-expansion-panel>
+          </mat-accordion>
+        </div>
+      </ng-container>
+    </ng-container>
+    <ng-template #noDataFound>
+      <div class="table-responsive" *ngIf="!showSpinner">
+        <mat-list cdkDropList class="example-list norecordFound mat-elevation-z2">
+          <mat-list-item class="example-box">
+            <p class="no-records">No records found</p>
+          </mat-list-item>
+        </mat-list>
+      </div>
+      <div *ngIf="alloAddTask && !showSpinner" class="add-new-task-wrapper" [ngClass]="noRecordsQuickTaskViewed ? 'view-all-bottom' : 'no-view'">
+        <a (click)="noRecordsQuickTaskViewed = true" *ngIf="!noRecordsQuickTaskViewed" class="new-task-blk">+ Add Task</a>
+    <main-app-tms-workspace-quick-add-task class="quick-add-task-wrapper" [groupByFilterValue]="'project'" [selectedProjectId]="-1" *ngIf="noRecordsQuickTaskViewed" (emitTaskStatusEvent)="onEmmitTaskStatusEventChanged($event, null)"></main-app-tms-workspace-quick-add-task>
+    </div>
+</ng-template>
+
+<mat-menu #taskMenu="matMenu" [overlapTrigger]="false" class="task-menu">
+    <button mat-menu-item style="line-height: 40px; height: 40px; width: 180px">
+        <img class="right-icon" src="assets/images/right-icon.svg" alt="Image" style="vertical-align: sub; margin-right: 5px" />
+        Task
+      </button>
+    <button mat-menu-item style="line-height: 40px; height: 40px; width: 180px">
+        <img class="right-icon" src="assets/images/data.svg" alt="Image" style="vertical-align: sub; margin-right: 5px" />
+        Sub Task
+      </button>
+    <button mat-menu-item style="line-height: 40px; height: 40px; width: 180px">
+        <img class="right-icon" src="assets/images/bugs.svg" alt="Image" style="vertical-align: sub; margin-right: 5px" />
+        Bugs
+      </button>
+</mat-menu>
+</div>
+</div>

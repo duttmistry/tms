@@ -1,0 +1,212 @@
+<div class="container-wrapper leave-approval">
+    <mat-card>
+        <div class="workspace-blk workspace-border">
+            <strong>
+        <a routerLink="/leave">Leave Approval</a>
+        <!-- <p>({{ totalRecords ? totalRecords : 0 }})</p> -->
+      </strong>
+            <div routerLink="/leave" class="tertiary-button">Back</div>
+        </div>
+
+        <div class="approval-field">
+            <div class="leave-form">
+                <!-- <p class="leave-filter-text">Leave Filter By :</p> -->
+                <div class="close-icon-wrapper">
+                    <mat-form-field (click)="leaveDatePicker.open()" appearance="fill" class="form-field-width calender-icon medium-height-wrapper input-field-wrapper">
+                        <mat-label>Date</mat-label>
+                        <mat-date-range-input [min]="minDate" [formGroup]="filterByLeaveDate" [rangePicker]="leaveDatePicker">
+                            <input matStartDate (dateChange)="onFilterByDate($event)" formControlName="startDate" readonly />
+                            <input (dateChange)="onFilterByDate($event)" matEndDate formControlName="endDate" readonly />
+                        </mat-date-range-input>
+                        <mat-error *ngIf="filterByLeaveDate.controls['endDate'].hasError('endDateReq')">Please add end date.</mat-error>
+                        <mat-datepicker-toggle matIconPrefix [for]="leaveDatePicker"></mat-datepicker-toggle>
+                        <mat-date-range-picker #leaveDatePicker></mat-date-range-picker>
+                    </mat-form-field>
+                    <svg (click)="filterByLeaveDate.reset(); onFilterByDate($event)" *ngIf="filterByLeaveDate.controls['startDate'].value || filterByLeaveDate.controls['endDate'].value" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"
+                        class="filter-close">
+            <path
+              d="M8.00065 1.3335C4.32732 1.3335 1.33398 4.32683 1.33398 8.00016C1.33398 11.6735 4.32732 14.6668 8.00065 14.6668C11.674 14.6668 14.6673 11.6735 14.6673 8.00016C14.6673 4.32683 11.674 1.3335 8.00065 1.3335ZM10.2407 9.5335C10.434 9.72683 10.434 10.0468 10.2407 10.2402C10.1407 10.3402 10.014 10.3868 9.88732 10.3868C9.76065 10.3868 9.63398 10.3402 9.53399 10.2402L8.00065 8.70683L6.46732 10.2402C6.36732 10.3402 6.24065 10.3868 6.11398 10.3868C5.98732 10.3868 5.86065 10.3402 5.76065 10.2402C5.56732 10.0468 5.56732 9.72683 5.76065 9.5335L7.29398 8.00016L5.76065 6.46683C5.56732 6.2735 5.56732 5.9535 5.76065 5.76016C5.95398 5.56683 6.27398 5.56683 6.46732 5.76016L8.00065 7.2935L9.53399 5.76016C9.72732 5.56683 10.0473 5.56683 10.2407 5.76016C10.434 5.9535 10.434 6.2735 10.2407 6.46683L8.70732 8.00016L10.2407 9.5335Z"
+              fill="#86969D"
+            />
+          </svg>
+                </div>
+                <!-- <span
+          *ngIf="
+            filterByLeaveStatus.value || filterByLeaveDate.controls['startDate'].value || filterByLeaveDate.controls['endDate'].value;
+            else disableFilter
+          "
+        >
+          <button color="primary" mat-icon-button matTooltip="Turn the filters off" (click)="resetAllFilters()">
+            <mat-icon>filter_list</mat-icon>
+          </button>
+        </span>
+        <ng-template #disableFilter>
+          <button disabled mat-icon-button (click)="resetAllFilters()">
+            <mat-icon>filter_list_off</mat-icon>
+          </button>
+        </ng-template> -->
+            </div>
+
+            <div class="assignee-wrapper task-right-filter">
+                <div class="close-icon-wrapper">
+                    <mat-form-field class="assignee-field small-dropdown medium-height-wrapper input-field-wrapper">
+                        <mat-label *ngIf="UserFilterControl?.value?.length == 0">Users</mat-label>
+                        <mat-label class="select-value" *ngIf="UserFilterControl?.value?.length !== 0">
+                            <!--               
+              <span class="value">{{(UserFilterControl.value?.[0]?.first_name + '' + UserFilterControl.value?.[0]?.last_name) || ""}}</span>
+              <span *ngIf="(UserFilterControl?.value?.length || 0) > 1" class="add-value"> +{{ (UserFilterControl.value?.length || 0) - 1 }} </span> -->
+                        </mat-label>
+                        <mat-select panelClass="assignee-select" #assigneeList [formControl]="UserFilterControl" multiple (selectionChange)="changedSelection = true" (openedChange)="assigneeSelectionToggled($event)" [ngClass]="assigneeList.panelOpen ? 'arrow-up' : 'arrow-down'">
+                            <div class="button-container">
+                                <div class="input-wrapper">
+                                    <input type="text" placeholder="Search" (keyup)="filterList($event, leaveUsersData)" [formControl]="employeeSearchControl" autofocus />
+                                    <img src="assets/images/search.svg" alt="search" class="search" />
+                                </div>
+                                <div class="button-wrapper">
+                                    <!-- assigneeList.close() -->
+                                    <span (click)="selectAllAsignee()">Select All</span>
+                                    <span (click)="unselcteAllAsignee()">Clear All</span>
+                                </div>
+                                <!-- <button  (click)="getProjectidsWiseTaskList(); assigneeList.close()">&#10004;</button> -->
+                            </div>
+                            <mat-select-trigger class="select-value" [matTooltip]="UserFilterControl.value?.[0]?.first_name && UserFilterControl.value?.[0]?.last_name ? UserFilterControl.value?.[0]?.first_name + '' + UserFilterControl.value?.[0]?.last_name :''">
+                                <span class="value">{{UserFilterControl.value?.[0]?.first_name || ''}} {{UserFilterControl.value?.[0]?.last_name || ''}} </span>
+                                <span *ngIf="(UserFilterControl?.value?.length || 0) > 1" class="add-value"> +{{ (UserFilterControl.value?.length || 0) - 1 }} </span>
+                            </mat-select-trigger>
+                            <div class="mat-option-wrapper">
+                                <mat-option *ngFor="let user of leaveUsers" (click)="onAssigneeCheckChangeOption(user)" [value]="user">{{ (user?.first_name || '') + ' ' + (user?.last_name || '') }}
+                                </mat-option>
+                            </div>
+                        </mat-select>
+                    </mat-form-field>
+                    <svg *ngIf="UserFilterControl?.value?.length !== 0" (click)="clearAssigneeFilter(); getLeaveUsersData()" class="filter-close" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path
+              d="M8.00065 1.3335C4.32732 1.3335 1.33398 4.32683 1.33398 8.00016C1.33398 11.6735 4.32732 14.6668 8.00065 14.6668C11.674 14.6668 14.6673 11.6735 14.6673 8.00016C14.6673 4.32683 11.674 1.3335 8.00065 1.3335ZM10.2407 9.5335C10.434 9.72683 10.434 10.0468 10.2407 10.2402C10.1407 10.3402 10.014 10.3868 9.88732 10.3868C9.76065 10.3868 9.63398 10.3402 9.53399 10.2402L8.00065 8.70683L6.46732 10.2402C6.36732 10.3402 6.24065 10.3868 6.11398 10.3868C5.98732 10.3868 5.86065 10.3402 5.76065 10.2402C5.56732 10.0468 5.56732 9.72683 5.76065 9.5335L7.29398 8.00016L5.76065 6.46683C5.56732 6.2735 5.56732 5.9535 5.76065 5.76016C5.95398 5.56683 6.27398 5.56683 6.46732 5.76016L8.00065 7.2935L9.53399 5.76016C9.72732 5.56683 10.0473 5.56683 10.2407 5.76016C10.434 5.9535 10.434 6.2735 10.2407 6.46683L8.70732 8.00016L10.2407 9.5335Z"
+              fill="#86969D"
+            />
+          </svg>
+                </div>
+            </div>
+            <mat-form-field class="small-dropdown" #selectFormField>
+                <mat-label>Status </mat-label>
+                <mat-select #selectField [formControl]="statusFilterControl" (selectionChange)="filterByStatus()" [ngClass]="selectField.panelOpen ? 'arrow-up' : 'arrow-down'">
+                    <mat-option *ngFor="let status of LEAVE_STATUS_FILTER_OPTIONS" [value]="status.value">
+                        {{ status.title }}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+            <div class="export-button">
+                <button class="next" (click)="exportExcel()" [disabled]="isExportTimingHistory">
+          <span *ngIf="isExportTimingHistory; else exportButtonContent">
+            <mat-spinner diameter="20" color="white"></mat-spinner>
+            <!-- You can customize the loader here -->
+          </span>
+          <ng-template #exportButtonContent>
+            <ng-container> Export as Excel</ng-container>
+          </ng-template>
+        </button>
+            </div>
+        </div>
+        <div class="leave-approval-main">
+            <div class="table-responsive">
+                <table mat-table [dataSource]="dataSource.data.length > 0 ? dataSource : emptyData" *ngIf="!showSpinner; else spinnerSection" matSort (matSortChange)="announceSortChange($event)">
+                    <ng-container matColumnDef="user">
+                        <th mat-header-cell *matHeaderCellDef>User</th>
+                        <td mat-cell *matCellDef="let element" (click)="redirectToViewLeaveHistory(element?.user?.id)" style="cursor: pointer">
+                            <div class="approval-img">
+                                <img #img (error)="img.src = 'assets/images/default.png'" [src]="_base_url + element?.user?.employee_image" /> {{ element?.user?.first_name + ' ' + element?.user?.last_name + '&nbsp;' }}
+                                <ng-container *ngIf="element?.leaveRejectHistoryByTlPm && element?.leaveRejectHistoryByTlPm?.length > 0">
+                                    <mat-icon color="warn" [matTooltip]="getTooltipText(element?.leaveRejectHistoryByTlPm)">error_outline</mat-icon>
+                                    {{ '&nbsp;' }}
+                                </ng-container>
+                                <ng-container *ngIf="element?.leaveApprovalHistoryByTlPm && element?.leaveApprovalHistoryByTlPm?.length > 0">
+                                    <mat-icon class="green-icon" [matTooltip]="getTooltipText(element?.leaveApprovalHistoryByTlPm)">check_circle</mat-icon>
+                                </ng-container>
+                            </div>
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="appliedDate">
+                        <th mat-header-cell *matHeaderCellDef>Applied date</th>
+                        <td mat-cell *matCellDef="let element" (click)="redirectToDetails(element.id)" style="cursor: pointer">{{ element.appliedDate }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="leaveDateFromTo">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by Leave date" (click)="orderByFromDate(sort)">
+                            Leave date
+                        </th>
+                        <td mat-cell *matCellDef="let element" [ngClass]="{ 'highlight-cell': element.isLeaveInNextThreeDays }" (click)="redirectToDetails(element.id)" style="cursor: pointer">
+                            {{ element.leaveDateFromTo }}
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="leaveType">
+                        <th mat-header-cell *matHeaderCellDef>Type</th>
+                        <td mat-cell *matCellDef="let element" class="pending-report" (click)="redirectToDetails(element.id)" style="cursor: pointer">
+                            {{ element.leaveType }}
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="leaveSubject">
+                        <th mat-header-cell *matHeaderCellDef>Subject</th>
+                        <td mat-cell *matCellDef="let element" class="pending-report" (click)="redirectToDetails(element.id)" style="cursor: pointer" matTooltip="{{ element.leaveDescription }}">
+                            {{ element.leaveSubject }}
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="noOfDays">
+                        <th mat-header-cell *matHeaderCellDef>No. of days</th>
+                        <td mat-cell *matCellDef="let element" class="pending-report" (click)="redirectToDetails(element.id)" style="cursor: pointer">
+                            {{ element.noOfDays }}
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="leaveStatus">
+                        <th mat-header-cell *matHeaderCellDef class="table-align">Status</th>
+                        <td class="table-align status" mat-cell *matCellDef="let element" [ngClass]="
+                element.leaveStatus == 'PENDING'
+                  ? 'pending-report'
+                  : element.leaveStatus == 'REJECTED'
+                  ? 'rejected-report'
+                  : element.leaveStatus == 'APPROVED'
+                  ? 'approved-report'
+                  : 'cancel-report'
+              ">
+                            <span>{{ element.leaveStatus | titlecase }}</span>
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="action">
+                        <th mat-header-cell *matHeaderCellDef class="approval-action">Actions</th>
+                        <td mat-cell *matCellDef="let element" class="leaves-image">
+                            <div class="approval-btn">
+                                <div matTooltip="View Details" class="tertiary-button" (click)="redirectToDetails(element.id)">
+                                    <span>View</span>
+                                </div>
+                                <div matTooltip="Update leave" class="edit-btn" *ngIf="isUserLeaveResponsiblePerson && !element.isDatePassed && (element.leaveStatus == APPROVED || element.leaveStatus == PENDING)" alt="edit" (click)="redirectToEditLeave(element.id)">
+                                    <span>Edit</span>
+                                </div>
+
+                                <div matTooltip="Approve leave" class="approve-btn" *ngIf="element.status === PENDING && element.leaveStatus === PENDING" alt="edit" (click)="ApproveRejectLeave(APPROVED, element.id)">
+                                    <span>Approve</span>
+                                </div>
+
+                                <div matTooltip="Reject leave" class="reject-btn" *ngIf="element.status === PENDING && element.leaveStatus === PENDING" alt="edit" (click)="ApproveRejectLeave(REJECTED, element.id)">
+                                    <span>Reject</span>
+                                </div>
+                                <div matTooltip="Cancel leave" class="cancel-btns" alt="edit" (click)="cancelLeave(element.id)" *ngIf="isUserLeaveResponsiblePerson && !element.isDatePassed && element.leaveStatus == APPROVED">
+                                    <span>Cancel</span>
+                                </div>
+                            </div>
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="empty-row">
+                        <td mat-cell *matCellDef="let element">No records found</td>
+                    </ng-container>
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: dataSource.data.length > 0 ? displayedColumns : ['empty-row']"></tr>
+                </table>
+            </div>
+            <mat-paginator *ngIf="dataSource.data.length > 0" [pageSize]="params.limit" [length]="totalRecords" [pageIndex]="params.page - 1" [pageSizeOptions]="[5, 10, 25, 100]" (page)="onPageSelectionChange($event)" aria-label="Select page of users" class="pagination"></mat-paginator>
+        </div>
+    </mat-card>
+</div>
+
+<ng-template #spinnerSection>
+    <div [mainAppSpinner]="showSpinner"></div>
+</ng-template>

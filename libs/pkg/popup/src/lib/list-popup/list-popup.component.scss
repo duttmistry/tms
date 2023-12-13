@@ -1,0 +1,75 @@
+// @import '@angular/cdk/overlay-prebuilt.css';
+@import './../../../../../../apps/angular/main-app/src/variables.scss';
+@import './../../../../../../apps/angular/main-app/src/mixins.scss';
+@import './../../../../../../apps/angular/main-app/src/assets/fonts/fonts.scss';
+.example-list {
+  .mdc-button {
+    display: block;
+    margin: 0 !important;
+    height: 36px !important;
+    padding: 0 !important;
+  }
+}
+
+.dialog-mat-icon {
+  border: 1px solid $theme-border-color-gray;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: all 0.5s ease;
+  color: $theme-main-color-light;
+  font-size: $theme-main-extra-extra-large-font;
+  @include flex;
+  @include flex-align-center;
+  @include flex-justify-center;
+  height: 22px;
+  width: 22px;
+  &:hover {
+    background-color: $theme-bg-color-gray;
+  }
+}
+
+.btn-margin {
+  margin: 0 20px 0 auto !important;
+}
+
+::ng-deep .mat-mdc-raised-button>.mat-icon {
+  margin: auto;
+}
+
+.team-flex {
+  @include flex;
+}
+
+.share-icon {
+  vertical-align: sub;
+}
+
+.dropdown-border-input-wrapper {
+  overflow: unset !important;
+  padding: 0 !important;
+  max-height: 400px !important;
+  .button-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 10px;
+  }
+  .mat-option-wrapper {
+    overflow: auto;
+    max-height: 339px;
+  }
+}
+
+.close-button-wrapper {
+  background: #336;
+  color: #fff;
+  position: absolute;
+  right: -10px;
+  top: -11px;
+  padding: 0;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

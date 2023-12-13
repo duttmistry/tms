@@ -1,0 +1,708 @@
+<table class="add-new-task-wrapper-table">
+    <tr>
+        <td colspan="10">
+            <div *ngIf="showAsListItem">
+                <form [formGroup]="quickAddTaskFormGroup">
+                    <div class="add-new-list-task">
+                        <div class="add-new-task-left">
+                            <span [matMenuTriggerFor]="belowMenu" class="cursor-pointer" matTooltip="Task type">
+                <ng-container *ngIf="!_quickAddTask['taskType'].value; else selectedTypeTemplate">
+                  <span class="task-cell task-color empty-status-indication" mat-tooltip="Task Type"></span>
+                            </ng-container>
+                            <ng-template #selectedTypeTemplate>
+                                <span class="task-cell task-color" [ngStyle]="{ 'background-color': getTypeBaseColor(_quickAddTask['taskType'].value) }"></span>
+                            </ng-template>
+                            </span>
+                            <mat-menu #belowMenu="matMenu" yPosition="below" class="task-type-list">
+                                <div mat-menu-item *ngFor="let taskTypeObject of taskTypeList; let i = index" (click)="onTaskTypeChange(taskTypeObject)" class="task-type-listing">
+                                    <span>{{ taskTypeObject.name }}</span>
+                                </div>
+                            </mat-menu>
+                            <!-- <ng-template
+                cdkConnectedOverlay
+                (overlayOutsideClick)="isOverlayTaskState = false"
+                [cdkConnectedOverlayOrigin]="triggerStateSelection"
+                [cdkConnectedOverlayOpen]="isOverlayTaskState"
+              >
+                <main-app-state-popup [listInput]="taskStateList" (selectionEmmiter)="onSelectState($event)"></main-app-state-popup>
+              </ng-template> -->
+                            <ng-container *ngIf="!parentTaskId; else inputWithoutAutofocusTemplate">
+                                <mat-form-field class="task-field">
+                                    <input matInput autocomplete="off" autoFocusDirective matTooltip="Task Name" placeholder="Task Name" formControlName="title" />
+                                </mat-form-field>
+                            </ng-container>
+                            <ng-template #inputWithoutAutofocusTemplate>
+                                <mat-form-field class="task-field">
+                                    <input matInput autocomplete="off" matTooltip="Task Name" placeholder="Task Name" formControlName="title" />
+                                </mat-form-field>
+                            </ng-template>
+                        </div>
+
+                        <div class="add-new-task-right">
+                            <!-- Project -->
+                            <div class="project-wrapper">
+                                <span class="project-inner" [ngStyle]="{ cursor: !parentTaskId ? 'pointer' : 'default' }" matTooltip="Project" (click)="toggleOverlayProjectSelection()" cdkOverlayOrigin #triggerProjectSelection="cdkOverlayOrigin">
+                  <ng-container *ngIf="!_quickAddTask['project'].value; else selectedProjectTemplate"
+                    ><span class="task-left-label-heading">
+                      <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg" class="red-svg">
+                        <path
+                          d="M6 9.15039H11.25"
+                          stroke="#6C757D"
+                          stroke-width="1.5"
+                          stroke-miterlimit="10"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                        <path
+                          d="M6 12.1504H9.285"
+                          stroke="#6C757D"
+                          stroke-width="1.5"
+                          stroke-miterlimit="10"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                        <path
+                          d="M7.5 4.5H10.5C12 4.5 12 3.75 12 3C12 1.5 11.25 1.5 10.5 1.5H7.5C6.75 1.5 6 1.5 6 3C6 4.5 6.75 4.5 7.5 4.5Z"
+                          stroke="#6C757D"
+                          stroke-width="1.5"
+                          stroke-miterlimit="10"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                        <path
+                          d="M12 3.01465C14.4975 3.14965 15.75 4.07215 15.75 7.49965V11.9996C15.75 14.9996 15 16.4996 11.25 16.4996H6.75C3 16.4996 2.25 14.9996 2.25 11.9996V7.49965C2.25 4.07965 3.5025 3.14965 6 3.01465"
+                          stroke="#6C757D"
+                          stroke-width="1.5"
+                          stroke-miterlimit="10"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                      </svg>
+                    </span>
+                                </ng-container>
+                                <ng-template #selectedProjectTemplate>
+                                    <span class="project-name" [ngClass]="parentTaskId ? 'not-allowed-cursor' : ''">{{
+                      _quickAddTask['project'].value.name || ''
+                    }}</span>
+                                </ng-template>
+                                </span>
+
+                                <ng-template cdkConnectedOverlay (overlayOutsideClick)="isOverlayProjectSelection = false" [cdkConnectedOverlayOrigin]="triggerProjectSelection" [cdkConnectedOverlayOpen]="isOverlayProjectSelection">
+                                    <main-app-user-dialog class="task-dialog" [listInput]="projectNameList" [searchText]="'Search Project'" [isShowSearchBox]="true" (emmitSelectedUser)="getSelectedProject($event)" [isUsers]="false"></main-app-user-dialog>
+                                </ng-template>
+                            </div>
+                            <!-- Task type -->
+                            <!-- <div class="task-type-wrapper">
+                <div
+                  matTooltip="Task Status"
+                  (click)="toggleOverlayTaskStateSelection()"
+                  cdkOverlayOrigin
+                  #triggerStateSelection="cdkOverlayOrigin"
+                  class="cursor-pointer"
+                >
+                  <span>{{ _quickAddTask['taskState'].value?.name || '' }}</span>
+                  <svg
+                    class="cursor-pointer red-svg"
+                    *ngIf="!quickAddTaskFormGroup.controls['taskState'].value"
+                    width="18"
+                    height="18"
+                    viewBox="0 0 18 18"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M6.75 16.5H11.25C15 16.5 16.5 15 16.5 11.25V6.75C16.5 3 15 1.5 11.25 1.5H6.75C3 1.5 1.5 3 1.5 6.75V11.25C1.5 15 3 16.5 6.75 16.5Z"
+                      stroke="#86969D"
+                      stroke-width="1.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                    <path
+                      d="M7.19957 6.72754L5.33207 8.59504C5.11457 8.81254 5.11457 9.18004 5.33207 9.39754L7.19957 11.265"
+                      stroke="#86969D"
+                      stroke-width="1.5"
+                      stroke-miterlimit="10"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                    <path
+                      d="M10.7998 6.72754L12.6673 8.59504C12.8848 8.81254 12.8848 9.18004 12.6673 9.39754L10.7998 11.265"
+                      stroke="#86969D"
+                      stroke-width="1.5"
+                      stroke-miterlimit="10"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                </div>
+                <ng-template
+                  cdkConnectedOverlay
+                  (overlayOutsideClick)="isOverlayTaskState = false"
+                  [cdkConnectedOverlayOrigin]="triggerStateSelection"
+                  [cdkConnectedOverlayOpen]="isOverlayTaskState"
+                >
+                  <main-app-state-popup [listInput]="taskStateList" (selectionEmmiter)="onSelectState($event)"></main-app-state-popup>
+                </ng-template>
+              </div> -->
+
+                            <!-- Task Sub-Status -->
+                            <div matTooltip="Status" class="status-wrapper" [ngClass]="_quickAddTask['project'].value && _quickAddTask['taskState'].value ? '' : 'disable-container'">
+                                <span class="cursor-pointer status-icon" (click)="toggleOverlayTaskStatusSelection()" cdkOverlayOrigin #triggerStatusSelection="cdkOverlayOrigin" [ngClass]="_quickAddTask['project'].value && _quickAddTask['taskState'].value ? '' : 'disable-item'">
+                  <ng-container *ngIf="!_quickAddTask['taskStatus'].value; else selectedStatusTemplate">
+                    <svg class="red-svg" width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M9.27734 6.66016H13.2148" stroke="#86969D" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                      <path
+                        d="M4.78516 6.66016L5.34766 7.22266L7.03516 5.53516"
+                        stroke="#86969D"
+                        stroke-width="1.5"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                      <path d="M9.27734 11.9102H13.2148" stroke="#86969D" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                      <path
+                        d="M4.78516 11.9102L5.34766 12.4727L7.03516 10.7852"
+                        stroke="#86969D"
+                        stroke-width="1.5"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                      <path
+                        d="M6.75 16.5H11.25C15 16.5 16.5 15 16.5 11.25V6.75C16.5 3 15 1.5 11.25 1.5H6.75C3 1.5 1.5 3 1.5 6.75V11.25C1.5 15 3 16.5 6.75 16.5Z"
+                        stroke="#86969D"
+                        stroke-width="1.5"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                    </svg>
+                  </ng-container>
+                  <ng-template #selectedStatusTemplate>
+                    <span> {{ _quickAddTask['taskStatus'].value.name || '' }}</span>
+                                </ng-template>
+                                </span>
+
+                                <ng-template cdkConnectedOverlay (overlayOutsideClick)="isOverlayTaskStatus = false" [cdkConnectedOverlayOrigin]="triggerStatusSelection" [cdkConnectedOverlayOpen]="isOverlayTaskStatus">
+                                    <main-app-status-popup [listInput]="filteredSubStatusList" (statusEmmiter)="getSelectedTaskStatus($event)"></main-app-status-popup>
+                                </ng-template>
+                            </div>
+
+                            <!-- Section -->
+                            <!-- <span class="task-left-label">
+          <span class="cursor-pointer" (click)="toggleOverlayForTaskSections()" cdkOverlayOrigin #triggerTaskLabels="cdkOverlayOrigin">
+            <ng-container *ngIf="_quickAddTask['section'].value; else taskSectionTemplate"
+              ><span>
+                <small
+                  ><strong>
+                    Section {{ _quickAddTask['section'].value.title || '' }}
+                    <mat-icon (click)="$event.stopPropagation(); onRemoveTaskSection()">cancel</mat-icon></strong
+                  ></small
+                ></span
+              ></ng-container
+            >
+          </span>
+        </span>
+        <span class="task-right-label">
+          <ng-template #taskSectionTemplate>
+            <span>
+              <small><strong> Section: </strong></small></span
+            >
+          </ng-template>
+          <ng-template
+            cdkConnectedOverlay
+            (overlayOutsideClick)="isOverlayOpenForSections = false"
+            [cdkConnectedOverlayOrigin]="triggerTaskLabels"
+            [cdkConnectedOverlayOpen]="isOverlayOpenForSections"
+          >
+            <tms-workspace-labels-popup
+              [listInput]="sectionsList"
+              (itemEmmiter)="onSectionSelect($event)"
+              [messageToCreateNewItem]="createSectionForMessage"
+            ></tms-workspace-labels-popup>
+          </ng-template>
+        </span>
+       -->
+
+                            <!-- Priority -->
+                            <div class="priroty-wrapper">
+                                <img *ngIf="quickAddTaskFormGroup.controls['priorityFormControl'].value?.priorityImg; else clearPriorityImg" class="cursor-pointer" [matMenuTriggerFor]="priorityMenu" [src]="'assets/images/' + quickAddTaskFormGroup.controls['priorityFormControl'].value?.priorityImg"
+                                    matTooltip="Priority" />
+                                <ng-template #clearPriorityImg>
+                                    <img [matMenuTriggerFor]="priorityMenu" [src]="'assets/images/flag.svg'" />
+                                </ng-template>
+                                <mat-menu #priorityMenu="matMenu" yPosition="below" class="priority-menu-wrapper cursor-pointer">
+                                    <div class="prirority-dropdown-list" mat-menu-item *ngFor="let priority of priorityList; let i = index" (click)="onPriorityChange(priority)">
+                                        <img [src]="'assets/images/' + priority.priorityImg" />
+                                        <span class="priority-name">{{ priority.name }}</span>
+                                    </div>
+                                    <div class="prirority-dropdown-list clear-list" mat-menu-item (click)="clearPriority()">
+                                        <img [src]="'assets/images/clear.svg'" />
+                                        <span class="priority-name">Clear</span>
+                                    </div>
+                                </mat-menu>
+                            </div>
+
+                            <!-- Labels -->
+                            <div class="label-wrapper-outer" matTooltip="Labels" [ngClass]="_quickAddTask['project'].value ? '' : 'disable-container'" cdkOverlayOrigin #triggerQuickTaskLabels="cdkOverlayOrigin" (click)="_quickAddTask['project'].value ? editTaskLables() : $event.preventDefault()">
+                                <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg" class="cursor-pointer" *ngIf="quickAddTaskFormGroup.controls['labels']?.value && quickAddTaskFormGroup.controls['labels']?.value?.length === 0">
+                  <path
+                    d="M3.12779 11.4749L6.52529 14.8724C7.92029 16.2674 10.1853 16.2674 11.5878 14.8724L14.8803 11.5799C16.2753 10.1849 16.2753 7.91985 14.8803 6.51735L11.4753 3.12735C10.7628 2.41485 9.78029 2.03235 8.77529 2.08485L5.02529 2.26485C3.52529 2.33235 2.33279 3.52485 2.25779 5.01735L2.07779 8.76735C2.03279 9.77985 2.41529 10.7624 3.12779 11.4749Z"
+                    stroke="#6C757D"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                  <path
+                    d="M7.125 9C8.16053 9 9 8.16053 9 7.125C9 6.08947 8.16053 5.25 7.125 5.25C6.08947 5.25 5.25 6.08947 5.25 7.125C5.25 8.16053 6.08947 9 7.125 9Z"
+                    stroke="#6C757D"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                  />
+                </svg>
+
+                                <span *ngFor="let label of quickAddTaskFormGroup.controls['labels']?.value?.slice(0, 1)" class="task-info label-wrapper cursor-pointer" [ngStyle]="{ 'background-color': label?.color?.bgColor, color: label?.color?.color }">
+                  {{ label.title }}
+                </span>
+                                <div class="count" *ngIf="quickAddTaskFormGroup.controls['labels']?.value?.length > 1">
+                                    +{{ quickAddTaskFormGroup.controls['labels'].value?.length - 1 }}
+                                </div>
+                            </div>
+                            <!-- <mat-menu #menuQuickTaskLables="matMenu" class="ios">
+                <button
+                  
+                  class="ios"
+                  *ngFor="let label of quickAddTaskFormGroup.controls['labels']?.value?.slice(1)"
+                  [ngStyle]="{ 'background-color': label?.color }"
+                >
+                  {{ label.title }}
+                </button>
+              </mat-menu> -->
+                            <ng-template class="ios" cdkConnectedOverlay cdkConnectedOverlayBackdropClass="cdk-overlay-transparent-backdrop" [cdkConnectedOverlayHasBackdrop]="true" [cdkConnectedOverlayOrigin]="triggerQuickTaskLabels" [cdkConnectedOverlayOpen]="openQuickTaskLabelsSection"
+                                (detach)="openQuickTaskLabelsSection = false; saveLabels()" (backdropClick)="openQuickTaskLabelsSection = false">
+                                <span class="task-right-label custom-overlay">
+                  <div class="section-menu-wrapper-outer">
+                    <div
+                      class="section-menu-wrapper-outer-inner"
+                      [ngClass]="tempLabelStorage && tempLabelStorage.length > 0 ? '' : 'empty-labels-selection'"
+                    >
+                      <ng-container *ngIf="tempLabelStorage && tempLabelStorage.length > 0" style="display: flex; width: 100%">
+                        <span
+                          *ngFor="let item of tempLabelStorage"
+                          [ngStyle]="{ 'background-color': item?.color?.bgColor, color: item?.color?.color }"
+                          class="label-wrapper"
+                        >
+                          {{ item?.title || '' }}
+                          <mat-icon (click)="$event.stopPropagation(); onRemoveTaskLabel(item)">cancel</mat-icon>
+                        </span>
+                                <span [cpFallbackColor]="'#800101'" [cpPresetColors]="presetColors" [(cpToggle)]="toggle" [(colorPicker)]="color" (colorPickerChange)="onLabelColorChange($event)"></span>
+                                </ng-container>
+                        </div>
+
+                        <!--  <button cdkOverlayOrigin #triggerAddTask="cdkOverlayOrigin" (click)="isOverlayOpenForTaskLabels = true">+</button>
+                <button (click)="saveLabels()">&#9989;</button>-->
+
+                        <!--      <ng-template
+                  cdkConnectedOverlay
+                  (overlayOutsideClick)="isOverlayOpenForTaskLabels = false"
+                  [cdkConnectedOverlayOrigin]="triggerAddTask"
+                  [cdkConnectedOverlayOpen]="isOverlayOpenForTaskLabels"
+                >
+                  <tms-workspace-labels-popup
+                    [listInput]="availableProjectLabels"
+                    (itemEmmiter)="onTaskLabelSelect($event)"
+                    [messageToCreateNewItem]="createLabelForMessage"
+                  ></tms-workspace-labels-popup>
+                </ng-template>-->
+                        <tms-workspace-labels-popup [placeHolder]="'Search or Create New'" [isIntaskList]="true" [listInput]="filteredAvailableLabels" (itemEmmiter)="onTaskLabelSelect($event)" [messageToCreateNewItem]="createLabelForMessage" [hasSelctedLables]="tempLabelStorage?.length > 0"></tms-workspace-labels-popup>
+                    </div>
+                    </span>
+                    </ng-template>
+
+                    <!-- Assignee -->
+                    <div class="assignee-wrapper" (mouseenter)="_quickAddTask['assignTo'].value ? (showAssigneeCloseIocn = true) : null" (mouseleave)="showAssigneeCloseIocn = false" [ngClass]="_quickAddTask['project'].value ? '' : 'disable-container'">
+                        <span [ngClass]="_quickAddTask['project'].value ? '' : 'disable-item'" class="cursor-pointer assignee-block" (click)="toggleOverlayAssignedTo()" cdkOverlayOrigin #triggerdialog="cdkOverlayOrigin">
+                  <ng-container *ngIf="!_quickAddTask['assignTo'].value; else assignToTemplate">
+                    <svg
+                      matTooltip="Assignee"
+                      class="cursor-pointer"
+                      width="18"
+                      height="18"
+                      viewBox="0 0 18 18"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M8.59529 10.297C9.75923 10.297 10.7028 9.35347 10.7028 8.18953C10.7028 7.02559 9.75923 6.08203 8.59529 6.08203C7.43135 6.08203 6.48779 7.02559 6.48779 8.18953C6.48779 9.35347 7.43135 10.297 8.59529 10.297Z"
+                        stroke="#6C757D"
+                        stroke-width="1.5"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                      <path
+                        d="M12.4876 15.1491C12.4876 13.4016 10.7476 11.9766 8.59514 11.9766C6.44264 11.9766 4.70264 13.3941 4.70264 15.1491"
+                        stroke="#6C757D"
+                        stroke-width="1.5"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                      <path
+                        d="M15.75 9.375C15.75 13.3125 12.5625 16.5 8.625 16.5C4.6875 16.5 1.5 13.3125 1.5 9.375C1.5 5.4375 4.6875 2.25 8.625 2.25C9.6075 2.25 10.545 2.44499 11.4 2.80499C11.3025 3.10499 11.25 3.42 11.25 3.75C11.25 4.3125 11.4075 4.845 11.685 5.295C11.835 5.55 12.03 5.78248 12.255 5.97748C12.78 6.45748 13.4775 6.75 14.25 6.75C14.58 6.75 14.895 6.69748 15.1875 6.59248C15.5475 7.44748 15.75 8.3925 15.75 9.375Z"
+                        stroke="#6C757D"
+                        stroke-width="1.5"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                      <path
+                        d="M17.25 3.75C17.25 3.99 17.22 4.22249 17.16 4.44749C17.0925 4.74749 16.9725 5.04 16.815 5.295C16.455 5.9025 15.8775 6.37498 15.1875 6.59248C14.895 6.69748 14.58 6.75 14.25 6.75C13.4775 6.75 12.78 6.45748 12.255 5.97748C12.03 5.78248 11.835 5.55 11.685 5.295C11.4075 4.845 11.25 4.3125 11.25 3.75C11.25 3.42 11.3025 3.10499 11.4 2.80499C11.5425 2.36999 11.7825 1.98002 12.0975 1.65752C12.645 1.09502 13.41 0.75 14.25 0.75C15.135 0.75 15.9375 1.13251 16.4775 1.74751C16.9575 2.28001 17.25 2.985 17.25 3.75Z"
+                        stroke="#6C757D"
+                        stroke-width="1.5"
+                        stroke-miterlimit="10"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                      <path
+                        d="M15.3673 3.73438H13.1323"
+                        stroke="#6C757D"
+                        stroke-width="1.5"
+                        stroke-miterlimit="10"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                      <path
+                        d="M14.25 2.63965V4.88214"
+                        stroke="#6C757D"
+                        stroke-width="1.5"
+                        stroke-miterlimit="10"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                    </svg>
+                  </ng-container>
+                  <ng-template #assignToTemplate>
+                    <span class="name-icon-wrapper cursor-pointer">
+                      <main-app-mat-chips
+                        [indicateUserWorkingLocation]="true"
+                        [viewAvatarOnly]="true"
+                        *ngIf="_quickAddTask['assignTo'].value"
+                        [data]="_quickAddTask['assignTo'].value"
+                        [isCloseButton]="false"
+                        [stopViewFullProfileOption]="true"
+                        class="cursor-pointer"
+                        [matTooltip]="
+                          _quickAddTask['assignTo'].value?.name
+                            ? 'Assignee: ' + _quickAddTask['assignTo'].value?.name
+                            : 'Assignee: ' + _quickAddTask['assignTo'].value?.first_name + ' ' + _quickAddTask['assignTo'].value?.last_name
+                        "
+                      >
+                      </main-app-mat-chips>
+                      <mat-icon *ngIf="showAssigneeCloseIocn" (click)="$event.stopPropagation(); removeAssignTo('assignTo')" class="filter-close"
+                        >close</mat-icon
+                      >
+                    </span>
+                        </ng-template>
+                        </span>
+
+                        <!-- This template displays the overlay content and is connected to the button -->
+                        <ng-template cdkConnectedOverlay (overlayOutsideClick)="isOverlayOpenForAssignTo = false" [cdkConnectedOverlayOrigin]="triggerdialog" [cdkConnectedOverlayOpen]="isOverlayOpenForAssignTo">
+                            <div class="assignee-dropdown">
+                                <div class="input-wrapper">
+                                    <input type="text" placeholder="Assignee" (keyup)="filterprojectBasedOnSearchText($event)" tmsWorkspaceAutoFocusInput />
+                                    <img src="assets/images/search.svg" alt="search" class="search" />
+                                </div>
+                                <div class="assignee-list-wrapper">
+                                    <ng-container *ngFor="let teamMember of filteredProjectTeam">
+                                        <main-app-mat-chips [indicateUserWorkingLocation]="true" [stopViewFullProfileOption]="true" *ngIf="teamMember" [data]="teamMember" [isCloseButton]="false" (click)="getSelectedResponsiblePerson(teamMember)" class="assignee-list"></main-app-mat-chips>
+                                    </ng-container>
+                                </div>
+                            </div>
+                        </ng-template>
+                    </div>
+
+                    <!-- Due Date -->
+                    <div class="due-wrapper">
+                        <span matTooltip="Due Date" class="task-info cursor-pointer" (click)="quickTaskDueDatePicker.open()" *ngIf="quickAddTaskFormGroup.controls['dueDate'].value; else setQuickTaskDueDate">{{ quickAddTaskFormGroup.controls['dueDate'].value | date : 'dd/MM/yyyy' }}</span
+                >
+                <ng-template #setQuickTaskDueDate>
+                  <svg
+                    matTooltip="Due Date"
+                    (click)="quickTaskDueDatePicker.open()"
+                    class="cursor-pointer"
+                    width="18"
+                    height="18"
+                    viewBox="0 0 18 18"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path d="M6 1.5V3.75" stroke="#6C757D" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                    <path
+                      d="M12 1.5V3.75"
+                      stroke="#6C757D"
+                      stroke-width="1.5"
+                      stroke-miterlimit="10"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                    <path
+                      d="M2.625 6.81738H15.375"
+                      stroke="#6C757D"
+                      stroke-width="1.5"
+                      stroke-miterlimit="10"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                    <path
+                      d="M15.75 6.375V12.75C15.75 15 14.625 16.5 12 16.5H6C3.375 16.5 2.25 15 2.25 12.75V6.375C2.25 4.125 3.375 2.625 6 2.625H12C14.625 2.625 15.75 4.125 15.75 6.375Z"
+                      stroke="#6C757D"
+                      stroke-width="1.5"
+                      stroke-miterlimit="10"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                    <path d="M11.7713 10.2754H11.778" stroke="#6C757D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                    <path d="M11.7713 12.5254H11.778" stroke="#6C757D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                    <path d="M8.99686 10.2754H9.00359" stroke="#6C757D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                    <path d="M8.99686 12.5254H9.00359" stroke="#6C757D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                    <path d="M6.22049 10.2754H6.22723" stroke="#6C757D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                    <path d="M6.22049 12.5254H6.22723" stroke="#6C757D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                </ng-template>
+                <input
+                  matInput
+                  [value]="quickAddTaskFormGroup.controls['dueDate'].value || ''"
+                  class="hidden-date-picker-input"
+                  readonly
+                  [matDatepicker]="quickTaskDueDatePicker"
+                  (dateChange)="updateDueDate($event)"
+                />
+                <mat-datepicker #quickTaskDueDatePicker></mat-datepicker>
+              </div>
+
+              <!-- ETA -->
+              <div
+                class="eta-wrapper eta-value-wrapper"
+                (click)="displayEtaSelection = true"
+                cdkOverlayOrigin
+                #triggerQuickTaskETAOverlay="cdkOverlayOrigin"
+                matTooltip="ETA"
+              >
+                <span class="task-info cursor-pointer" *ngIf="quickAddTaskFormGroup.controls['eta'].value; else setQuickTaskEta">
+                  {{ quickAddTaskFormGroup.controls['eta'].value }}
+                </span>
+                        <ng-template #setQuickTaskEta>
+                            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg" class="cursor-pointer red-svg">
+                    <path
+                      d="M11.4298 1.5H6.56978C3.74978 1.5 3.53228 4.035 5.05478 5.415L12.9448 12.585C14.4673 13.965 14.2498 16.5 11.4298 16.5H6.56978C3.74978 16.5 3.53228 13.965 5.05478 12.585L12.9448 5.415C14.4673 4.035 14.2498 1.5 11.4298 1.5Z"
+                      stroke="#6C757D"
+                      stroke-width="1.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                        </ng-template>
+                    </div>
+                    <ng-template cdkConnectedOverlay (overlayOutsideClick)="displayEtaSelection = false" [cdkConnectedOverlayOrigin]="triggerQuickTaskETAOverlay" [cdkConnectedOverlayOpen]="displayEtaSelection">
+                        <tms-workspace-eta-popup [ETAInput]="quickAddTaskFormGroup.controls['eta'].value || ''" (ETAEmmiter)="getSelectedETA($event)"></tms-workspace-eta-popup>
+                    </ng-template>
+
+                    <!-- Actions -->
+                    <span class="task-save-button-wrapper">
+                <!-- [ngClass]="this.quickAddTaskFormGroup.valid ? '' : 'disable-item'" -->
+                <!-- [ngClass]="this.quickAddTaskFormGroup.valid ? '' : 'disable-container'" -->
+                <button
+                  class="cursor-pointer save-button"
+                  [ngClass]="isDisableSaveButton ? 'workspace-disable' : ''"
+                  [disabled]="isDisableSaveButton"
+                  (click)="onSaveTask()"
+                  matTooltip="Save"
+                >
+                  Save
+                </button>
+              </span>
+                    <span class="task-cancel-svg">
+                <img src="assets/images/close-circle.svg" class="cursor-pointer" alt="save" (click)="onCancelTask()" matTooltip="Cancel" />
+              </span>
+            </div>
+            </div>
+            </form>
+
+            <!------------------- Not In Use Its For Board View Only ---------------->
+            <!-- <div class="group-task" *ngIf="!showAsListItem">
+          <form [formGroup]="quickAddTaskFormGroup">
+            <div class="group-task-row">
+              <mat-form-field class="task-field card-item">
+                <input
+                  matInput
+                  autocomplete="off"
+                  autoFocusDirective
+                  placeholder="Enter Task Title..."
+                  (keyup.enter)="onSaveTask()"
+                  formControlName="title"
+                />
+              </mat-form-field>
+              <span class="task-left-heading card-item">
+                <span class="cursor-pointer" (click)="toggleOverlayProjectSelection()" cdkOverlayOrigin #triggerProjectSelection="cdkOverlayOrigin">
+                  <ng-container *ngIf="!_quickAddTask['project'].value; else selectedProjectTemplate"
+                    ><span class="task-left-label-heading">
+                      <strong class="pr-form-top-header"> Project</strong>
+                    </span>
+                  </ng-container>
+                  <ng-template #selectedProjectTemplate>
+                    <span class="project-name" [matTooltip]="_quickAddTask['project'].value.name">{{ _quickAddTask['project'].value.name || '' }}</span>
+                  </ng-template>
+                </span>
+      
+                <ng-template
+                  cdkConnectedOverlay
+                  (overlayOutsideClick)="isOverlayProjectSelection = false"
+                  [cdkConnectedOverlayOrigin]="triggerProjectSelection"
+                  [cdkConnectedOverlayOpen]="isOverlayProjectSelection"
+                >
+                  <main-app-user-dialog
+                    class="task-dialog"
+                    [listInput]="projectNameList"
+                    [searchText]="'Search Project'"
+                    [isShowSearchBox]="true"
+                    (emmitSelectedUser)="getSelectedProject($event)"
+                  ></main-app-user-dialog>
+                </ng-template>
+              </span>
+            </div>
+            <div class="group-task-row">
+              <span>
+                <span
+                  class="cursor-pointer card-item"
+                  (click)="toggleOverlayTaskStateSelection()"
+                  cdkOverlayOrigin
+                  #triggerStateSelection="cdkOverlayOrigin"
+                  [matTooltip]="'State - ' + _quickAddTask['taskState'].value.name"
+                >
+                  <ng-container *ngIf="!_quickAddTask['taskState'].value; else selectedStateTemplate"> Task State </ng-container>
+                  <ng-template #selectedStateTemplate>
+                    <span class="task-state-svg"><img [src]="taskStateSVGURL" alt="" /></span><span>{{ _quickAddTask['taskState'].value.name || '' }}</span>
+                  </ng-template>
+                </span>
+      
+                <ng-template
+                  cdkConnectedOverlay
+                  (overlayOutsideClick)="isOverlayTaskState = false"
+                  [cdkConnectedOverlayOrigin]="triggerStateSelection"
+                  [cdkConnectedOverlayOpen]="isOverlayTaskState"
+                >
+                  <main-app-state-popup [listInput]="taskStateList" (selectionEmmiter)="onSelectState($event)"></main-app-state-popup>
+                </ng-template>
+              </span>
+              <span>
+                <span
+                  class="cursor-pointer card-item"
+                  (click)="toggleOverlayTaskStatusSelection()"
+                  cdkOverlayOrigin
+                  #triggerStatusSelection="cdkOverlayOrigin"
+                  [matTooltip]="_quickAddTask['taskStatus'].value.name ? 'Staus -' + _quickAddTask['taskStatus'].value.name : 'Staus'"
+                >
+                  <ng-container *ngIf="!_quickAddTask['taskStatus'].value; else selectedStatusTemplate"> Task Status </ng-container>
+                  <ng-template #selectedStatusTemplate>
+                    <span> {{ _quickAddTask['taskStatus'].value.name || '' }}</span>
+                  </ng-template>
+                </span>
+      
+                <ng-template
+                  cdkConnectedOverlay
+                  (overlayOutsideClick)="isOverlayTaskStatus = false"
+                  [cdkConnectedOverlayOrigin]="triggerStatusSelection"
+                  [cdkConnectedOverlayOpen]="isOverlayTaskStatus"
+                >
+                  <main-app-status-popup [listInput]="filteredSubStatusList" (statusEmmiter)="getSelectedTaskStatus($event)"></main-app-status-popup>
+                </ng-template>
+              </span>
+              <span class="card-item">
+                <button [matMenuTriggerFor]="belowMenu">
+                  {{ _quickAddTask['taskType'].value || 'Task Type' }}
+                </button>
+                <mat-menu #belowMenu="matMenu" yPosition="below">
+                  <button mat-menu-item *ngFor="let taskTypeObject of taskTypeList; let i = index" (click)="onTaskTypeChange(taskTypeObject)">
+                    <span>{{ taskTypeObject.name }}</span>
+                  </button>
+                </mat-menu>
+              </span>
+              <span class="task-right-label card-item">
+                <span class="cursor-pointer" (click)="toggleOverlayAssignedTo()" cdkOverlayOrigin #triggerdialog="cdkOverlayOrigin">
+                  <ng-container *ngIf="!_quickAddTask['assignTo'].value; else assignToTemplate">
+                    <img src="assets/images/user-add.png" matTooltip="Assign" />
+                  </ng-container>
+                  <ng-template #assignToTemplate>
+                    <span class="name-icon-wrapper">
+                      <img
+                        [src]="baseURL + _quickAddTask['assignTo'].value.employee_image"
+                        alt=""
+                        srcset=""
+                        [matTooltip]="_quickAddTask['assignTo'].value.name || ''"
+                      />
+                      <mat-icon (click)="$event.stopPropagation(); removeAssignTo('assignTo')">cancel</mat-icon></span
+                    >
+                  </ng-template>
+                </span>
+      
+                
+                <ng-template
+                  cdkConnectedOverlay
+                  (overlayOutsideClick)="isOverlayOpenForAssignTo = false"
+                  [cdkConnectedOverlayOrigin]="triggerdialog"
+                  [cdkConnectedOverlayOpen]="isOverlayOpenForAssignTo"
+                >
+                  <main-app-user-dialog
+                    [listInput]="projectTeamMembers"
+                    [isShowSearchBox]="true"
+                    [searchText]="'Search Assign to'"
+                    (emmitSelectedUser)="getSelectedAssignedTo($event)"
+                  ></main-app-user-dialog>
+                </ng-template>
+              </span>
+            </div>
+            <div class="group-task-row">
+              <span class="task-left-label card-item">
+                <span class="cursor-pointer" (click)="toggleOverlayForTaskSections()" cdkOverlayOrigin #triggerTaskLabels="cdkOverlayOrigin">
+                  <ng-container *ngIf="_quickAddTask['section'].value; else taskSectionTemplate"
+                    ><span>
+                      <small
+                        ><strong>
+                          Section: {{ _quickAddTask['section'].value.title || '' }}
+                          <mat-icon (click)="$event.stopPropagation(); onRemoveTaskSection()">cancel</mat-icon></strong
+                        ></small
+                      ></span
+                    ></ng-container
+                  >
+                </span>
+              </span>
+              <span class="task-right-label card-item">
+                <ng-template #taskSectionTemplate>
+                  <span>
+                    <small><strong> Section: </strong></small></span
+                  >
+                </ng-template>
+                <ng-template
+                  cdkConnectedOverlay
+                  (overlayOutsideClick)="isOverlayOpenForSections = false"
+                  [cdkConnectedOverlayOrigin]="triggerTaskLabels"
+                  [cdkConnectedOverlayOpen]="isOverlayOpenForSections"
+                >
+                  <tms-workspace-labels-popup
+                    [listInput]="sectionsList"
+                    (itemEmmiter)="onSectionSelect($event)"
+                    [messageToCreateNewItem]="createSectionForMessage"
+                  ></tms-workspace-labels-popup>
+                </ng-template>
+              </span>
+      
+              <div class="card-item">
+                <span class="task-save-svg">
+                  <img [src]="quickTaskSaveSVGURL" class="cursor-pointer" alt="save" (click)="onSaveTask()" matTooltip="Save" />
+                </span>
+                <span class="task-cancel-svg">
+                  <img [src]="quickTaskCancelSVGURL" class="cursor-pointer" alt="save" (click)="onCancelTask()" matTooltip="Cancel" />
+                </span>
+              </div>
+            </div>
+          </form>
+        </div> -->
+            </div>
+        </td>
+    </tr>
+</table>

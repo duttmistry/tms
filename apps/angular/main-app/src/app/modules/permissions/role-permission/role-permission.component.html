@@ -1,0 +1,132 @@
+<div class="role-permission">
+  <div class="role-header" *ngIf="allowEdit">
+    <button class="cancel secondary-button" (click)="onCancelClick()">Cancel</button>
+    <button class="cancel secondary-button" (click)="onReset()">Reset</button>
+    <button color="primary" class="next primary-button" (click)="onSave()">Save</button>
+  </div>
+  <div class="permission-table" *ngIf="permissionArray && permissionArray.length > 0; else noRecordFoundTemplate">
+    <div class="permission-table-blk">
+      <div class="permission-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th class="sticky-column">
+                <div>Modules</div>
+              </th>
+              <th *ngFor="let userRoleObject of userRoles" class="sticky-column">{{ userRoleObject.title || '' }}</th>
+            </tr>
+          </thead>
+          <ng-container *ngFor="let permissionObject of permissionArray; let i = index">
+            <tr (click)="expandModule(permissionObject)" class="column-row">
+              <td [ngClass]="{ 'parent-toogle-background': permissionObject.isExpandModule }" class="sticky-column">
+                <div class="first-level">
+                  <mat-icon>{{ permissionObject.isExpandModule ? 'keyboard_arrow_up' : 'keyboard_arrow_down' }}</mat-icon>
+                  {{ permissionObject?.moduleName | replaceUnderscore | replaceDot }}
+                </div>
+              </td>
+              <ng-container *ngIf="permissionObject.moduleControls && permissionObject.moduleControls.length > 0">
+                <ng-container *ngFor="let moduleControl of permissionObject.moduleControls; let moduleControlIndex = index">
+                  <td [ngClass]="{ 'parent-toogle-background': permissionObject.isExpandModule }">
+                    <div [ngClass]="!allowEdit ? 'form-group1' : 'form-group'">
+                      <input
+                        type="checkbox"
+                        [checked]="moduleControl.checked || false"
+                        [id]="moduleControl.id"
+                        (change)="onModuleStatusChange($event, i, moduleControlIndex)"
+                        [disabled]="!allowEdit"
+                      />
+                      <label [for]="moduleControl.id"></label>
+                    </div>
+                  </td>
+                </ng-container>
+              </ng-container>
+            </tr>
+
+            <ng-container *ngIf="permissionObject?.isExpandModule">
+              <ng-container *ngIf="permissionObject.actions && permissionObject.actions.length > 0">
+                <ng-container *ngFor="let actionObject of permissionObject.actions; let actionObjectIndex = index">
+                  <tr (click)="expandActionModule(actionObject, permissionObject)">
+                    <td class="action-bg" [ngClass]="{ 'action-toogle-background': actionObject.isExpandAction }">
+                      <div class="second-level" [ngClass]="actionObject?.fields.length > 0 ? 'node-with-chil' : ''">
+                        <mat-icon [ngStyle]="{ visibility: actionObject?.fields && actionObject?.fields.length > 0 ? '' : 'hidden' }"
+                          >{{ actionObject.isExpandAction ? 'keyboard_arrow_up' : 'keyboard_arrow_down' }}
+                        </mat-icon>
+                        {{ actionObject?.actionName | replaceUnderscore | taskStatus }}
+                      </div>
+                    </td>
+                    <ng-container *ngIf="actionObject?.actionControls && actionObject?.actionControls.length > 0">
+                      <ng-container *ngFor="let actionControl of actionObject?.actionControls; let actionControlIndex = index">
+                        <td class="action-bg" [ngClass]="{ 'action-toogle-background': actionObject.isExpandAction }">
+                          <div [ngClass]="!allowEdit ? 'form-group1' : 'form-group'">
+                            <input
+                              type="checkbox"
+                              [id]="actionControl.id"
+                              [checked]="actionControl.checked"
+                              (change)="onActionStatusChange($event, i, actionObjectIndex, actionControlIndex)"
+                              [disabled]="!allowEdit"
+                            />
+                            <label [for]="actionControl.id"></label>
+                          </div>
+                        </td>
+                      </ng-container>
+                    </ng-container>
+                  </tr>
+
+                  <ng-container *ngIf="actionObject.isExpandAction">
+                    <ng-container *ngIf="actionObject.fields && actionObject.fields.length > 0">
+                      <ng-container *ngFor="let fieldObject of actionObject.fields; let fieldIndex = index">
+                        <tr (click)="expandFieldModule(fieldObject)">
+                          <td class="field-bg third-level">
+                            {{ fieldObject?.name | replaceUnderscore | taskStatus }}
+                          </td>
+                          <ng-container *ngIf="fieldObject?.fieldControls && fieldObject?.fieldControls.length > 0">
+                            <ng-container *ngFor="let fieldControl of fieldObject?.fieldControls; let controlIndex = index">
+                              <td class="field-bg">
+                                <div
+                                  [ngClass]="
+                                    !allowEdit ? 'form-group1' : fieldControl.is_required && fieldControl.checked ? 'form-group1' : 'form-group'
+                                  "
+                                >
+                                  <input
+                                    type="checkbox"
+                                    [id]="fieldControl.id"
+                                    [checked]="fieldControl.checked"
+                                    [disabled]="
+                                      fieldControl.is_required && !fieldControl.checked
+                                        ? false
+                                        : !allowEdit
+                                        ? true
+                                        : fieldControl.is_required && fieldControl.checked
+                                        ? true
+                                        : !allowEdit
+                                        ? true
+                                        : false
+                                    "
+                                    (change)="onFieldStatusChange($event, i, actionObjectIndex, fieldIndex, controlIndex)"
+                                  />
+                                  <label [for]="fieldControl.id"></label>
+                                </div>
+                              </td>
+                            </ng-container>
+                          </ng-container>
+                        </tr>
+                      </ng-container>
+                    </ng-container>
+                  </ng-container>
+                </ng-container>
+              </ng-container>
+            </ng-container>
+          </ng-container>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+<div>
+  <ng-template #noRecordFoundTemplate>
+    <ng-container *ngIf="showSpinner; else noRecordsTemp">
+      <div mat-row [mainAppSpinner]="showSpinner"></div>
+    </ng-container>
+    <ng-template #noRecordsTemp> No records found </ng-template>
+  </ng-template>
+</div>

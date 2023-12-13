@@ -1,0 +1,307 @@
+@import 'apps/angular/main-app/src/variables';
+@import 'apps/angular/main-app/src/mixins';
+@import 'apps/angular/main-app/src/assets/fonts/fonts';
+.dropzone {
+  width: 200px;
+  height: 50px;
+  padding: 2rem;
+  text-align: center;
+  border: dashed 1px $theme-border-color-gray;
+  position: relative;
+  margin: 0 auto;
+  input {
+    opacity: 0;
+    position: absolute;
+    z-index: 2;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+  }
+  h3 {
+    font-size: $theme-main-extra-extra-large-font;
+    font-weight: 400;
+  }
+}
+
+.workspace {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  .button-wrap {
+    @include flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    .mdc-button__label {
+      letter-spacing: unset;
+    }
+  }
+  .mat-mdc-form-field {
+    margin-bottom: 0;
+  }
+  .workspace-wrap {
+    .workspace-flex {
+      @include flex;
+      flex-wrap: wrap;
+      margin-top: 20px;
+      margin-left: -8px;
+      margin-right: -8px;
+      .workspace-item {
+        position: relative;
+        width: 25%;
+        padding: 0 8px;
+        margin-bottom: 20px;
+        @include flex;
+        .mat-mdc-card {
+          background-color: $card-background;
+          border-radius: $small-card-radius !important;
+          box-shadow: unset;
+          border: 1px solid $theme-border-color-gray;
+          @include flex-justify-space-between;
+          transition: all 0.5s ease;
+          &:hover {
+            background-color: $theme-color-white;
+            border: 1px solid #adadad;
+          }
+          .card-height {
+            @include flex;
+            width: 100%;
+            @include flex-justify-space-between;
+            padding-top: 12px;
+            border-top: 1px solid $theme-border-color-gray;
+            div {
+              @include flex;
+              @include flex-align-center;
+              img {
+                margin-left: 15px;
+                width: 22px;
+              }
+            }
+            .mat-mdc-card-subtitle {
+              font-size: $theme-main-small-font;
+              line-height: 17px;
+              font-weight: 400;
+              color: $theme-main-color-light;
+              border-left: 1px solid $theme-border-color-gray;
+              margin-left: 10px;
+              padding-left: 10px;
+              &:first-child {
+                border-left: unset;
+                margin-left: 0;
+                padding-left: 0;
+              }
+              span {
+                color: $theme-font-color-black;
+                font-weight: 500;
+                font-size: $theme-main-medium-font;
+                display: block;
+                line-height: 17px;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  ::ng-deep .mat-mdc-card-header-text {
+    width: 100%;
+  }
+  .mat-mdc-card-header {
+    display: unset;
+    padding: 0 !important;
+    margin-bottom: 12px;
+    .mat-icon {
+      cursor: pointer;
+      color: $theme-main-color-light;
+      font-size: 22px;
+    }
+  }
+  .mat-mdc-card-content {
+    @include flex;
+    @include flex-align-start;
+    @include flex-justify-space-between;
+    position: relative;
+    margin-top: 0px;
+    padding: 0;
+  }
+  .no-record-section {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+    align-items: center;
+    border-radius: $button-radius !important;
+    padding: 10px;
+    margin-top: 20px;
+    background-color: $card-background;
+  }
+}
+
+.project {
+  .mat-card-title {
+    font-weight: 400;
+    font-size: $theme-main-large-font;
+    margin-bottom: 0;
+  }
+  ::ng-deep .mat-card-header-text {
+    margin: 0;
+    width: 100%;
+  }
+  .project-h2 {
+    @include flex;
+    @include flex-align-center;
+    color: #000;
+    margin-bottom: 12px;
+    line-height: 20px;
+    font-size: $theme-main-large-font;
+    font-weight: 600;
+    .workspace-link {
+      margin-left: 5px;
+      span {
+        color: $theme-main-extra-color-dark;
+        font-weight: 600;
+        line-height: 20px;
+      }
+    }
+  }
+  .mat-card-content {
+    margin: 10px 0;
+  }
+  .workspace-link {
+    transition: all 0.5s ease;
+    text-decoration: none;
+    cursor: pointer;
+    color: $theme-main-color-light;
+  }
+}
+
+::ng-deep .mdc-list {
+  padding-top: 0 !important;
+}
+
+::ng-deep .project-mat-menu {
+  .mdc-list-item__primary-text {
+    font-size: 12px !important;
+    font-weight: 400 !important;
+    color: $theme-main-color !important;
+    @include flex;
+    @include flex-align-center;
+    transition: all 0.5s ease;
+    line-height: 16px !important;
+    img {
+      margin-right: 8px;
+      width: 18px;
+      transition: all 0.5s ease;
+    }
+  }
+  ::ng-deep .mat-mdc-menu-content {
+    .mat-mdc-menu-item {
+      min-height: 35px;
+      transition: all 0.5s ease;
+      padding: 0 10px;
+      color: $theme-main-color-light;
+      mdc-list-item__primary-text {
+        color: $theme-main-color-light;
+      }
+    }
+  }
+  .orange-top-border {
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+    border-top: 2px solid $theme-main-color;
+  }
+  .green-top-border {
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+    border-top: 2px solid $theam-color-green;
+  }
+  .red-top-border {
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+    border-top: 2px solid $theme-color-error;
+  }
+}
+
+mat-spinner {
+  margin: 0 auto;
+}
+
+::ng-deep .mat-mdc-raised-button > .mat-icon {
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+
+.status-project {
+  width: 500px;
+  ::ng-deep .cdk-overlay-pane {
+    width: 500px;
+  }
+}
+
+@media screen and (max-width: $extra-extra-large-device) {
+  .workspace {
+    .workspace-wrap {
+      .workspace-flex {
+        .workspace-item {
+          width: 33.3%;
+        }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: $extra-large-device) {
+  .workspace {
+    .workspace-wrap {
+      .workspace-flex {
+        .workspace-item {
+          width: 33.3%;
+        }
+        .mat-mdc-card {
+          .card-height {
+            div {
+              align-items: unset !important;
+            }
+          }
+        }
+      }
+    }
+    .search-input {
+      .mat-mdc-form-field {
+        width: 190px;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: $lerge-device) {
+  .workspace {
+    .workspace-wrap {
+      .workspace-flex {
+        .workspace-item {
+          width: 50%;
+        }
+      }
+    }
+    .search-input {
+      .mat-mdc-form-field {
+        width: 116px;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: $small-device) {
+  .workspace {
+    .workspace-wrap {
+      .workspace-flex {
+        .workspace-item {
+          width: 100%;
+        }
+      }
+    }
+    .mat-card {
+      height: auto !important;
+    }
+  }
+}

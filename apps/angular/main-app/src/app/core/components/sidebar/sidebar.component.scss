@@ -1,0 +1,190 @@
+@use '@angular/material' as mat;
+@include mat.core();
+@import 'apps/angular/main-app/src/variables';
+@import 'apps/angular/main-app/src/mixins';
+@import 'apps/angular/main-app/src/assets/fonts/fonts';
+@import '~quill/dist/quill.core.css';
+@import '~quill/dist/quill.snow.css';
+$custom-typography: mat.define-typography-config(
+  $font-family: $theme-main-font-family,
+);
+$TMS-primary: mat.define-palette(mat.$indigo-palette, 900);
+$TMS-accent: mat.define-palette(mat.$gray-palette, A200, A100, A400);
+$TMS-warn: mat.define-palette(mat.$red-palette);
+$TMS-theme: mat.define-light-theme(
+  (
+    color: (
+      primary: $TMS-primary,
+      accent: $TMS-accent,
+      warn: $TMS-warn,
+    ),
+    typography: $custom-typography,
+  )
+);
+@include mat.all-component-themes($TMS-theme);
+.ccc-logo {
+  width: 180px;
+}
+
+body {
+  margin: 0;
+  height: 100%;
+  font-family: $theme-main-font-family;
+  color: $theme-font-color-black;
+  background-color: $theme-body-color;
+}
+
+.example-sidenav-content {
+  min-height: 100vh;
+  z-index: 2 !important;
+}
+
+.sidenav-blk {
+  padding-top: 50px;
+}
+
+.top-nav {
+  margin-bottom: 11px;
+}
+
+.footer {
+  text-align: center;
+  background-color: #212529;
+  padding: 10px 0;
+  border-top: 1px solid #343a40;
+  font-size: $theme-main-small-font;
+  font-weight: 400;
+  color: #ced4da;
+}
+
+.mat-sidenav {
+  box-shadow: $box-shadow-card;
+  .divider-top {
+    margin-top: 11px;
+  }
+  mat-expansion-panel {
+    display: initial;
+    color: #adb5bd;
+  }
+  .mat-icon {
+    padding: 0;
+    margin-right: 13px;
+    font-size: $theme-main-medium-font;
+    width: 22px;
+    height: 22px !important;
+  }
+  ::ng-deep .mdc-list-item__primary-text {
+    @include flex;
+    @include flex-align-center;
+  }
+  mat-list-item {
+    padding: 0 24px !important;
+    height: 33px;
+    span {
+      font-weight: 400;
+      font-size: $theme-main-small-font;
+      font-family: $theme-main-font-family;
+      color: #ced4da;
+    }
+  }
+  img {
+    width: 22px;
+    height: 22px;
+  }
+  mat-list-item.active {
+    color:$theme-main-color;
+    span {
+      color: $theme-color-white;
+    }
+  }
+  mat-list-item.active img {
+    filter: brightness(0) invert(1);
+  }
+  mat-nav-list {
+    padding-top: 20px;
+  }
+  .mat-icon.active {
+    color: $theme-main-color !important;
+  }
+}
+
+.mat-drawer-side {
+  border-right: 0;
+  position: fixed;
+  top: 70px;
+  overflow: auto;
+  background-color: #212529;
+}
+
+::ng-deep .mat-expansion-indicator::after {
+  margin-left: -4px !important;
+  color: #6c757d;
+}
+
+.side-button-toggle {
+  border: unset;
+  margin-top: 85px;
+  margin-left: -27px;
+  z-index: 9999999999;
+  background-color: unset;
+  position: fixed;
+  padding: unset !important;
+  cursor: pointer;
+}
+
+.callspaan-open {
+  cursor: pointer;
+  margin-top: 78px;
+  margin-left: -2px;
+  border: unset;
+  z-index: 9999999999;
+  background-color: unset;
+  position: fixed;
+  padding: unset !important;
+}
+
+::ng-deep .mat-drawer-content {
+  overflow: initial !important;
+}
+
+.logout-blk {
+  position: absolute;
+  bottom: 20px;
+}
+
+::ng-deep .mat-expansion-panel-body {
+  padding: 0 !important;
+  margin-bottom: 11px;
+}
+
+::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  background-color: $theme-bg-color-drawer-container;
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+  background-color: $theme-bg-color-drawer-container;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: $theme-bg-color-scrollbar-thumb;
+  border-radius: 50px;
+}
+
+.mat-expansion-panel-header {
+  font-weight: 600 !important;
+  height: 52px !important;
+  font-size: 15px;
+  &:hover {
+    background-color: transparent !important;
+  }
+}
+
+.mat-divider {
+  border-top-color: #343a40;
+}
+
+.help-class {
+  margin-top: 10px;
+}

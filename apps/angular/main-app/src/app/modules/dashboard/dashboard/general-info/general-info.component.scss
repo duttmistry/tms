@@ -1,0 +1,53 @@
+@import 'apps/angular/main-app/src/variables';
+@import 'apps/angular/main-app/src/mixins';
+@import 'apps/angular/main-app/src/assets/fonts/fonts.scss';
+.record-wrapper {
+  display: flex;
+  flex-direction: column;
+  max-height: 239px;
+  height: 239px;
+  overflow: auto;
+  .record {
+    display: flex;
+    gap: 10px;
+    border-bottom: 1px solid $theme-border-color-gray;
+    margin-bottom: 12px;
+    padding-bottom: 12px;
+    &:last-child {
+      border-bottom: 0;
+      padding-bottom: 10px;
+      margin-bottom: 10px;
+    }
+    .record-left {
+      img {
+        display: block;
+      }
+    }
+    .record-right {
+      .meesage {
+        margin: 0;
+        font-size: $theme-main-medium-font;
+        line-height: 18px;
+        color: $theme-bg-color-black;
+        font-weight: 400;
+      }
+      .designation {
+        font-size: $theme-main-small-font;
+        list-style: 16px;
+        color: $theme-font-color-dark-grey;
+        font-weight: 400;
+      }
+    }
+  }
+}
+
+.refresh-button-wrapper {
+  position: relative;
+  .refresh-button {
+    position: absolute;
+    right: 0;
+    top: 10px;
+    z-index: 9999;
+    cursor: pointer;
+  }
+}

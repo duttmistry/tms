@@ -1,0 +1,184 @@
+@import 'apps/angular/main-app/src/variables';
+@import 'apps/angular/main-app/src/mixins';
+@import 'apps/angular/main-app/src/assets/fonts/fonts.scss';
+.user-role {
+  .search-blk {
+    width: 400px !important;
+  }
+  form {
+    margin: 20px 0;
+    ::ng-deep .mat-mdc-form-field {
+      margin-bottom: 0;
+    }
+  }
+  .role {
+    width: 220px;
+  }
+  table {
+    .mat-mdc-form-field {
+      width: 100%;
+      margin-bottom: 0;
+    }
+  }
+  .designation-section {
+    .action-section {
+      mat-label {
+        font-size: 12px !important;
+        margin-top: 13px;
+        display: block;
+      }
+    }
+  }
+  .permission-form {
+    @include flex;
+    @include flex-align-center;
+    gap: 15px;
+    .mat-mdc-form-field-flex {
+      @include flex;
+      @include flex-align-center;
+      gap: 15px;
+    }
+  }
+  .role-form {
+    padding: 5px 20px;
+  }
+  .select-td {
+    width: 100%;
+    border: 1px solid #e7e7e7;
+    height: 30px;
+    border-radius: 3px;
+    font-weight: 400;
+    outline: none;
+    color: $theme-font-color-black;
+    font-size: $theme-main-small-font;
+  }
+  .permission-form-wrap {
+    @include flex;
+    @include flex-align-center;
+    @include flex-justify-space-between;
+  }
+  .employee-img {
+    @include flex;
+    @include flex-align-center;
+  }
+  .role-header {
+    @include flex;
+    @include flex-justify-space-between;
+    @include flex-align-center;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #e9e9e9;
+    padding: 15px 20px 15px 20px;
+    button {
+      height: auto;
+      padding: 9px 15px;
+      width: initial;
+      margin-left: 10px;
+    }
+  }
+  .user-role-table {
+    th,
+    td {
+      padding: 0px 10px !important;
+    }
+    img {
+      width: 25px;
+      height: 25px;
+      border-radius: 50%;
+      margin-right: 10px;
+      object-fit: cover;
+    }
+    p {
+      margin: 0;
+    }
+  }
+}
+
+::ng-deep .mat-sort-header-arrow {
+  display: none !important;
+}
+
+.custom-sorting-icon {
+  font-size: $theme-main-large-font;
+  color: #757575;
+  font-weight: 600;
+  padding-top: -3px;
+  display: flex;
+  align-items: center;
+  margin-left: 2px;
+  opacity: 0;
+}
+
+::ng-deep .mat-column-name {
+  &:hover {
+    .custom-sorting-icon {
+      opacity: 0.7;
+      transform: translateY(0px);
+    }
+  }
+}
+
+::ng-deep .mat-column-employee_id {
+  &:hover {
+    .custom-sorting-icon {
+      opacity: 0.7;
+      transform: translateY(0px);
+    }
+  }
+}
+
+.designation-section {
+  @include flex;
+  margin-left: 15px;
+  gap: 10px;
+}
+
+.not-allowed-cursor {
+  cursor: not-allowed !important;
+}
+
+@media screen and (max-width: $extra-extra-large) {
+  .user-role {
+    form {
+      .search-blk {
+        width: 250px !important;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: $extra-large-device) {
+  .user-role {
+    form {
+      .search-blk {
+        width: 180px !important;
+      }
+      .mat-mdc-form-field {
+        width: 180px !important;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: $lerge-device) {
+  .user-role {
+    form {
+      .search-blk {
+        width: 140px !important;
+      }
+      .mat-mdc-form-field {
+        width: 140px !important;
+      }
+    }
+  }
+  .cancel,
+  .next {
+    min-width: 80px !important;
+  }
+}
+
+.filter-by-wrapper {
+  ::ng-deep .mat-mdc-select-trigger {
+    height: 100%;
+  }
+}

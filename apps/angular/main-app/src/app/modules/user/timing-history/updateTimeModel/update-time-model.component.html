@@ -1,0 +1,73 @@
+<div class="super-admin">
+    <h1 mat-dialog-title>Update Time Manually</h1>
+    <div mat-dialog-content>
+        <form [formGroup]="updateTimeFormGroup">
+            <div class="fields">
+                <mat-form-field class="small-dropdown arrow-down">
+                    <mat-label>Select Operation</mat-label>
+                    <mat-select formControlName="actionControl">
+                        <mat-option *ngFor="let item of actionOptions" [value]="item.id"> {{ item.title }}</mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="_updateTimeFormGroup['actionControl'].hasError('required')"> Please select an operation. </mat-error>
+                </mat-form-field>
+                <mat-form-field (click)="picker.open()">
+                    <mat-label>Select Date</mat-label>
+                    <input class="cursor-pointer" [max]="maxDate" formControlName="dateControl" matInput [matDatepicker]="picker" readonly />
+
+                    <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-datepicker #picker></mat-datepicker>
+
+                    <mat-error *ngIf="_updateTimeFormGroup['dateControl'].hasError('required')"> Please select a date. </mat-error>
+                </mat-form-field>
+            </div>
+            <div class="fields" formGroupName="timeControl">
+                <mat-form-field class="small-dropdown arrow-down">
+                    <mat-label>Hours</mat-label>
+                    <mat-select formControlName="hoursControl">
+                        <mat-option *ngFor="let hour of hours" [value]="hour">{{ hour }}</mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="_updateTimeFormGroup.timeControl['controls']?.['hoursControl']?.hasError('required')">
+                        Please select no. of hours.
+                    </mat-error>
+                </mat-form-field>
+
+                <mat-form-field class="small-dropdown arrow-down">
+                    <mat-label>Minutes</mat-label>
+                    <mat-select formControlName="minutesControl">
+                        <mat-option *ngFor="let minute of minutes" [value]="minute">{{ minute }}</mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="_updateTimeFormGroup['timeControl'].get('minutesControl')?.hasError('required')">
+                        Please select no. of minutes.
+                    </mat-error>
+                    <div *ngIf="_updateTimeFormGroup['timeControl'].hasError('notBothDoubleZero')" style="color: #ea6060 !important; font-size: 12px; font-weight: 400; line-height: 14px; margin-left: -12px; margin-top: 2px">
+                        Please select a valid time.
+                    </div>
+                    <!-- {{_updateTimeFormGroup['timeControl'].errors | json}}
+          {{_updateTimeFormGroup['timeControl'].hasError('notBothDoubleZero') | json}}
+          {{_updateTimeFormGroup['timeControl'].get('minutesControl')?.hasError('required') | json}} -->
+                </mat-form-field>
+                <!-- <mat-form-field>
+          <input type="number" placeholder="Hours" matInput formControlName="hoursControl" />
+        </mat-form-field>
+        <mat-form-field>
+          <input type="number" placeholder="Minutes" matInput formControlName="minutesControl" />
+        </mat-form-field> -->
+            </div>
+            <div class="fields">
+                <mat-form-field class="textarea">
+                    <mat-label>State the reason</mat-label>
+                    <textarea matInput formControlName="reasonControl"></textarea>
+                    <mat-error *ngIf="_updateTimeFormGroup['reasonControl'].hasError('maxlength')"> Max 1000 characters are allowed.</mat-error>
+                </mat-form-field>
+            </div>
+        </form>
+    </div>
+    <div style="justify-content: center" mat-dialog-actions class="button-wrapper">
+        <button (click)="onClose()" color="primary" class="cancel">
+      <span>Cancel</span>
+    </button>
+        <button (click)="onSave()" color="accent" class="next">
+      <span> Save</span>
+    </button>
+    </div>
+</div>

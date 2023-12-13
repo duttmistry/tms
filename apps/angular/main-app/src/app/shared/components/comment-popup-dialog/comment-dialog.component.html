@@ -1,0 +1,16 @@
+<div class="approval-dialog">
+    <h1 mat-dialog-title class="pr-form-top-header">{{ data.title }}</h1>
+    <div mat-dialog-content>
+        <mat-form-field>
+            <mat-label>{{ data.label || 'Comment' }}</mat-label>
+            <input matInput [formControl]="comment" />
+        </mat-form-field>
+
+        <mat-error *ngIf="(isSubmitted || comment.touched) && comment.hasError('required')">Please enter comment</mat-error>
+        <mat-error *ngIf="comment.hasError('minlength')">Please enter minimum 3 characters</mat-error>
+    </div>
+    <div mat-dialog-actions style="justify-content: center; margin-bottom: 20px">
+        <button matTooltip="No" (click)="onClose('No')" color="accent" class="cancel">Cancel</button>
+        <button matTooltip="Yes" (click)="isSubmitted = true; onClose('Yes')" color="primary" class="next">Save</button>
+    </div>
+</div>

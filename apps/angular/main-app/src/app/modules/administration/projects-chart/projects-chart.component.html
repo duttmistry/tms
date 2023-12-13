@@ -1,0 +1,14 @@
+<div *ngIf="options" style="width: 100%">
+  <div class="ag-chart" style="position: relative">
+    <h3>Project Tasks Chart</h3>
+    <ag-charts-angular [options]="options"> </ag-charts-angular>
+    <div class="page-item">
+      <label class="page-lable">Projects limit</label>
+      <mat-form-field style="width: 78px" [ngClass]="projectSelect.panelOpen ? 'arrow-up' : 'arrow-down'" class="small-dropdown">
+        <mat-select #projectSelect [(value)]="limit" (selectionChange)="selectedPageSizeChange()">
+          <mat-option *ngFor="let option of pageSizeOptions" [value]="option">{{ option }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </div>
+</div>

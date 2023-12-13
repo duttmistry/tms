@@ -1,0 +1,173 @@
+<div class="tags">
+  <div class="tags-form" *ngIf="allowAdd">
+    <div>
+      <mat-form-field class="medium-height-wrapper input-field-wrapper tag-form-wrapper">
+        <mat-label>Search</mat-label>
+        <input matInput [formControl]="searchTag" (keyup)="onSearchKeyUp($event)" (keydown.enter)="validateAndSearch()" />
+        <!-- <mat-icon matSuffix *ngIf="searchTag.value" (click)="resetSearch($event); onSearch()" class="filter-close">close</mat-icon> -->
+        <svg
+          *ngIf="searchTag.value"
+          (click)="resetSearch($event); onSearch()"
+          width="16"
+          height="16"
+          viewBox="0 0 16 16"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          class="filter-close"
+        >
+          <path
+            d="M8.00065 1.3335C4.32732 1.3335 1.33398 4.32683 1.33398 8.00016C1.33398 11.6735 4.32732 14.6668 8.00065 14.6668C11.674 14.6668 14.6673 11.6735 14.6673 8.00016C14.6673 4.32683 11.674 1.3335 8.00065 1.3335ZM10.2407 9.5335C10.434 9.72683 10.434 10.0468 10.2407 10.2402C10.1407 10.3402 10.014 10.3868 9.88732 10.3868C9.76065 10.3868 9.63398 10.3402 9.53399 10.2402L8.00065 8.70683L6.46732 10.2402C6.36732 10.3402 6.24065 10.3868 6.11398 10.3868C5.98732 10.3868 5.86065 10.3402 5.76065 10.2402C5.56732 10.0468 5.56732 9.72683 5.76065 9.5335L7.29398 8.00016L5.76065 6.46683C5.56732 6.2735 5.56732 5.9535 5.76065 5.76016C5.95398 5.56683 6.27398 5.56683 6.46732 5.76016L8.00065 7.2935L9.53399 5.76016C9.72732 5.56683 10.0473 5.56683 10.2407 5.76016C10.434 5.9535 10.434 6.2735 10.2407 6.46683L8.70732 8.00016L10.2407 9.5335Z"
+            fill="#86969D"
+          />
+        </svg>
+        <mat-error *ngIf="searchTag.invalid && (searchTag.dirty || searchTag.touched)">
+          <ng-container *ngIf="searchTag.errors?.['minlength']">Please enter at least 2 characters </ng-container>
+          <ng-container *ngIf="searchTag.errors?.['maxlength']">Maximum 20 characters are allowed</ng-container>
+          <ng-container *ngIf="searchTag.errors?.['pattern']">Whitespaces are not allowed.</ng-container>
+        </mat-error>
+
+        <img matPrefix (click)="onSearch()" src="assets/images/search.svg" alt="search" class="search" />
+      </mat-form-field>
+    </div>
+    <div class="right-form">
+      <mat-form-field class="example-chip-list tag-hide medium-height-wrapper input-field-wrapper" appearance="fill" *ngIf="!isTagEdit">
+        <mat-label>Add Tags</mat-label>
+        <!-- <mat-chip-grid #chipGrid aria-label="Enter tags"> -->
+        <!-- <mat-chip-row
+            *ngFor="let tag of addTags"
+            (removed)="remove(tag)"
+            [editable]="true"
+            (edited)="edit(tag, $event)"
+            [aria-description]="'press enter to edit ' + tag.title"
+          >
+            {{ tag.title }}
+            <button matChipRemove [attr.aria-label]="'remove ' + tag.title">
+              <img src="assets/images/close.svg" alt="homepage" class="close" />
+            </button>
+          </mat-chip-row>
+
+          <ng-template #singleChip>
+            <mat-chip-row
+              *ngFor="let tag of addTags"
+              (removed)="remove(tag)"
+              [editable]="true"
+              (edited)="edit(tag, $event)"
+              [aria-description]="'press enter to edit ' + tag.title"
+            >
+              {{ tag.title }}
+              <button matChipRemove [attr.aria-label]="'remove ' + tag.title">
+                <img src="assets/images/close.svg" alt="homepage" class="close" />
+              </button>
+            </mat-chip-row>
+          </ng-template> -->
+
+        <!--  <mat-chip-row [matMenuTriggerFor]="extraChipMenu" *ngIf="addTags && addTags.length > 2"> + {{ addTags.length - 1 }} more </mat-chip-row>-->
+        <!-- <mat-menu #extraChipMenu class="ios-mat-menu">
+            <mat-chip-row
+              *ngFor="let tag of addTags.slice(1)"
+              (removed)="remove(tag)"
+              [editable]="true"
+              (edited)="edit(tag, $event)"
+              [aria-description]="'press enter to edit ' + tag.title"
+            >
+              {{ tag.title }}
+              <button matChipRemove [attr.aria-label]="'remove ' + tag.title">
+                <img src="assets/images/close.svg" alt="homepage" class="close" />
+              </button>
+            </mat-chip-row>
+          </mat-menu>
+          <input
+            #tagInput
+            [matChipInputFor]="chipGrid"
+            [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+            [matChipInputAddOnBlur]="addOnBlur"
+            (matChipInputTokenEnd)="add($event)"
+          />
+        </mat-chip-grid> -->
+        <input #tagInput matInput [formControl]="tagControl" />
+      </mat-form-field>
+      <mat-form-field class="example-chip-list" appearance="fill" *ngIf="isTagEdit && allowEdit">
+        <mat-label>Update Tags</mat-label>
+        <input #editTagInput matInput [formControl]="editTagControl" required />
+        <mat-error>
+          <ng-container *ngIf="editTagControl.errors?.['required']"> Please provide a title for tag.</ng-container>
+          <ng-container> </ng-container>
+        </mat-error>
+      </mat-form-field>
+      <button *ngIf="allowAdd" color="primary" class="next primary-button" (click)="isTagEdit ? onUpdateTags() : onSave()">
+        {{ isTagEdit ? 'Update' : 'Save' }}
+      </button>
+      <button *ngIf="allowAdd" color="accent" class="cancel secondary-button" (click)="onCancel()">Cancel</button>
+    </div>
+  </div>
+
+  <div class="table-responsive" *ngIf="tags; else noRecordsFound">
+    <table mat-table [dataSource]="tags.data.length > 0 ? tags : emptyData" *ngIf="!showSpinner; else spinnerSection">
+      <!-- Position Column -->
+      <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef class="action">No.</th>
+        <td
+          mat-cell
+          *matCellDef="let element; let i = index"
+          [ngClass]="{ highlightRecord: element?.id === editableTag?.id, removeHighlight: isCancelButtonClicked }"
+        >
+          {{ ((currentPage - 1) * limit + i + 1).toString().padStart(2, '0') }}
+        </td>
+      </ng-container>
+
+      <!-- Name Column -->
+      <ng-container matColumnDef="title">
+        <th mat-header-cell *matHeaderCellDef>Title</th>
+        <td
+          mat-cell
+          *matCellDef="let element"
+          [ngClass]="{ highlightRecord: element?.id === editableTag?.id, removeHighlight: isCancelButtonClicked }"
+        >
+          {{ element.title }}
+        </td>
+      </ng-container>
+
+      <!-- Action Column -->
+      <ng-container matColumnDef="action">
+        <th mat-header-cell *matHeaderCellDef class="action table-align">Action</th>
+        <td
+          class="table-align tag-center"
+          mat-cell
+          *matCellDef="let element"
+          [ngClass]="{ highlightRecord: element?.id === editableTag?.id, removeHighlight: isCancelButtonClicked }"
+        >
+          <img src="assets/images/edit-bg.svg" (click)="onEditTag(element)" *ngIf="allowEdit" matTooltip="Edit" />
+          <span class="line"></span>
+          <img src="assets/images/trash.svg" (click)="onDeleteTag(element.id, element.title)" *ngIf="allowDelete" matTooltip="Delete" />
+        </td>
+      </ng-container>
+
+      <!-- No data Column -->
+      <ng-container matColumnDef="empty-row">
+        <td mat-cell *matCellDef="let element">No records found</td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: tags.data.length > 0 ? displayedColumns : ['empty-row']"></tr>
+    </table>
+  </div>
+  <mat-paginator
+    *ngIf="tags.data.length > 0"
+    class="pagination"
+    [pageSize]="limit"
+    [length]="totalRecords"
+    [pageIndex]="currentPage - 1"
+    (page)="onPageSelectionChange($event)"
+    [pageSizeOptions]="pageSizeOptions"
+    showFirstLastButtons
+    aria-label="Select page of periodic elements"
+  >
+  </mat-paginator>
+  <ng-template #noRecordsFound>
+    <p>No Records Found</p>
+  </ng-template>
+</div>
+
+<ng-template #spinnerSection>
+  <div mat-row [mainAppSpinner]="showSpinner"></div>
+</ng-template>

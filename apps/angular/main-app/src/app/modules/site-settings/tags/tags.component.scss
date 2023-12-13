@@ -1,0 +1,126 @@
+@import 'apps/angular/main-app/src/variables';
+@import 'apps/angular/main-app/src/mixins';
+@import 'apps/angular/main-app/src/assets/fonts/fonts.scss';
+.tags {
+  ::ng-deep .mat-mdc-form-field-icon-suffix {
+    padding: 0 !important;
+    @include flex;
+    @include flex-align-center;
+  }
+  ::ng-deep .mat-mdc-form-field-icon-suffix > .mat-icon {
+    padding: 0 !important;
+    margin-right: 5px;
+    cursor: pointer;
+    font-size: 21px;
+    @include flex;
+    @include flex-align-center;
+  }
+  ::ng-deep .mdc-data-table__header-cell {
+    border-bottom-width: 0px !important;
+  }
+  .tag-form {
+    @include flex;
+    @include flex-justify-space-between;
+    @include flex-align-center;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    ::ng-deep .mat-mdc-form-field-subscript-wrapper {
+      display: none;
+    }
+    p {
+      margin: 0;
+      font-weight: 400;
+      font-size: 17px;
+      margin-bottom: 0;
+      color: #494949;
+    }
+    button {
+      margin-left: 10px;
+    }
+  }
+  .tags-table {
+    padding: 0px 20px 20px 20px;
+  }
+  form {
+    position: relative;
+    padding: 0 20px;
+    .mat-icon {
+      position: absolute;
+      right: 25px;
+      top: 10px;
+    }
+  }
+  ::ng-deep .mat-mdc-raised-button > .mat-icon {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+  table {
+    img {
+      width: 18px;
+    }
+    .line {
+      background-color: $theme-border-color-gray;
+      height: 16px;
+      width: 1px;
+      display: inline-block;
+      margin: 0 13px;
+    }
+  }
+  .tags-form {
+    margin: 25px 0 20px;
+    gap: 15px;
+    @include flex;
+    @include flex-justify-space-between;
+    .mat-mdc-form-field {
+      margin-bottom: 0;
+      width: 450px !important;
+      min-width: 300px !important;
+      max-width: 500px !important;
+      overflow: auto;
+    }
+    .right-form {
+      @include flex;
+      gap: 15px;
+    }
+  }
+  ::ng-deep .tag-hide .mdc-evolution-chip-set .mdc-evolution-chip {
+    margin: 4px 5px 0 0px !important;
+    background-color: $theme-border-color-gray !important;
+    padding: 14px 0;
+  }
+  .tag-center {
+    @include flex;
+    @include flex-justify-center;
+    @include flex-align-center;
+    height: 52px;
+    img {
+      cursor: pointer;
+    }
+  }
+}
+
+::ng-deep .ios-mat-menu {
+  height: 86px;
+  .mat-mdc-menu-content {
+    @include flex;
+    gap: 5px;
+    flex-wrap: wrap;
+    .mat-mdc-chip {
+      border-radius: 2px;
+    }
+  }
+}
+
+@media screen and (max-width: $extra-large-device) {
+  .tags-form {
+    flex-direction: column;
+  }
+}
+
+.tag-form-wrapper {
+  ::ng-deep .mat-mdc-form-field-flex {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+}

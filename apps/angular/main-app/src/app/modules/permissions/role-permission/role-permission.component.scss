@@ -1,0 +1,229 @@
+@import 'apps/angular/main-app/src/variables';
+@import 'apps/angular/main-app/src/mixins';
+@import 'apps/angular/main-app/src/assets/fonts/fonts.scss';
+.role-permission {
+  .role-header {
+    @include flex;
+    justify-content: end;
+    @include flex-align-center;
+    margin-bottom: 20px;
+    margin-top: 20px;
+    gap: 10px;
+  }
+  .permission-wrap {
+    border-radius: $button-radius;
+    overflow-x: auto;
+    border: 1px solid $theme-border-color-gray;
+    width: 100%;
+  }
+  .role-form {
+    padding: 5px 20px;
+  }
+  .tree-view {
+    ::ng-deep .treeview-container {
+      padding: 0px 20px 20px;
+      max-height: initial !important;
+    }
+  }
+  ::ng-deep .form-inline {
+    @include flex;
+    @include flex-align-center;
+  }
+  ::ng-deep .treeview-container {
+    .form-check-label {
+      font-weight: 400;
+      font-size: $theme-main-medium-font;
+    }
+  }
+  ::ng-deep .form-check-input {
+    width: 18px;
+    height: 18px;
+    border-radius: 5px;
+  }
+  ::ng-deep .mat-mdc-select-arrow {
+    margin-top: 10px !important;
+  }
+  .permission-table {
+    table {
+      border-collapse: separate;
+      width: 100%;
+      border: initial !important;
+      table-layout: fixed;
+      border-spacing: 0;
+      td {
+        text-align: center;
+        padding: 10px 15px;
+        border-bottom: 1px solid $theme-border-color-gray;
+        border-right: 1px solid $theme-border-color-gray;
+        width: 160px;
+        height: 45px;
+      }
+      th {
+        padding: 10px 15px;
+        width: 160px;
+        border-right: 1px solid $theme-border-color-gray;
+        position: sticky;
+        top: 0;
+        z-index: 1;
+        background-color: #f9f9f9;
+        border-bottom: 1px solid $theme-border-color-gray;
+      }
+      th:last-child,
+      td:last-child {
+        border-right: 0;
+      }
+    }
+    .form-group {
+      display: block;
+    }
+    .form-group input {
+      padding: 0;
+      height: initial;
+      width: initial;
+      margin-bottom: 0;
+      display: none;
+      cursor: pointer;
+    }
+    .form-group label {
+      position: relative;
+      cursor: pointer;
+    }
+    .form-group label:before {
+      content: '';
+      border: 1.5px solid #86969d;
+      background-color: $theme-color-white;
+      display: inline-block;
+      position: relative;
+      vertical-align: middle;
+      cursor: pointer;
+      width: 18px;
+      height: 18px;
+      border-radius: $card-radius;
+      box-sizing: border-box;
+    }
+  }
+  .permission-table table th:first-child {
+    position: sticky;
+    left: 0;
+    text-align: left;
+    padding: 10px 15px;
+    width: 308px;
+    z-index: 9;
+    background-color: #f9f9f9;
+  }
+  .permission-table table td:first-child {
+    position: sticky;
+    left: 0;
+    background-color: $theme-color-white;
+    text-align: left;
+    z-index: 1;
+    width: 308px;
+    div {
+      @include flex;
+      @include flex-align-center;
+      gap: 5px;
+      .mat-icon {
+        font-size: 18px;
+        @include flex;
+        @include flex-align-center;
+        height: 16px;
+        width: 18px;
+      }
+    }
+  }
+  .permission-table table th:first-child {
+    border-left: initial !important;
+    min-width: 308px;
+  }
+  .permission-table .permission-wrap table .second-level {
+    padding-left: 10px;
+  }
+  .permission-table .permission-wrap table .second-level.node-with-chil {
+    cursor: pointer;
+  }
+  .permission-table .permission-wrap table .third-level {
+    padding-left: 53px !important;
+  }
+  .permission-table table td:first-child {
+    border-left: initial !important;
+    cursor: pointer;
+  }
+  ::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.062);
+    background-color: $theme-color-white;
+  }
+  ::-webkit-scrollbar {
+    height: 6px;
+    background-color: $theme-color-white;
+  }
+  ::-webkit-scrollbar-thumb {
+    background-color: #cccccce7;
+  }
+}
+
+.not-allowed-cursor {
+  cursor: not-allowed !important;
+}
+
+.form-group1 {
+  display: block;
+}
+
+.form-group1 input {
+  padding: 0;
+  height: initial;
+  width: initial;
+  margin-bottom: 0;
+  display: none;
+  cursor: not-allowed;
+}
+
+.form-group1 label {
+  position: relative;
+  cursor: not-allowed;
+}
+
+.form-group1 label:before {
+  content: '';
+  border: 0.5px solid #86969d;
+  background-color: #868686f0;
+  display: inline-block;
+  position: relative;
+  vertical-align: middle;
+  width: 18px;
+  height: 18px;
+  border-radius: 10px !important;
+}
+
+.form-group1 input:checked + label:after {
+  content: '';
+  display: block;
+  position: absolute;
+  top: 3px;
+  left: 7px;
+  width: 3px;
+  height: 7px;
+  border: solid $theme-color-white;
+  border-width: 0 3px 3px 0;
+  transform: rotate(45deg);
+}
+
+.field-bg {
+  background-color: #f0f0f0 !important;
+  cursor: unset !important;
+}
+
+.action-bg {
+  background-color: #f9f9f9 !important;
+  cursor: unset !important;
+}
+
+// This class used for applied background color
+// .parent-toogle-background {
+//background-color: #5e5a5afd !important;
+//   cursor: pointer !important;
+// }
+// .action-toogle-background {
+//background-color: #acacacd3 !important;
+//   cursor: pointer !important;
+// }

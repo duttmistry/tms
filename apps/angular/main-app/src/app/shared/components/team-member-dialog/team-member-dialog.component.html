@@ -1,0 +1,62 @@
+<div class="team-flex">
+  <h2 *ngIf="showLabel" class="add-h2">Team Members</h2>
+</div>
+<!-- </button> -->
+<div class="chip-wrap">
+  <div>
+    <mat-icon
+      (click)="disabledTeam ? $event.stopPropagation() : openTeamDialog()"
+      cdkOverlayOrigin
+      #trigger1="cdkOverlayOrigin"
+      class="dialog-mat-icon"
+      [ngClass]="disabledTeam ? 'not-allowed-cursor' : ''"
+      >add</mat-icon
+    >
+  </div>
+  <ng-container *ngIf="data && data.length">
+    <mat-chip-set>
+      <main-app-mat-chips
+        *ngFor="let item of data; let i = index"
+        [data]="item"
+        [isCloseButton]="item?.isShowCloseButton == false || (disableSuperAdminUsers && item?.role_id == 1) ? false : true"
+        (chipClosed)="remove(item.id)"
+        [disabledTeam]="disabledTeam"
+      >
+      </main-app-mat-chips>
+    </mat-chip-set>
+  </ng-container>
+</div>
+
+<!-- This template displays the overlay content and is connected to the button -->
+
+<ng-template
+  cdkConnectedOverlay
+  [cdkConnectedOverlayOrigin]="trigger1"
+  [cdkConnectedOverlayOpen]="isDialogOpen"
+  (overlayOutsideClick)="onClosePopup()"
+>
+  <mat-list class="example-list dropdown-border-input-wrapper team-member-wrapper">
+    <mat-list-item class="input-wrapper">
+      <input autoFocusDirective id="myInput" [placeholder]="'Search Names'" [formControl]="searchControl" autocomplete="off" class="team-field" />
+      <img src="assets/images/search.svg" alt="search" class="search" />
+
+      <button mat-icon-button (click)="onClosePopup()">
+        <mat-icon>close</mat-icon>
+      </button>
+    </mat-list-item>
+    <div class="dropdown-border-listing-wrapper multiselect-dropdown">
+      <mat-list-item
+        [disabled]="item.id === currentUser?.user?.id || item.id === responsiblePerson || (disableSuperAdminUsers && item?.role_id == 1)"
+        *ngFor="let item of filteredData | async"
+        (click)="selected(item)"
+      >
+        <mat-checkbox
+          color="primary"
+          [checked]="checkSelectedItem(item)"
+          [disabled]="item.id === currentUser?.user?.id || item.id === responsiblePerson || (disableSuperAdminUsers && item?.role_id == 1)"
+        ></mat-checkbox>
+        {{ item.name }}
+      </mat-list-item>
+    </div>
+  </mat-list>
+</ng-template>

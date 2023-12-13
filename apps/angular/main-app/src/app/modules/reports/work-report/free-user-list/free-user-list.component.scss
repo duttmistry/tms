@@ -1,0 +1,70 @@
+@import 'apps/angular/main-app/src/variables';
+@import 'apps/angular/main-app/src/mixins';
+@import 'apps/angular/main-app/src/assets/fonts/fonts';
+table {
+  width: 100%;
+}
+
+.report-table {
+  margin-top: 30px;
+  .report-table-wrap {
+    margin-bottom: 20px;
+  }
+  .table-align {
+    width: 50px;
+  }
+   ::ng-deep .mat-mdc-table .mdc-data-table__row {
+    height: 46px;
+  }
+}
+
+.bg-orange {
+  background-color: rgb(240, 196, 115);
+}
+
+.bg-yellow {
+  background-color: rgb(238, 238, 112);
+}
+
+table {
+  td {
+    padding: 5px 5px !important;
+  }
+}
+
+.wfh-details {
+  font-size: 12px;
+  display: inline;
+}
+
+.remove-wfh-filter {
+  font-size: 14px;
+  height: 14px;
+  width: 12px;
+  display: inline-block;
+  cursor: pointer;
+  color: #000;
+  vertical-align: middle;
+}
+
+.header-with-wfh-details {
+  display: block;
+}
+
+.wfh-icon {
+  font-size: 24px;
+  height: 20px;
+  width: 20px;
+  color: orange;
+}
+
+.wfo-icon {
+  font-size: 24px;
+  height: 20px;
+  width: 20px;
+  color: #333366;
+}
+
+.wfm-image {
+  text-align: center !important;
+}

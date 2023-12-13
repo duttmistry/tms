@@ -1,0 +1,33 @@
+{
+  "name": "ui-material-controls",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "library",
+  "sourceRoot": "libs/ui/material-controls/src",
+  "prefix": "tms-workspace",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/angular:ng-packagr-lite",
+      "outputs": ["{workspaceRoot}/dist/{projectRoot}"],
+      "options": {
+        "project": "libs/ui/material-controls/ng-package.json"
+      },
+      "configurations": {
+        "production": {
+          "tsConfig": "libs/ui/material-controls/tsconfig.lib.prod.json"
+        },
+        "development": {
+          "tsConfig": "libs/ui/material-controls/tsconfig.lib.json"
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/ui/material-controls/**/*.ts", "libs/ui/material-controls/**/*.html"]
+      }
+    }
+  },
+  "tags": ["angular"]
+}

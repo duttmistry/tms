@@ -1,0 +1,16 @@
+<div class="example-list multiselect-dropdown dropdown-border-input-wrapper">
+  <mat-list>
+    <mat-list-item class="input-wrapper">
+      <input tmsWorkspaceAutoFocusInput id="myInput" [placeholder]="'Start Typing'" [formControl]="searchControl" autocomplete="off" />
+      <img src="assets/images/search.svg" alt="search" class="search" />
+    </mat-list-item>
+    <div class="dropdown-border-listing-wrapper">
+      <mat-list-item *ngFor="let item of filteredItems | async" (click)="selected(item)">
+        <div class="multiselect-dropdown-list">
+          <mat-checkbox color="primary" [checked]="checkSelectedItem(item)"></mat-checkbox>
+          {{ item.name }}
+        </div>
+      </mat-list-item>
+    </div>
+  </mat-list>
+</div>

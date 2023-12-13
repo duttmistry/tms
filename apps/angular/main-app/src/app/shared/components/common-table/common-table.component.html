@@ -1,0 +1,125 @@
+<div class="role task-table-wrapper user-list-wrapper">
+  <div class="role-table table-responsive">
+    <table mat-table [dataSource]="list.data.length > 0 ? list : emptyData" class="mat-elevation-z8">
+      <!-- <ng-container *ngFor="let col of columnsToBind" [matColumnDef]="col">
+        <th mat-header-cell *matHeaderCellDef>{{ col }}</th>
+        <td mat-cell *matCellDef="let element">{{ element[col] || '-' }}</td>
+      </ng-container> -->
+      <ng-container *ngFor="let col of columnsToBind; let i = index" matColumnDef="{{ col }}">
+        <th mat-header-cell *matHeaderCellDef>{{ col }}</th>
+        <td mat-cell *matCellDef="let element">
+          <span *ngIf="col !== actionColumn"
+            >{{ col == 'End time' ? element[col] || 'Work in progress' : element[col] }}
+            <label *ngIf="!element['End time'] && col === 'Total time'" class="clock-icon-wrapper">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <g id="vuesax/linear/clock">
+                  <g id="clock">
+                    <path
+                      id="Vector"
+                      d="M14.6663 8.00016C14.6663 11.6802 11.6797 14.6668 7.99967 14.6668C4.31967 14.6668 1.33301 11.6802 1.33301 8.00016C1.33301 4.32016 4.31967 1.3335 7.99967 1.3335C11.6797 1.3335 14.6663 4.32016 14.6663 8.00016Z"
+                      stroke="#021629"
+                      stroke-width="1.2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                    <path
+                      id="Vector_2"
+                      d="M10.4729 10.1202L8.40626 8.88684C8.04626 8.6735 7.75293 8.16017 7.75293 7.74017V5.00684"
+                      stroke="#021629"
+                      stroke-width="1.2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </g>
+                </g>
+              </svg>
+            </label>
+          </span>
+
+          <span *ngIf="col === actionColumn" class="edit-delete-icon-wrapper">
+            <mat-icon *ngIf="element['End time'] && (element.user_id == loggedInUserId || canDelete)" (click)="onEditRecord(element)">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" class="cursor-pointer">
+                <path
+                  d="M11.0504 3.00002L4.20878 10.2417C3.95045 10.5167 3.70045 11.0584 3.65045 11.4334L3.34211 14.1333C3.23378 15.1083 3.93378 15.775 4.90045 15.6084L7.58378 15.15C7.95878 15.0834 8.48378 14.8084 8.74211 14.525L15.5838 7.28335C16.7671 6.03335 17.3004 4.60835 15.4588 2.86668C13.6254 1.14168 12.2338 1.75002 11.0504 3.00002Z"
+                  stroke="#86969D"
+                  stroke-width="1.5"
+                  stroke-miterlimit="10"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M9.9082 4.2085C10.2665 6.5085 12.1332 8.26683 14.4499 8.50016"
+                  stroke="#86969D"
+                  stroke-width="1.5"
+                  stroke-miterlimit="10"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M2.5 18.3335H17.5"
+                  stroke="#86969D"
+                  stroke-width="1.5"
+                  stroke-miterlimit="10"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </mat-icon>
+            <mat-icon
+              *ngIf="element['End time'] && (canDelete || element.user_id == loggedInUserId)"
+              (click)="canDelete || element.user_id == loggedInUserId ? onDeleteRecord(element) : ''"
+              [ngClass]="canDelete || element.user_id == loggedInUserId ? '' : 'restrict-cursor'"
+              ><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none" class="cursor-pointer">
+                <path
+                  d="M17.5 4.98356C14.725 4.70856 11.9333 4.56689 9.15 4.56689C7.5 4.56689 5.85 4.65023 4.2 4.81689L2.5 4.98356"
+                  stroke="#FF5959"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M7.08301 4.1415L7.26634 3.04984C7.39967 2.25817 7.49967 1.6665 8.90801 1.6665H11.0913C12.4997 1.6665 12.608 2.2915 12.733 3.05817L12.9163 4.1415"
+                  stroke="#FF5959"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M15.7087 7.6167L15.167 16.0084C15.0753 17.3167 15.0003 18.3334 12.6753 18.3334H7.32533C5.00033 18.3334 4.92533 17.3167 4.83366 16.0084L4.29199 7.6167"
+                  stroke="#FF5959"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path d="M8.6084 13.75H11.3834" stroke="#FF5959" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                <path d="M7.91699 10.4165H12.0837" stroke="#FF5959" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </mat-icon>
+            <span *ngIf="!(element['End time'] && (element.user_id == loggedInUserId || canDelete))"> - </span>
+          </span>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="empty-row">
+        <td mat-cell *matCellDef="let element">No records found</td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="columnsToBind"></tr>
+      <tr
+        mat-row
+        *matRowDef="let row; columns: list.data.length > 0 ? columnsToBind : ['empty-row']"
+        [ngClass]="!row.end_time ? 'tometo-bg' : ''"
+      ></tr>
+    </table>
+  </div>
+  <mat-paginator
+    class="pagination"
+    [length]="totalRecords"
+    [pageSize]="limit"
+    [pageIndex]="currentPage - 1"
+    [pageSizeOptions]="[5, 10, 25, 100]"
+    aria-label="Select page"
+    (page)="onPaginatorChangeEvent($event)"
+  >
+  </mat-paginator>
+</div>

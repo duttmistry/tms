@@ -1,0 +1,12 @@
+<!-- <mat-progress-bar mode="indeterminate" color="primary" class="progressbar" *ngIf="isShowSpinner"></mat-progress-bar> -->
+<ng-container *ngIf="showPreference; else displayPreferencePage">
+  <!-- <ngx-loading-bar></ngx-loading-bar> -->
+  <app-header></app-header>
+  <app-sidebar>
+    <router-outlet></router-outlet>
+  </app-sidebar>
+</ng-container>
+<!-- <main-app-spinner *ngIf="isShowSpinner"></main-app-spinner> -->
+<ng-template #displayPreferencePage>
+  <main-app-set-preference></main-app-set-preference>
+</ng-template>

@@ -1,0 +1,42 @@
+{
+  "name": "node-main-apis",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/node/main-apis/src",
+  "projectType": "application",
+  "type": "module",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/esbuild:esbuild",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/apps/node/main-apis",
+        "format": ["cjs"],
+        "main": "apps/node/main-apis/src/server.ts",
+        "tsConfig": "apps/node/main-apis/tsconfig.app.json",
+        "assets": ["apps/node/main-apis/src/assets"]
+      }
+    },
+    "serve": {
+      "executor": "@nrwl/js:node",
+      "options": {
+        "buildTarget": "node-main-apis:build"
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/node/main-apis/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "apps/node/main-apis/jest.config.ts",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": ["node"]
+}

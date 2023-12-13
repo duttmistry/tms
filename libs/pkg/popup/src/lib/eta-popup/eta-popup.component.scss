@@ -1,0 +1,20 @@
+@import '@angular/cdk/overlay-prebuilt.css';
+@import './../../../../../../apps/angular/main-app/src/variables.scss';
+@import './../../../../../../apps/angular/main-app/src/mixins.scss';
+@import './../../../../../../apps/angular/main-app/src/assets/fonts/fonts.scss';
+.eta-popup-form {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 5px;
+  max-width: 246px;
+}
+
+.tms-tasktime-right-wrapper {
+  .mat-error {
+    color: red;
+    width: 100%;
+    font-size: 12px;
+    margin-top: 0;
+  }
+}

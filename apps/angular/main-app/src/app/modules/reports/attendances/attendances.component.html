@@ -1,0 +1,228 @@
+<div class="administration container-wrapper">
+    <div class="container-inner">
+        <mat-card class="container-child">
+            <div class="workspace-blk workspace-border">
+                <strong><a (click)="redirectToAdministration()">Attendance Reports</a></strong>
+            </div>
+            <div class="administration-wrap">
+                <div class="administration-wrap-top">
+                    <div class="tollbar">
+                        <img src="assets/images/arrow_back.svg" alt="homepage" (click)="onPrevMonth()" />
+
+                        <p>{{ (month ? (month | getMonthString) : '-') + ' ' + year }}</p>
+
+                        <img src="assets/images/arrow_back1.svg" alt="homepage" (click)="onNextMonth()" />
+                    </div>
+                    <div class="administration-color">
+                        <div class="p-day">
+                            <span>Present (P)</span>
+                        </div>
+                        <div class="upl-day">
+                            <span>Leave L (FH | SH | FD)</span>
+                        </div>
+                        <div class="h-day">
+                            <span>Holiday (H)</span>
+                        </div>
+                        <div class="wo-day">
+                            <span>Week Off (WO)</span>
+                        </div>
+
+                        <div class="a-day">
+                            <span>Absent (A)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="administration-flex autocomplete-blk">
+                    <!-- <mat-form-field class="small-dropdown arrow-down">
+          <mat-chip-grid #chipList>
+            <main-app-mat-chips *ngIf="selectedUsers.length" [data]="selectedUsers[0]" [isCloseButton]="false"> </main-app-mat-chips>
+            <mat-chip *ngIf="selectedUsers.length - 1 > 0">
+              {{ '+' + (selectedUsers.length - 1) + 'more' }}
+            </mat-chip>
+            <input
+              #userSearchInput
+              #autocompleteTrigger="matAutocompleteTrigger"
+              [formControl]="userSearchInputCtrl"
+              [matAutocomplete]="auto"
+              [matChipInputFor]="chipList"
+            />
+          </mat-chip-grid>
+
+          <mat-autocomplete #auto="matAutocomplete">
+            <mat-list-item *ngFor="let user of filteredUsersList$ | async" (click)="selected(user)">
+              <mat-checkbox color="primary" [checked]="checkSelectedItem(user)"></mat-checkbox>
+              {{ user.name }}
+            </mat-list-item>
+          </mat-autocomplete>
+          <!-- <mat-icon matSuffix *ngIf="usersCtrl.value" (click)="resetUsersContol($event)" class="filter-close">close</mat-icon>
+        </mat-form-field> -->
+                    <div class="close-icon-wrapper">
+                        <mat-form-field class="small-dropdown user-dropdown medium-height-wrapper" style="width: 250px">
+                            <mat-label *ngIf="selectedUsers.length === 0">Employee</mat-label>
+                            <mat-chip-grid #chipList [ngClass]="auto.isOpen ? 'arrow-up' : 'arrow-down'">
+                                <ng-container *ngFor="let user of selectedUsers.slice(0, 1); let last = last">
+                                    <mat-chip>
+                                        {{ user.name }}
+                                        <span *ngIf="selectedUsers.length > 1" class="selected"> +{{ selectedUsers.length - 1 }} </span>
+                                    </mat-chip>
+                                </ng-container>
+                                <input #userSearchInput #autocompleteTrigger="matAutocompleteTrigger" [formControl]="userSearchInputCtrl" [matAutocomplete]="auto" [matChipInputFor]="chipList" />
+                            </mat-chip-grid>
+
+                            <mat-autocomplete #auto="matAutocomplete" class="administration-user">
+                                <mat-list-item *ngFor="let user of filteredUsersList$ | async" (click)="selected(user)">
+                                    <mat-checkbox color="primary" [checked]="checkSelectedItem(user)"></mat-checkbox>
+                                    {{ user.name }}
+                                </mat-list-item>
+                            </mat-autocomplete>
+                        </mat-form-field>
+                        <svg (click)="clearAllUsers()" *ngIf="selectedUsers.length !== 0" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" class="filter-close">
+              <path
+                d="M8.00065 1.3335C4.32732 1.3335 1.33398 4.32683 1.33398 8.00016C1.33398 11.6735 4.32732 14.6668 8.00065 14.6668C11.674 14.6668 14.6673 11.6735 14.6673 8.00016C14.6673 4.32683 11.674 1.3335 8.00065 1.3335ZM10.2407 9.5335C10.434 9.72683 10.434 10.0468 10.2407 10.2402C10.1407 10.3402 10.014 10.3868 9.88732 10.3868C9.76065 10.3868 9.63398 10.3402 9.53399 10.2402L8.00065 8.70683L6.46732 10.2402C6.36732 10.3402 6.24065 10.3868 6.11398 10.3868C5.98732 10.3868 5.86065 10.3402 5.76065 10.2402C5.56732 10.0468 5.56732 9.72683 5.76065 9.5335L7.29398 8.00016L5.76065 6.46683C5.56732 6.2735 5.56732 5.9535 5.76065 5.76016C5.95398 5.56683 6.27398 5.56683 6.46732 5.76016L8.00065 7.2935L9.53399 5.76016C9.72732 5.56683 10.0473 5.56683 10.2407 5.76016C10.434 5.9535 10.434 6.2735 10.2407 6.46683L8.70732 8.00016L10.2407 9.5335Z"
+                fill="#86969D"
+              />
+            </svg>
+                    </div>
+                    <mat-form-field class="small-dropdown medium-height-wrapper input-field-wrapper">
+                        <mat-label>Year</mat-label>
+                        <mat-select placeholder="" #selectInput [formControl]="yearControl" [ngClass]="selectInput.panelOpen ? 'arrow-up' : 'arrow-down'">
+                            <mat-option *ngFor="let item of yearList" [value]="item">{{ item }}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <mat-form-field class="small-dropdown calender-icon medium-height-wrapper input-field-wrapper">
+                        <mat-label>Month</mat-label>
+                        <mat-select [formControl]="monthControl">
+                            <mat-option *ngFor="let item of monthList" [value]="item.index">{{ item.name }}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <button (click)="onClickGenerateReport()" class="cancel secondary-button">Generate Report</button>
+                    <button (click)="exportExcel()" class="cancel secondary-button">Export Excel</button>
+                </div>
+
+                <div class="table-responsive">
+                    <table *ngIf="!showSpinner; else spinnerSection">
+                        <thead>
+                            <tr>
+                                <th>User</th>
+                                <!-- <th>Month</th> -->
+                                <ng-container *ngFor="let item of tableDayHeader">
+                                    <th [ngClass]="item.isWeekOff ? 'wo-day' : ''">{{ item.day }}</th>
+                                </ng-container>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <ng-container *ngFor="let attendanceReport of attendanceReportData; let i1 = index">
+                                <ng-container *ngFor="let month of attendanceReport.attendance; let i2 = index">
+                                    <tr>
+                                        <td (click)="toggleShowDetails(i1, i2)" *ngIf="i2 == 0" [attr.rowspan]="month.isShowDetails ? 2 : 1">
+                                            <!-- <main-app-mat-chips
+                      [data]="{
+                        id: attendanceReport.id,
+                        name: attendanceReport.first_name + ' ' + attendanceReport.last_name,
+                        avatar: attendanceReport.employee_image
+                      }"
+                      [showOrangeChip]="month.isShowDetails"
+                      [isCloseButton]="false"
+                    >
+                    </main-app-mat-chips> -->
+                                            {{ attendanceReport.first_name ? attendanceReport.first_name.trim() : '' }}{{ attendanceReport.first_name && attendanceReport.last_name ? ' ' : '' }}{{ attendanceReport.last_name ? attendanceReport.last_name.trim() : '' }}{{ !attendanceReport.first_name
+                                            && !attendanceReport.last_name ? '--' : '' }}
+                                        </td>
+                                        <td *ngFor="let day of month.attendance">
+                                            <!-- 1 > H - Holiday
+                      // *  2 > WO - Week Off
+                      // *  3 > P - Present
+                      // *  4 > FH - Half Day (First Half)
+                      // *  5 > SH - Half Day (Second Half)
+                      // *  6 > FD - Unplanned Leave
+                      // *  7 > FD - Leave
+                      // *  8 > -
+                      // *  9 > Absence -->
+                                            <div *ngIf="day.day_id == 2 || day.day_id == 9 || day.day_id == 8" class="day-cell" [ngClass]="day.day_id == 2 ? 'wo-day' : day.day_id == 9 ? 'a-day' : ''">
+                                                <span>{{ day.day_type }}</span>
+                                            </div>
+                                            <div *ngIf="day.day_id != 2 && day.day_id != 9 && day.day_id != 8" [matMenuTriggerFor]="menu" class="day-cell" [ngClass]="
+                          day.day_id === 1
+                            ? 'h-day'
+                            : day.day_id === 2
+                            ? 'wo-day'
+                            : day.day_id === 3
+                            ? 'p-day'
+                            : day.day_id === 4 || day.day_id === 5 || day.day_id === 6 || day.day_id === 7
+                            ? 'upl-day'
+                            : day.day_id === 9
+                            ? 'a-day'
+                            : ''
+                        ">
+                                                <span>{{ day.day_type }}</span>
+                                            </div>
+                                            <mat-menu #menu xPosition="before" yPosition="above" pgcCenter class="attendance-menu">
+                                                <div *ngIf="day.day_id == 3 || day.day_id === 4 || day.day_id === 5">
+                                                    <p><span>Login:</span>{{ day.time.loginTime }}</p>
+                                                    <p><span>Logout:</span>{{ day.time.logoutTime }}</p>
+                                                    <p><span>Break:</span> {{ day.time.breakTime }}</p>
+                                                    <p><span>Total Time:</span>{{ day.time.totalTime }}</p>
+                                                </div>
+                                                <div *ngIf="day.day_id === 4 || day.day_id === 5 || day.day_id === 6 || day.day_id === 7">
+                                                    <p><span> Leave Subject: </span> {{ day.leave_subject }}</p>
+                                                </div>
+                                                <div *ngIf="day.day_id === 1">
+                                                    <p>
+                                                        <span>{{ day.holiday_title }} </span>
+                                                    </p>
+                                                </div>
+                                            </mat-menu>
+                                        </td>
+                                    </tr>
+                                    <tr *ngIf="month.isShowDetails">
+                                        <!-- <td>-</td> -->
+                                        <td [attr.colspan]="4" class="highlight-counts">
+                                            <span> REPORT TOTALS </span>
+                                        </td>
+                                        <td [attr.colspan]="3" class="highlight-counts highlight-counts-wrap">
+                                            <span>Attended :
+                        <p>
+                          {{ month.attendedCount }}
+                        </p>
+                      </span>
+                                        </td>
+                                        <td [attr.colspan]="3" class="highlight-counts highlight-counts-wrap">
+                                            <span>
+                        Leaves :
+                        <p>
+                          {{ month.leavesCount }}
+                        </p></span
+                      >
+                    </td>
+                    <td [attr.colspan]="4" class="highlight-counts highlight-counts-wrap">
+                      <span>
+                        Holiday/Week off :
+                        <p>
+                          {{ month.holidayWeekoffCount }}
+                        </p></span
+                      >
+                    </td>
+
+                    <td [attr.colspan]="4" class="highlight-counts highlight-counts-wrap1">
+                      <span
+                        >Attendance(%) :
+                        <p>
+                          {{ month.attendancePercentage + '%' }}
+                        </p>
+                      </span>
+                                        </td>
+                                        <td colSpan="13"></td>
+                                    </tr>
+                                </ng-container>
+                            </ng-container>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </mat-card>
+    </div>
+</div>
+<ng-template #spinnerSection>
+    <div [mainAppSpinner]="showSpinner"></div>
+</ng-template>

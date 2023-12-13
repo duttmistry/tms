@@ -1,0 +1,43 @@
+@import 'apps/angular/main-app/src/variables';
+@import 'apps/angular/main-app/src/mixins';
+@import 'apps/angular/main-app/src/assets/fonts/fonts';
+.messaging-template {
+  .mat-mdc-card {
+    height: 100%;
+  }
+  .messaging-template-wrap {
+    width: 865px;
+    margin-top: 25px;
+  }
+  quill-editor {
+    max-width: 865px;
+    margin-bottom: 25px;
+  }
+  .message-form {
+    @include flex;
+    gap: 13px;
+    margin-bottom: 20px;
+  }
+  .Disable {
+    font-size: $theme-main-small-font;
+    font-weight: 400;
+    line-height: 15px;
+    color: #adadad;
+    cursor: pointer;
+  }
+  .enable {
+    font-size: $theme-main-small-font;
+    font-weight: 500;
+    line-height: 15px;
+    cursor: pointer;
+  }
+  .mat-mdc-form-field {
+    margin-bottom: 0;
+  }
+  ::ng-deep .mdc-switch {
+    margin: 0 10px;
+  }
+  .side-toggle-blk {
+    margin-bottom: 20px;
+  }
+}

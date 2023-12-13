@@ -1,0 +1,60 @@
+@import 'apps/angular/main-app/src/variables';
+@import 'apps/angular/main-app/src/mixins';
+@import 'apps/angular/main-app/src/assets/fonts/fonts';
+::ng-deep .mdc-linear-progress__bar-inner {
+  border-color: unset !important;
+}
+
+.project-block-inner {
+  .heading {
+    color: $theme-font-color-black;
+    font-size: $theme-main-extra-large-font;
+    font-weight: 600;
+    margin-bottom: 0;
+    margin-top: 0;
+  }
+  .project-data-wrapper {
+    background-color: $theme-bg-color-drawer-container;
+    padding: 15px;
+    border-radius: 4px;
+    max-height: 275px;
+    overflow: auto;
+    margin-top: 4px;
+    .mat-mdc-progress-bar {
+      border-radius: 5px;
+    }
+    .project-list-wrapper+.project-list-wrapper {
+      margin-top: 20px;
+    }
+    .percentage-wrapper-outer {
+      display: flex;
+      justify-content: space-between;
+    }
+    .project-name {
+      color: $theme-font-color-black;
+      font-size: $theme-main-large-font;
+      font-weight: 500;
+      margin: 0 0 2px 0;
+    }
+    .total-wrapper {
+      color: $theme-main-color-light;
+      font-size: $theme-main-medium-font;
+      font-weight: 500;
+      margin: 0 0 8px 0;
+    }
+    .percentage-wrapper {
+      font-size: $theme-main-medium-font;
+      font-weight: 500;
+    }
+  }
+}
+
+.view-details-button {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 34px;
+  .view-more-link {
+    font-size: 12px;
+  }
+}

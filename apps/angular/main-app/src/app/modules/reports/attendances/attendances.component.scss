@@ -1,0 +1,320 @@
+@import 'apps/angular/main-app/src/variables';
+@import 'apps/angular/main-app/src/mixins';
+@import 'apps/angular/main-app/src/assets/fonts/fonts';
+::ng-deep .center-before {
+  transform: translateX(40%) !important;
+}
+
+.administration {
+  min-height: 100vh;
+  .administration-blk {
+    @include flex;
+    @include flex-justify-space-between;
+    @include flex-align-center;
+    mat-icon {
+      margin-right: 0;
+      margin-left: 0;
+    }
+    strong {
+      font-weight: 500;
+      font-size: $theme-main-extra-large-font;
+      margin-bottom: 0;
+      span {
+        margin-left: 5px;
+        font-weight: 400;
+      }
+    }
+  }
+  .highlight-counts {
+    span {
+      font-weight: bold;
+      color: rgb(57, 118, 251);
+    }
+  }
+  .wo-day {
+    background-color: #e5e5e5;
+  }
+  .p-day {
+    background-color: $theme-color-bg-present;
+  }
+  .upl-day {
+    background-color: #ffdede;
+  }
+  .h-day {
+    background-color: #cdecfa;
+  }
+  .a-day {
+    background-color: #ffdcc3;
+  }
+  .administration-wrap {
+    margin-top: 25px;
+    .administration-wrap-top {
+      @include flex;
+      gap: 15px;
+      @include flex-justify-space-between;
+      @include flex-align-center;
+      .tollbar {
+        @include flex;
+        @include flex-align-center;
+        img {
+          cursor: pointer;
+        }
+        p {
+          font-size: $theme-main-extra-large-font;
+          font-weight: 600;
+          text-align: center;
+          width: 153px;
+          margin: 0;
+        }
+      }
+      .administration-color {
+        @include flex;
+        @include flex-align-center;
+        gap: 42px;
+        span {
+          font-size: $theme-main-small-font;
+          font-weight: 400;
+          position: relative;
+          word-wrap: break-word;
+        }
+        .wo-day {
+          background-color: unset;
+          position: relative;
+          &:before {
+            background-color: #e5e5e5;
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            content: ' ';
+            top: 7px;
+            left: -18px;
+            border-radius: 50%;
+          }
+        }
+        .p-day {
+          background-color: unset;
+          position: relative;
+          &:before {
+            background-color: $theme-color-bg-present;
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            content: ' ';
+            top: 7px;
+            left: -18px;
+            border-radius: 50%;
+          }
+        }
+        .upl-day {
+          background-color: unset;
+          position: relative;
+          &:before {
+            background-color: #ffdede;
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            content: ' ';
+            top: 7px;
+            left: -18px;
+            border-radius: 50%;
+          }
+        }
+        .h-day {
+          background-color: unset;
+          position: relative;
+          &:before {
+            background-color: #cdecfa;
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            content: ' ';
+            top: 7px;
+            left: -18px;
+            border-radius: 50%;
+          }
+        }
+        .a-day {
+          background-color: unset;
+          position: relative;
+          &:before {
+            background-color: #ffdcc3;
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            content: ' ';
+            top: 7px;
+            left: -18px;
+            border-radius: 50%;
+          }
+        }
+      }
+    }
+    .administration-flex {
+      gap: 15px;
+      @include flex;
+      margin-top: 30px;
+      margin-bottom: 30px;
+      flex-wrap: wrap;
+      .mat-mdc-form-field {
+        margin-bottom: 0;
+        width: 180px;
+      }
+    }
+     ::ng-deep .mat-card-header-text {
+      display: none !important;
+    }
+  }
+  .table-responsive {
+    border: 1px solid #f0f0f0 !important;
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      thead {
+        tr {
+          background-color: #efefef !important;
+          height: 41px !important;
+        }
+        .ng-star-inserted {
+          text-align: center;
+          width: 45px;
+        }
+      }
+      th {
+        font-size: $theme-main-medium-font !important;
+        font-weight: 500 !important;
+        line-height: 17px;
+        padding: 0 13px !important;
+        text-align: left;
+        border-bottom: 1px solid #f0f0f0;
+        &:last-child {
+          border-right: unset;
+        }
+      }
+      td {
+        padding: 0 !important;
+        text-align: left;
+        border-top: 1px solid #f0f0f0;
+        height: 46px;
+        &:first-child {
+          padding: 0 10px !important;
+          cursor: pointer;
+        }
+        &:last-child {
+          border-right: unset;
+        }
+      }
+    }
+  }
+  .day-cell {
+    @include flex;
+    @include flex-justify-center;
+    @include flex-align-center;
+    font-weight: 500;
+    font-size: $theme-main-small-font;
+    height: 100%;
+  }
+  .month-cell {
+    @extend .day-cell;
+  }
+  .total-day-cell {
+    @extend .day-cell;
+    background-color: #a7ddf1;
+  }
+  .highlight-counts {
+    border: unset;
+    span {
+      color: $theme-main-extra-color-dark;
+      font-weight: 600;
+      line-height: 15px;
+      font-size: $theme-main-small-font;
+    }
+  }
+  .highlight-counts-wrap {
+    span {
+      font-size: 12px;
+      line-height: 15px;
+      font-weight: 400;
+      color: $theme-main-extra-color-dark;
+      @include flex;
+      position: relative;
+      &::before {
+        content: '';
+        position: absolute;
+        right: 30px;
+        top: 0;
+        width: 1px;
+        height: 13px;
+        background-color: #d4d4d4;
+      }
+      p {
+        font-weight: 600;
+        color: $theme-font-color-black;
+        margin: 0;
+      }
+    }
+  }
+  .highlight-counts-wrap1 {
+    span {
+      font-size: 12px;
+      line-height: 15px;
+      font-weight: 400;
+      color: $theme-main-extra-color-dark;
+      @include flex;
+      p {
+        font-weight: 600;
+        color: $theme-font-color-black;
+        margin: 0;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: $extra-extra-large-device) {
+  .administration {
+    .table-responsive {
+      overflow-x: auto;
+      table {
+        width: 1600px;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: $lerge-device) {
+  .administration {
+    .administration-wrap {
+      .administration-wrap-top {
+        flex-direction: column;
+      }
+      .administration-flex {
+        @include flex-justify-center;
+        .cancel {
+          padding: 0 9px !important;
+          font-size: 12px !important;
+        }
+        .mat-mdc-form-field {
+          width: 125px;
+        }
+      }
+    }
+  }
+}
+
+.administration-flex {
+  .user-dropdown {
+    .selected {
+      padding: 1px;
+      min-width: 22px;
+      min-height: 22px;
+      display: table-cell;
+      border-radius: 50%;
+      color: #fff;
+      text-align: center;
+      font-weight: 600;
+      vertical-align: middle;
+      font-size: 10px;
+      line-height: 20px;
+      background: #333366;
+    }
+  }
+}

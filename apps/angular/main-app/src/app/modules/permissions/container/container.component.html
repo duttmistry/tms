@@ -1,0 +1,16 @@
+<div class="container-wrapper site-settings" [ngClass]="activeLink === 'Permissions' ? 'permission-class' : ''">
+    <div class="container-inner">
+        <mat-card class="container-child">
+            <div class="workspace-blk workspace-border">
+                <strong>User Permissions</strong>
+            </div>
+            <nav mat-tab-nav-bar [disableRipple]="true" class="tabs tab-outer-wrapper" fitInkBarToContent [tabPanel]="tabPanel">
+                <a *ngFor="let section of sidebarSectionList" (click)="activeLink = section.title" [active]="activeLink === section.title" mat-tab-link [routerLink]="section.route" routerLinkActive="active">{{ section.title }}</a
+        >
+      </nav>
+      <mat-tab-nav-panel #tabPanel>
+        <router-outlet></router-outlet>
+      </mat-tab-nav-panel>
+    </mat-card>
+  </div>
+</div>

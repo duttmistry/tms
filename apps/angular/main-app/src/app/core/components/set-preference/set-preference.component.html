@@ -1,0 +1,175 @@
+<div class="container-wrapper Preferences">
+    <mat-card>
+        <div class="workspace-border">
+            <div class="icon-section">
+                <img src="assets/images/logo.svg" alt="homepage" class="header-icon" />
+            </div>
+            <div class="username-section" *ngIf="userData && userData?.user_firstname">
+                <p>Hii, {{ userData?.user_firstname }}</p>
+            </div>
+            <div class="username-section" *ngIf="userData && userData?.user_firstname">
+                <p>{{ notificationTitle }}</p>
+            </div>
+            <div class="username-section" *ngIf="userData && userData?.user_firstname">
+                <p>{{ notificationDescription }}</p>
+            </div>
+        </div>
+        <div class="Preferences-blk Preferences-responsive">
+            <div class="Preferences-wrap">
+                <mat-stepper [linear]="isLinear" #stepper>
+                    <mat-step [stepControl]="firstFormGroup">
+                        <div class="stepper-content-section">
+                            <!-- <ng-template matStepLabel>Project Preference</ng-template> -->
+                            <ng-template matStepLabel>Set Project Preferences</ng-template>
+                            <!-- <ul class="top-ul">
+                <li class="big-width">Project Notifications <img src="assets/images/info.svg" alt="info" /></li>
+                <ng-container *ngFor="let item of preferenceHeader">
+                  <li class="gray-width" id="{{ item.key }}">
+                    <img
+                      src="{{ item?.allowAllNotification ? 'assets/images/check-blue.svg' : 'assets/images/check-sky.svg' }}"
+                      alt="check-sky"
+                      (click)="updateAllProjectAction(item)"
+                    />{{ item.label }}
+                    <img src="assets/images/info.svg" alt="info" matTooltip="{{ item.tooltip_message }}" />
+                  </li>
+                </ng-container>
+              </ul>
+              <div class="scroll-blk multiple-data" *ngIf="projectPreferenceList && projectPreferenceList?.length; else no_records_found">
+                <ul *ngFor="let item of projectPreferenceList">
+                  <li class="big-width">
+                    {{ item?.project_title }}
+                    <img
+                      src="{{ item?.is_notify ? 'assets/images/check-blue.svg' : 'assets/images/check-sky.svg' }}"
+                      alt="check-sky"
+                      (click)="changeProjectNotification(item)"
+                    />
+                  </li>
+                  <li class="gray-width">
+                    <img
+                      src="{{ item?.is_notify_email ? 'assets/images/single-blue.svg' : 'assets/images/single-sky.svg' }}"
+                      alt="check-blue"
+                      (click)="changeProjectNotificationStatus(item, 'is_notify_email')"
+                    />
+                  </li>
+                  <li class="gray-width">
+                    <img
+                      src="{{ item?.is_notify_push ? 'assets/images/single-blue.svg' : 'assets/images/single-sky.svg' }}"
+                      alt="check-blue"
+                      (click)="changeProjectNotificationStatus(item, 'is_notify_push')"
+                    />
+                  </li>
+                  <li class="gray-width">
+                    <img
+                      src="{{ item?.is_notify_chat ? 'assets/images/single-blue.svg' : 'assets/images/single-sky.svg' }}"
+                      alt="check-blue"
+                      (click)="changeProjectNotificationStatus(item, 'is_notify_chat')"
+                    />
+                  </li>
+                  <li *ngFor="let action of item.actions" id="{{ action.key }}">
+                    <img
+                      src="{{ action?.is_notify ? 'assets/images/single-blue.svg' : 'assets/images/single-sky.svg' }}"
+                      alt="check-blue"
+                      (click)="changeProjectActionNotificationStatus(item, action.key)"
+                    />
+                  </li>
+                </ul>
+              </div> -->
+                            <ul class="top-ul" *ngIf="projectPreferenceList && projectPreferenceList?.length">
+                                <li class="big-width 1234">
+                                    Project Alerts <img src="assets/images/info.svg" alt="info" matTooltip="Get notification of project" />
+                                </li>
+                                <!-- Preference Header Section Start-->
+                                <ng-container *ngFor="let item of preferenceHeader">
+                                    <li class="{{ item.isGrayBackground ? 'gray-width' : '' }}" id="{{ item.key }}">
+                                        <span>
+                      <img
+                        src="{{ item?.allowAllNotification ? 'assets/images/check-blue.svg' : 'assets/images/check-sky.svg' }}"
+                        alt="check-sky"
+                        class="double-tik"
+                        (click)="updateAllProjectAction(item)"
+                      />{{ item.label }}</span
+                    >
+                    <img src="assets/images/info.svg" alt="info" matTooltip="{{ item.tooltip_message }}" />
+                  </li>
+                </ng-container>
+                <!-- Preference Header Section Start-->
+              </ul>
+              <div *ngIf="projectPreferenceList && projectPreferenceList?.length">
+                <ul *ngFor="let project of projectPreferenceList">
+                  <li class="big-width">
+                    {{ project?.project_title }}
+                    <img
+                      src="{{ project?.is_notify ? 'assets/images/check-blue.svg' : 'assets/images/check-sky.svg' }}"
+                      alt="check-sky"
+                      class="double-tik"
+                      (click)="changeProjectNotification(project)"
+                    />
+                  </li>
+                  <li class="gray-width">
+                    <img
+                      src="{{ project?.is_notify_email ? 'assets/images/single-blue.svg' : 'assets/images/single-sky.svg' }}"
+                      alt="check-blue"
+                      (click)="changeProjectNotificationStatus(project?.id, 'is_notify_email')"
+                    />
+                  </li>
+                  <li class="gray-width">
+                    <img
+                      src="{{ project?.is_notify_push ? 'assets/images/single-blue.svg' : 'assets/images/single-sky.svg' }}"
+                      alt="check-blue"
+                      (click)="changeProjectNotificationStatus(project?.id, 'is_notify_push')"
+                    />
+                  </li>
+                  <li class="gray-width">
+                    <img
+                      src="{{ project?.is_notify_chat ? 'assets/images/single-blue.svg' : 'assets/images/single-sky.svg' }}"
+                      alt="check-blue"
+                      (click)="changeProjectNotificationStatus(project?.id, 'is_notify_chat')"
+                    />
+                  </li>
+                  <li *ngFor="let action of project.actions">
+                    <img
+                      src="{{ action.is_notify ? 'assets/images/single-blue.svg' : 'assets/images/single-sky.svg' }}"
+                      alt="check-blue"
+                      (click)="changeProjectActionNotificationStatus(project?.id, action.key)"
+                    />
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div class="stepper-button-section">
+              <!-- <button  matStepperNext>Next</button> -->
+              <button color="primary" (click)="onSubmitPreference()" class="next reason-confirm-button pointer cursor-pointer" matStepperPrevious>
+                Submit
+              </button>
+            </div>
+          </mat-step>
+          <!-- <mat-step [stepControl]="secondFormGroup" label="Fill content step 2">
+            <div class="stepper-content-section">
+              <form [formGroup]="secondFormGroup">
+                <p>Content of step 2</p>
+              </form>
+            </div>
+            <div class="stepper-button-section">
+              <button  matStepperPrevious>Back</button>
+              <button  matStepperNext>Next</button>
+            </div>
+          </mat-step>
+          <mat-step>
+            <div class="stepper-content-section">
+              <ng-template matStepLabel>Done</ng-template>
+              <p>Content of step 3</p>
+            </div>
+
+            <div class="stepper-button-section">
+              <button  matStepperPrevious>Back</button>
+              <button  color="primary" (click)="onSubmitPreference()" matStepperPrevious>Submit</button>
+            </div>
+          </mat-step> -->
+        </mat-stepper>
+      </div>
+    </div>
+  </mat-card>
+</div>
+<ng-template #no_records_found>
+  <p>No records found</p>
+</ng-template>

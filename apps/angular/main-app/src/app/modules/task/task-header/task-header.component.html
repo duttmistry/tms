@@ -1,0 +1,545 @@
+<div class="task-header">
+    <div class="workspace-blk workspace-border">
+        <strong>Task(s) <ng-container *ngIf="totalTasksCount">({{ totalTasksCount }})</ng-container></strong
+    >
+    <!-- <button  color="primary" (click)="navigateToAddTask()" class="create-task">Create Task</button> -->
+
+    <!--
+    <div class="tabs">
+      <mat-tab-group
+        mat-stretch-tabs="false"
+        mat-align-tabs="start"
+        [selectedIndex]="selectedTab.value"
+        (selectedIndexChange)="selectedTab.setValue($event)"
+        (click)="onChangeTab()"
+      >
+        <mat-tab *ngFor="let tab of tabs">
+          <ng-template mat-tab-label>
+            <img [src]="'assets/images/task.svg'" [alt]="'task'" style="margin-right: 5px; width: 17px" /> {{ tab.name }}
+          </ng-template>
+        </mat-tab>
+      </mat-tab-group>
+    </div> -->
+  </div>
+
+  <div class="task-filter-wrapper">
+    <div class="task-filter-left input-close-wrapper">
+      <mat-form-field class="search-form-field medium-height-wrapper">
+        <input
+          type="text"
+          matInput
+          #input
+          [formControl]="searchFormControl"
+          (keydown.enter)="input.blur()"
+          (change)="getProjectidsWiseTaskList()"
+          placeholder="Search Task"
+        />
+        <mat-icon matPrefix class="search-icon"><img src="assets/images/search.svg" class="search-icon" /></mat-icon>
+      </mat-form-field>
+
+      <svg
+        matSuffix
+        (click)="searchFormControl.reset(''); getProjectidsWiseTaskList()"
+        *ngIf="searchFormControl?.value"
+        class="filter-close"
+        width="16"
+        height="16"
+        viewBox="0 0 16 16"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M8.00065 1.3335C4.32732 1.3335 1.33398 4.32683 1.33398 8.00016C1.33398 11.6735 4.32732 14.6668 8.00065 14.6668C11.674 14.6668 14.6673 11.6735 14.6673 8.00016C14.6673 4.32683 11.674 1.3335 8.00065 1.3335ZM10.2407 9.5335C10.434 9.72683 10.434 10.0468 10.2407 10.2402C10.1407 10.3402 10.014 10.3868 9.88732 10.3868C9.76065 10.3868 9.63398 10.3402 9.53399 10.2402L8.00065 8.70683L6.46732 10.2402C6.36732 10.3402 6.24065 10.3868 6.11398 10.3868C5.98732 10.3868 5.86065 10.3402 5.76065 10.2402C5.56732 10.0468 5.56732 9.72683 5.76065 9.5335L7.29398 8.00016L5.76065 6.46683C5.56732 6.2735 5.56732 5.9535 5.76065 5.76016C5.95398 5.56683 6.27398 5.56683 6.46732 5.76016L8.00065 7.2935L9.53399 5.76016C9.72732 5.56683 10.0473 5.56683 10.2407 5.76016C10.434 5.9535 10.434 6.2735 10.2407 6.46683L8.70732 8.00016L10.2407 9.5335Z"
+          fill="#86969D"
+        />
+      </svg>
+    </div>
+    <div class="task-filter-right">
+      <!-- <main-app-project-selection
+        class=""
+        [projectList]="projectSelectionInputList"
+        [selctedProjects]="projectSelection"
+        (getSelectedProjects)="getSelectedProjectList($event)"
+      ></main-app-project-selection> -->
+      <workspace-grouped-project-selection
+        [displayCount]="true"
+        (getSelectedProjects)="getSelectedProjects($event)"
+        [hideNoTaskCount]="true"
+        class=""
+        [selectedWorkSpaceID]="selectedWorkSpaceId"
+        [selectedProjectID]="selectedProjectID"
+        [prefName]="userFilterPrefStorageID"
+      ></workspace-grouped-project-selection>
+
+      <div class="assignee-wrapper task-right-filter">
+        <div class="close-icon-wrapper">
+          <mat-form-field class="assignee-field small-dropdown medium-height-wrapper">
+            <mat-label *ngIf="userFormControl?.value?.length === 0">Assignee</mat-label>
+            <mat-label class="select-value" *ngIf="userFormControl?.value?.length !== 0">
+              <span class="value">{{userFormControl.value?.[0]?.name || ''}}</span>
+              <span *ngIf="(userFormControl?.value?.length || 0) > 1" class="add-value"> +{{ (userFormControl.value?.length || 0) - 1 }} </span>
+            </mat-label>
+            <mat-select
+              panelClass="assignee-select"
+              #assigneeList
+              [formControl]="userFormControl"
+              multiple
+              (selectionChange)="changedSelection = true"
+              (openedChange)="assigneeSelectionToggled($event)"
+              [ngClass]="assigneeList.panelOpen ? 'arrow-up' : 'arrow-down'"
+            >
+              <div class="button-container">
+                <div class="input-wrapper">
+                  <input
+                    type="text"
+                    placeholder="Search"
+                    (keyup)="filterList($event)"
+                    [formControl]="assigneeSearchControl"
+                    tmsWorkspaceAutoFocusInput
+                  />
+                  <img src="assets/images/search.svg" alt="search" class="search" />
+                </div>
+                <div class="button-wrapper">
+                  <!-- assigneeList.close() -->
+                  <span (click)="selectAllAsignee()">Select All</span>
+                  <span (click)="unselcteAllAsignee()">Clear All</span>
+                </div>
+                <!-- <button  (click)="getProjectidsWiseTaskList(); assigneeList.close()">&#10004;</button> -->
+              </div>
+              <mat-select-trigger style="display: none" class="select-value" [matTooltip]="userFormControl.value?.[0]?.name || ''">
+                <span class="value">{{userFormControl.value?.[0]?.name || ''}}</span>
+                <span *ngIf="(userFormControl?.value?.length || 0) > 1" class="add-value"> +{{ (userFormControl.value?.length || 0) - 1 }} </span>
+              </mat-select-trigger>
+              <div class="mat-option-wrapper">
+                <mat-option *ngFor="let user of filteredAssigneeList" (click)="onAssigneeCheckChangeOption(user)" [value]="user"
+                  >{{ user.name }}
+                </mat-option>
+              </div>
+            </mat-select>
+          </mat-form-field>
+          <svg
+            *ngIf="userFormControl?.value?.length !== 0"
+            (click)="clearAssigneeFilter(); getProjectidsWiseTaskList()"
+            class="filter-close"
+            width="16"
+            height="16"
+            viewBox="0 0 16 16"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M8.00065 1.3335C4.32732 1.3335 1.33398 4.32683 1.33398 8.00016C1.33398 11.6735 4.32732 14.6668 8.00065 14.6668C11.674 14.6668 14.6673 11.6735 14.6673 8.00016C14.6673 4.32683 11.674 1.3335 8.00065 1.3335ZM10.2407 9.5335C10.434 9.72683 10.434 10.0468 10.2407 10.2402C10.1407 10.3402 10.014 10.3868 9.88732 10.3868C9.76065 10.3868 9.63398 10.3402 9.53399 10.2402L8.00065 8.70683L6.46732 10.2402C6.36732 10.3402 6.24065 10.3868 6.11398 10.3868C5.98732 10.3868 5.86065 10.3402 5.76065 10.2402C5.56732 10.0468 5.56732 9.72683 5.76065 9.5335L7.29398 8.00016L5.76065 6.46683C5.56732 6.2735 5.56732 5.9535 5.76065 5.76016C5.95398 5.56683 6.27398 5.56683 6.46732 5.76016L8.00065 7.2935L9.53399 5.76016C9.72732 5.56683 10.0473 5.56683 10.2407 5.76016C10.434 5.9535 10.434 6.2735 10.2407 6.46683L8.70732 8.00016L10.2407 9.5335Z"
+              fill="#86969D"
+            />
+          </svg>
+        </div>
+      </div>
+      <div class="task-type-wrapper task-right-filter">
+        <div class="close-icon-wrapper">
+          <mat-form-field appearance="fill" class="small-dropdown medium-height-wrapper">
+            <!-- <mat-label *ngIf="statusControl?.value?.length === 0">Status</mat-label> -->
+            <mat-select
+              #statusSelect
+              panelClass="task-type-select"
+              placeholder="Status"
+              multiple
+              [formControl]="statusControl"
+              multiple
+              (selectionChange)="statusSelectionChanged = true"
+              (openedChange)="statusSelectionChange($event)"
+              [ngClass]="statusSelect.panelOpen ? 'arrow-up' : 'arrow-down'"
+            >
+              <mat-select-trigger *ngIf="statusControl.value" class="select-value">
+                <span class="value">{{ (statusControl.value[0] | stateText) || '' }}</span>
+                <span *ngIf="(statusControl.value?.length || 0) > 1" class="add-value"> +{{ (statusControl.value.length || 0) - 1 }} </span>
+              </mat-select-trigger>
+              <div>
+                <mat-option *ngFor="let status of statusList" [value]="status.value" class="status-name">{{ status.title }}</mat-option>
+              </div>
+            </mat-select>
+          </mat-form-field>
+
+          <svg
+            class="filter-close"
+            (click)="statusControl.reset([]); getProjectidsWiseTaskList()"
+            *ngIf="statusControl?.value?.length !== 0"
+            width="16"
+            height="16"
+            viewBox="0 0 16 16"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M8.00065 1.3335C4.32732 1.3335 1.33398 4.32683 1.33398 8.00016C1.33398 11.6735 4.32732 14.6668 8.00065 14.6668C11.674 14.6668 14.6673 11.6735 14.6673 8.00016C14.6673 4.32683 11.674 1.3335 8.00065 1.3335ZM10.2407 9.5335C10.434 9.72683 10.434 10.0468 10.2407 10.2402C10.1407 10.3402 10.014 10.3868 9.88732 10.3868C9.76065 10.3868 9.63398 10.3402 9.53399 10.2402L8.00065 8.70683L6.46732 10.2402C6.36732 10.3402 6.24065 10.3868 6.11398 10.3868C5.98732 10.3868 5.86065 10.3402 5.76065 10.2402C5.56732 10.0468 5.56732 9.72683 5.76065 9.5335L7.29398 8.00016L5.76065 6.46683C5.56732 6.2735 5.56732 5.9535 5.76065 5.76016C5.95398 5.56683 6.27398 5.56683 6.46732 5.76016L8.00065 7.2935L9.53399 5.76016C9.72732 5.56683 10.0473 5.56683 10.2407 5.76016C10.434 5.9535 10.434 6.2735 10.2407 6.46683L8.70732 8.00016L10.2407 9.5335Z"
+              fill="#86969D"
+            />
+          </svg>
+        </div>
+      </div>
+      <div class="from-wrapper task-right-filter">
+        <div class="input-close-wrapper">
+          <mat-form-field
+            class="small-dropdown medium-height-wrapper"
+            [ngClass]="fromDateControl.value ? '' : 'calender-icon'"
+            (click)="fromDatePicker.open()"
+          >
+            <!-- <mat-label class="filterLabel">From</mat-label> -->
+            <input
+              matInput
+              placeholder="From"
+              [matDatepicker]="fromDatePicker"
+              [formControl]="fromDateControl"
+              (dateChange)="getProjectidsWiseTaskList()"
+              autocomplete="off"
+              readonly
+            />
+            <mat-datepicker-toggle matPrefix [for]="fromDatePicker"></mat-datepicker-toggle>
+            <mat-datepicker #fromDatePicker></mat-datepicker>
+          </mat-form-field>
+          <!-- <mat-icon matSuffix matTooltip="Date filters filtering data based on Start Date, Due Date & Worked History of task">info</mat-icon> -->
+
+          <svg
+            width="16"
+            class="filter-close"
+            (click)="fromDateControl.reset(); getProjectidsWiseTaskList()"
+            *ngIf="fromDateControl.value"
+            height="16"
+            viewBox="0 0 16 16"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M8.00065 1.3335C4.32732 1.3335 1.33398 4.32683 1.33398 8.00016C1.33398 11.6735 4.32732 14.6668 8.00065 14.6668C11.674 14.6668 14.6673 11.6735 14.6673 8.00016C14.6673 4.32683 11.674 1.3335 8.00065 1.3335ZM10.2407 9.5335C10.434 9.72683 10.434 10.0468 10.2407 10.2402C10.1407 10.3402 10.014 10.3868 9.88732 10.3868C9.76065 10.3868 9.63398 10.3402 9.53399 10.2402L8.00065 8.70683L6.46732 10.2402C6.36732 10.3402 6.24065 10.3868 6.11398 10.3868C5.98732 10.3868 5.86065 10.3402 5.76065 10.2402C5.56732 10.0468 5.56732 9.72683 5.76065 9.5335L7.29398 8.00016L5.76065 6.46683C5.56732 6.2735 5.56732 5.9535 5.76065 5.76016C5.95398 5.56683 6.27398 5.56683 6.46732 5.76016L8.00065 7.2935L9.53399 5.76016C9.72732 5.56683 10.0473 5.56683 10.2407 5.76016C10.434 5.9535 10.434 6.2735 10.2407 6.46683L8.70732 8.00016L10.2407 9.5335Z"
+              fill="#86969D"
+            />
+          </svg>
+        </div>
+      </div>
+      <div class="to-wrapper task-right-filter">
+        <div class="input-close-wrapper">
+          <mat-form-field
+            class="small-dropdown medium-height-wrapper"
+            [ngClass]="toDateControl.value ? '' : 'calender-icon'"
+            (click)="toDatePicker.open()"
+          >
+            <!-- <mat-label class="filterLabel">To</mat-label> -->
+            <input
+              matInput
+              [matDatepicker]="toDatePicker"
+              [formControl]="toDateControl"
+              (dateChange)="getProjectidsWiseTaskList()"
+              autocomplete="off"
+              placeholder="To"
+              readonly
+            />
+
+            <mat-datepicker-toggle matPrefix [for]="toDatePicker"></mat-datepicker-toggle>
+            <mat-datepicker #toDatePicker></mat-datepicker>
+          </mat-form-field>
+          <svg
+            (click)="toDateControl.reset(); getProjectidsWiseTaskList()"
+            *ngIf="toDateControl.value"
+            width="16"
+            class="filter-close"
+            height="16"
+            viewBox="0 0 16 16"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M8.00065 1.3335C4.32732 1.3335 1.33398 4.32683 1.33398 8.00016C1.33398 11.6735 4.32732 14.6668 8.00065 14.6668C11.674 14.6668 14.6673 11.6735 14.6673 8.00016C14.6673 4.32683 11.674 1.3335 8.00065 1.3335ZM10.2407 9.5335C10.434 9.72683 10.434 10.0468 10.2407 10.2402C10.1407 10.3402 10.014 10.3868 9.88732 10.3868C9.76065 10.3868 9.63398 10.3402 9.53399 10.2402L8.00065 8.70683L6.46732 10.2402C6.36732 10.3402 6.24065 10.3868 6.11398 10.3868C5.98732 10.3868 5.86065 10.3402 5.76065 10.2402C5.56732 10.0468 5.56732 9.72683 5.76065 9.5335L7.29398 8.00016L5.76065 6.46683C5.56732 6.2735 5.56732 5.9535 5.76065 5.76016C5.95398 5.56683 6.27398 5.56683 6.46732 5.76016L8.00065 7.2935L9.53399 5.76016C9.72732 5.56683 10.0473 5.56683 10.2407 5.76016C10.434 5.9535 10.434 6.2735 10.2407 6.46683L8.70732 8.00016L10.2407 9.5335Z"
+              fill="#86969D"
+            />
+          </svg>
+        </div>
+      </div>
+      <div class="group-by-wrapper task-right-filter">
+        <mat-form-field appearance="fill" class="small-dropdown medium-height-wrapper">
+          <mat-select
+            #groupBySelect
+            [formControl]="groupByControl"
+            (selectionChange)="onSelectGroupBy($event)"
+            panelClass="group-by-select"
+            [ngClass]="groupBySelect.panelOpen ? 'arrow-up' : 'arrow-down'"
+          >
+            <mat-select-trigger><span class="group-label">Group By:</span> {{ getGroupByValue() }}</mat-select-trigger>
+            <mat-option
+              *ngFor="let item of groupByList"
+              [value]="item.key"
+              [ngClass]="item.projectSpecific ? (enableProjSpecificFilters ? '' : 'hiddenOption') : ''"
+              >{{ item.value }}</mat-option
+            >
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <!-- <button
+        mat-icon-button
+        [matMenuTriggerFor]="menu"
+        aria-label="Example icon-button with a menu"
+        matBadgeColor="warn"
+        [matBadge]="filterCount"
+        [matBadgeHidden]="!hideFilterBadge"
+        matBadgeSize="small"
+      >
+        <mat-icon class="filter-icon">filter_alt</mat-icon>
+      </button> -->
+
+      <!-- more filters -->
+      <mat-menu #menu="matMenu" class="filter-menu">
+        <form [formGroup]="moreFiltersGroup" style="width: 900px">
+          <div style="display: flex; justify-content: space-between; margin: 15px; align-items: center">
+            <h2>Filters</h2>
+            <button mat-raised-button color="primary" (click)="$event.stopPropagation(); applyMoreFilters()">Apply Filters</button>
+          </div>
+
+          <div formArrayName="moreFilters" style="margin-left: 10px">
+            <div class="more-filter-menu" *ngFor="let filterGroup of moreFilters()?.controls; let i = index" [formGroupName]="i">
+              <div style="text-align: center; width: 120px; margin-bottom: 20px" *ngIf="i == 0">
+                <span>Where</span>
+              </div>
+
+              <mat-form-field *ngIf="i == 1" style="width: 120px">
+                <input
+                  matInput
+                  formControlName="operation"
+                  readonly
+                  style="cursor: pointer"
+                  (click)="$event.stopPropagation()"
+                  (click)="toggleOperation()"
+                  [value]="moreFiltersGroup.get('operation')?.value"
+                  [@valueChange]="valueChangeAnimation"
+                />
+                <mat-icon matSuffix (click)="$event.stopPropagation()" (click)="toggleOperation()">keyboard_arrow_down</mat-icon>
+              </mat-form-field>
+              <span *ngIf="i > 1" style="width: 120px; text-align: center; margin-bottom: 20px">{{ moreFiltersGroup.get('operation')?.value }}</span>
+
+              <!-- main filter dropdown -->
+              <mat-form-field style="width: 250px">
+                <mat-label>Select filter</mat-label>
+                <mat-select
+                  (click)="$event.stopPropagation()"
+                  formControlName="filter"
+                  class="form-control"
+                  (valueChange)="onMoreFilterChange($event, i)"
+                >
+                  <mat-option
+                    [value]="option.value"
+                    *ngFor="let option of moreFilterOptions; let i = index"
+                    [ngClass]="disabledSelectedFiter(option) ? 'disabled-option-color' : ''"
+                    >{{ option.label }}</mat-option
+                  >
+                </mat-select>
+              </mat-form-field>
+
+              <!-- when dropdown -->
+              <ng-container *ngIf="moreFilters()?.controls?.[i]?.value?.showWhenDropdown === true">
+                <mat-form-field style="width: 250px">
+                  <!-- <mat-label>{{moreFilters()?.controls?.[i]?.value?.whenFilterOptions[0]?.label || ''}}</mat-label> -->
+                  <mat-label>Select filter</mat-label>
+                  <mat-select
+                    (click)="$event.stopPropagation()"
+                    formControlName="when"
+                    class="form-control"
+                    (valueChange)="onWhenFilterChanges($event, i)"
+                  >
+                    <!-- <ng-container *ngFor="let option of moreFilterOptions"> -->
+                    <mat-option [value]="option?.value" *ngFor="let option of moreFilters()?.controls?.[i]?.value?.whenFilterOptions">{{
+                      option?.label
+                    }}</mat-option>
+                    <!-- </ng-container> -->
+                  </mat-select>
+                </mat-form-field>
+              </ng-container>
+
+              <!-- priority dropdown -->
+              <ng-container *ngIf="moreFilters()?.controls?.[i]?.value?.showPriorityDropdown === true">
+                <mat-form-field style="width: 280px">
+                  <mat-label>Select filter</mat-label>
+
+                  <mat-select (click)="$event.stopPropagation()" formControlName="where" class="form-control" multiple>
+                    <mat-select-trigger>
+                      <span *ngFor="let p of moreFilters()?.controls?.[i]?.value?.where"><img [src]="'assets/images/' + p?.priorityImg" /></span>
+                    </mat-select-trigger>
+                    <mat-option [value]="priority" *ngFor="let priority of priorityFilterOptions">
+                      <img [src]="'assets/images/' + priority?.priorityImg" />
+                      <span class="priority-name">{{ priority?.label }}</span></mat-option
+                    >
+                  </mat-select>
+                </mat-form-field>
+              </ng-container>
+
+              <!-- labels dropdown -->
+              <ng-container *ngIf="moreFilters()?.controls?.[i]?.value?.showLabelsDropdown === true">
+                <mat-form-field style="width: 280px">
+                  <mat-select
+                    (openedChange)="openedChange($event)"
+                    placeholder="Select"
+                    [formControl]="selectFormControl"
+                    multiple
+                    (click)="$event.stopPropagation()"
+                  >
+                    <mat-select-trigger>
+                      <span
+                        [style]="
+                          selectFormControl?.value && selectFormControl?.value?.length > 0
+                            ? { color: selectFormControl?.value[0]?.color?.color, backgroundColor: selectFormControl?.value[0]?.color?.bgColor }
+                            : {}
+                        "
+                        class="label-wrapper"
+                      >
+                        {{ selectFormControl?.value ? selectFormControl?.value[0]?.labelName : '' }}</span
+                      >
+                      <span *ngIf="selectFormControl.value?.length > 1" class="additional-selection label-wrapper">
+                        (+{{ selectFormControl.value?.length - 1 }} {{ selectFormControl.value?.length === 2 ? 'other' : 'others' }})
+                      </span>
+                    </mat-select-trigger>
+                    <div class="select-container">
+                      <mat-optgroup>
+                        <mat-form-field style="width: 100%">
+                          <input
+                            #search
+                            autocomplete="off"
+                            placeholder="Search"
+                            aria-label="Search"
+                            matInput
+                            [formControl]="searchTextboxControl"
+                            (input)="searchLabels(search.value)"
+                          />
+                          <button
+                            [disableRipple]="true"
+                            *ngIf="search.value"
+                            matSuffix
+                            mat-icon-button
+                            aria-label="Clear"
+                            (click)="clearSearch($event)"
+                          >
+                            <mat-icon>close</mat-icon>
+                          </button>
+                        </mat-form-field>
+                      </mat-optgroup>
+                      <mat-optgroup *ngIf="filteredOptions?.length == 0">
+                        <div>No results found!</div>
+                      </mat-optgroup>
+
+                      <mat-option (onSelectionChange)="selectionChange($event)" *ngFor="let option of filteredOptions" [value]="option">
+                        <span [style]="{ color: option?.color?.color, backgroundColor: option?.color?.bgColor }" class="label-wrapper">{{
+                          option?.labelName || ''
+                        }}</span>
+                        <span *ngIf="!enableProjSpecificFilters" style="font-size: 10px">{{ option?.projectName || '' }}</span>
+                      </mat-option>
+                    </div>
+                  </mat-select>
+                </mat-form-field>
+                <!-- <mat-error *ngIf="selectFormControl.invalid && selectFormControl.touched && selectFormControl.hasError('required')">
+              Please select labels
+            </mat-error> -->
+              </ng-container>
+
+              <!-- due date dropdown -->
+              <ng-container *ngIf="moreFilters()?.controls?.[i]?.value?.showDateFilterDropdown === true">
+                <div class="from-wrapper task-right-filter" style="width: 250px">
+                  <div class="close-icon-wrapper">
+                    <!-- <mat-form-field class="small-dropdown" [ngClass]="moreFilters()?.controls?.[i]?.value?.where ? '' : 'calender-icon'" (click)="$event.stopPropagation(); dueDatePicker.open()">
+                  <mat-label class="filterLabel">Due date</mat-label> 
+                  <input
+                    matInput
+                    placeholder="Due date"
+                    [matDatepicker]="dueDatePicker"
+                    formControlName="where"
+                    (dateChange)="dueDateChange(dueDateValue,i)"
+                    autocomplete="off"
+                    class="form-control"
+                    readonly
+                    #dueDateValue
+                  />
+                  <mat-datepicker-toggle matPrefix [for]="dueDatePicker"></mat-datepicker-toggle>
+                  <mat-datepicker #dueDatePicker></mat-datepicker>
+                </mat-form-field> -->
+                    <mat-form-field
+                      (click)="$event.stopPropagation(); dueDatePicker.open()"
+                      appearance="fill"
+                      class="form-field-width calender-icon"
+                      style="width: 250px !important"
+                    >
+                      <mat-label>Due Date</mat-label>
+                      <mat-date-range-input [min]="minDate" [formGroup]="filterByDueDate" [rangePicker]="dueDatePicker">
+                        <input matStartDate (dateChange)="onFilterByDate($event, i)" formControlName="startDate" readonly />
+                        <input (dateChange)="onFilterByDate($event, i)" matEndDate formControlName="endDate" readonly />
+                      </mat-date-range-input>
+                      <!-- <mat-error *ngIf="filterByDueDate.controls['endDate'].hasError('endDateReq')">Please add end date.</mat-error> -->
+                      <mat-datepicker-toggle matIconPrefix [for]="dueDatePicker"></mat-datepicker-toggle>
+                      <mat-date-range-picker #dueDatePicker></mat-date-range-picker>
+
+                      <!-- <mat-icon
+                  matSuffix
+                  (click)="filterByDueDate.reset(); onFilterByDate($event)"
+                  *ngIf="filterByDueDate.controls['startDate'].value || filterByDueDate.controls['endDate'].value"
+                  class="filter-close"
+                  >close</mat-icon
+                > -->
+                      <svg
+                        (click)="filterByDueDate.reset(); onFilterByDate($event, i)"
+                        *ngIf="filterByDueDate.controls['startDate'].value || filterByDueDate.controls['endDate'].value"
+                        width="16"
+                        height="16"
+                        viewBox="0 0 16 16"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="filter-close"
+                      >
+                        <path
+                          d="M8.00065 1.3335C4.32732 1.3335 1.33398 4.32683 1.33398 8.00016C1.33398 11.6735 4.32732 14.6668 8.00065 14.6668C11.674 14.6668 14.6673 11.6735 14.6673 8.00016C14.6673 4.32683 11.674 1.3335 8.00065 1.3335ZM10.2407 9.5335C10.434 9.72683 10.434 10.0468 10.2407 10.2402C10.1407 10.3402 10.014 10.3868 9.88732 10.3868C9.76065 10.3868 9.63398 10.3402 9.53399 10.2402L8.00065 8.70683L6.46732 10.2402C6.36732 10.3402 6.24065 10.3868 6.11398 10.3868C5.98732 10.3868 5.86065 10.3402 5.76065 10.2402C5.56732 10.0468 5.56732 9.72683 5.76065 9.5335L7.29398 8.00016L5.76065 6.46683C5.56732 6.2735 5.56732 5.9535 5.76065 5.76016C5.95398 5.56683 6.27398 5.56683 6.46732 5.76016L8.00065 7.2935L9.53399 5.76016C9.72732 5.56683 10.0473 5.56683 10.2407 5.76016C10.434 5.9535 10.434 6.2735 10.2407 6.46683L8.70732 8.00016L10.2407 9.5335Z"
+                          fill="#86969D"
+                        />
+                      </svg>
+                    </mat-form-field>
+                    <!-- <mat-icon matSuffix matTooltip="Date filters filtering data based on Start Date, Due Date & Worked History of task">info</mat-icon> -->
+
+                    <!-- <svg
+                  width="16"
+                  class="filter-close"
+                  (click)="fromDateControl.reset(); getProjectidsWiseTaskList()"
+                  *ngIf="fromDateControl.value"
+                  height="16"
+                  viewBox="0 0 16 16"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M8.00065 1.3335C4.32732 1.3335 1.33398 4.32683 1.33398 8.00016C1.33398 11.6735 4.32732 14.6668 8.00065 14.6668C11.674 14.6668 14.6673 11.6735 14.6673 8.00016C14.6673 4.32683 11.674 1.3335 8.00065 1.3335ZM10.2407 9.5335C10.434 9.72683 10.434 10.0468 10.2407 10.2402C10.1407 10.3402 10.014 10.3868 9.88732 10.3868C9.76065 10.3868 9.63398 10.3402 9.53399 10.2402L8.00065 8.70683L6.46732 10.2402C6.36732 10.3402 6.24065 10.3868 6.11398 10.3868C5.98732 10.3868 5.86065 10.3402 5.76065 10.2402C5.56732 10.0468 5.56732 9.72683 5.76065 9.5335L7.29398 8.00016L5.76065 6.46683C5.56732 6.2735 5.56732 5.9535 5.76065 5.76016C5.95398 5.56683 6.27398 5.56683 6.46732 5.76016L8.00065 7.2935L9.53399 5.76016C9.72732 5.56683 10.0473 5.56683 10.2407 5.76016C10.434 5.9535 10.434 6.2735 10.2407 6.46683L8.70732 8.00016L10.2407 9.5335Z"
+                    fill="#86969D"
+                  />
+                </svg>  -->
+                  </div>
+                </div>
+              </ng-container>
+
+              <mat-icon (click)="$event.stopPropagation(); removeFilters(i)" style="cursor: pointer; margin-bottom: 20px; margin-right: 10px"
+                >delete</mat-icon
+              >
+            </div>
+          </div>
+          <button mat-flat-button (click)="$event.stopPropagation(); addFilters()" style="margin-left: 10px">
+            <mat-icon>add</mat-icon>
+            Add filter
+          </button>
+        </form>
+      </mat-menu>
+    </div>
+  </div>
+
+  <!-- <div class="search-filter-section">
+
+
+    <mat-checkbox class="example-margin" [checked]="includeCompleted.value" (change)="onShowCompletedChange($event)"
+      >Show Completed Tasks</mat-checkbox
+    >
+
+
+
+
+
+
+
+  </div>-->
+</div>

@@ -1,0 +1,112 @@
+<div class="task-list container-wrapper" style="padding-top: 45px">
+  <ng-container *ngIf="taskList && taskList.length > 0; else noDataFound">
+    <ng-container *ngFor="let projectObject of taskList; let projectIndex = index">
+      <mat-accordion togglePosition="before" class="task-wrap">
+        <mat-expansion-panel [expanded]="true">
+          <mat-expansion-panel-header class="task-wrap-header">
+            <p>
+              {{ (projectObject?.projectTitle | stateText) || '' }} <span>({{ projectObject?.projectTasks?.length || 0 }})</span>
+            </p>
+          </mat-expansion-panel-header>
+          <div class="table-responsive">
+            <dynamic-mat-table
+              style="height: 30vh"
+              tableName="my-table"
+              [columns]="columns"
+              [dataSource]="projectObject?.projectTasks"
+              [sticky]="true"
+              [showNoData]="true"
+              [showReload]="true"
+              [filterable]="false"
+              [setting]="settings"
+              [visibleActionMenu]="false"
+              (settingChange)="onChangeTableSetting($event)"
+              (onTableEvent)="onTableEvent($event)"
+              (onRowEvent)="onRowClick($event)"
+              (rowSelectionChange)="onRowSelectionChange($event)"
+              (matSortChange)="applySorting($event)"
+              [showColumnSelector]="false"
+            >
+              <ng-container matColumnDef="title">
+                <th mat-header-cell *matHeaderCellDef>Name</th>
+                <td mat-cell *matCellDef="let item">{{ item.title }}</td>
+              </ng-container>
+            </dynamic-mat-table>
+          </div>
+        </mat-expansion-panel>
+      </mat-accordion>
+    </ng-container>
+  </ng-container>
+  <ng-template #noDataFound>
+    <div class="table-responsive">
+      <mat-list cdkDropList class="example-list norecordFound">
+        <mat-list-item class="example-box">
+          <p>No records found</p>
+        </mat-list-item>
+      </mat-list>
+    </div>
+  </ng-template>
+
+  <!-- <dynamic-mat-table
+    style="height: 30vh"
+    tableName="my-table"
+    [columns]="columns"
+    [setting]="settings"
+    [dataSource]="dataSource"
+    [sticky]="true"
+    [showNoData]="true"
+    [showReload]="true"
+    [rowHeight]="40"
+    [headerEnable]="true"
+    [rowSelectionMode]="selectionMode"
+    (settingChange)="onChangeTableSetting($event)"
+    (onTableEvent)="onTableEvent($event)"
+    (onRowEvent)="onRowClick($event)"
+    (rowSelectionChange)="onRowSelectionChange($event)"
+    (matSortChange)="applySorting($event)"
+  >
+  </dynamic-mat-table>
+  <dynamic-mat-table
+    style="height: 30vh"
+    tableName="my-table"
+    [columns]="columns"
+    [setting]="settings"
+    [dataSource]="dataSource"
+    [sticky]="true"
+    [showNoData]="true"
+    [showReload]="true"
+    [rowHeight]="40"
+    [headerEnable]="true"
+    [rowSelectionMode]="selectionMode"
+    (settingChange)="onChangeTableSetting($event)"
+    (onTableEvent)="onTableEvent($event)"
+    (onRowEvent)="onRowClick($event)"
+    (rowSelectionChange)="onRowSelectionChange($event)"
+  ></dynamic-mat-table> -->
+  <!-- <dynamic-mat-table
+      tableName="demo_table"
+      [scrollStrategyType]="scrollStrategyType"
+      [contextMenuItems]="contextMenuItems"
+      [direction]="direction"
+      [expandComponent]="expandComponent"
+      [rowHeight]="rowHeight"
+      [columns]="columns"
+      [pending]="pending"
+      [setting]="setting"
+      [sticky]="stickyHeader"
+      [pagingMode]="paginationMode"
+      [pagination]="pagination"
+      [showNoData]="showNoData"
+      [printConfig]="printConfig"
+      [rowSelectionMode]="rowSelectionMode"
+      [rowSelectionModel]="selectionModel"
+      [showProgress]="showProgress"
+      [rowContextMenuItems]="contextMenuItems"
+      (onTableEvent)="tableEvent_onClick($event)"
+      (onRowEvent)="rowEvent_onClick($event)"
+      [class.conditional-class]="conditinalClass"
+      (settingChange)="table_onChangeSetting($event)"
+      (rowSelectionChange)="table_onRowSelectionChange($event)"
+    >
+    </dynamic-mat-table> -->
+</div>

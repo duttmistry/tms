@@ -1,0 +1,340 @@
+@import 'apps/angular/main-app/src/variables';
+@import 'apps/angular/main-app/src/mixins';
+@import 'apps/angular/main-app/src/assets/fonts/fonts.scss';
+h2 {
+  margin: 0;
+  font-size: $theme-main-large-font;
+}
+
+.button-wrapper {
+  padding: 5px 0;
+  display: flex;
+  justify-content: space-around;
+  span {
+    font-size: $theme-main-small-font;
+    font-weight: 500;
+    color:$theme-main-color;
+    cursor: pointer;
+  }
+}
+
+ul {
+  margin: 0;
+  padding: 0 0 0 1.5em;
+}
+
+li {
+  margin: 1.5em 0;
+  padding: 0;
+}
+
+b {
+  margin-right: 3px;
+}
+
+.demo-app {
+  display: flex;
+  min-height: 100%;
+  font-size: $theme-main-medium-font;
+}
+
+.demo-app-sidebar {
+  width: 300px;
+  line-height: 1.5;
+  border-right: 1px solid $theme-border-color-gray;
+}
+
+mat-card {
+  padding: 0;
+  box-shadow: unset;
+}
+
+.demo-app-sidebar-section {
+  padding: 2em;
+}
+
+::ng-deep .calendar-header-day-date {
+  @include flex;
+  @include flex-align-center;
+  flex-direction: column;
+}
+
+::ng-deep .day-text {
+  margin-bottom: 3px;
+  color: $theme-main-color-light !important;
+  font-weight: 400 !important;
+  font-size: $theme-main-medium-font;
+  line-height: 17px;
+}
+
+::ng-deep .date-number {
+  font-size: $theme-main-large-font;
+  font-weight: 500;
+  line-height: 19px;
+  color: $theme-font-color-black;
+}
+
+::ng-deep .fc-timeline-slot-frame {
+  height: 59px !important;
+}
+
+::ng-deep .weekend-event {
+  color: $theam-color-green;
+}
+
+::ng-deep .fc-license-message {
+  display: none;
+}
+
+::ng-deep .fc-h-event {
+  background-color: #fff0;
+}
+
+::ng-deep .fc-theme-standard th,
+::ng-deep .fc-theme-standard td {
+  border: 1px solid $theme-border-color-gray;
+}
+
+::ng-deep .fc-datagrid-cell-frame {
+  height: 59px !important;
+}
+
+::ng-deep .resource-label-content-title {
+  margin: 0;
+}
+
+.mat-select {
+  .mat-mdc-form-field {
+    width: 250px;
+    margin-bottom: 0;
+  }
+}
+
+::ng-deep .fc-toolbar-chunk .fc-toolbar-title {
+  max-width: 225px;
+  min-width: 145px;
+  width: auto;
+  font-size: $theme-main-large-font;
+  margin-top: 3px;
+}
+
+::ng-deep .fc-day-past {
+  background: rgba(255, 153, 51, 0.07);
+}
+
+::ng-deep .fc-day-sun {
+  background: rgba(96, 177, 88, 0.07) !important;
+}
+
+::ng-deep .fc-day-sat {
+  background: rgba(96, 177, 88, 0.07) !important;
+}
+
+::ng-deep .fc-timeline-slot-cushion {
+  text-transform: uppercase !important;
+  font-weight: 600;
+}
+
+::ng-deep .fc-daygrid-day {
+  height: auto;
+}
+
+::ng-deep .fc-timeline-header-row {
+  .fc-day-sat {
+    background: #60b15826 !important;
+  }
+  .fc-day-sun {
+    background: #60b15826 !important;
+  }
+  .fc-day-past {
+    background: #ff993326;
+  }
+}
+
+.team-leave-in {
+  min-height: 100vh;
+  .fc {
+    max-width: 100%;
+    margin: 0 auto;
+  }
+  .demo-app-main {
+    flex-grow: 1;
+  }
+   ::ng-deep .resource-label-content-title {
+    margin-left: 0px !important;
+    color: $theme-font-color-black;
+    line-height: 17px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    width: 210px;
+    font-size: $theme-main-large-font;
+    font-weight: 400;
+  }
+   ::ng-deep .fc .fc-timeline-now-indicator-arrow,
+   ::ng-deep .fc .fc-timeline-now-indicator-line {
+    border-color: $theme-color-error;
+  }
+   ::ng-deep .fc-datagrid-cell-main {
+    color: $theme-main-color-light;
+    font-size: $theme-main-medium-font;
+    line-height: 21px;
+    &:first-child {
+      margin-left: 20px;
+    }
+  }
+  .team-right {
+    @include flex;
+    @include flex-align-center;
+    @include flex-justify-end;
+    width: 100%;
+    padding-right: 15px;
+    margin-bottom: 25px;
+    height: 38px;
+    gap: 34px;
+  }
+   ::ng-deep .mat-mdc-select-value {
+    font-size: $theme-main-small-font;
+  }
+  .leave-img {
+    @include flex;
+    @include flex-align-center;
+    gap: 49px;
+    & div {
+      @include flex;
+      @include flex-align-center;
+      position: relative;
+      font-size: $theme-main-small-font;
+      color: $theam-color-green;
+      line-height: 15px;
+      &::before {
+        position: absolute;
+        content: ' ';
+        right: -27px;
+        width: 0.5px;
+        height: 25px;
+        background-color: $theme-border-color-gray;
+        top: 50%;
+        transform: translate(-50%, -50%);
+      }
+      img {
+        margin-right: 10px;
+      }
+    }
+  }
+  .leave-img div:last-child::before {
+    display: none;
+  }
+   ::ng-deep .fc .fc-toolbar.fc-header-toolbar {
+    position: absolute;
+    top: 7px;
+    left: 15px;
+    margin-bottom: 0;
+    margin-top: 0;
+  }
+  .fullday {
+    color: $theme-color-error !important;
+  }
+}
+
+::ng-deep .fc .fc-scrollgrid {
+  border-top: 1px solid $theme-border-color-gray;
+  border-bottom: 1px solid $theme-border-color-gray;
+  border-left: unset;
+  border-radius: unset;
+}
+
+::ng-deep .fc .fc-resource-timeline-divider {
+  border-collapse: collapse;
+  width: 0px !important;
+  border: unset;
+}
+
+::ng-deep .mat-mdc-checkbox {
+  padding: 0 !important;
+  margin-left: 5px !important;
+}
+
+.checkbox-selectall-emp {
+   ::ng-deep .mdc-form-field {
+    label {
+      padding-left: 0px !important;
+    }
+  }
+}
+
+@media screen and (max-width: $extra-large-device) {
+  .team-leave-in {
+    .team-right {
+      justify-content: center;
+      margin-bottom: 60px;
+      padding-right: 0;
+    }
+    .leave-img {
+      width: initial !important;
+      & div {
+        margin-left: 0;
+      }
+    }
+    .leave-img div:last-child {
+      margin-right: 0;
+    }
+     ::ng-deep .fc .fc-toolbar.fc-header-toolbar {
+      left: 50%;
+      transform: translate(-50%, -50%);
+      top: 63px;
+    }
+  }
+}
+
+@media screen and (max-width: $lerge-device) {
+  .team-leave {
+    .leave-img {
+      & div {
+        &::before {
+          right: -11px;
+        }
+        img {
+          height: 20px !important;
+          width: 20px !important;
+        }
+      }
+    }
+  }
+}
+
+.button-container {
+  border-bottom: 1px solid $theme-border-color-gray;
+  margin: 10px;
+  .button-wrapper {
+    padding: 5px 0;
+    display: flex;
+    justify-content: space-between;
+    span {
+      font-size: $theme-main-small-font;
+      font-weight: 500;
+      color:$theme-main-color;
+      cursor: pointer;
+    }
+  }
+}
+
+.input-wrapper {
+  position: relative;
+  input {
+    border: 1px solid $theme-border-color-gray;
+    width: 100%;
+    border-radius: $button-radius;
+    outline: none;
+    font-size: $theme-main-medium-font;
+    font-weight: 400;
+    font-family: $theme-main-font-family;
+    padding: 10px 10px 10px 35px;
+  }
+  img {
+    display: block;
+    position: absolute;
+    top: 11px;
+    left: 10px;
+  }
+}

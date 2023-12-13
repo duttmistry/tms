@@ -1,0 +1,14 @@
+<div class="super-admin">
+    <div mat-dialog-content>
+        <p [innerHTML]="data.title"></p>
+        <p [innerHTML]="data.content" *ngIf="data?.content && data?.content?.length > 0"></p>
+    </div>
+    <div mat-dialog-actions class="btn-flex">
+        <button color="primary" [mat-dialog-close]="true" class="cancel primary-button">
+      <span>Yes</span>
+    </button>
+        <button color="accent" [mat-dialog-close]="false" class="next secondary-button">
+      <span> No</span>
+    </button>
+    </div>
+</div>

@@ -1,0 +1,329 @@
+<div class="add-workspace">
+    <mat-card>
+        <div class="workspace-blk workspace-border">
+            <strong>{{ workspaceId ? 'Edit' : 'Create' }} Workspace</strong>
+            <div class="btn-flex">
+                <button class="cancel secondary-button" (click)="navigateToWorkspaceList()">Cancel</button>
+                <button type="submit" color="primary" (click)="onSubmit()" class="next primary-button">Submit</button>
+            </div>
+        </div>
+
+        <form [formGroup]="basicDetailsForm" class="change-form">
+            <div class="add-button pr-form-top-buttons">
+                <h2 class="pr-form-top-header">Basic Details</h2>
+            </div>
+
+            <div class="add-field-blk">
+                <div class="add-field-blk-left">
+                    <div class="add-field-blk-child">
+                        <mat-form-field [ngClass]="_basicDetailsForm['title'].disabled ? 'not-allowed-cursor' : ''" class="big-height-wrapper input-field-wrapper">
+                            <mat-label>Workspace Name</mat-label>
+                            <input matInput placeholder="Workspace Name" formControlName="title" autocomplete="off" />
+
+                            <mat-error *ngIf="_basicDetailsForm['title'].errors?.['required']">Please enter a workspace name</mat-error>
+                            <mat-error *ngIf="_basicDetailsForm['title'].errors?.['pattern']">Please enter a valid workspace name</mat-error>
+                            <mat-error *ngIf="_basicDetailsForm['title'].errors?.['minlength']">Please enter at least 3 characters </mat-error>
+                            <mat-error *ngIf="_basicDetailsForm['title'].errors?.['maxlength']">Please enter less than 125 characters </mat-error>
+                        </mat-form-field>
+                        <mat-form-field *ngIf="unlinkedProjectList" class="big-height-wrapper">
+                            <mat-label *ngIf="!_basicDetailsForm['linkedProject']?.value || _basicDetailsForm['linkedProject']?.value?.length == 0">Link Project</mat-label>
+                            <mat-label class="select-value" *ngIf="_basicDetailsForm['linkedProject']?.value?.length !== 0">
+                                <span class="value">{{_basicDetailsForm['linkedProject'].value?.[0]?.name || ''}}</span>
+                                <span *ngIf="(_basicDetailsForm['linkedProject'].value?.length || 0) > 1" class="add-value">
+                  +{{ _basicDetailsForm['linkedProject'].value?.length - 1 }}
+                </span>
+                            </mat-label>
+                            <mat-select #linkProjectSelect formControlName="linkedProject" multiple [ngClass]="{
+                  'not-allowed-cursor': _basicDetailsForm['linkedProject'].disabled,
+                  'arrow-down': !linkProjectSelect.panelOpen,
+                  'arrow-up': linkProjectSelect.panelOpen
+                }">
+                                <div class="menu-container">
+                                    <div class="button-wrapper">
+                                        <label class="count">
+                      {{ _basicDetailsForm['linkedProject'].value?.length ? _basicDetailsForm['linkedProject'].value?.length : 0 }} Selected
+                    </label>
+                                        <div>
+                                            <span (click)="selectAllProjectStatus(); linkProjectSelect.close()">Select All</span>
+                                            <span (click)="clearAllProjectStatus(); linkProjectSelect.close()">Clear All</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <mat-select-trigger class="select-value trigger" style="display: none">
+                                    <span class="value">{{_basicDetailsForm['linkedProject'].value?.[0]?.name || ''}}</span>
+                                    <span *ngIf="(_basicDetailsForm['linkedProject'].value?.length || 0) > 1" class="add-value">
+                    +{{ (_basicDetailsForm['linkedProject'].value?.length || 0) - 1 }}
+                  </span>
+                                </mat-select-trigger>
+                                <mat-option *ngFor="let item of unlinkedProjectList" [value]="item">{{ item.name }}</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <div class="filezone filezone-blk" *ngIf="editAvatarResData" (click)="getAndPreviewDocument(editAvatarResData)" style="height: 50px">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="svg">
+              <path
+                d="M22 10V15C22 20 20 22 15 22H9C4 22 2 20 2 15V9C2 4 4 2 9 2H14"
+                stroke="#333366"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path d="M22 10H18C15 10 14 9 14 6V2L22 10Z" stroke="#333366" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+
+                        <div class="upload-file-blk">
+                            <span>{{ editAvatarResData.split('/').pop() }} </span>
+                        </div>
+                        <button mat-icon-button (click)="removeAvatarFile()">
+              <mat-icon class="clear">clear</mat-icon>
+            </button>
+                    </div>
+                    <div class="filezone filezone-blk" *ngIf="avatarFile">
+                        <div (click)="previewFile(avatarFile)" class="filezone-flex">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="svg svg-margin">
+                <path
+                  d="M22 10V15C22 20 20 22 15 22H9C4 22 2 20 2 15V9C2 4 4 2 9 2H14"
+                  stroke="#333366"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path d="M22 10H18C15 10 14 9 14 6V2L22 10Z" stroke="#333366" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+
+                            <div class="upload-file-blk">
+                                <span>{{ avatarFile.name }} </span>
+                                <p>{{ (avatarFile.size / 1024).toFixed(2) }} kb</p>
+                            </div>
+                        </div>
+                        <button mat-icon-button (click)="removeAvatarFile()">
+              <mat-icon class="clear">clear</mat-icon>
+            </button>
+                    </div>
+                    <div (click)="avatarFileInput.click()" *ngIf="!editAvatarResData && !avatarFile" class="dropzone project-description" [ngClass]="isDisabledAvatarImage ? 'not-allowed-cursor' : ''">
+                        <label [ngClass]="isDisabledAvatarImage ? 'not-allowed-cursor' : ''"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="svg">
+                <path
+                  d="M16.44 8.90002C20.04 9.21002 21.51 11.06 21.51 15.11V15.24C21.51 19.71 19.72 21.5 15.25 21.5H8.73998C4.26998 21.5 2.47998 19.71 2.47998 15.24V15.11C2.47998 11.09 3.92998 9.24002 7.46998 8.91002"
+                  stroke="#333366"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path d="M12 15V3.62" stroke="#333366" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                <path d="M15.3499 5.85L11.9999 2.5L8.6499 5.85" stroke="#333366" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+              &nbsp; Upload &nbsp;<span> Workspace Avatar</span></label
+            >
+
+            <input
+              #avatarFileInput
+              [disabled]="isDisabledAvatarImage"
+              type="file"
+              (change)="avatarFileBrowseHandler($event)"
+              id="uploadDocRef"
+              hidden
+            />
+          </div>
+        </div>
+        <div class="add-field-blk-right">
+          <mat-form-field class="text-area-main-wrapper input-field-wrapper">
+            <mat-label>Short Description</mat-label>
+            <textarea
+              placeholder="Short Description"
+              [ngClass]="_basicDetailsForm['description'].disabled ? 'not-allowed-cursor' : ''"
+              matInput
+              formControlName="description"
+              autocomplete="off"
+              [readonly]="_basicDetailsForm['description'].disabled"
+            ></textarea>
+          </mat-form-field>
+        </div>
+      </div>
+    </form>
+
+    <mat-divider class="pr-form-divider"></mat-divider>
+
+    <div class="workspace-team-blk">
+      <div class="pr-form-top-buttons">
+        <h2 class="pr-form-top-header">Team</h2>
+      </div>
+      <div class="workspace-team" *ngIf="teamMembersList">
+        <div>
+          <div class="team-flex">
+            <h2 class="add-h2">Responsible Person</h2>
+          </div>
+          <responsible-person
+            #responsiblePersonRef
+            [teammembersList]="teamMembersList"
+            [isDisabledInputControl]="isResponsiblePersonDisabled"
+            (emmitSelectedTeamMates)="getSelectedResponsiblePerson($event)"
+            [dataId]="responsiblePerson"
+          >
+          </responsible-person>
+          <mat-error *ngIf="responsiblePerson === null && isFormSubmitted" class="error-space">Please Select Responsible Person</mat-error>
+        </div>
+      </div>
+      <div class="workspace-team" *ngIf="teamMembersList">
+        <div class="workspace-team-right">
+          <h2 class="add-h2">
+            <team-member-dialog
+              #teamMembers
+              [showLabel]="true"
+              [teamMembersList]="teamMembersList"
+              [isDisabledTeam]="isResponsiblePersonDisabled"
+              [disableSuperAdminUsers]="true"
+              class="workspace-dialog"
+              (emmitSelectedTeamMates)="getSelectedTeamMembers($event)"
+              (emmitDeletedTeamMates)="getDeletedTeamMembers($event)"
+              [responsiblePerson]="responsiblePerson"
+            ></team-member-dialog>
+          </h2>
+          <mat-error *ngIf="!teamMembersData.length && isFormSubmitted">Please Add Team Members</mat-error>
+        </div>
+      </div>
+
+      <div class="workspace-table table-responsive" *ngIf="teamMembersData.length && teamMembersList">
+        <table>
+          <thead>
+            <tr>
+              <th class="team">Team</th>
+              <th class="reporting-to">Reporting To</th>
+              <th class="actions">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of teamMembersData; index as i">
+              <td>
+                <div class="workspace-table-img">
+                  <mat-chip-set>
+                    <main-app-mat-chips [data]="item.user" [isCloseButton]="false"> </main-app-mat-chips>
+                  </mat-chip-set>
+                </div>
+              </td>
+              <td>
+                <team-member-dialog
+                  [dataId]="item.report_to"
+                  [teamMembersList]="teamMembersList"
+                  [isDisabledTeam]="isResponsiblePersonDisabled"
+                  (emmitSelectedTeamMates)="getSelectedReportingPerson($event, item.user.id)"
+                  (emmitDeletedTeamMates)="getDeletedReportingPerson($event, item.user.id)"
+                  [currentUser]="item"
+                >
+                </team-member-dialog>
+              </td>
+
+              <td class="table-delete-align">
+                <ng-container *ngIf="item.user.id !== responsiblePerson && item.user.role_id !== 1">
+                  <img src="assets/images/trash.svg" alt="trash" (click)="removeTeamMember(item.user.id)" class="table-delete" matTooltip="Delete" />
+                </ng-container>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <mat-divider class="pr-form-divider"></mat-divider>
+
+    <div class="workspace-documents">
+      <div class="pr-form-top-buttons">
+        <h2 class="pr-form-top-header">Documents</h2>
+      </div>
+
+      <div>
+        <div
+          (click)="fileDropRef.click()"
+          class="dropzone document-dropzone"
+          (dragover)="onDragover($event)"
+          (dragleave)="onDragLeave($event)"
+          (drop)="onDrop($event)"
+          [ngClass]="isDisabledDocuments ? 'not-allowed-cursor' : ''"
+        >
+          <input
+            [disabled]="isDisabledDocuments"
+            type="file"
+            #fileDropRef
+            id="fileDropRef"
+            (click)="clearFileInput()"
+            (change)="documentFileBrowseHandler($event)"
+            hidden
+            multiple
+          />
+
+          <label class="mat-body-2" [ngClass]="isDisabledDocuments ? 'not-allowed-cursor' : ''">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="svg">
+              <path
+                d="M16.44 8.90002C20.04 9.21002 21.51 11.06 21.51 15.11V15.24C21.51 19.71 19.72 21.5 15.25 21.5H8.73998C4.26998 21.5 2.47998 19.71 2.47998 15.24V15.11C2.47998 11.09 3.92998 9.24002 7.46998 8.91002"
+                stroke="#333366"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path d="M12 15V3.62" stroke="#333366" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+              <path
+                d="M15.3499 5.85L11.9999 2.5L8.6499 5.85"
+                stroke="#333366"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              /></svg
+            >&nbsp;Upload
+            <p>or drag & drop files here</p></label
+          >
+        </div>
+        <div class="filezone document-filezone">
+          <ng-container *ngIf="workspaceId && editDocumentsResData && editDocumentsResData.length">
+            <div *ngFor="let document of editDocumentsResData; index as i" (click)="getAndPreviewDocument(document)">
+              <i class="{{ document.split('/').pop() | FileExtension }}"></i>
+
+              <div class="upload-file-blk">
+                <span>{{ document.split('/').pop() }}</span>
+              </div>
+
+              <button
+                mat-icon-button
+                (click)="isDisabledDocuments ? $event.stopPropagation() : removeFileWhileEditWorkspace(document, i)"
+                [ngClass]="isDisabledDocuments ? 'cursor-not-allowed' : ''"
+              >
+                <mat-icon class="clear">clear</mat-icon>
+              </button>
+            </div>
+          </ng-container>
+
+          <ng-container *ngIf="workspaceDocuments && workspaceDocuments.length">
+            <div *ngFor="let document of workspaceDocuments; index as i" (click)="previewFile(document)">
+              <i class="{{ document.name | FileExtension }}"></i>
+              <div class="upload-file-blk">
+                <span>{{ document.name }} </span>
+                <p>{{ (document.size / 1024).toFixed(2) }}kb</p>
+              </div>
+              <button mat-icon-button (click)="removeDocument(i)">
+                <mat-icon class="clear">clear</mat-icon>
+              </button>
+            </div>
+          </ng-container>
+        </div>
+
+        <h2 class="add-h2">Notes</h2>
+        <!-- <quill-editor placeholder="Start typing..." [formControl]="notesControl" [modules]="quillConfiguration" class="quill-editor"></quill-editor> -->
+        <div class="ck-editor-data">
+          <ckeditor
+            [(ngModel)]="notesContent"
+            #ckeditor="ngModel"
+            name="ckeditor"
+            required
+            [config]="ckeConfig"
+            debounce="500"
+            (ngModelChange)="onChange($event)"
+          >
+          </ckeditor>
+        </div>
+      </div>
+    </div>
+    <mat-divider class="pr-form-divider"></mat-divider>
+
+    <div *ngIf="userRole == 'Super Admin' && workspaceId && editWorkspaceResData" class="disable-workspace">
+      <a (click)="updateWorkspaceStatus()"> {{ editWorkspaceResData.is_active ? 'Disable Workspace' : 'Enable Workspace' }}</a>
+    </div>
+  </mat-card>
+</div>

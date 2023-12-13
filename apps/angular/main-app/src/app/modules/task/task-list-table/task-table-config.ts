@@ -1,0 +1,266 @@
+import { TableField, TablePagination, TableSetting, VisibleActionMenu } from 'dynamic-mat-table';
+import { TableCellStatusComponent } from './table-cell-status/table-cell-status.component';
+import { TableCellTagsComponent } from './table-cell-tags/table-cell-tags.component';
+export const tableSettingsConfig: TableSetting = {
+  pageSize: 25,
+  direction: 'ltr',
+  columnSetting: [],
+  // settingList: [
+  //   {
+  //     isCurrentSetting: true,
+  //     isDefaultSetting: true,
+  //   },
+  // ],
+  // settingName: 'setting-1',
+  scrollStrategy: 'fixed-size',
+  autoHeight: true,
+  visibleTableMenu: true,
+  visibleActionMenu: {
+    fullscreen: false,
+    json: false,
+    csv: false,
+    print: false,
+    columnSettingPin: false,
+    columnSettingOrder: false,
+    columnSettingFilter: false,
+    columnSettingSort: false,
+    columnSettingPrint: false,
+    saveTableSetting: false,
+    clearFilter: false,
+  },
+  rowStyle: {
+    'background-color': '#FFFFFF',
+    color: '#000000',
+  },
+  alternativeRowStyle: {
+    'background-color': '#FFFFFF',
+    color: '#000000',
+  },
+  enableContextMenu: false,
+  saveSettingMode: 'multi', // "simple" | "multi" | "none";
+};
+
+export const paginationConfig: TablePagination = {
+  length: 0,
+  pageIndex: 1,
+  pageSize: 12,
+  pageSizeOptions: [5, 10, 15, 25, 50, 100],
+  showFirstLastButtons: true,
+};
+
+export const tableListColumnsConfig: TableField<any>[] = [
+  {
+    name: 'title',
+    header: 'Title',
+    type: 'text',
+    sticky: 'end',
+    display: 'prevent-hidden',
+    draggable: false,
+    filter: 'none',
+    width: 300,
+    rowSelectable: true,
+    footer: [
+      {
+        aggregateText: '+ New task',
+        aggregateIcon: 'account_circle',
+        aggregateIconColor: '#00ff00',
+        footerStyle: {
+          'background-color': 'aaffbb',
+          color: 'fafafa',
+          margin: '0 0 0 12',
+        },
+        footerClass: 'add-new-task',
+      },
+    ],
+  },
+  {
+    name: 'task_key',
+    header: 'Task Key',
+    type: 'text',
+    draggable: true,
+    filter: 'none',
+    rowSelectable: true,
+  },
+  {
+    name: 'status',
+    header: 'Status',
+    type: 'text',
+    draggable: true,
+    filter: 'none',
+    rowSelectable: true,
+    cellClass: 'status-cell',
+    dynamicCellComponent: TableCellStatusComponent,
+  },
+  {
+    name: 'section',
+    header: 'Section',
+    type: 'text',
+    draggable: true,
+    filter: 'none',
+    rowSelectable: true,
+    display: 'hidden',
+  },
+  {
+    name: 'state',
+    header: 'State',
+    type: 'text',
+    draggable: true,
+    filter: 'none',
+    rowSelectable: true,
+  },
+  {
+    name: 'assigned_by',
+    header: 'Assigned By',
+    type: 'text',
+    draggable: true,
+    filter: 'none',
+    rowSelectable: true,
+  },
+  {
+    name: 'due_date',
+    header: 'Due Date',
+    type: 'date',
+    draggable: true,
+    filter: 'none',
+    rowSelectable: true,
+  },
+  { name: 'eta', header: 'ETA', type: 'text', display: 'visible', draggable: true, filter: 'none', rowSelectable: true },
+  {
+    name: 'assignee',
+    header: 'Assignee',
+    type: 'text',
+    draggable: true,
+    filter: 'none',
+    rowSelectable: true,
+  },
+  {
+    name: 'parent_task_id',
+    header: 'Parent Task Id',
+    type: 'number',
+    display: 'hidden',
+    draggable: true,
+    filter: 'none',
+    rowSelectable: true,
+  },
+  {
+    name: 'project_id',
+    header: 'Project Id',
+    type: 'number',
+    display: 'hidden',
+
+    draggable: true,
+    filter: 'none',
+    rowSelectable: true,
+  },
+  { name: 'type', header: 'Type', type: 'text', display: 'visible', draggable: true, filter: 'none', rowSelectable: true },
+  {
+    name: 'description',
+    header: 'Description',
+    type: 'text',
+    display: 'hidden',
+
+    draggable: true,
+    filter: 'none',
+    rowSelectable: true,
+  },
+  {
+    name: 'reporter',
+    header: 'Reporter',
+    type: 'text',
+    display: 'hidden',
+
+    draggable: true,
+    filter: 'none',
+    rowSelectable: true,
+  },
+  {
+    name: 'labels',
+    header: 'Labels',
+    type: 'category',
+    display: 'hidden',
+    draggable: true,
+    filter: 'none',
+    rowSelectable: true,
+    dynamicCellComponent: TableCellTagsComponent,
+  },
+  {
+    name: 'documents',
+    header: 'Document',
+    type: 'category',
+    display: 'hidden',
+
+    draggable: true,
+    filter: 'none',
+    rowSelectable: true,
+  },
+  {
+    name: 'start_date',
+    header: 'Start Date',
+    type: 'date',
+    display: 'hidden',
+
+    draggable: true,
+    filter: 'none',
+    rowSelectable: true,
+  },
+  {
+    name: 'priority',
+    header: 'Priority',
+    type: 'text',
+    display: 'hidden',
+
+    draggable: true,
+    filter: 'none',
+    rowSelectable: true,
+  },
+  {
+    name: 'running_status',
+    header: 'Running Status',
+    type: 'text',
+    display: 'hidden',
+
+    draggable: true,
+    filter: 'none',
+    rowSelectable: true,
+  },
+  {
+    name: 'subscribers',
+    header: 'Subscribers',
+    type: 'category',
+    display: 'hidden',
+
+    draggable: true,
+    filter: 'none',
+    rowSelectable: true,
+  },
+  {
+    name: 'created_by',
+    header: 'Created By',
+    type: 'date',
+    display: 'hidden',
+
+    draggable: true,
+    filter: 'none',
+    rowSelectable: true,
+  },
+  {
+    name: 'updated_by',
+    header: 'Updated By',
+    type: 'date',
+    display: 'hidden',
+
+    draggable: true,
+    filter: 'none',
+    rowSelectable: true,
+  },
+  {
+    name: 'projects',
+    header: 'Projects',
+    type: 'category',
+    display: 'hidden',
+
+    draggable: true,
+    filter: 'none',
+    rowSelectable: true,
+  },
+];

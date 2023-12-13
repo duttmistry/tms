@@ -1,0 +1,174 @@
+@import 'apps/angular/main-app/src/variables';
+@import 'apps/angular/main-app/src/mixins';
+@import 'apps/angular/main-app/src/assets/fonts/fonts.scss';
+
+.notification-wraper {
+  background-color: $theme-color-white;
+  margin-left: 20px;
+  border-radius: $card-radius;
+  box-shadow: $box-shadow-card;
+  margin-right: 1px;
+  margin-bottom: 1px;
+  ::ng-deep .mat-mdc-select {
+    margin-top: 0 !important;
+  }
+  .role-form {
+    padding: 5px 20px;
+  }
+
+  ::ng-deep .mat-mdc-text-field-wrapper.mdc-text-field--outlined .mat-mdc-form-field-infix {
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    min-height: 46px !important;
+    @include flex;
+    @include flex-align-center;
+    font-size: $theme-main-medium-font;
+    font-weight: 500;
+  }
+  ::ng-deep .mat-mdc-form-field-icon-suffix {
+    padding: 0 !important;
+    @include flex;
+    @include flex-align-center;
+  }
+  ::ng-deep .mat-mdc-form-field-icon-suffix > .mat-icon {
+    padding: 0 !important;
+    //color: $theme-main-color-light;
+    margin-right: 5px;
+    cursor: pointer;
+    font-size: 21px;
+    @include flex;
+    @include flex-align-center;
+  }
+  ::ng-deep .mat-mdc-form-field {
+    width: 100%;
+  }
+  ::ng-deep .mdc-text-field--no-label:not(.mdc-text-field--textarea) .mat-mdc-form-field-input-control.mdc-text-field__input,
+  .mat-mdc-text-field-wrapper .mat-mdc-form-field-input-control {
+    height: 40px !important;
+    font-size: $theme-main-medium-font;
+    font-weight: 500;
+    //color: $theme-main-color-light;
+  }
+  ::ng-deep .mat-mdc-text-field-wrapper .mat-mdc-form-field-flex .mat-mdc-floating-label {
+    top: 21px !important;
+  }
+  table {
+    border: 1px solid #e9e9e9;
+    box-shadow: initial !important;
+    .mat-mdc-header-row {
+      height: 45px;
+      background-color: $theme-bg-color-drawer-container;
+    }
+
+    td {
+      font-size: $theme-main-medium-font;
+      font-weight: 500;
+      //color: $theme-main-color-light;
+      img {
+        width: 25px;
+        cursor: pointer;
+        border-radius: 50%;
+        transition: all 0.5s ease;
+        vertical-align: middle;
+        height: 25px;
+        &:hover {
+          background-color: $theme-bg-color-drawer-container;
+        }
+      }
+    }
+    th {
+      font-size: $theme-main-medium-font;
+      font-weight: 400;
+    }
+  }
+  ::ng-deep .mdc-data-table__header-cell {
+    border-bottom-width: 0px !important;
+  }
+
+  .notification-wraper-header {
+    @include flex;
+    @include flex-justify-space-between;
+    @include flex-align-center;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #e9e9e9;
+    padding: 15px 20px 15px 20px;
+    p {
+      margin: 0;
+      font-weight: 400;
+      font-size: 17px;
+      margin-bottom: 0;
+      color: #494949;
+    }
+    button {
+      height: auto;
+      padding: 9px 15px;
+      width: initial;
+      margin-left: 10px;
+    }
+  }
+  ::ng-deep .mat-mdc-form-field {
+    width: 100%;
+  }
+  form {
+    position: relative;
+    padding: 0 20px;
+    .mat-icon {
+      position: absolute;
+      right: 25px;
+      top: 10px;
+    }
+  }
+  ::ng-deep .mdc-text-field--no-label:not(.mdc-text-field--textarea) .mat-mdc-form-field-input-control.mdc-text-field__input,
+  .mat-mdc-text-field-wrapper .mat-mdc-form-field-input-control {
+    height: 40px !important;
+    font-size: $theme-main-medium-font;
+    font-weight: 500;
+    //color: $theme-main-color-light;
+  }
+  ::ng-deep .mat-mdc-text-field-wrapper.mdc-text-field--outlined .mat-mdc-form-field-infix {
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    min-height: 46px;
+    @include flex;
+    @include flex-align-center;
+    font-size: $theme-main-medium-font;
+    font-weight: 500;
+  }
+  ::ng-deep .mat-mdc-text-field-wrapper .mat-mdc-form-field-flex .mat-mdc-floating-label {
+    top: 21px;
+    font-size: $theme-main-medium-font;
+    font-weight: 500;
+    //color: $theme-main-color-light;
+  }
+  ::ng-deep .mat-mdc-form-field .mdc-text-field--outlined .mdc-notched-outline--upgraded .mdc-floating-label--float-above {
+    top: 27px !important;
+  }
+  .notification-wraper-table {
+    box-shadow: initial !important;
+    width: 100%;
+    text-align: left;
+    color: #9c9e9d;
+    border-collapse: collapse;
+    font-family: $theme-main-font-family;
+    th,
+    td {
+      padding: 10px 15px;
+      font-weight: 500;
+      font-size: $theme-main-medium-font;
+      border-top: 1px solid #e0e0e0;
+      //color: $theme-main-color-light;
+    }
+    th {
+      border-top: initial;
+    }
+    img {
+      width: 25px;
+      height: 25px;
+      border-radius: 50%;
+    }
+    p {
+      margin: 0 0 0 8px;
+    }
+  }
+}

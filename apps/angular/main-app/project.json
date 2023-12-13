@@ -1,0 +1,109 @@
+{
+  "name": "angular-main-app",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "sourceRoot": "apps/angular/main-app/src",
+  "prefix": "main-app",
+  "targets": {
+    "build": {
+      "executor": "@angular-devkit/build-angular:browser",
+      "outputs": [
+        "{options.outputPath}"
+      ],
+      "options": {
+        "outputPath": "dist/apps/angular/main-app",
+        "index": "apps/angular/main-app/src/index.html",
+        "main": "apps/angular/main-app/src/main.ts",
+        "polyfills": [
+          "zone.js"
+        ],
+        "tsConfig": "apps/angular/main-app/tsconfig.app.json",
+        "inlineStyleLanguage": "scss",
+        "assets": [
+          "apps/angular/main-app/src/favicon.ico",
+          "apps/angular/main-app/src/assets",
+          {
+            "glob": "**/*",
+            "input": "../../../node_modules/@kolkov/angular-editor/assets/",
+            "output": "./assets/fonts/"
+          },
+          "apps/angular/main-app/src/firebase-messaging-sw.js",
+          "apps/angular/main-app/src/manifest.json"
+        ],
+        "styles": [
+          "apps/angular/main-app/src/styles.scss",
+          "node_modules/ngx-owl-carousel-o/lib/styles/prebuilt-themes/owl.carousel.min.css",
+          "node_modules/ngx-owl-carousel-o/lib/styles/prebuilt-themes/owl.theme.default.min.css"
+        ],
+        "scripts": [],
+        "stylePreprocessorOptions": {
+          "includePaths": [
+            "libs/ui/stylesheets/src/lib/styles"
+          ]
+        }
+      },
+      "configurations": {
+        "production": {
+          "budgets": [
+            {
+              "type": "initial",
+              "maximumWarning": "6mb",
+              "maximumError": "6mb"
+            },
+            {
+              "type": "anyComponentStyle",
+              "maximumWarning": "1mb",
+              "maximumError": "1mb"
+            }
+          ],
+          "outputHashing": "all"
+        },
+        "development": {
+          "buildOptimizer": false,
+          "optimization": false,
+          "vendorChunk": true,
+          "extractLicenses": false,
+          "sourceMap": true,
+          "namedChunks": true
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "serve": {
+      "executor": "@angular-devkit/build-angular:dev-server",
+      "configurations": {
+        "production": {
+          "browserTarget": "angular-main-app:build:production"
+        },
+        "development": {
+          "browserTarget": "angular-main-app:build:development"
+        }
+      },
+      "defaultConfiguration": "development",
+      "options": {
+        "port": 4201
+      }
+    },
+    "extract-i18n": {
+      "executor": "@angular-devkit/build-angular:extract-i18n",
+      "options": {
+        "browserTarget": "angular-main-app:build"
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": [
+        "{options.outputFile}"
+      ],
+      "options": {
+        "lintFilePatterns": [
+          "apps/angular/main-app/**/*.ts",
+          "apps/angular/main-app/**/*.html"
+        ]
+      }
+    }
+  },
+  "tags": [
+    "angular"
+  ]
+}

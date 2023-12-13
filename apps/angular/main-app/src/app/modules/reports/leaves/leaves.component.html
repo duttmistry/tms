@@ -1,0 +1,170 @@
+<div class="administration-leave container-wrapper">
+    <mat-card>
+        <div class="workspace-blk workspace-border">
+            <strong>{{ displayCurrentMonth }}</strong>
+            <div class="tertiary-button" (click)="redirectToAdministration()">Back</div>
+            <!-- <a (click)="redirectToAdministration()"></a> -->
+        </div>
+
+        <div class="administration-leave-table">
+            <div class="administration-form">
+                <div>
+                    <!-- <ng-container *ngIf="allUsersList">
+            <user-filter
+              [allUsersList]="allUsersList"
+              (emmitSaveUser)="onSaveUsers($event)"
+              (emmitDeletedUser)="getDeletedFilterUser($event)"
+              (emmitSelectedUser)="getSelectedFilterUser($event)"
+            ></user-filter>
+          </ng-container> -->
+                    <form [formGroup]="searchEmpForm" class="search-blk search-input">
+                        <mat-form-field appearance="fill">
+                            <mat-label>Search</mat-label>
+                            <input matInput formControlName="searchEmp" (click)="highlightRecord(-1)" (keyup)="onSearchKeyUp($event)" (keydown.enter)="onSearch()" />
+                            <img src="assets/images/search.svg" alt="search" matSuffix (click)="onSearch()" class="search" />
+                        </mat-form-field>
+                    </form>
+
+                    <div>
+                        <button color="primary" *ngIf="hasEditPermission && !isHistoryData && status && status.toUpperCase() !== 'SAVED'" (click)="btnSaveClick()" matTooltip="Save" class="next">
+              Save
+            </button>
+
+                        <div class="img-item">
+                            <img src="assets/images/refresh.svg" alt="draft" (click)="getListOfEmployeeLeaveList(true, true)" matTooltip="Refresh" *ngIf="!isHistoryData" />
+                        </div>
+                        <div class="img-item">
+                            <img src="assets/images/save.svg" alt="draft" *ngIf="hasEditPermission && !isHistoryData && status && status.toUpperCase() !== 'SAVED'" (click)="btnSaveAsDraftClick()" matTooltip="Save as draft" />
+                        </div>
+                        <div class="img-item">
+                            <img src="assets/images/excel.svg" alt="draft" (click)="btnExportExcelClick()" matTooltip="Export as excel" />
+                        </div>
+                        <div class="img-item">
+                            <img src="assets/images/history1.svg" alt="draft" (click)="openDialog()" matTooltip="View Save History" />
+                        </div>
+                    </div>
+                </div>
+                <div *ngIf="lastUpdatedBy || lastUpdatedDate">
+                    <p>
+                        Last updated by <i>{{ lastUpdatedBy }}</i> at <i>{{ lastUpdatedDate }}</i>
+                    </p>
+                </div>
+            </div>
+
+            <div class="table-responsive">
+                <table *ngIf="!showSpinnerSection; else showSpinnerDiv">
+                    <thead>
+                        <tr>
+                            <th (click)="sortRecordsByName()" class="name">Employee Name</th>
+                            <th class="table-align table-width">{{ 'Opening CL' + displayConsoldiationMonth }}</th>
+                            <th class="table-align table-width">{{ 'Opening PL' + displayConsoldiationMonth }}</th>
+                            <th class="table-align table-width">{{ 'Used CL' + displayConsoldiationMonth }}</th>
+                            <th class="table-align table-width">{{ 'Used PL' + displayConsoldiationMonth }}</th>
+                            <th class="table-align table-width">{{ 'Available CL' + displayConsoldiationMonth }}</th>
+                            <th class="table-align table-width">{{ 'Available PL' + displayConsoldiationMonth }}</th>
+                            <th class="table-align table-width">{{ 'Added CL' + displayConsoldiationMonth }}</th>
+                            <th class="table-align table-width">{{ 'Added PL' + displayConsoldiationMonth }}</th>
+                            <th class="table-align table-width">{{ 'LWP' + displayConsoldiationMonth }}</th>
+                            <th class="table-align table-width">Adjusted LWP</th>
+                            <th class="table-align table-width">New CL Balance</th>
+                            <th class="table-align table-width">New PL Balance</th>
+                            <th class="table-align table-width">New LWP</th>
+                            <th class="table-align comment">Comment</th>
+                        </tr>
+                    </thead>
+                    <tbody *ngIf="employeeLeaveListData && employeeLeaveListData.length > 0; else NoRecordFound">
+                        <tr *ngFor="let emp of employeeLeaveListData; let index" (click)="highlightRecord(index)" [ngClass]="currentSelectedRecord === index ? 'highlightRecord' : ''">
+                            <th>{{ emp.first_name + ' ' + emp.last_name }}</th>
+                            <th class="table-align">{{ emp.opening_CL }}</th>
+                            <th class="table-align">{{ emp.opening_PL }}</th>
+                            <th class="table-align">{{ emp.used_CL }}</th>
+                            <th class="table-align">{{ emp.used_PL }}</th>
+                            <th class="table-align">{{ emp.opening_CL - emp.used_CL }}</th>
+                            <th class="table-align">{{ emp.opening_PL - emp.used_PL }}</th>
+                            <th class="editable-columns table-align" [ngClass]="currentSelectedRecord === index ? 'highlightRecord' : ''">
+                                <input (blur)="leaveInputLosseFocus($event, emp.id, 'CL')" type="number" [value]="emp.added_CL" class="admin-input" [disabled]="!(hasEditPermission && !isHistoryData && status && status.toUpperCase() !== 'SAVED')" />
+                            </th>
+                            <th class="editable-columns table-align" [ngClass]="currentSelectedRecord === index ? 'highlightRecord' : ''">
+                                <input (blur)="leaveInputLosseFocus($event, emp.id, 'PL')" type="number" [value]="emp.added_PL" class="admin-input" [disabled]="!(hasEditPermission && !isHistoryData && status && status.toUpperCase() !== 'SAVED')" />
+                            </th>
+                            <th class="table-align">{{ emp.used_LWP }}</th>
+                            <th class="editable-columns table-align" [ngClass]="currentSelectedRecord === index ? 'highlightRecord' : ''">
+                                <input (blur)="leaveInputLosseFocus($event, emp.id, 'LWP')" type="number" [value]="emp.adjusted_LWP" class="admin-input" [disabled]="!(hasEditPermission && !isHistoryData && status && status.toUpperCase() !== 'SAVED')" />
+                            </th>
+                            <th class="table-align">{{ emp.opening_CL + emp.added_CL - emp.used_CL }}</th>
+                            <th class="table-align">{{ emp.opening_PL + emp.added_PL - emp.used_PL }}</th>
+                            <th class="table-align">{{ emp.used_LWP - emp.adjusted_LWP }}</th>
+                            <th class="editable-columns" [ngClass]="currentSelectedRecord === index ? 'highlightRecord' : ''">
+                                <textarea (blur)="commentValueChange($event, emp.id)" [disabled]="!(hasEditPermission && !isHistoryData && status && status.toUpperCase() !== 'SAVED')">{{ emp.comments || '' }}</textarea
+                >
+              </th>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <ng-template #NoRecordFound>
+        <tr>
+          <td colspan="15">{{ loadingData ? 'Loading ..' : 'No Record Found' }}</td>
+        </tr>
+      </ng-template>
+      <ng-template #showSpinnerDiv>
+        <div [mainAppSpinner]="showSpinnerSection"></div>
+      </ng-template>
+    </div>
+
+    <ng-template #historyListDilog>
+      <div class="manualupdateleaves-heading">
+        <h1 mat-dialog-title>Manual Update Leaves History</h1>
+        <div mat-dialog-actions>
+          <button color="accent" [mat-dialog-close]="false" class="cancel">Cancel</button>
+        </div>
+      </div>
+      <hr />
+      <div mat-dialog-content>
+        <div>
+          <table mat-table [dataSource]="dataSource.data.length > 0 ? dataSource : emptyData" class="mat-elevation-z8">
+            <ng-container matColumnDef="monthYear">
+              <th mat-header-cell *matHeaderCellDef>MM-YYYY</th>
+              <td mat-cell *matCellDef="let element">{{ element.monthYear }}</td>
+            </ng-container>
+            <ng-container matColumnDef="updatedBy">
+              <th mat-header-cell *matHeaderCellDef>Updated By</th>
+              <td mat-cell *matCellDef="let element">{{ element.updatedBy }}</td>
+            </ng-container>
+            <ng-container matColumnDef="updatedDate">
+              <th mat-header-cell *matHeaderCellDef>Updated Date</th>
+              <td mat-cell *matCellDef="let element">{{ element.updatedDate }}</td>
+            </ng-container>
+            <ng-container matColumnDef="draftId">
+              <th mat-header-cell *matHeaderCellDef></th>
+              <td mat-cell *matCellDef="let element">
+                <img
+                  src="assets/images/eye.svg"
+                  class="ng-star-inserted cursor-pointer"
+                  (click)="viewHistoryItem(element.draftId, element.month, element.year)"
+                />
+              </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: dataSource.data.length > 0 ? displayedColumns : ['empty-row']"></tr>
+            <ng-container matColumnDef="empty-row">
+              <mat-cell *matCellDef="let element">No records found</mat-cell>
+            </ng-container>
+          </table>
+        </div>
+      </div>
+      <div>
+        <mat-paginator
+          *ngIf="dataSource.data.length > 0"
+          class="pagination"
+          [length]="paginationHistoryLogs?.totalRecords"
+          [pageSize]="paginationHistoryLogs?.limit"
+          [pageIndex]="paginationHistoryLogs?.currentPage - 1"
+          [pageSizeOptions]="[5, 10, 25, 100]"
+          aria-label="Select page"
+          (page)="getLogsOnChange($event)"
+        ></mat-paginator>
+      </div>
+    </ng-template>
+  </mat-card>
+</div>

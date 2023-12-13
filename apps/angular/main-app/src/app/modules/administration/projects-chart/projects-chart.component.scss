@@ -1,0 +1,23 @@
+.page-item {
+  position: absolute;
+  bottom: -15px;
+  right: 30px;
+}
+
+.page-lable {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 20px !important;
+  color: #021629;
+  margin-right: 10px;
+}
+
+.ag-chart {
+  ::ng-deep .ag-chart-wrapper {
+    height: 480px !important;
+  }
+}
+
+// ::ng-deep .ag-chart-wrapper {
+//   height: 45vh !important;
+// }

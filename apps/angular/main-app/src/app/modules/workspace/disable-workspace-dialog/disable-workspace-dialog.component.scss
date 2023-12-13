@@ -1,0 +1,56 @@
+@import 'apps/angular/main-app/src/variables';
+@import 'apps/angular/main-app/src/mixins';
+@import 'apps/angular/main-app/src/assets/fonts/fonts.scss';
+.are-you-sure {
+  text-align: center;
+  padding: 20px;
+  h2 {
+    padding: 0;
+    margin-bottom: 10px;
+    &::before {
+      display: none;
+    }
+  }
+  .cancel {
+    margin-right: 10px;
+    min-width: 86px !important;
+  }
+  .next {
+    min-width: 86px !important;
+    margin-left: 0 !important;
+    margin-right: 10px;
+  }
+  label {
+    color: $theme-font-color-black;
+    margin-bottom: 10px;
+    font-size: $theme-main-medium-font;
+    font-weight: 500;
+    line-height: 17px;
+    text-align: left;
+    display: block;
+  }
+  input {
+    border-radius: $button-radius !important;
+  }
+  p {
+    font-size: $theme-main-medium-font;
+    font-weight: 400;
+    line-height: 20px;
+    color: $theme-main-extra-color-dark;
+    line-height: 20px;
+    background-color: #ff59591a;
+    padding: 10px;
+    margin-bottom: 20px;
+  }
+   ::ng-deep .mat-mdc-dialog-actions {
+    margin-top: 20px;
+    padding: 0;
+    min-height: unset;
+  }
+  .mat-mdc-dialog-content {
+    padding: 0;
+  }
+  .mat-mdc-dialog-actions .mat-mdc-button-base+.mat-mdc-button-base {
+    margin-left: 0 !important;
+  }
+}

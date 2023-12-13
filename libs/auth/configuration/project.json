@@ -1,0 +1,26 @@
+{
+  "name": "auth-configuration",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/auth/configuration/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/esbuild:esbuild",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/auth/configuration",
+        "main": "libs/auth/configuration/src/index.js",
+        "tsConfig": "libs/auth/configuration/tsconfig.lib.json",
+        "assets": ["libs/auth/configuration/*.md"]
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/auth/configuration/**/*.js"]
+      }
+    }
+  },
+  "tags": ["node", "config"]
+}

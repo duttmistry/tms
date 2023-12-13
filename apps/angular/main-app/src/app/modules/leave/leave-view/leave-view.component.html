@@ -1,0 +1,334 @@
+<div class="container-wrapper leaves">
+  <div class="container-inner">
+    <mat-card class="padding-remove container-child">
+      <div class="workspace-blk workspace-border">
+        <!-- <strong>Leaves </strong> -->
+        <strong><a routerLink="/leave">Leaves</a></strong>
+
+        <div class="btn-flex">
+          <button color="primary" [disabled]="!allowForLeaveRequest" routerLink="/leave/add" class="navy-bg primary-button">Add Leave</button>
+
+          <button
+            *ngIf="allowForTeamLeave && reportingUsersCount !== 0"
+            color="primary"
+            routerLink="/leave/team"
+            class="navy-button secondary-button"
+          >
+            Team Leaves
+          </button>
+          <button
+            [matBadge]="approvalCount > 0 ? approvalCount : null"
+            matBadgeColor="warn"
+            *ngIf="allowForLeaveApproval && (isUserLeaveResponsiblePerson || approvalCount)"
+            color="primary"
+            routerLink="/leave/approval"
+            class="navy-button count-btn"
+          >
+            Leave Approval
+          </button>
+        </div>
+      </div>
+      <div class="leave-bottom">
+        <div class="leave-bottom-balance border-content">
+          <div class="leave-balance">
+            <div class="balance-top">
+              <strong class="pr-form-top-header">My Leave Balance </strong>
+
+              <div matTooltip="Leave Balance Summary" routerLink="/leave/transection-history" class="tertiary-button">
+                <svg width="19" height="18" viewBox="0 0 19 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path
+                    d="M17 9C17 13.14 13.64 16.5 9.5 16.5C5.36 16.5 2 13.14 2 9C2 4.86 5.36 1.5 9.5 1.5C13.64 1.5 17 4.86 17 9Z"
+                    stroke="#333366"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                  <path
+                    d="M12.2827 11.3853L9.95766 9.99781C9.55266 9.75781 9.22266 9.18031 9.22266 8.70781V5.63281"
+                    stroke="#333366"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+                <span>Leave Balance Summary</span>
+              </div>
+            </div>
+            <ng-container *ngIf="showSpinner; else leaveGraph">
+              <div [mainAppSpinner]="showSpinner"></div>
+            </ng-container>
+            <ng-template #leaveGraph>
+              <div class="leaves-graph">
+                <div class="leaves-graph-item">
+                  <canvas
+                    baseChart
+                    [labels]="TotalDoughnutChartLabels"
+                    [datasets]="TotalDoughnutChartDatasets"
+                    [options]="TotalDoughnutChartOptions"
+                    [plugins]="TotalDoughnutChartPlugins"
+                    [legend]="true"
+                    [type]="'doughnut'"
+                  >
+                  </canvas>
+                </div>
+
+                <div class="leaves-graph-item">
+                  <canvas
+                    baseChart
+                    [labels]="CLDoughnutChartLabels"
+                    [datasets]="CLDoughnutChartDatasets"
+                    [options]="CLDoughnutChartOptions"
+                    [plugins]="CLDoughnutChartPlugins"
+                    [legend]="true"
+                    [type]="'doughnut'"
+                  >
+                  </canvas>
+                </div>
+                <div class="leaves-graph-item">
+                  <canvas
+                    baseChart
+                    [labels]="PLDoughnutChartLabels"
+                    [datasets]="PLDoughnutChartDatasets"
+                    [options]="PLDoughnutChartOptions"
+                    [plugins]="PLDoughnutChartPlugins"
+                    [legend]="true"
+                    [type]="'doughnut'"
+                  >
+                  </canvas>
+                </div>
+
+                <div class="leaves-graph-item">
+                  <canvas
+                    baseChart
+                    [labels]="LWPDoughnutChartLabels"
+                    [datasets]="LWPDoughnutChartDatasets"
+                    [options]="LWPDoughnutChartOptions"
+                    [plugins]="LWPDoughnutChartPlugins"
+                    [legend]="true"
+                    [type]="'doughnut'"
+                  >
+                  </canvas>
+                </div>
+              </div>
+            </ng-template>
+          </div>
+          <mat-divider></mat-divider>
+          <div class="leave-table">
+            <div class="applied-table">
+              <strong class="pr-form-top-header">Applied Leaves </strong>
+              <div class="leave-form">
+                <p>Leave Filter By :</p>
+                <div class="close-icon-wrapper">
+                  <mat-form-field
+                    (click)="leaveDatePicker.open()"
+                    appearance="fill"
+                    class="form-field-width calender-icon medium-height-wrapper input-field-wrapper"
+                  >
+                    <mat-label>Date</mat-label>
+                    <mat-date-range-input [min]="minDate" [formGroup]="filterByLeaveDate" [rangePicker]="leaveDatePicker">
+                      <input matStartDate (dateChange)="onFilterByDate($event)" formControlName="startDate" readonly />
+                      <input (dateChange)="onFilterByDate($event)" matEndDate formControlName="endDate" readonly />
+                    </mat-date-range-input>
+                    <mat-error *ngIf="filterByLeaveDate.controls['endDate'].hasError('endDateReq')">Please add end date.</mat-error>
+                    <mat-datepicker-toggle matIconPrefix [for]="leaveDatePicker"></mat-datepicker-toggle>
+                    <mat-date-range-picker #leaveDatePicker></mat-date-range-picker>
+
+                    <!-- <mat-icon
+                  matSuffix
+                  (click)="filterByLeaveDate.reset(); onFilterByDate($event)"
+                  *ngIf="filterByLeaveDate.controls['startDate'].value || filterByLeaveDate.controls['endDate'].value"
+                  class="filter-close"
+                  >close</mat-icon
+                > -->
+                  </mat-form-field>
+                  <svg
+                    (click)="filterByLeaveDate.reset(); onFilterByDate($event)"
+                    *ngIf="filterByLeaveDate.controls['startDate'].value || filterByLeaveDate.controls['endDate'].value"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 16 16"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="filter-close"
+                  >
+                    <path
+                      d="M8.00065 1.3335C4.32732 1.3335 1.33398 4.32683 1.33398 8.00016C1.33398 11.6735 4.32732 14.6668 8.00065 14.6668C11.674 14.6668 14.6673 11.6735 14.6673 8.00016C14.6673 4.32683 11.674 1.3335 8.00065 1.3335ZM10.2407 9.5335C10.434 9.72683 10.434 10.0468 10.2407 10.2402C10.1407 10.3402 10.014 10.3868 9.88732 10.3868C9.76065 10.3868 9.63398 10.3402 9.53399 10.2402L8.00065 8.70683L6.46732 10.2402C6.36732 10.3402 6.24065 10.3868 6.11398 10.3868C5.98732 10.3868 5.86065 10.3402 5.76065 10.2402C5.56732 10.0468 5.56732 9.72683 5.76065 9.5335L7.29398 8.00016L5.76065 6.46683C5.56732 6.2735 5.56732 5.9535 5.76065 5.76016C5.95398 5.56683 6.27398 5.56683 6.46732 5.76016L8.00065 7.2935L9.53399 5.76016C9.72732 5.56683 10.0473 5.56683 10.2407 5.76016C10.434 5.9535 10.434 6.2735 10.2407 6.46683L8.70732 8.00016L10.2407 9.5335Z"
+                      fill="#86969D"
+                    />
+                  </svg>
+                </div>
+                <div class="close-icon-wrapper">
+                  <mat-form-field class="small-dropdown medium-height-wrapper input-field-wrapper" #statusFormField>
+                    <mat-label>Status</mat-label>
+                    <mat-select
+                      placeholder="Status"
+                      #statusSelect
+                      [formControl]="filterByLeaveStatus"
+                      (selectionChange)="onFilterByLeaveStatus($event)"
+                      [ngClass]="statusSelect.panelOpen ? 'arrow-up' : 'arrow-down'"
+                    >
+                      <mat-option *ngFor="let item of leaveStatusOptions" [value]="item">
+                        {{ item }}
+                      </mat-option>
+                    </mat-select>
+                    <!-- <mat-icon
+                  matSuffix
+                  (click)="filterByLeaveStatus.reset(); onFilterByLeaveStatus($event)"
+                  *ngIf="filterByLeaveStatus.value"
+                  class="filter-close"
+                  >close</mat-icon
+                > -->
+                  </mat-form-field>
+
+                  <svg
+                    (click)="filterByLeaveStatus.reset(); onFilterByLeaveStatus($event)"
+                    *ngIf="filterByLeaveStatus.value"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 16 16"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="filter-close"
+                  >
+                    <path
+                      d="M8.00065 1.3335C4.32732 1.3335 1.33398 4.32683 1.33398 8.00016C1.33398 11.6735 4.32732 14.6668 8.00065 14.6668C11.674 14.6668 14.6673 11.6735 14.6673 8.00016C14.6673 4.32683 11.674 1.3335 8.00065 1.3335ZM10.2407 9.5335C10.434 9.72683 10.434 10.0468 10.2407 10.2402C10.1407 10.3402 10.014 10.3868 9.88732 10.3868C9.76065 10.3868 9.63398 10.3402 9.53399 10.2402L8.00065 8.70683L6.46732 10.2402C6.36732 10.3402 6.24065 10.3868 6.11398 10.3868C5.98732 10.3868 5.86065 10.3402 5.76065 10.2402C5.56732 10.0468 5.56732 9.72683 5.76065 9.5335L7.29398 8.00016L5.76065 6.46683C5.56732 6.2735 5.56732 5.9535 5.76065 5.76016C5.95398 5.56683 6.27398 5.56683 6.46732 5.76016L8.00065 7.2935L9.53399 5.76016C9.72732 5.56683 10.0473 5.56683 10.2407 5.76016C10.434 5.9535 10.434 6.2735 10.2407 6.46683L8.70732 8.00016L10.2407 9.5335Z"
+                      fill="#86969D"
+                    />
+                  </svg>
+                </div>
+                <span
+                  *ngIf="
+                    filterByLeaveStatus.value || filterByLeaveDate.controls['startDate'].value || filterByLeaveDate.controls['endDate'].value;
+                    else disableFilter
+                  "
+                >
+                  <button color="primary" mat-icon-button matTooltip="Turn the filters off" (click)="resetAllFilters()">
+                    <mat-icon>filter_list</mat-icon>
+                  </button>
+                </span>
+                <ng-template #disableFilter>
+                  <button disabled mat-icon-button (click)="resetAllFilters()">
+                    <mat-icon>filter_list_off</mat-icon>
+                  </button>
+                </ng-template>
+              </div>
+            </div>
+            <div>
+              <div class="table-top table-responsive">
+                <ng-container *ngIf="showSpinner === true; else leaveTable">
+                  <div [mainAppSpinner]="showSpinner"></div>
+                </ng-container>
+                <ng-template #leaveTable>
+                  <table mat-table [dataSource]="leaveHistoryDataSource.data.length > 0 ? leaveHistoryDataSource : emptyData">
+                    <ng-container matColumnDef="appliedDate">
+                      <th mat-header-cell *matHeaderCellDef>Applied on</th>
+                      <td mat-cell *matCellDef="let element">{{ element.appliedDate }}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="leaveDateFromTo">
+                      <th mat-header-cell *matHeaderCellDef>Leave date</th>
+                      <td mat-cell *matCellDef="let element">{{ element.leaveDateFromTo }}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="leaveType">
+                      <th mat-header-cell *matHeaderCellDef>Type</th>
+                      <td mat-cell *matCellDef="let element">
+                        <span *ngFor="let type of element.leaveTypes">
+                          {{ type.leave_type + '(' + type.leave_days + ')' }}
+                        </span>
+                      </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="leaveSubject">
+                      <th mat-header-cell *matHeaderCellDef class="subject">Subject</th>
+                      <td mat-cell *matCellDef="let element">{{ element.leaveSubject }}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="noOfDays">
+                      <th mat-header-cell *matHeaderCellDef class="table-align">No. of days</th>
+                      <td mat-cell *matCellDef="let element" class="table-align">{{ element.noOfDays }}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="status">
+                      <th mat-header-cell *matHeaderCellDef class="table-align">Status</th>
+                      <td
+                        class="table-align status"
+                        mat-cell
+                        *matCellDef="let element"
+                        [ngClass]="
+                          element.status === 'PENDING'
+                            ? 'pending-report'
+                            : element.status === 'REJECTED'
+                            ? 'rejected-report'
+                            : element.status === 'APPROVED'
+                            ? 'approved-report'
+                            : 'cancel-report'
+                        "
+                      >
+                        <span>{{ element.status | titlecase }}</span>
+                      </td>
+                    </ng-container>
+                    <ng-container matColumnDef="action">
+                      <th mat-header-cell *matHeaderCellDef class="table-align action">Actions</th>
+                      <td mat-cell *matCellDef="let element" class="leaves-image table-align">
+                        <img src="assets/images/eye.svg" matTooltip="View leave" alt="Image" (click)="redirectToDetailsPage(element.id)" />
+
+                        <img
+                          *ngIf="(!element.isDatePassed && element.status == 'APPROVED') || element.status == 'PENDING'"
+                          src="assets/images/close-square.svg"
+                          matTooltip="Cancel leave"
+                          alt="Image"
+                          (click)="cancelLeave(element.id)"
+                        />
+                        <img
+                          src="assets/images/pencil.svg"
+                          matTooltip="Edit leave"
+                          alt="Image"
+                          *ngIf="element.status === 'PENDING' && !element.isDatePassed && element.allowEdit"
+                          (click)="redirectToEditLeave(element.id)"
+                        />
+                      </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="empty-row">
+                      <td mat-cell *matCellDef="let element">No records found</td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: leaveHistoryDataSource.data.length > 0 ? displayedColumns : ['empty-row']"></tr>
+                  </table>
+                </ng-template>
+              </div>
+              <mat-paginator
+                *ngIf="leaveHistoryDataSource.data.length > 0"
+                [pageSize]="params.limit"
+                [pageIndex]="params.page - 1"
+                [length]="totalRecords"
+                [pageSizeOptions]="[5, 10, 25, 100]"
+                (page)="onPageSelectionChange($event)"
+                aria-label="Select page of users"
+                class="pagination"
+              ></mat-paginator>
+            </div>
+          </div>
+        </div>
+
+        <div class="leaves-holiday">
+          <ng-container *ngIf="showSpinner">
+            <div [mainAppSpinner]="showSpinner"></div>
+          </ng-container>
+          <div *ngIf="holidayList && holidayList.length > 0 && !showSpinner; else noRecordFound">
+            <mat-list>
+              <div *ngIf="holidayList && holidayList.length" class="calander">
+                <custom-calendar [holidayList]="holidayList"></custom-calendar>
+              </div>
+            </mat-list>
+          </div>
+        </div>
+      </div>
+    </mat-card>
+  </div>
+</div>
+<ng-template #noRecordFound>
+  <div class="no-record" *ngIf="!showSpinner">No Records Found</div>
+</ng-template>

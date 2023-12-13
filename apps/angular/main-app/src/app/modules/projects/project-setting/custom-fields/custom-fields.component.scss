@@ -1,0 +1,459 @@
+@import 'apps/angular/main-app/src/variables';
+@import 'apps/angular/main-app/src/mixins';
+@import 'apps/angular/main-app/src/assets/fonts/fonts.scss';
+.flex-parent-element-custom-field {
+  display: flex;
+}
+
+.custom-button {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin: 15px 0;
+  .cancel,
+  .next {
+    min-width: 82px;
+    padding: 0 !important;
+    margin-left: 0 !important;
+    height: 33px !important;
+  }
+  .disable {
+    cursor: not-allowed;
+    pointer-events: unset;
+    min-width: 82px;
+    padding: 0 !important;
+    margin-left: 0 !important;
+    height: 33px !important;
+  }
+}
+
+.flex-child-element-custome-field .left {
+  max-width: 80%;
+}
+
+.flex-child-element-custome-field .right {
+  max-width: 20%;
+}
+
+.custom-field-blk {
+   ::ng-deep .mat-mdc-checkbox label {
+    font-size: $theme-main-small-font;
+  }
+  .cancel,
+  .next {
+    min-width: 82px;
+    padding: 0 !important;
+    margin-left: 0 !important;
+    height: 33px !important;
+  }
+   ::ng-deep .mdc-form-field>label {
+    padding-left: 0 !important;
+    font-size: 14px;
+    color: $theme-main-color-light;
+  }
+  .form-control-title {
+    color: $theme-main-color-light;
+    font-size: 14px;
+    font-weight: 400;
+    margin-top: 5px;
+    cursor: pointer;
+    text-align: center;
+    line-height: 17px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+    display: block;
+    white-space: nowrap;
+  }
+  .form-control-list {
+    @include flex;
+    flex-direction: column;
+    @include flex-align-center;
+    padding: 15px;
+    margin-right: 0;
+    background-color: #fff;
+    img {
+      width: 24px;
+    }
+  }
+  .example-container {
+    width: 100%;
+    margin: 12px;
+    border: 1px solid #555;
+  }
+  mat-drawer-content {
+    padding: 12px;
+    @include flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .flex-parent-element {
+    @include flex;
+    width: 50%;
+  }
+  .flex-child-element {
+    flex: 1;
+    margin: 10px;
+  }
+  .flex-child-element:first-child {
+    margin-right: 30px !important;
+  }
+  .cmyk-text {
+    float: left;
+    width: 72px;
+    height: 72px;
+    font-weight: bolder;
+    line-height: 72px;
+    text-align: center;
+    text-shadow: 1px 1px 2px #bbb;
+  }
+  .color-box {
+    width: 15px;
+    height: 15px;
+    cursor: pointer;
+  }
+  .example-checkbox {
+    width: 100%;
+  }
+  .filter-close {
+    width: 20px;
+    height: 20px;
+    top: 14px;
+  }
+  .change-me {
+    cursor: pointer;
+    font-size: 30px;
+    font-weight: bolder;
+  }
+  .change-form {
+    padding: 0;
+    width: 100%;
+  }
+  .change-wrap {
+    @include flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 20px;
+    .mat-mdc-form-field {
+      margin-bottom: 20px;
+    }
+  }
+   ::ng-deep .mdc-card__actions {
+    padding: 0;
+    width: 20%;
+    gap: 10px;
+    min-height: unset;
+  }
+  .example-box {
+    padding: 20px 10px;
+    margin-bottom: 20px;
+    @include flex;
+    @include flex-align-center;
+    @include flex-justify-space-between;
+    flex-direction: row;
+    box-sizing: border-box;
+    cursor: move;
+    background-color: $theme-color-white;
+    font-size: 14px;
+  }
+   ::ng-deep .mat-mdc-radio-button .mdc-radio:hover .mdc-radio__native-control:not([disabled]):not(:focus)~.mdc-radio__background::before {
+    opacity: 0 !important;
+  }
+   ::ng-deep .mat-mdc-radio-button.mat-mdc-radio-checked .mdc-radio__background::before {
+    background-color: #ff993300 !important;
+  }
+   ::ng-deep .mat-mdc-radio-button .mdc-radio .mdc-radio__native-control:enabled+.mdc-radio__background .mdc-radio__inner-circle {
+    border-color: $theme-main-color !important;
+    top: -1px !important;
+    left: -1px !important;
+    border-width: 9px !important;
+  }
+   ::ng-deep .mat-mdc-radio-button .mdc-radio .mdc-radio__native-control:enabled:checked+.mdc-radio__background .mdc-radio__outer-circle {
+    border-color: $theme-main-color !important;
+  }
+  .mat-mdc-radio-group {
+    @include flex;
+    @include flex-align-center;
+    width: 100%;
+  }
+   ::ng-deep .mdc-radio__background {
+    width: 16px !important;
+    height: 16px !important;
+  }
+   ::ng-deep .mat-mdc-radio-button .mdc-radio {
+    @include flex;
+    @include flex-align-center;
+    @include flex-justify-center;
+    padding: 5px !important;
+  }
+  .cdk-drag-animating {
+    transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+  }
+  .cdk-drag-placeholder {
+    opacity: 0;
+  }
+  .cdk-drag-preview {
+    box-sizing: border-box;
+    border-radius: 4px;
+    box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2), 0 8px 10px 1px rgba(0, 0, 0, 0.14), 0 3px 14px 2px rgba(0, 0, 0, 0.12);
+  }
+  .example-box:last-child {
+    border: none;
+  }
+  .example-list.cdk-drop-list-dragging .example-box:not(.cdk-drag-placeholder) {
+    transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+  }
+  .drop-list {
+    @include flex;
+    min-width: 50%;
+  }
+  .mat-mdc-card {
+    border-top: 1px solid #ececec !important;
+  }
+  .description-title-section {
+    @include flex;
+    @include flex-align-center;
+    @include flex-justify-space-between;
+    margin-bottom: 15px;
+  }
+  .description-title-section span {
+    margin-right: 10px;
+  }
+  .left,
+  .right {
+    flex: 1;
+  }
+  span {
+    text-decoration: solid;
+  }
+  .create-field-container {
+    @include flex;
+    flex-wrap: wrap;
+    margin-left: -5px;
+    margin-right: -5px;
+    margin-top: 15px;
+  }
+  .search-custom {
+    padding: 0 5px;
+    margin-bottom: 40px;
+     ::ng-deep .mat-mdc-form-field:not(.mat-form-field-no-animations) .mdc-text-field__input {
+      min-height: 48px !important;
+    }
+    img {
+      margin-right: 10px;
+    }
+    span {
+      font-weight: 400;
+      font-size: 15px;
+      margin-bottom: 10px;
+    }
+     ::ng-deep .mat-mdc-form-field-hint-wrapper {
+      padding: 0;
+    }
+    .custom-hint {
+      font-size: $theme-main-small-font;
+      font-weight: 400;
+      margin-top: 5px;
+    }
+    mat-icon {
+      font-size: 21px;
+      padding: 0;
+      margin-top: 10px;
+    }
+  }
+  .field-box {
+    padding: 0;
+    box-sizing: border-box;
+    cursor: pointer;
+    margin: 0px 5px 11px;
+    width: calc(23.8% - 5px);
+  }
+  .buttons-right {
+    @include flex;
+  }
+   ::ng-deep .mat-mdc-form-field:not(.mat-form-field-no-animations) .mdc-text-field__input {
+    color: $theme-main-color-light !important;
+  }
+   ::ng-deep .mat-form-field {
+    font-size: $theme-main-small-font;
+  }
+  .full-width-formfield {
+    width: 100%;
+    margin-bottom: 0;
+  }
+  .left {
+    margin: 0 !important;
+  }
+  .right-wrap {
+    margin: 0 !important;
+    max-width: 32%;
+    background-color: #f7f7f7;
+    padding: 20px 15px;
+    border-radius: 5px;
+    .mat-mdc-form-field {
+      border: 1px solid $theme-border-color-gray;
+    }
+  }
+  .create-field-wrap {
+    @include flex;
+    @include flex-align-center;
+    font-weight: 500;
+    gap: 10px;
+    margin-bottom: 15px;
+    mat-icon {
+      cursor: pointer;
+      font-size: $theme-main-extra-extra-large-font;
+      @include flex;
+      @include flex-align-center;
+    }
+  }
+   ::ng-deep .mat-mdc-raised-button>.mat-icon {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+   ::ng-deep .cdk-drag {
+    padding: 0px 0px 0px 0 !important;
+  }
+  .cross-icon {
+    border: 1px solid #c3c3c3;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: all 0.5s ease;
+    color: #b7b7b7;
+    font-size: $theme-main-extra-extra-large-font;
+    @include flex;
+    @include flex-align-center;
+    @include flex-justify-center;
+    height: 15px;
+    width: 15px;
+    padding: 4px;
+    &:hover {
+      background-color: #eeeeee;
+    }
+  }
+  .right-icon {
+    border: 1px solid #c3c3c3;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: all 0.5s ease;
+    color: #b7b7b7;
+    font-size: $theme-main-extra-extra-large-font;
+    @include flex;
+    @include flex-align-center;
+    @include flex-justify-center;
+    height: 15px;
+    width: 15px;
+    padding: 4px;
+    margin-left: 10px;
+    &:hover {
+      background-color: #eeeeee;
+    }
+  }
+   ::ng-deep .mat-mdc-form-field-icon-prefix>.mat-icon {
+    padding: 0 !important;
+    margin-right: 5px;
+  }
+   ::ng-deep .mat-mdc-form-field-icon-suffix>.mat-icon {
+    padding: 0 !important;
+    color: #aeacac;
+    font-weight: 400;
+  }
+   ::ng-deep .mat-mdc-form-field-flex {
+    height: 48px !important;
+  }
+   ::ng-deep .mat-mdc-icon-button.mat-mdc-button-base {
+    width: 30px !important;
+    height: 21px !important;
+    padding: 0 !important;
+  }
+}
+
+.edit-icon-required-section {
+  @include flex;
+  @include flex-align-center;
+  margin-left: 10px;
+  width: 20%;
+}
+
+@media (max-width: $extra-extra-large-device) {
+  .custom-field-blk {
+    .form-control-title {
+      font-size: $theme-main-small-font;
+    }
+    .form-control-list {
+      padding: 15px;
+    }
+    .field-box {
+      width: calc(31.5% - 5px);
+    }
+  }
+}
+
+@media (max-width: $extra-large-device) {
+  .flex-parent-element-custom-field {
+    display: block;
+  }
+  .custom-field-blk {
+    .right-wrap {
+      max-width: 100% !important;
+      margin-top: 20px !important;
+    }
+  }
+  .custom-field-blk {
+    .flex-child-element:first-child {
+      margin-right: 1px !important;
+    }
+    .field-box {
+      width: calc(13.7% - 5px);
+    }
+    .form-control-title {
+      font-size: $theme-main-medium-font;
+    }
+  }
+}
+
+@media (max-width: $lerge-device) {
+  .custom-field-blk {
+    .field-box {
+      width: calc(18.8% - 5px);
+    }
+    .mdc-card__actions {
+      width: 40%;
+    }
+    .edit-icon-required-section {
+      width: 40%;
+    }
+  }
+}
+
+@media (max-width: $medium-device) {
+  .custom-field-blk {
+    .field-box {
+      width: calc(31.9% - 5px);
+    }
+    .create-field-wrap {
+      font-size: $theme-main-medium-font;
+      mat-icon {
+        font-size: $theme-main-medium-font;
+        font-size: $theme-main-extra-large-font;
+        @include flex;
+        @include flex-align-center;
+        @include flex-justify-center;
+      }
+    }
+  }
+}
+
+@media (max-width: 767px) {
+  .field-box {
+    width: 50%;
+  }
+}
+
+.change-form .mat-mdc-form-field:not(.mat-form-field-no-animations) .mat-mdc-form-field-textarea-control {
+  position: absolute;
+  top: 14px;
+}
+.prefix-icon{
+  cursor: pointer;
+}

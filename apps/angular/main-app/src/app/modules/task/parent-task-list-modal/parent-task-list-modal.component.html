@@ -1,0 +1,61 @@
+<div class="lib-add-document">
+    <ng-template #parentTaskListModal>
+        <div class="task-list-modal-wrapper">
+            <mat-dialog-title class="mat-dialog-lib">
+                <h2>Convert to subtask</h2>
+
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="cursor-pointer" mat-dialog-close (click)="onCloseModal()">
+          <path
+            d="M12 22C17.5 22 22 17.5 22 12C22 6.5 17.5 2 12 2C6.5 2 2 6.5 2 12C2 17.5 6.5 22 12 22Z"
+            stroke="#86969D"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+          <path d="M9.16992 14.8299L14.8299 9.16992" stroke="#86969D" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+          <path d="M14.8299 14.8299L9.16992 9.16992" stroke="#86969D" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+            </mat-dialog-title>
+            <mat-dialog-content class="mat-typography">
+                <mat-form-field class="input-wrapper">
+                    <input type="text" matInput tmsWorkspaceAutoFocusInput [formControl]="taskSearchControl" placeholder="Search for task name, ID, or URL" #taskTitleInput (keyup)="onKeyPress($event)" class="input-field" />
+                    <img src="assets/images/search.svg" alt="search" class="search" />
+                    <svg *ngIf="taskSearchControl?.value" class="filter-close" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" (click)="clearSearch()">
+            <path
+              d="M8.00065 1.3335C4.32732 1.3335 1.33398 4.32683 1.33398 8.00016C1.33398 11.6735 4.32732 14.6668 8.00065 14.6668C11.674 14.6668 14.6673 11.6735 14.6673 8.00016C14.6673 4.32683 11.674 1.3335 8.00065 1.3335ZM10.2407 9.5335C10.434 9.72683 10.434 10.0468 10.2407 10.2402C10.1407 10.3402 10.014 10.3868 9.88732 10.3868C9.76065 10.3868 9.63398 10.3402 9.53399 10.2402L8.00065 8.70683L6.46732 10.2402C6.36732 10.3402 6.24065 10.3868 6.11398 10.3868C5.98732 10.3868 5.86065 10.3402 5.76065 10.2402C5.56732 10.0468 5.56732 9.72683 5.76065 9.5335L7.29398 8.00016L5.76065 6.46683C5.56732 6.2735 5.56732 5.9535 5.76065 5.76016C5.95398 5.56683 6.27398 5.56683 6.46732 5.76016L8.00065 7.2935L9.53399 5.76016C9.72732 5.56683 10.0473 5.56683 10.2407 5.76016C10.434 5.9535 10.434 6.2735 10.2407 6.46683L8.70732 8.00016L10.2407 9.5335Z"
+              fill="#86969D"
+            />
+          </svg>
+                </mat-form-field>
+                <ng-container *ngIf="parentTaskList && parentTaskList.length > 0; else noRecordsTemplate">
+                    <div class="task-list-popup-wrapper">
+                        <ng-container *ngFor="let taskObject of parentTaskList">
+                            <div class="cursor-pointer task-list-name" mat-dialog-close (click)="onTaskSelected(taskObject)">
+                                <div class="task-popup-left">
+                                    <span [ngStyle]="{ 'background-color': getTaskColor(taskObject) }" class="task-color"></span>
+                                    <span *ngIf="taskObject.title && taskObject.title.length > 64; else lessThan64Title" [matTooltip]="taskObject.title" class="task-name">{{ taskObject.title.slice(0, 64) + '...' }}</span
+                  >
+                  <ng-template #lessThan64Title>
+                    <span class="task-name">{{ taskObject.title }}</span>
+    </ng-template>
+    </div>
+    <div class="task-popup-right">
+        <ng-container *ngIf="taskObject?.user; else emptyDat">
+            <main-app-mat-chips [indicateUserWorkingLocation]="true" *ngIf="taskObject?.user" [data]="taskObject?.user" [isCloseButton]="false" [viewAvatarOnly]="true" [stopViewFullProfileOption]="true" [viewTooltip]="true">
+            </main-app-mat-chips>
+        </ng-container>
+        <ng-template #emptyDat> (No Assignee)</ng-template>
+    </div>
+    </div>
+    </ng-container>
+    <button *ngIf="isshowLoadMoreTasks" color="secondary" type="button" (click)="onLoadMoreTasks()" class="load-more">Load More</button>
+    </div>
+    </ng-container>
+
+    <ng-template #noRecordsTemplate>
+        <p class="no-records">No records found</p>
+    </ng-template>
+    </mat-dialog-content>
+    </div>
+    </ng-template>
+</div>

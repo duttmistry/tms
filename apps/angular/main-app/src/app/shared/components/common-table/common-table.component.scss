@@ -1,0 +1,92 @@
+@import 'apps/angular/main-app/src/variables';
+@import 'apps/angular/main-app/src/mixins';
+@import 'apps/angular/main-app/src/assets/fonts/fonts.scss';
+.role {
+   ::ng-deep .mdc-data-table__header-cell {
+    border-bottom-width: 0px !important;
+  }
+  .user-role-table {
+    box-shadow: initial !important;
+    width: 100%;
+    text-align: left;
+    color: #9c9e9d;
+    border-collapse: collapse;
+    img {
+      width: 25px;
+      height: 25px;
+      border-radius: 50%;
+    }
+    p {
+      margin: 0 0 0 8px;
+    }
+  }
+}
+
+::ng-deep .mat-mdc-table .mdc-data-table__header-row {
+  height: 40px;
+  background-color: $theme-bg-color-gray;
+}
+
+::ng-deep .mat-mdc-paginator-page-size-select {
+  width: 100px !important;
+}
+
+::ng-deep .mat-mdc-option {
+  min-height: 34px !important;
+  font-size: $theme-main-medium-font;
+  font-weight: 400;
+  color: $theme-main-color-light !important;
+}
+
+.task-table-wrapper {
+  .mat-mdc-table .mdc-data-table__row {
+    height: unset;
+  }
+  td {
+    padding: 7px 10px !important;
+  }
+  .cdk-column-comment {
+    // max-width: 300px;
+    width: 300px;
+    min-width: 200px;
+    // word-break: break-all;
+  }
+}
+
+.edit-delete-icon-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  .mat-icon {
+    width: 20px;
+    height: 20px;
+    font-size: 20px;
+  }
+}
+
+.restrict-cursor {
+  cursor: not-allowed;
+}
+
+.task-add-wrap {
+  .table-responsive {
+    width: 100%;
+    overflow: auto;
+  }
+}
+
+.clock-icon-wrapper {
+  display: inline-block;
+  vertical-align: middle;
+  margin-left: 2px;
+  margin-top: 4px;
+}
+
+.user-list-wrapper {
+  .table-responsive {
+    tr td,
+    tr th {
+      border-color: #DFDFDF !important;
+    }
+  }
+}

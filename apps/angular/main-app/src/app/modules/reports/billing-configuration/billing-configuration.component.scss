@@ -1,0 +1,59 @@
+@import 'apps/angular/main-app/src/variables';
+@import 'apps/angular/main-app/src/mixins';
+@import 'apps/angular/main-app/src/assets/fonts/fonts';
+.billing-configuration {
+  .billing-field {
+    @include flex;
+    gap: 15px;
+    margin: 25px 0;
+    .mat-mdc-form-field {
+      margin-bottom: 0;
+      width: 250px;
+      &:first-child {
+        width: 400px;
+      }
+    }
+    .search {
+      margin-right: 10px;
+    }
+  }
+  .mat-mdc-table .mdc-data-table__row {
+    height: 50px;
+  }
+  table {
+    td {
+      padding: 0 10px !important;
+    }
+    .mat-mdc-form-field {
+      margin-bottom: 0;
+    }
+     ::ng-deep .mat-mdc-select-value {
+      font-size: $theme-main-small-font !important;
+      color: $theme-font-color-black !important;
+    }
+  }
+  .button-wrap {
+    @include flex;
+    gap: 5px;
+  }
+  .project-status {
+    width: 14%;
+  }
+  .project-title {
+    width: 24%;
+    cursor: pointer;
+  }
+  .project-tag {
+    width: 62%;
+  }
+  .cursor {
+    cursor: unset;
+  }
+  .not-project-title {
+    width: 24%;
+  }
+}
+
+.no-cursor {
+  cursor: not-allowed;
+}

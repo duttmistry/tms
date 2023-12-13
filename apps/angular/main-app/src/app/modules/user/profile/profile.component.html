@@ -1,0 +1,497 @@
+<div class="container-wrapper profile-page">
+    <mat-card>
+        <ng-container>
+            <div class="workspace-blk workspace-border">
+                <strong>User Profile</strong>
+            </div>
+
+            <div class="profile-blk">
+                <div class="profile-blk-left border-content">
+                    <div class="profile-blk-left-top">
+                        <div class="profile-wrap border-content">
+                            <div class="profile-wrap-item">
+                                <ng-container *ngIf="showSpinner; else userDataTemplate">
+                                    <div [mainAppSpinner]="showSpinner"></div>
+                                </ng-container>
+                                <ng-template #userDataTemplate>
+                                    <img #img (error)="img.src = 'assets/images/default.png'" [src]="baseUrl + userData?.employee_image || 'assets/images/default.png'" alt="Image" class="person" />
+
+                                    <strong>{{ userData?.first_name + ' ' + userData?.last_name }}</strong>
+                                    <p>{{ userData?.designation || '-' }}</p>
+                                    <span>Employee ID: {{ userData?.employee_id || '-' }}</span>
+                                    <span *ngIf="productionDate && productionDate?.length > 0">Since: {{ productionDate || '-' }}</span>
+                                </ng-template>
+                            </div>
+                            <div class="profile-contact">
+                                <strong class="profile-title">Personal Details</strong>
+                                <ng-container *ngIf="showSpinner; else personalDetailsTemplate">
+                                    <div [mainAppSpinner]="showSpinner"></div>
+                                </ng-container>
+                                <ng-template #personalDetailsTemplate>
+                                    <div class="profile-content-item">
+                                        <div class="img">
+                                            <img src="assets/images/pperson.svg" />
+                                        </div>
+                                        <div class="content-item-blk">
+                                            <p>Name</p>
+                                            <a>{{ userData?.first_name + ' ' + userData?.last_name }}</a>
+                                        </div>
+                                    </div>
+                                    <div class="profile-content-item">
+                                        <div class="img">
+                                            <img src="assets/images/pcall.svg" />
+                                        </div>
+                                        <div class="content-item-blk">
+                                            <p>Phone</p>
+                                            <a *ngIf="userData?.contact_number" [href]="'tel:' + userData?.contact_number">{{ userData?.contact_number }}</a>
+                                            <span *ngIf="!userData?.contact_number"> - </span>
+                                        </div>
+                                    </div>
+                                    <div class="profile-content-item">
+                                        <div class="img">
+                                            <img src="assets/images/psms.svg" />
+                                        </div>
+                                        <div class="content-item-blk">
+                                            <p>Email</p>
+                                            <a target="_blank" [href]="'https://mail.google.com/mail/u/0/?view=cm&fs=1&to=' + userData?.cybercom_email">{{
+                        userData?.cybercom_email || '-'
+                      }}</a>
+                                            <!-- <span *ngIf="!userData?.emails || !userData?.emails?.length"> - </span> -->
+                                        </div>
+                                    </div>
+                                    <div class="profile-content-item">
+                                        <div class="img">
+                                            <img src="assets/images/pin.svg" />
+                                        </div>
+                                        <div class="content-item-blk">
+                                            <p>LinkedIn</p>
+                                            <a *ngIf="userData?.linkedin" [href]="userData?.linkedin" target="_blank"> {{ userData?.linkedin }}</a>
+                                            <span *ngIf="!userData?.linkedin"> - </span>
+                                        </div>
+                                    </div>
+                                    <div class="profile-content-item">
+                                        <div class="img">
+                                            <span class="material-icons-outlined" style="color: grey">cake</span>
+                                        </div>
+                                        <div class="content-item-blk-detail">
+                                            <p>DOB</p>
+                                            <a style="margin-top: auto; margin-bottom: auto">{{ dateOfBirth || '--' }}</a>
+                                        </div>
+                                    </div>
+                                    <div class="profile-content-item">
+                                        <div class="img">
+                                            <span class="material-icons-outlined" style="color: grey">bloodtype</span>
+                                        </div>
+                                        <div class="content-item-blk-detail">
+                                            <p>Blood Group</p>
+                                            <a style="margin-top: auto; margin-bottom: auto">{{ userData?.blood_group ? userData?.blood_group : '-' }}</a>
+                                        </div>
+                                    </div>
+                                </ng-template>
+                            </div>
+                        </div>
+                        <div class="profile-contact">
+                            <strong class="profile-title">Professional Details</strong>
+                            <ng-container *ngIf="showSpinner; else professionalDetailsTemplate">
+                                <div [mainAppSpinner]="showSpinner"></div>
+                            </ng-container>
+                            <ng-template #professionalDetailsTemplate>
+                                <!-- <div class="profile-content-item">
+                  <div class="img">
+                    <img src="assets/images/pin.svg" />
+                  </div>
+                  <div class="content-item-blk">
+                    <p>LinkedIn</p>
+                    <a *ngIf="userData?.linkedin" [href]="userData?.linkedin" target="_blank"> {{ userData?.linkedin }}</a>
+                    <span *ngIf="!userData?.linkedin"> - </span>
+                  </div>
+                </div> -->
+
+                                <div class="profile-content-item">
+                                    <div class="img">
+                                        <img src="assets/images/technology-img.svg" />
+                                    </div>
+                                    <div class="content-item-blk">
+                                        <p>Technologies</p>
+                                        <div class="technologies-wrapper">
+                                            <ng-container *ngIf="userData?.technologies && userData?.technologies.length > 0">
+                                                <ng-container *ngFor="let technology of userData.technologies; let index = index">
+                                                    <a>{{ technology }}</a>
+                                                    <ng-container *ngIf="index < userData.technologies.length - 1">
+                                                        <a>,&nbsp;</a>
+                                                    </ng-container>
+                                                </ng-container>
+                                            </ng-container>
+                                            <ng-container *ngIf="!userData?.technologies || userData.technologies.length === 0">
+                                                <span>-</span>
+                                            </ng-container>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="profile-content-item">
+                                    <div class="img">
+                                        <img src="assets/images/department-img.svg" />
+                                    </div>
+                                    <div class="content-item-blk">
+                                        <p>Departments</p>
+                                        <div style="display: flex">
+                                            <ng-container *ngIf="userData?.departments && userData?.departments.length > 0" style="display: flex">
+                                                <ng-container *ngFor="let department of userData.departments; let index = index">
+                                                    <a>{{ department }}</a>
+                                                    <ng-container *ngIf="index < userData.departments.length - 1">
+                                                        <a>,&nbsp;</a>
+                                                    </ng-container>
+                                                </ng-container>
+                                            </ng-container>
+                                            <ng-container *ngIf="!userData?.departments || userData.departments.length === 0">
+                                                <span>-</span>
+                                            </ng-container>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="profile-content-item">
+                                    <div class="img">
+                                        <img src="assets/images/pskype.svg" />
+                                    </div>
+                                    <div class="content-item-blk">
+                                        <p>Skype</p>
+                                        <a *ngIf="userData?.skype" [href]="skypeUrl">{{ userData?.skype }}</a>
+                                        <span *ngIf="!userData?.skype"> - </span>
+                                    </div>
+                                </div>
+                                <div class="profile-content-item">
+                                    <div class="img">
+                                        <mat-icon style="color: grey" class="material-icons-outlined">event</mat-icon>
+                                    </div>
+                                    <div class="content-item-blk">
+                                        <p>Date of joining</p>
+                                        <a>{{ dateOfJoining }}</a>
+                                    </div>
+                                </div>
+                                <div class="profile-content-item">
+                                    <div class="img">
+                                        <mat-icon style="color: grey" class="material-icons-outlined">event</mat-icon>
+                                    </div>
+                                    <div class="content-item-blk">
+                                        <p>Production Date</p>
+                                        <a>{{ productionDate }}</a>
+                                    </div>
+                                </div>
+                                <div class="profile-content-item">
+                                    <div class="img">
+                                        <mat-icon style="color: grey">work_outline</mat-icon>
+                                    </div>
+                                    <div class="content-item-blk">
+                                        <p>CCC experience</p>
+                                        <a *ngIf="experience">
+                                            <ng-container *ngIf="experience?.totalCCCYears || experience?.totalCCCMonths; else nocccexpe">
+                                                {{ experience?.totalCCCYears + '.' + experience?.totalCCCMonths + ' ' + 'Yrs' }}
+                                            </ng-container>
+                                        </a>
+                                        <ng-template #nocccexpe>-</ng-template>
+                                    </div>
+                                </div>
+                                <div class="profile-content-item">
+                                    <div class="img">
+                                        <mat-icon style="color: grey" class="material-icons-outlined">domain</mat-icon>
+                                    </div>
+                                    <div class="content-item-blk">
+                                        <p>Total experience</p>
+                                        <a *ngIf="experience">
+                                            <ng-container *ngIf="experience?.overallYears || experience?.overallMonths; else nooverallexp">
+                                                {{ experience?.overallYears + '.' + experience?.overallMonths + ' ' + 'Yrs' }}
+                                            </ng-container>
+                                        </a>
+                                        <ng-template #nooverallexp>-</ng-template>
+                                    </div>
+                                </div>
+                            </ng-template>
+                        </div>
+
+                        <!-- <ng-container *ngIf="showSpinner; else updateSkillTemplate">
+                <div [mainAppSpinner]="showSpinner"></div>
+              </ng-container>
+              <ng-template #updateSkillTemplate>
+                <div class="middle-flex-input">
+                  <div class="content-item-blk-detail" *ngIf="dateOfJoining && dateOfJoining?.length > 0">
+                    <p>DOJ :-</p>
+                    <a style="margin-top: auto; margin-bottom: auto">{{ dateOfJoining }}</a>
+                  </div>
+                  <div class="content-item-blk-detail" *ngIf="dateOfBirth && dateOfBirth?.length > 0">
+                    <p>DOB :-</p>
+                    <a style="margin-top: auto; margin-bottom: auto">{{ dateOfBirth }}</a>
+                  </div>
+                  <div class="content-item-blk-detail">
+                    <p>CCC Experience :-</p>
+                    <a style="margin-top: auto; margin-bottom: auto">{{ userData?.first_name + ' ' + userData?.last_name }}</a>
+                  </div>
+                  <div class="content-item-blk-detail">
+                    <p>Total Experience :-</p>
+                    <a style="margin-top: auto; margin-bottom: auto">{{ userData?.first_name + ' ' + userData?.last_name }}</a>
+                  </div>
+                  <div class="content-item-blk-detail">
+                    <p>Blood Group :-</p>
+                    <a style="margin-top: auto; margin-bottom: auto">{{ userData?.blood_group ? userData?.blood_group : '-' }}</a>
+                  </div>
+                </div>
+                <mat-form-field>
+                    <textarea
+                      matInput
+                      #inputBio
+                      [formControl]="skillDescControl"
+                      placeholder="Enter your bio here."
+                      (keypress)="onKeypressBio($event)"
+                    ></textarea>
+                    <mat-icon matSuffix (click)="updateSkill()">done</mat-icon>
+                    <mat-error *ngIf="skillDescControl.hasError('maxlength')">Maximum length of 1024 characters allowed.</mat-error>
+                  </mat-form-field>
+                </div>
+                <div *ngIf="userData?.technologies && userData.technologies.length" class="middle-flex">
+                  <strong class="profile-title">Skills</strong>
+                </div>
+
+                <mat-chip-listbox>
+                  <mat-chip *ngFor="let tech of userData?.technologies" class="angular">{{ tech }}</mat-chip>
+                </mat-chip-listbox> -->
+                        <!-- </ng-template>
+            </div> -->
+                        <!-- <div class="profile-skill">
+              <strong class="profile-title"
+                >Bio
+                <img (click)="focusOnInputBio()" src="assets/images/pedit.svg" />
+              </strong>
+              <ng-container *ngIf="showSpinner; else updateSkillTemplate">
+                <div [mainAppSpinner]="showSpinner"></div>
+              </ng-container>
+              <ng-template #updateSkillTemplate>
+                <div class="middle-flex-input">
+                  <mat-form-field>
+                    <textarea
+                      matInput
+                      #inputBio
+                      [formControl]="skillDescControl"
+                      placeholder="Enter your bio here."
+                      (keypress)="onKeypressBio($event)"
+                    ></textarea>
+                    <mat-icon matSuffix (click)="updateSkill()">done</mat-icon>
+                    <mat-error *ngIf="skillDescControl.hasError('maxlength')">Maximum length of 1024 characters allowed.</mat-error>
+                  </mat-form-field>
+                </div>
+                <div *ngIf="userData?.technologies && userData.technologies.length" class="middle-flex">
+                  <strong class="profile-title">Skills</strong>
+                </div>
+
+                <mat-chip-listbox>
+                  <mat-chip *ngFor="let tech of userData?.technologies" class="angular">{{ tech }}</mat-chip>
+                </mat-chip-listbox>
+              </ng-template>
+            </div> -->
+                    </div>
+                    <mat-divider></mat-divider>
+                    <div class="profile-blk-left-bottom">
+                        <div class="profile-bottom-item border-content">
+                            <div class="profile-bottom-flex">
+                                <strong class="profile-title">Active Projects
+                  <!-- <span *ngIf="loggedInUserId == employeeId && totalProjectCount > 3">
+                    <a routerLink="/project"> View All </a>
+                  </span> -->
+                </strong>
+                            </div>
+                            <div class="active-project-container">
+                                <ng-container *ngIf="showSpinner">
+                                    <div [mainAppSpinner]="showSpinner"></div>
+                                </ng-container>
+                                <ng-container *ngIf="projectList && projectList.length > 0 && !showSpinner; else noProject">
+                                    <ng-container *ngFor="let project of projectList; let i = index">
+                                        <ng-container>
+                                            <div class="profile-item-bottom">
+                                                <strong>{{ project?.name || '' }}</strong>
+                                                <span class="active-project-list cursor-pointer" (click)="navigateToTaskListPage(project)">
+                          Tasks: {{ project?.project_pending_task_count || 0 }}
+                        </span>
+                                            </div>
+                                        </ng-container>
+                                    </ng-container>
+                                </ng-container>
+                                <ng-template #noProject>
+                                    <p *ngIf="!showSpinner">No active projects in your profile</p>
+                                </ng-template>
+                            </div>
+                        </div>
+                        <div class="profile-bottom-item" *ngIf="userData?.certificates && userData?.certificates.length">
+                            <strong class="profile-title">Achivements</strong>
+                            <div class="certificatad">
+                                <ng-container *ngIf="showSpinner">
+                                    <div [mainAppSpinner]="showSpinner"></div>
+                                </ng-container>
+                                <ng-container *ngFor="let certificate of userData?.certificates && !showSpinner">
+                                    <img *ngIf="certificate?.cretificate_file" crossorigin="anonymous" [src]="baseUrl + certificate?.certificate_file" />
+                                    <!-- <img src="assets/images/default_image.png" />
+                  <img src="assets/images/default_image.png" />
+                  <img src="assets/images/default_image.png" />
+                  <img src="assets/images/default_image.png" />
+                  <img src="assets/images/default_image.png" /> -->
+                                </ng-container>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="profile-blk-right">
+                    <div class="profile-image">
+                        <strong class="profile-title">Position</strong>
+                        <ng-container *ngIf="showSpinner; else positionTemplate">
+                            <div [mainAppSpinner]="showSpinner"></div>
+                        </ng-container>
+                        <ng-template #positionTemplate>
+                            <ul class="hr-theme-slash-2">
+                                <li *ngIf="!isCEOUser" (click)="navigateToProfilePage(ceoProfileData?.ceo?.id)" style="cursor: pointer">
+                                    <div class="profile-image-top">
+                                        <img [src]="ceoProfileData?.profile ? baseUrl + ceoProfileData?.profile : 'assets/images/anup_patel_profile_picture.jpg'" class="profile-top-img" />
+                                    </div>
+                                    <div>
+                                        <span>{{
+                      ceoProfileData?.ceo?.first_name && ceoProfileData?.ceo?.last_name
+                        ? ceoProfileData?.ceo?.first_name + ' ' + ceoProfileData?.ceo?.last_name
+                        : 'Anup Patel'
+                    }}</span>
+                                        <p>CEO</p>
+                                    </div>
+                                </li>
+                                <!-- <li *ngIf="userData?.project_manager_name && userData?.project_manager_name?.first_name && userData?.project_manager_name?.last_name">
+                  <ng-container>
+                    <div class="profile-image-top">
+                      <img
+                        #img3
+                        (error)="img3.src = 'assets/images/default.png'"
+                        crossorigin="anonymous"
+                        [src]="baseUrl + userData?.project_manager_name?.employee_image"
+                        class="profile-top-img"
+                      />
+                    </div>
+                    <div>
+                      <span>{{ userData?.project_manager_name?.first_name + ' ' + userData?.project_manager_name?.last_name }}</span>
+                      <p>{{ userData?.project_manager_name?.designation || '-' }}</p>
+                    </div>
+                  </ng-container>
+                </li> -->
+                                <!-- *ngIf="userData?.team_lead_name && userData?.team_lead_name?.first_name && userData?.team_lead_name?.last_name && userData?.hierarchy && userData?.hierarchy.length>0" -->
+                                <ng-container *ngIf="userData && userData?.hierarchy && userData?.hierarchy?.length > 0 && userData?.hierarchy[0] !== null" >
+                                    <li *ngFor="let hierarchy of userData?.hierarchy; let i = index" (click)="navigateToProfilePage(hierarchy?.id)" style="cursor: pointer">
+                                        <ng-container >
+                                            <div class="profile-image-top">
+                                                <img #img2 (error)="img2.src = 'assets/images/default.png'" crossorigin="anonymous" [src]="baseUrl + hierarchy?.employee_image" class="profile-top-img" />
+                                            </div>
+                                            <div >
+                                                <span>{{ (hierarchy?.first_name || '-') + ' ' + (hierarchy?.last_name || '-') }}</span>
+                                                <p>{{ hierarchy?.designation || '-' }}</p>
+                                            </div>
+                                        </ng-container>
+                                    </li>
+                                </ng-container>
+                                <li (click)="navigateToProfilePage(userData?.id)" style="cursor: pointer">
+                                    <div class="profile-image-top">
+                                        <ng-template #DefaultImg2>
+                                            <img src="assets/images/default.png" alt="person" class="profile-top-img" />
+                                        </ng-template>
+                                        <img *ngIf="userData?.employee_image" #img1 (error)="img1.src = 'assets/images/default.png'" [src]="baseUrl + userData?.employee_image" class="profile-top-img" />
+                                    </div>
+                                    <div>
+                                        <span>{{ (userData?.first_name || '-') + ' ' + (userData?.last_name || '-') }}</span>
+                                        <p>{{ userData?.designation || '-' }}</p>
+                                    </div>
+                                </li>
+                            </ul>
+                        </ng-template>
+                    </div>
+                    <mat-divider></mat-divider>
+                    <div class="profile-links">
+                        <!-- <strong class="profile-title">View More</strong> -->
+                        <ng-container *ngIf="showSpinner; else viewMoreTemplate">
+                            <div [mainAppSpinner]="showSpinner"></div>
+                        </ng-container>
+                        <ng-template #viewMoreTemplate>
+                            <div class="profile-content-item">
+                                <a (click)="navigateToLeaveHistory()">View Leave History</a>
+                            </div>
+                            <div class="profile-content-item">
+                                <a (click)="navigateToLeaveTransectionHistory()">View Leave Transaction</a>
+                            </div>
+                            <div class="profile-content-item">
+                                <a [routerLink]="['/users/timing-history', encryptedUserId]">View Timing History</a>
+                            </div>
+                            <div class="profile-content-item" *ngIf="userRole?.user_role == 'Super Admin'" (click)="assignProjectsModel()">
+                                <a>Assigned Projects</a>
+                            </div>
+                        </ng-template>
+                    </div>
+                </div>
+            </div>
+        </ng-container>
+    </mat-card>
+</div>
+
+<ng-template #dialogContent>
+    <div class="large-dialog-container">
+        <h3>Modify Assigned Project</h3>
+        <div>
+            <tms-workspace-remove-assigned-projects-dropdown [prefName]="prefStorageName" (getSelectedProjects)="getSelectedProjects($event)" (getSelectedworkspacesArr)="selectedWorkspace($event)" (getSelectedProjectsArr)="getSelectedProjects_standalone($event)"
+                [userId]="params_user_id ? params_user_id : user_id" [hideNoTaskCount]="true"></tms-workspace-remove-assigned-projects-dropdown>
+            <!-- <div *ngIf="removeAssignedProjectError" style="color: red">Workspace and project required</div> -->
+            <!-- [displayCount]="true"
+        [hideNoTaskCount]="true" -->
+            <!-- <div *ngIf="!isSubmitted && reason.errors" class="invalid-feedback">
+        <div *ngIf="reason.errors['required'] && reason.touched" class="error">Reason is required</div>
+        <div *ngIf="reason.errors['pattern'] && reason.touched" class="error">Extra white space is not allowed</div>
+        <div *ngIf="!reason.errors['pattern'] && reason.errors['minlength'] && reason.touched" class="error">
+          Reason must be at least 5 characters
+        </div>
+      </div> -->
+        </div>
+        <div style="display: flex; justify-content: end">
+            <button color="primary" type="submit" class="next reason-confirm-button pointer cursor-pointer" (click)="removeAssignedProjects()" [style]="
+          !(selectedStandaloneProjectsIds.length > 0) && !(notSelectedWorkspacesProjectsIds.length > 0) && !(selectedWorkspacesIds.length > 0)
+            ? 'margin-right: 10px;cursor: not-allowed'
+            : 'margin-right: 10px;cursor: pointer'
+        " [disabled]="
+          !(selectedStandaloneProjectsIds.length > 0) && !(notSelectedWorkspacesProjectsIds.length > 0) && !(selectedWorkspacesIds.length > 0)
+        ">
+        <span>Save</span>
+      </button>
+            <button color="primary" type="submit" class="cancel reason-confirm-button pointer cursor-pointer" (click)="closeDialog()">
+        <span>Close</span>
+      </button>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #projectsLists>
+    <div class="large-dialog-container-project-list">
+        <h2 style="margin-bottom: 10px">Confirmation</h2>
+        <mat-divider></mat-divider>
+        <h5 style="margin-top: 10px">
+            Are you sure you want to modify the project assignments? The following projects will be removed from the list as they are unchecked:
+        </h5>
+        <div [style]="
+        allRemovedProjectsIds.length > 5
+          ? allRemovedProjectsIds.length > 12
+            ? 'height: 250px; overflow: auto'
+            : 'height: 150px; overflow: auto'
+          : 'height: 100px; overflow: auto'
+      ">
+            <div *ngFor="let project of allRemovedProjectsIds; let i = index">{{ i + 1 + '. ' + project?.name }}</div>
+        </div>
+        <h5>
+            Please review the list above and ensure you want to proceed with the removal of these projects. Click 'Confirm' to proceed with the changes, or 'Cancel' to keep the current assignments.
+        </h5>
+        <div style="display: flex; justify-content: end">
+            <button color="primary" type="submit" class="next reason-confirm-button pointer cursor-pointer" style="margin-right: 10px" (click)="removeAssignedProjectsConfirmation()">
+        <span>Confirm</span>
+      </button>
+            <button color="primary" type="submit" class="cancel reason-confirm-button pointer cursor-pointer" (click)="closeDialogProject()">
+        <span>Cancel</span>
+      </button>
+        </div>
+    </div>
+</ng-template>

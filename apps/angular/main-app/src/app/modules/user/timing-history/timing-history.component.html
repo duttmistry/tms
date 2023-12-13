@@ -1,0 +1,171 @@
+<div class="container-wrapper timing-history">
+    <mat-card>
+        <div class="workspace-blk workspace-border">
+            <strong>View Timing History</strong>
+            <div class="tertiary-button" (click)="goBack()">Back</div>
+            <!-- <a style="cursor: pointer" (click)="redirectBack()">Timing History </a>  -->
+        </div>
+        <!-- <strong >User: {{userName}}</strong> -->
+        <div class="user-info" *ngIf="!showSpinnerUserDetails; else spinnerSection">
+            <div class="user-info-flex">
+                <img #img (error)="img.src = 'assets/images/default.png'" [src]="baseUrl + userDetails?.employee_image || 'assets/images/default.png'" alt="Image" />
+                <div>
+                    <span>{{ fullName || '-' }}</span>
+                    <p>{{ userDetails?.designation || '-' }}</p>
+                    <!-- <span *ngIf="projectManagerName"
+          >Project Manager : <label> {{ projectManagerName || '-' }} </label></span
+        >
+        <span *ngIf="teamLeadName"
+          >Team Leader : <label> {{ teamLeadName || '-' }} </label></span
+        > -->
+                    <!-- <span
+          >Leave Balance :
+          <div *ngFor="let item of userInformation?.leaveBalance">
+            <label>{{ item?.leave_type }} : {{ item?.current_balance || '0' }}</label>
+          </div>
+        </span> -->
+                </div>
+            </div>
+            <!-- <span class="user-name" *ngIf="userName">User: {{ userName }}</span> -->
+            <div class="leave-count-attedance timing-history-count">
+                <div class="leave-count-green">
+                    <strong>{{ totalWorked || 0 }}</strong>
+                    <span> Total Worked</span>
+                </div>
+                <div class="leave-count-red">
+                    <strong>{{ idleTime || 0 }}</strong>
+                    <span> Idle Time</span>
+                </div>
+                <div class="leave-count-blue">
+                    <strong>{{ manualAdjustment || 0 }}</strong>
+                    <span> Manual Adjustment</span>
+                </div>
+            </div>
+        </div>
+        <mat-divider class="user-detail-divider"></mat-divider>
+        <div class="profile-blk">
+            <!-- <mat-form-field [ngClass]="userSelect.panelOpen ? 'arrow-up' : 'arrow-down'" *ngIf="isUserLeaveResponsiblePerson || isSuperAdmin" class="small-dropdown">
+        <mat-label>Filter by Action user</mat-label>
+        <mat-select #userSelect [formControl]="userControl" (selectionChange)="onFilterByUser()">
+          <mat-option *ngFor="let user of reportingPersons" [value]="user"> {{ user.name }}</mat-option>
+        </mat-select>
+      </mat-form-field> -->
+
+            <mat-form-field (click)="filterDatePicker.open()" appearance="fill" class="small-dropdown calender-icon medium-height-wrapper input-field-wrapper">
+                <mat-label>Filter By Date(s)</mat-label>
+                <mat-date-range-input [formGroup]="filterByDateForm" [rangePicker]="filterDatePicker" [max]="maxDate">
+                    <input matStartDate formControlName="fromDate" readonly />
+                    <input (dateChange)="onFilterDateChange()" matEndDate formControlName="toDate" readonly />
+                </mat-date-range-input>
+                <mat-error *ngIf="filterByDateForm.controls['toDate'].hasError('endDateReq')">Please select end date.</mat-error>
+
+                <mat-datepicker-toggle matIconSuffix [for]="filterDatePicker"></mat-datepicker-toggle>
+                <mat-date-range-picker #filterDatePicker></mat-date-range-picker>
+                <!-- <mat-error *ngIf="filterByDateForm.controls['fromDate'].hasError('matStartDateInvalid')">Invalid from date</mat-error>
+        <mat-error *ngIf="filterByDateForm.controls['toDate'].hasError('matEndDateInvalid')">Invalid to date</mat-error>
+     -->
+            </mat-form-field>
+
+            <!-- <div> -->
+            <button class="next-no-space primary-button" (click)="exportExcel()" [disabled]="isExportTimingHistory">
+        <!-- <span *ngIf="isExportTimingHistory; else exportButtonContent">
+            <mat-spinner diameter="20" color="white"></mat-spinner>
+            You can customize the loader here
+          </span> -->
+        Export as Excel
+        <!-- <ng-template #exportButtonContent>
+            <ng-container> </ng-container>
+          </ng-template> -->
+      </button>
+            <!-- </div> -->
+            <!-- <div > -->
+            <button *ngIf="isAllowedToUpdateTime" class="next-no-space primary-button" (click)="openUpdateTimeModel()">
+        <!-- <span>
+            <mat-spinner diameter="20" color="white"></mat-spinner>
+
+          </span> -->
+        <!-- <ng-template #updateTimeTemp>  -->
+        Update Time Manually
+        <!-- </ng-template> -->
+      </button>
+            <!-- </div> -->
+            <div>
+                <button (click)="changeOrderBy()" class="sort-button-section up-down-arrow">
+          <img *ngIf="orderBy === 'asc'" matTooltip="Sort in descending order" src="assets/images/up-arrow.png" alt="asc" />
+          <img *ngIf="orderBy === 'desc'" matTooltip="Sort in ascending order" src="assets/images/down-arrow.png" alt="asc" />
+        </button>
+            </div>
+        </div>
+        <div class="table-top table-responsive">
+            <table mat-table [dataSource]="
+          timingHistoryListDataSouce && timingHistoryListDataSouce.data && timingHistoryListDataSouce.data.length > 0
+            ? timingHistoryListDataSouce
+            : emptyData
+        " class="mat-elevation-z8" *ngIf="!showSpinner; else spinnerSection">
+                <ng-container matColumnDef="action">
+                    <mat-header-cell *matHeaderCellDef> Action </mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{ element.action || '-' | formatForDisplayTitle }} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="action_start_date">
+                    <mat-header-cell *matHeaderCellDef> Action Start Time </mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{ element.action_start_date || '-' }} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="action_end_date">
+                    <mat-header-cell *matHeaderCellDef> Action End Time </mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{ element.action_end_date || '-' }} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="total_time">
+                    <mat-header-cell *matHeaderCellDef> Total Time </mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{ element.total_time || '-' }} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="full_Name">
+                    <mat-header-cell *matHeaderCellDef> User </mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{ element.full_Name || '-' }} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="actionBy">
+                    <mat-header-cell *matHeaderCellDef> Action By</mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{ element.actionBy || '-' }} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="reason">
+                    <mat-header-cell *matHeaderCellDef>Reason</mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{ element.reason || '-' }} </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="ipAddress">
+                    <mat-header-cell *matHeaderCellDef> IP Address</mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{ element?.login_capture_data?.ip || '-' }} </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="deviceType">
+                    <mat-header-cell *matHeaderCellDef> Device Type</mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{ element?.deviceType || '-' }} </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="browser">
+                    <mat-header-cell *matHeaderCellDef> Browser</mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{ element?.login_capture_data?.browser_client?.browser || '-' }} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="empty-row">
+                    <mat-cell *matCellDef="let element">No Record Found</mat-cell>
+                </ng-container>
+
+                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                <mat-row *matRowDef="
+            let row;
+            columns: timingHistoryListDataSouce && timingHistoryListDataSouce.data && timingHistoryListDataSouce.data.length > 0
+              ? displayedColumns
+              : ['empty-row']
+          "></mat-row>
+            </table>
+        </div>
+        <mat-paginator *ngIf="timingHistoryListDataSouce && timingHistoryListDataSouce.data && timingHistoryListDataSouce.data.length > 0" class="pagination" [pageSize]="limit" [length]="totalRecords" [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users"
+            (page)="onPageSelectionChange($event)"></mat-paginator>
+    </mat-card>
+</div>
+<ng-template #spinnerSection>
+    <div [mainAppSpinner]="showSpinner"></div>
+</ng-template>

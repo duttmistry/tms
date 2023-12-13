@@ -1,0 +1,153 @@
+@import 'apps/angular/main-app/src/variables';
+@import 'apps/angular/main-app/src/mixins';
+@import 'apps/angular/main-app/src/assets/fonts/fonts.scss';
+::ng-deep .avoid-matoption .mat-pseudo-checkbox {
+  position: absolute;
+  z-index: -1;
+}
+
+.example-tree-invisible {
+  display: none;
+}
+
+.workspace-selection {
+  width: 280px;
+  margin-bottom: 0;
+}
+
+.task_count {
+  font-size: 12px;
+  color: #5c5c5c;
+}
+
+::ng-deep .workspaceSelection .mdc-text-field--filled .mdc-floating-label--float-above {
+  display: inline !important;
+  transform: translateY(-75%) scale(1) !important;
+}
+
+.workspaceSelection .trigger {
+  display: none !important;
+}
+
+.close-icon-wrapper {
+  .project-report-blk {
+    width: 250px;
+    .filter-close {
+      right: 5px;
+    }
+    img {
+      margin-right: 5px;
+    }
+    ::ng-deep mat-label {
+      @include flex;
+      @include flex-align-center;
+    }
+    ::ng-deep .mdc-floating-label--float-above {
+      display: none;
+    }
+  }
+}
+
+.button-container {
+  border-bottom: 1px solid $theme-border-color-gray;
+  margin: 10px;
+  .button-wrapper {
+    padding: 5px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    span {
+      font-size: $theme-main-small-font;
+      font-weight: 500;
+      color: $theam-color-blue;
+      cursor: pointer;
+      margin-left: 28px;
+      position: relative;
+      &::before {
+        position: absolute;
+        content: ' ';
+        width: 1px;
+        background-color: $theme-border-color-gray;
+        top: 0;
+        left: -13px;
+        height: 15px;
+      }
+      &:first-child::before {
+        display: none;
+      }
+    }
+    label.count {
+      font-size: $theme-main-small-font;
+      font-weight: 500;
+    }
+  }
+}
+
+.input-wrapper {
+  position: relative;
+  input {
+    border: 1px solid $theme-border-color-gray;
+    width: 100%;
+    border-radius: $button-radius;
+    outline: none;
+    font-size: $theme-main-medium-font;
+    font-weight: 400;
+    font-family: $theme-main-font-family;
+    padding: 10px 10px 10px 35px;
+  }
+  img {
+    display: block;
+    position: absolute;
+    top: 11px;
+    left: 10px;
+  }
+}
+
+@media screen and (max-width: $lerge-device) {
+  ::ng-deep .mdc-menu-surface.mat-mdc-select-panel.project-filter-wrapper .button-container .button-wrapper span {
+    margin-left: 8px;
+  }
+  ::ng-deep .mdc-menu-surface.mat-mdc-select-panel.project-filter-wrapper .button-container .button-wrapper span::before {
+    left: -4px;
+  }
+}
+
+.workspace-custom {
+  max-width: 200px;
+}
+
+.workspace-name {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.standlone-project-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.standlong-project-header {
+  font-size: 16px;
+  color: #86969d;
+  font-weight: 500;
+  margin-left: 10px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  display: block;
+}
+
+.hide-node {
+  display: none;
+}
+
+.show-node {
+  display: block;
+}
+
+::ng-deep .mat-mdc-checkbox .mdc-checkbox .mdc-checkbox__native-control:enabled:indeterminate ~ .mdc-checkbox__background {
+  background-color: $theme-main-color !important;
+}
+
+::ng-deep .mat-mdc-checkbox .mdc-checkbox .mdc-checkbox__native-control:enabled ~ .mdc-checkbox__background .mdc-checkbox__mixedmark {
+  border-color: #fff !important;
+}

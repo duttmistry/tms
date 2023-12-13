@@ -1,0 +1,45 @@
+@import './../../../../../../apps/angular/main-app/src/variables.scss';
+@import './../../../../../../apps/angular/main-app/src/mixins.scss';
+@import './../../../../../../apps/angular/main-app/src/assets/fonts/fonts.scss';
+
+::ng-deep .project-mat-menu {
+  ::ng-deep .mat-mdc-menu-content {
+    .mat-mdc-menu-item {
+      min-height: 35px;
+      transition: all 0.5s ease;
+      padding: 0 10px;
+    }
+    .mdc-list-item__primary-text {
+      font-size: 12px !important;
+      font-weight: 400 !important;
+      color: $theme-main-color-light;
+      @include flex;
+      @include flex-align-center;
+      transition: all 0.5s ease;
+      img {
+        margin-right: 8px;
+        width: 17px;
+        transition: all 0.5s ease;
+        height: 17px;
+      }
+    }
+  }
+}
+
+.not-allowed-cursor {
+  cursor: not-allowed !important;
+}
+.documents-card-wrap {
+  @include flex;
+  @include flex-align-center;
+  cursor: pointer;
+  .trash {
+    width: 20px;
+    height: 20px;
+  }
+  .share-icon {
+    margin: 0 5px;
+    @include flex;
+    @include flex-align-center;
+  }
+}

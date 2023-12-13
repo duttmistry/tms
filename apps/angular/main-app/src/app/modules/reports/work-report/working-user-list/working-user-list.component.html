@@ -1,0 +1,267 @@
+<div class="report-table">
+    <div class="report-table-wrap">
+        <div>
+            <strong class="pr-form-top-header header-with-wfh-details">Working ({{ totalUsersCount }})</strong>
+            <p class="wfh-details" [ngStyle]="{
+          cursor: toatlWorkFromHome === 0 ? 'not-allowed' : 'pointer',
+          color: showOnlyWorkFromHomeUsers ? 'orange' : 'black'
+        }" (click)="toatlWorkFromHome > 0 ? _OnShowOnlyWFHClick() : $event.preventDefault()">
+                Working From Home : {{ toatlWorkFromHome }}
+            </p>
+            <mat-icon *ngIf="showOnlyWorkFromHomeUsers" (click)="_removeFilterWFHOnly()" class="remove-wfh-filter">close</mat-icon>
+        </div>
+        <br />
+        <div class="report-field">
+            <mat-form-field class="small-dropdown medium-height-wrapper">
+                <mat-select #projectSelect [(ngModel)]="projectFilterValue" (openedChange)="applyFilters()" multiple placeholder="Project" [ngClass]="projectSelect.panelOpen ? 'arrow-up' : 'arrow-down'">
+                    <!-- <mat-select-trigger>
+            <span>{{ projectFilterValue.length ? projectFilterValue.join(', ') : 'All' }}</span>
+          </mat-select-trigger> -->
+
+                    <mat-select-trigger>
+                        {{ projectFilterValue?.length ? projectFilterValue[0] : '' }}
+                        <span *ngIf="projectFilterValue.length > 1">
+              (+{{ projectFilterValue.length - 1 }} {{ projectFilterValue?.length === 2 ? 'other' : 'others' }})
+            </span>
+                    </mat-select-trigger>
+                    <input type="text" [placeholder]="projectFilterOptions.length === 0 ? 'No project found for search' : 'Search Project'" [(ngModel)]="projectSearchText" (ngModelChange)="filterProjectOptions()" class="report-input" />
+                    <!-- Check if projectFilterOptions array is empty -->
+                    <ng-container *ngIf="projectFilterOptions.length === 0">
+                        <mat-option disabled>No records found</mat-option>
+                    </ng-container>
+
+                    <!-- Render options if projectFilterOptions array is not empty -->
+                    <ng-container *ngIf="projectFilterOptions.length > 0">
+                        <mat-option [ngClass]="option.visible ? '' : 'display-hide'" *ngFor="let option of projectFilterOptions" [value]="option.projectName">
+                            {{ option.projectName }}
+                        </mat-option>
+                    </ng-container>
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field class="small-dropdown medium-height-wrapper">
+                <mat-select #userSelect [(ngModel)]="userFilterValue" multiple placeholder="User" (openedChange)="applyFilters()" [ngClass]="userSelect.panelOpen ? 'arrow-up' : 'arrow-down'">
+                    <!-- <mat-select-trigger>
+            <span>{{ userFilterValue.length ? userFilterValue.join(', ') : 'All' }}</span>
+          </mat-select-trigger> -->
+                    <mat-select-trigger>
+                        {{ userFilterValue?.length ? userFilterValue[0] : '' }}
+                        <span *ngIf="userFilterValue.length > 1">
+              (+{{ userFilterValue.length - 1 }} {{ userFilterValue?.length === 2 ? 'other' : 'others' }})
+            </span>
+                    </mat-select-trigger>
+                    <input type="text" [placeholder]="userFilterOptions.length === 0 ? 'No user found for search' : 'Search User'" [(ngModel)]="userSearchText" (ngModelChange)="filterUserOptions()" class="report-input" />
+
+                    <!-- Check if projectFilterOptions array is empty -->
+                    <ng-container *ngIf="userFilterOptions.length === 0">
+                        <mat-option disabled>No records found</mat-option>
+                    </ng-container>
+
+                    <!-- Render serach input if projectFilterOptions array is not empty -->
+                    <ng-container *ngIf="userFilterOptions.length > 0">
+                        <mat-option [ngClass]="option.visible ? '' : 'display-hide'" *ngFor="let option of userFilterOptions" [value]="option.name">
+                            {{ option.name }}
+                        </mat-option>
+                    </ng-container>
+                </mat-select>
+            </mat-form-field>
+        </div>
+    </div>
+    <div class="table-responsive">
+        <table mat-table [dataSource]="dataSource.data.length > 0 ? dataSource : emptyData" matSort (matSortChange)="sortData($event)" *ngIf="!showSpinner; else spinnerSection">
+            <!-- ID Column -->
+            <ng-container matColumnDef="id">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header></th>
+                <td mat-cell *matCellDef="let element" class="wfm-image">
+                    <mat-icon class="wfh-icon" *ngIf="element && element?.login_capture_data && element?.login_capture_data?.isWfo === false"> home </mat-icon>
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="user">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>User</th>
+                <td mat-cell *matCellDef="let element" [ngClass]="{
+            'bg-red': element?.task_priority?.toLowerCase() === 'urgent',
+            'bg-orange': element?.assign_task_count < 3,
+            'bg-yellow': element?.assign_task_count > 6
+          }">
+                    <span [ngClass]="element?.assign_task_count ? 'cursor-pointer' : ''" (click)="openTaskDetails(element?.user_id)">
+            {{ element.user_first_name ? element.user_first_name.trim() : '' }}{{ element.user_first_name && element.user_last_name ? ' ' : ''
+            }}{{ element.user_last_name ? element.user_last_name.trim() : ''
+            }}{{ !element.user_first_name && !element.user_last_name ? '--' : '' }} ({{ element.assign_task_count || 0 }})
+          </span>
+                </td>
+            </ng-container>
+
+            <!-- Project Column -->
+            <ng-container matColumnDef="project">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Project</th>
+                <td mat-cell *matCellDef="let element" [ngClass]="{ 'bg-project-name': element?.project_name }">{{ element?.project_name }}</td>
+            </ng-container>
+
+            <!--Set Priority Column -->
+            <ng-container matColumnDef="setPriority">
+                <th mat-header-cell *matHeaderCellDef class="table-align">Set Priority</th>
+                <td mat-cell *matCellDef="let element" class="table-align">
+                    <!-- <mat-icon
+            class="cursor-pointer"
+            *ngIf="element?.task_priority && element.task_priority?.toLowerCase() !== 'urgent'"
+            color="warn"
+            matTooltip="Change Priority"
+            (click)="setTaskPriority(element)"
+            >error_outline</mat-icon
+          > -->
+                    <span class="cursor-pointer">
+            <img
+              [matMenuTriggerFor]="priorityMenu"
+              (click)="currentTaskIdToEdit = element?.id"
+              [src]="'assets/images/' + element?.priorityImg"
+              [alt]="element?.task_priority + ' Priority'"
+              [matTooltip]="element?.task_priority"
+              (error)="img.src = 'assets/images/flag.svg'"
+              #img
+            />
+            <mat-menu
+              #priorityMenu="matMenu"
+              yPosition="below"
+              class="priority-menu-wrapper dropdown-border-input-wrapper"
+              (closed)="currentTaskIdToEdit = null"
+            >
+              <div
+                class="prirority-dropdown-list"
+                mat-menu-item
+                *ngFor="let priority of priorityList; let i = index"
+                (click)="setTaskPriority(priority, element)"
+              >
+                <img [src]="'assets/images/' + priority.priorityImg" />
+                <span class="priority-name">{{ priority.name }}</span>
+    </div>
+    <div class="prirority-dropdown-list" mat-menu-item (click)="clearPriority(element, { name: null })">
+        <img [src]="'assets/images/clear.svg'" />
+        <span class="priority-name">Clear</span>
+    </div>
+    </mat-menu>
+    </span>
+    </td>
+    </ng-container>
+
+    <!-- Task Column -->
+    <ng-container matColumnDef="taskname">
+        <th mat-header-cell *matHeaderCellDef>Task Name</th>
+        <td mat-cell *matCellDef="let element" class="blue-text-position">
+            <div class="text-wrapper">
+                <a class="cursor-pointer no-underline" [routerLink]="getTaskDetailLink(element?.task_id)" target="_blank">
+              {{ element.task_title }}
+              <a *ngIf="element?.external_link" [href]="element?.external_link" target="_blank" class="blue-text"
+                ><span><i class="fa fa-external-link"></i></span
+              ></a>
+                </a>
+            </div>
+        </td>
+    </ng-container>
+
+    <!-- Assigned By Column -->
+    <ng-container matColumnDef="assignedby">
+        <th mat-header-cell *matHeaderCellDef>Assigned By</th>
+        <td mat-cell *matCellDef="let element">
+            {{ element.assigned_by_first_name ? element.assigned_by_first_name.trim() : '' }}{{ element.assigned_by_first_name && element.assigned_by_last_name ? ' ' : '' }}{{ element.assigned_by_last_name ? element.assigned_by_last_name.trim() : '' }}{{ !element.assigned_by_first_name
+            && !element.assigned_by_last_name ? '--' : '' }}
+        </td>
+    </ng-container>
+
+    <!-- TL/RM Column -->
+    <!-- <ng-container matColumnDef="tl">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Lead</th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.team_lead_first_name ? element.team_lead_first_name.trim() : ''
+          }}{{ element.team_lead_first_name && element.team_lead_last_name ? ' ' : ''
+          }}{{ element.team_lead_last_name ? element.team_lead_last_name.trim() : ''
+          }}{{ !element.team_lead_first_name && !element.team_lead_last_name ? '--' : '' }}
+        </td>
+      </ng-container> -->
+
+    <!-- Status Column -->
+    <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef>Status</th>
+        <td mat-cell *matCellDef="let element" class="report-running">
+            {{ element.task_running_status }}
+            <img src="assets/images/running.svg" alt="homepage" class="report-running-img cursor-pointer" matTooltip="Stop Task" (click)="stopTask(element)" />
+        </td>
+    </ng-container>
+
+    <!-- Due Date Column -->
+    <ng-container matColumnDef="duedate">
+        <th mat-header-cell *matHeaderCellDef>Due Date</th>
+        <td mat-cell *matCellDef="let element" [ngClass]="{ 'red-border': element.isDueDatePassed, 'green-border': element.isDueDateToday }">
+            {{ element.showDueDate }}
+        </td>
+    </ng-container>
+
+    <!-- Current Column -->
+    <ng-container matColumnDef="current">
+        <th mat-header-cell *matHeaderCellDef>Current</th>
+        <td mat-cell *matCellDef="let element">{{ element.currentTime || 00 }}</td>
+    </ng-container>
+
+    <!--Assigned Column -->
+    <ng-container matColumnDef="assigned">
+        <th mat-header-cell *matHeaderCellDef>Assigned</th>
+        <td mat-cell *matCellDef="let element">{{ element.task_eta || 00 }}</td>
+    </ng-container>
+
+    <!--Total Time Column -->
+    <ng-container matColumnDef="totaltime">
+        <th mat-header-cell *matHeaderCellDef>Total Time</th>
+        <!-- <td mat-cell *matCellDef="let element" class="red-running">{{ element.total_time || 00 }}</td> -->
+        <td mat-cell *matCellDef="let element" [ngClass]="{ 'red-border': element.isTotalTimeGreaterThanTaskEta }">{{ element.total_time || 00 }}</td>
+    </ng-container>
+
+    <!--Today Total Column -->
+    <ng-container matColumnDef="todaytotal">
+        <th mat-header-cell *matHeaderCellDef>Today Total</th>
+        <td mat-cell *matCellDef="let element">{{ element.todaytotal || 00 }}</td>
+    </ng-container>
+
+    <!--Login At Column -->
+    <ng-container matColumnDef="loginat">
+        <th mat-header-cell *matHeaderCellDef>Login At</th>
+        <td mat-cell *matCellDef="let element">{{ element.loginAt | date : 'hh:mm a' }}</td>
+    </ng-container>
+
+    <!--Priority Column -->
+    <!-- <ng-container matColumnDef="priority">
+        <th mat-header-cell *matHeaderCellDef>Priority</th>
+        <td mat-cell *matCellDef="let element">{{ element.task_priority }}</td>
+      </ng-container> -->
+
+    <!--Break Column -->
+    <ng-container matColumnDef="break">
+        <th mat-header-cell *matHeaderCellDef class="table-align">Break</th>
+        <td mat-cell *matCellDef="let element" class="table-align">
+            <img class="cursor-pointer" *ngIf="loggedInUserId !== element?.user_id" src="assets/images/monitor.svg" alt="homepage" matTooltip="Break Time" (click)="breakTime(element)" />
+        </td>
+        <!-- {{ 'assets/images/tea.svg' }} -->
+    </ng-container>
+
+    <!--Login Column -->
+    <ng-container matColumnDef="logout">
+        <th mat-header-cell *matHeaderCellDef class="table-align">Logout</th>
+        <td mat-cell *matCellDef="let element" class="table-align">
+            <img *ngIf="loggedInUserId !== element?.user_id" class="cursor-pointer" src="assets/images/login1.svg" alt="homepage" matTooltip="Click to Logout" (click)="logoutUser(element)" />
+        </td>
+        <!-- {{ '--' }} -->
+    </ng-container>
+
+    <!-- No data Column -->
+    <ng-container matColumnDef="empty-row" *ngIf="!showSpinner">
+        <td mat-cell *matCellDef="let element">No records found</td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: dataSource.data.length > 0 ? displayedColumns : ['empty-row']" [ngClass]="{
+          'border-indication':
+            row.isDueDatePassed || row.isDueDateToday || row.isTotalTimeGreaterThanTaskEta || row?.task_priority?.toLowerCase() === 'urgent'
+        }"></tr>
+    </table>
+</div>
+</div>
+<ng-template #spinnerSection>
+    <div [mainAppSpinner]="showSpinner"></div>
+</ng-template>

@@ -1,0 +1,22 @@
+// @import 'apps/angular/main-app/src/variables';
+// @import 'apps/angular/main-app/src/mixins';
+// @import 'apps/angular/main-app/src/assets/fonts/fonts';
+@import './../../../../../../apps/angular/main-app/src/variables.scss';
+@import './../../../../../../apps/angular/main-app/src/mixins.scss';
+@import './../../../../../../apps/angular/main-app/src/assets/fonts/fonts.scss';
+
+.snackbar {
+  @include flex;
+  @include flex-justify-center;
+  @include flex-justify-space-between;
+  color: $theme-color-white;
+  button {
+    padding: 0 !important;
+    width: 20px;
+    height: 20px;
+    font-size: $theme-main-small-font;
+    @include flex;
+    @include flex-justify-center;
+    @include flex-align-center;
+  }
+}

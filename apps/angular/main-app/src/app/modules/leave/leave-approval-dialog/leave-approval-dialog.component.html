@@ -1,0 +1,17 @@
+<div class="approval-dialog">
+    <h1 mat-dialog-title class="pr-form-top-header">{{ data.status == 'APPROVED' ? 'Reason For Approval' : 'Reason For Rejection' }}</h1>
+    <div mat-dialog-content>
+        <mat-form-field>
+            <mat-label>Comment</mat-label>
+            <input matInput [formControl]="comment" />
+        </mat-form-field>
+
+        <mat-error *ngIf="data.status == 'REJECTED' && isSubmited">Comment is required</mat-error>
+    </div>
+    <div mat-dialog-actions>
+        <button [mat-dialog-close]="null" color="accent" class="cancel"><span> Cancel</span></button>
+        <button (click)="onApproveOrReject()" color="primary" class="next">
+      <span>Confirm</span>
+    </button>
+    </div>
+</div>

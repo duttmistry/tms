@@ -1,0 +1,30 @@
+export type TableListData = {
+  id: number | null;
+  parent_task_id: string | null;
+  project_id: number | null;
+  task_key: string | null;
+  type: string | null;
+  title: string | null;
+  description: string | null;
+  state: string | null;
+  status: number | null;
+  section: number | null;
+  assignee: number | null;
+  assigned_by: number | null;
+  reporter: number | null;
+  labels: number[];
+  documents: string[] | null;
+  start_date: string | null;
+  due_date: string | null;
+  priority: string | null;
+  running_status: string | null;
+  eta: string | null;
+  subscribers: number[] | null;
+  created_by: number | null;
+  updated_by: number | null;
+  projects: {
+    id: number | null;
+    name: string | null;
+  };
+  actionMenu: any;
+};

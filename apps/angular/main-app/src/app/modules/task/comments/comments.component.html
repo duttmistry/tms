@@ -1,0 +1,90 @@
+<ng-container *ngIf="!editableCommentFormControl.value">
+  <form [formGroup]="commentsForm" class="quill-editor-form">
+    <quill-editor
+      #addCommentEditor
+      placeholder="Type @ to mention and notify someone."
+      formControlName="comment"
+      [modules]="quillConfiguration"
+      (onContentChanged)="onEditorContentChange($event)"
+      (onBlur)="checkIfCommentEditorHasNoSpace(_commentForm['comment'].value)"
+      class="comments-quill-editor"
+    ></quill-editor>
+    <!-- <ng-container *ngIf="_commentForm['comment'].errors && (isCommentSubmitted || _commentForm['comment'].touched)">
+      <ng-container *ngIf="_commentForm['comment'].errors?.['required']">
+        <div class="error">Please type in something...</div>
+      </ng-container>
+    </ng-container> -->
+    <div>
+      <button class="quill-editor-button" color="primary" (click)="onPostComment()">Comment</button>
+    </div>
+  </form>
+</ng-container>
+<ng-container *ngIf="paginatedComments && paginatedComments.length > 0">
+  <ng-container *ngFor="let commentObject of paginatedComments; let commentIndex = index">
+    <div class="comment-container">
+      <div *ngIf="commentObject?.commentedOn" class="icon-hour-wrapper">
+        <mat-chip-set>
+          <main-app-mat-chips *ngIf="commentObject?.userDataReBind" [data]="commentObject?.userDataReBind" [isCloseButton]="false">
+          </main-app-mat-chips>
+        </mat-chip-set>
+        <span class="comment-on" [matTooltip]="commentObject?.commentedOnTime || ''">{{ commentObject?.commentedOn | amTimeAgo }}</span>
+        <!-- <span class="comment-on">{{ commentObject?.commentedOn | amTimeAgo }}</span> -->
+        <span class="edited-on" *ngIf="commentObject?.isCommentEdited">Edited</span>
+      </div>
+
+      <mat-card [ngClass]="commentObject?.isCommentEditable ? 'comment-box-blk' : 'comment-box'">
+        <!-- comment-box-blk -->
+        <mat-card-content>
+          <quill-view-html
+            class="cursor-pointer description-wrapper view-task-edit-inner"
+            [content]="commentObject?.comments || ''"
+            theme="snow"
+            *ngIf="!commentObject.isCommentEditable"
+          ></quill-view-html>
+          <ng-container *ngIf="commentObject.isCommentEditable" class="ankita">
+            <quill-editor
+              placeholder="Type @ to mention and notify someone."
+              [formControl]="editableCommentFormControl"
+              [modules]="quillConfiguration"
+              (onContentChanged)="onEditorContentChange($event)"
+              #editCommentEditor
+            ></quill-editor>
+            <!-- <ng-container *ngIf="editableCommentFormControl.errors && (isUpdateCommentSubmitted || editableCommentFormControl.touched)">
+              <ng-container *ngIf="editableCommentFormControl.errors?.['required']">
+                <div class="error">Please type in something...</div>
+              </ng-container>
+            </ng-container> -->
+            <div class="comments-btn">
+              <button color="secondary" style="padding-right: 10px; margin-right: 10px" (click)="onCancelUpdateComment(commentIndex)">Cancel</button>
+              <button color="primary" style="padding-right: 10px; margin-right: 10px" (click)="onUpdateComment(commentIndex)">Update</button>
+            </div>
+          </ng-container>
+        </mat-card-content>
+      </mat-card>
+      <!-- <div class="comments-btn" *ngIf="!commentObject.isCommentEditable">
+        <button
+          
+          color="secondary"
+          style="padding-right: 10px; margin-right: 10px"
+          [ngClass]="loggedInUserId === commentObject?.user_id ? '' : 'cursor-not-allowed'"
+          (click)="loggedInUserId === commentObject?.user_id ? onEditComment(commentObject, commentIndex) : ''"
+        >
+          Edit
+        </button>
+        <button
+          
+          color="primary"
+          style="padding-right: 10px; margin-right: 10px"
+          [ngClass]="loggedInUserId === commentObject?.user_id ? '' : 'cursor-not-allowed'"
+          (click)="loggedInUserId === commentObject?.user_id ? onDeleteComment(commentObject, commentIndex) : ''"
+        >
+          Delete
+        </button>
+      </div> -->
+    </div>
+  </ng-container>
+  <ng-container *ngIf="isShowLoadMoreComments">
+    <button color="secondary" type="button" (click)="onLoadMoreComments()">Load More</button>
+  </ng-container>
+  <div></div>
+</ng-container>

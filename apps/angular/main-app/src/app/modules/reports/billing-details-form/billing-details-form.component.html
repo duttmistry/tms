@@ -1,0 +1,60 @@
+<div class="billing-details-form container-wrapper">
+    <mat-card>
+        <div class="workspace-border">
+            <div class="workspace-blk">
+                <strong *ngIf="projectResData">
+          {{ projectResData.name }}
+        </strong>
+                <div class="tertiary-button" routerLink="/reports/billing-configuration">Back</div>
+            </div>
+            <div class="title-details" *ngIf="createdByNameAndDate">
+                <span>{{ createdByNameAndDate }}</span>
+            </div>
+        </div>
+        <div *ngIf="!loading">
+            <div class="details-radio">
+                <mat-radio-group color="primary" (change)="onSave()" [formControl]="isBillableControl" aria-label="Select an option">
+                    <mat-radio-button [value]="true" [disableRipple]="true" [ngClass]="{ 'not-allowed-cursor': !allowToUpdate }" [disabled]="!allowToUpdate">Billable</mat-radio-button>
+                    <mat-radio-button [value]="false" [disableRipple]="true" [ngClass]="{ 'not-allowed-cursor': !allowToUpdate }" [disabled]="!allowToUpdate">Not Billable</mat-radio-button>
+                </mat-radio-group>
+
+                <div *ngIf="isBillableControl.value" class="radio-form">
+                    <div>
+                        <label for="quoted-hours" class="add-h2">Quoted Hours</label>
+
+                        <input id="quoted-hours" type="number" [formControl]="quotedHoursControl" [ngClass]="{ 'not-allowed-cursor': !allowToUpdate }" [readOnly]="!allowToUpdate" />
+                        <mat-error *ngIf="quotedHoursControl.hasError('min') || quotedHoursControl.hasError('max')" class="error">Please enter value in between 1 to 9999.</mat-error>
+                    </div>
+
+                    <div>
+                        <label class="add-h2">Total Time Worked</label>
+                        <input class="bg-input" [ngClass]="{ 'not-allowed-cursor': !allowToUpdate }" [formControl]="workedHoursControl" readonly />
+                    </div>
+                    <div [ngClass]="{ 'not-allowed-cursor': !allowToUpdate }">
+                        <button [disabled]="!allowToUpdate" type="submit" color="primary" class="next" (click)="onSave()" matTooltip="Save">Save</button>
+                    </div>
+                </div>
+            </div>
+            <div class="details-text">
+                <h2 class="pr-form-top-header">Project Details</h2>
+                <div>
+                    <div class="text-item">
+                        <span>Project Name :</span> {{ projectResData.name }}
+                    </div>
+                    <div class="text-item">
+                        <span> Start Date :</span> {{ projectResData.start_date ? formateDate(projectResData.start_date) : '-' }}
+                    </div>
+                    <div class="text-item">
+                        <span>Estimated End Date :</span> {{ projectResData.estimated_end_date ? formateDate(projectResData.estimated_end_date) : '-' }}
+                    </div>
+                </div>
+            </div>
+            <div class="details-chip">
+                <h2 class="pr-form-top-header">Team Members</h2>
+                <div *ngFor="let item of projectTeam">
+                    <main-app-mat-chips [data]="item" [isCloseButton]="false"> </main-app-mat-chips>
+                </div>
+            </div>
+        </div>
+    </mat-card>
+</div>

@@ -1,0 +1,45 @@
+@import '@angular/cdk/overlay-prebuilt.css';
+@import 'apps/angular/main-app/src/variables';
+@import 'apps/angular/main-app/src/mixins';
+@import 'apps/angular/main-app/src/assets/fonts/fonts.scss';
+.state-popup-wrapper {
+  border-radius: $button-radius;
+  border: 1px solid $theme-border-color-dropdown;
+  background: $theme-color-white;
+  box-shadow: $box-shadow-dropdown;
+  padding: 0;
+  min-width: 150px;
+  .mat-mdc-list-item {
+    height: 35px;
+    min-height: 35px;
+    cursor: pointer;
+    padding: 0 10px;
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.04);
+    }
+    &:first-child {
+      margin-top: 0;
+    }
+  }
+}
+
+.task-color {
+  width: 8px;
+  height: 8px;
+  display: block;
+  min-width: 8px;
+  max-width: 8px;
+  margin-top: 7px;
+  margin-right: 8px;
+  border-radius: 2px;
+}
+
+.state-container {
+  display: flex;
+}
+
+.state-popup-wrapper {
+  .mat-mdc-list .mat-mdc-list-item {
+    padding: 0 10px !important;
+  }
+}

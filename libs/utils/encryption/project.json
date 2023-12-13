@@ -1,0 +1,19 @@
+{
+  "name": "utils-encryption",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/utils/encryption/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/utils/encryption",
+        "main": "libs/utils/encryption/src/index.ts",
+        "tsConfig": "libs/utils/encryption/tsconfig.lib.json",
+        "assets": ["libs/utils/encryption/*.md"]
+      }
+    }
+  },
+  "tags": ["node", "angular"]
+}

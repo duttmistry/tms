@@ -1,0 +1,99 @@
+<div class="holiday container-wrapper">
+  <mat-card>
+    <div class="workspace-blk workspace-border">
+      <strong>Calendar</strong>
+    </div>
+    <div class="workspace-table">
+      <div class="holiday-calender">
+        <full-calendar #calendar [options]="calendarOptions"></full-calendar>
+        <div class="holiday-color">
+          <div class="holiday-color-item purple-holiday">Holiday</div>
+          <div class="holiday-color-item yellowish-brown-holiday">Special Day</div>
+          <div class="holiday-color-item babypink-holiday">Birthday</div>
+          <div class="holiday-color-item skyblue-holiday">Work Anniversary</div>
+        </div>
+      </div>
+      <div class="leaves-holiday">
+        <div class="leaves-holiday-wrap">
+          <div class="holiday-blk">
+            <!-- <p class="holiday-day pr-form-top-header">Public Holidays {{ !showAllHoliday ? getMonthAndYear() : '' }}</p> -->
+            <p class="holiday-day pr-form-top-header">Public Holidays</p>
+            <span (click)="!showAllHoliday ? getHolidayList(1) : getHolidayList(3)">{{
+              !showAllHoliday ? 'View All Holidays' : 'Hide All Holidays'
+            }}</span>
+            <!-- <span (click)="getHolidayList(1)" [ngClass]="showAllHoliday ? 'disabled-span' : ''">{{showAllHoliday ? "View All Holidays" : "Hide All Holidays"}}</span> -->
+          </div>
+          <div class="holiday-height">
+            <ng-container *ngIf="showSpinnerHolidays">
+              <div [mainAppSpinner]="showSpinnerHolidays"></div>
+            </ng-container>
+            <mat-list *ngIf="holidayList && holidayList?.length > 0 && !showSpinnerHolidays; else noDataOnMonthChangeHolidays">
+              <mat-list-item *ngFor="let holiday of holidayList" ngClass="holiday-item">
+                <img src="assets/images/holiday.svg" alt="holiday" class="holiday-img" />
+                <div class="days">
+                  <h2>{{ holiday.holidayName }}</h2>
+                  <p>{{ holiday.holidayDate ? holiday.holidayDate : '' }} {{ holiday.day ? ' - ' + holiday.day : '' }}</p>
+                </div>
+              </mat-list-item>
+            </mat-list>
+          </div>
+        </div>
+        <div class="leaves-holiday-wrap">
+          <div class="holiday-blk">
+            <!-- <p class="holiday-day pr-form-top-header">Special Days {{ !showAllSpecialDay ? getMonthAndYear() : '' }}</p> -->
+            <p class="holiday-day pr-form-top-header">Special Days</p>
+            <span (click)="!showAllSpecialDay ? getHolidayList(2) : getHolidayList(4)">{{
+              !showAllSpecialDay ? 'View All Special Days' : 'Hide All Special Days'
+            }}</span>
+          </div>
+          <div class="holiday-height">
+            <ng-container *ngIf="showSpinnerSpecialDays">
+              <div [mainAppSpinner]="showSpinnerSpecialDays"></div>
+            </ng-container>
+            <mat-list *ngIf="specialDayList && specialDayList?.length > 0 && !showSpinnerSpecialDays; else noDataOnMonthChangeSpecialDays">
+              <mat-list-item *ngFor="let holiday of specialDayList" [ngClass]="holiday.isHoliday === true ? 'holiday-item' : 'special-day-item'">
+                <img
+                  [src]="
+                    holiday.isHoliday === 0
+                      ? 'assets/images/special-day.svg'
+                      : holiday.isHoliday === 2
+                      ? 'assets/images/cake.svg'
+                      : 'assets/images/anniversary.svg'
+                  "
+                  alt="holiday"
+                  class="holiday-img"
+                />
+                <div class="days">
+                  <h2>{{ holiday.holidayName }}</h2>
+                  <p>{{ holiday.holidayDate ? holiday.holidayDate : '' }} {{ holiday.day ? ' - ' + holiday.day : '' }}</p>
+                </div>
+              </mat-list-item>
+            </mat-list>
+          </div>
+        </div>
+      </div>
+    </div>
+  </mat-card>
+</div>
+<ng-template #noDataOnMonthChangeHolidays>
+  <mat-list-item *ngIf="isFutureDate && !showSpinnerHolidays">
+    <div class="no-record">{{ futureMonthErrorMessage }}</div>
+  </mat-list-item>
+  <mat-list-item *ngIf="isPastDate && !showSpinnerHolidays">
+    <div class="no-record">{{ pastMonthErrorMessage }}</div>
+  </mat-list-item>
+  <mat-list-item *ngIf="isCurrentDate && !showSpinnerHolidays">
+    <div class="no-record">{{ currentMonthErrorMessage }}</div>
+  </mat-list-item>
+</ng-template>
+<ng-template #noDataOnMonthChangeSpecialDays>
+  <mat-list-item *ngIf="isFutureDate && !showSpinnerSpecialDays">
+    <div class="no-record">{{ futureMonthErrorMessage }}</div>
+  </mat-list-item>
+  <mat-list-item *ngIf="isPastDate && !showSpinnerSpecialDays">
+    <div class="no-record">{{ pastMonthErrorMessage }}</div>
+  </mat-list-item>
+  <mat-list-item *ngIf="isCurrentDate && !showSpinnerSpecialDays">
+    <div class="no-record">{{ currentMonthErrorMessage }}</div>
+  </mat-list-item>
+</ng-template>

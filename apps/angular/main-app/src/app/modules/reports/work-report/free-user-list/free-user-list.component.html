@@ -1,0 +1,139 @@
+<div class="report-table">
+  <div class="report-table-wrap">
+    <strong class="pr-form-top-header header-with-wfh-details">Free ({{ totalRecordsCount }})</strong>
+    <p
+      class="wfh-details"
+      [ngStyle]="{
+        cursor: toatlWorkFromHome === 0 ? 'not-allowed' : 'pointer',
+        color: showOnlyWorkFromHomeUsers ? 'orange' : 'black'
+      }"
+      (click)="toatlWorkFromHome > 0 ? _OnShowOnlyWFHClick() : $event.preventDefault()"
+    >
+      Working From Home : {{ toatlWorkFromHome }}
+    </p>
+    <mat-icon *ngIf="showOnlyWorkFromHomeUsers" (click)="_removeFilterWFHOnly()" class="remove-wfh-filter">close</mat-icon>
+  </div>
+  <div class="table-responsive">
+    <table
+      mat-table
+      [dataSource]="dataSource.data.length > 0 ? dataSource : emptyData"
+      class="mat-elevation-z8"
+      *ngIf="!showSpinner; else spinnerSection"
+    >
+      <!--- Note that these columns can be defined in any order.
+          The actual rendered columns are set as a property on the row definition" -->
+
+      <!-- User Column -->
+      <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let element" class="wfm-image">
+          <mat-icon class="wfh-icon" *ngIf="element && element?.login_capture_data && element?.login_capture_data?.isWfo === false"> home </mat-icon>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="user">
+        <th mat-header-cell *matHeaderCellDef>User</th>
+        <td
+          mat-cell
+          *matCellDef="let element"
+          [ngClass]="{
+            'bg-orange': element?.assign_task_count < 3,
+            'bg-yellow': element?.assign_task_count > 6
+          }"
+        >
+          <span
+            [ngClass]="{
+              'cursor-pointer': element?.assign_task_count
+            }"
+            (click)="openTaskDetails(element?.user_id)"
+          >
+            {{ element.user_first_name ? element.user_first_name.trim() : '' }}{{ element.user_first_name && element.user_last_name ? ' ' : ''
+            }}{{ element.user_last_name ? element.user_last_name.trim() : ''
+            }}{{ !element.user_first_name && !element.user_last_name ? '--' : '' }} ({{ element.assign_task_count || 0 }})
+          </span>
+        </td>
+      </ng-container>
+
+      <!-- TL Column -->
+      <ng-container matColumnDef="tl">
+        <th mat-header-cell *matHeaderCellDef>Lead</th>
+        <td mat-cell *matCellDef="let element">
+          <!-- {{ element.team_lead_first_name ? element.team_lead_first_name.trim() : ''
+          }}{{ element.team_lead_first_name && element.team_lead_last_name ? ' ' : ''
+          }}{{ element.team_lead_last_name ? element.team_lead_last_name.trim() : ''
+          }}{{ !element.team_lead_first_name && !element.team_lead_last_name ? '--' : '' }} -->
+          {{
+            element.team_lead_first_name && element.team_lead_last_name
+              ? (element.team_lead_first_name ? element.team_lead_first_name.trim() : '') +
+                (element.team_lead_first_name && element.team_lead_last_name ? ' ' : '') +
+                (element.team_lead_last_name ? element.team_lead_last_name.trim() : '')
+              : element.project_manager_first_name && element.project_manager_last_name
+              ? (element.project_manager_first_name ? element.project_manager_first_name.trim() : '') +
+                (element.project_manager_first_name && element.project_manager_last_name ? ' ' : '') +
+                (element.project_manager_last_name ? element.project_manager_last_name.trim() : '')
+              : '-'
+          }}
+        </td>
+      </ng-container>
+
+      <!-- Today's Total Work Column -->
+      <ng-container matColumnDef="todaytotalwork">
+        <th mat-header-cell *matHeaderCellDef>Today's Total Work</th>
+        <td mat-cell *matCellDef="let element">{{ element.total_time }}</td>
+      </ng-container>
+
+      <!-- Today Login At Column -->
+      <ng-container matColumnDef="todayloginat">
+        <th mat-header-cell *matHeaderCellDef>Today Login At</th>
+        <td mat-cell *matCellDef="let element">{{ element.loginAt | date : 'hh:mm a' }}</td>
+      </ng-container>
+
+      <!--Break Column -->
+      <ng-container matColumnDef="break">
+        <th mat-header-cell *matHeaderCellDef class="table-align">Break</th>
+        <td mat-cell *matCellDef="let element" class="table-align">
+          <ng-container *ngIf="element?.breakAt; else break">
+            <img src="assets/images/tea.svg" alt="homepage" matTooltip="On Break" />
+          </ng-container>
+          <ng-template #break>
+            <img
+              *ngIf="loggedInUserId !== element?.user_id"
+              class="cursor-pointer"
+              src="assets/images/monitor.svg"
+              alt="homepage"
+              (click)="breakTime(element)"
+              matTooltip="Click to Break"
+            />
+          </ng-template>
+        </td>
+        <!-- {{ '--' }} -->
+      </ng-container>
+
+      <!--Login Column -->
+      <ng-container matColumnDef="logout">
+        <th mat-header-cell *matHeaderCellDef class="table-align">Logout</th>
+        <td mat-cell *matCellDef="let element" class="table-align">
+          <img
+            *ngIf="loggedInUserId !== element?.user_id"
+            class="cursor-pointer"
+            src="assets/images/login1.svg"
+            alt="homepage"
+            (click)="logoutUser(element)"
+            matTooltip="Click to Logout"
+          />
+        </td>
+        <!-- {{ '--' }} -->
+      </ng-container>
+
+      <!-- No data Column -->
+      <ng-container matColumnDef="empty-row">
+        <td mat-cell *matCellDef="let element">No records found</td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: dataSource.data.length > 0 ? displayedColumns : ['empty-row']"></tr>
+    </table>
+  </div>
+</div>
+<ng-template #spinnerSection>
+  <div mat-row [mainAppSpinner]="showSpinner"></div>
+</ng-template>

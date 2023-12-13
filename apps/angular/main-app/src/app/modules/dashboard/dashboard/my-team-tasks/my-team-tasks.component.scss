@@ -1,0 +1,179 @@
+@import 'apps/angular/main-app/src/variables';
+@import 'apps/angular/main-app/src/mixins';
+@import 'apps/angular/main-app/src/assets/fonts/fonts.scss';
+.my-team-wrapper {
+  height: 100%;
+  .dashboard-medium-heading {
+    margin-bottom: 20px;
+  }
+  .table-container {
+    height: calc(100vh - 330px);
+    overflow: auto;
+  }
+}
+
+.team-name {
+  font-size: $theme-main-medium-font;
+  line-height: 20px;
+  font-weight: 600;
+  color: $theme-font-color-black;
+  margin: 0 0 10px 0;
+}
+
+.table-outer-wrapper {
+  position: relative;
+}
+
+.table-outer-wrapper + .table-outer-wrapper {
+  margin-top: 15px;
+}
+
+.task-table-wrapper {
+  border: 1px solid $theme-border-color-gray;
+  border-radius: 5px;
+  .task-table {
+    tbody {
+      border-radius: 5px;
+    }
+    td {
+      padding: 0 !important;
+      border-right: 0 !important;
+    }
+  }
+}
+
+.task-table {
+  width: 100%;
+  border-collapse: collapse;
+  border-radius: 4px;
+  margin-bottom: 0;
+  .task-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 7px 14px;
+    position: relative;
+    z-index: 9;
+    gap: 10px;
+    border: 1px solid transparent;
+    border-radius: 5px;
+    &:first-child {
+      border-top-left-radius: 5px;
+      border-top-right-radius: 5px;
+    }
+    &:last-child {
+      border-bottom-left-radius: 5px;
+      border-bottom-right-radius: 5px;
+    }
+    .task-left-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      .task-key {
+        color: $theme-main-color-light;
+        font-size: $theme-main-small-font;
+        font-weight: 500;
+        line-height: 16px;
+        min-width: 67px;
+        width: 67px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .task-name {
+        font-size: $theme-main-small-font;
+        text-decoration: none;
+        line-height: 20px;
+        font-weight: 400;
+        color: $theme-font-color-black;
+        position: relative;
+        z-index: 99;
+        cursor: pointer;
+        display: -webkit-box;
+        -webkit-line-clamp: 1;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        margin-right: 10px;
+      }
+      .task-color {
+        width: 8px;
+        height: 8px;
+        display: block;
+        min-width: 8px;
+        max-width: 8px;
+        border-radius: 2px;
+      }
+      .task-type {
+        color: #86969d;
+        font-size: 12px;
+      }
+    }
+    .task-right-info {
+      min-width: 180px;
+      max-width: auto;
+      width: auto;
+      padding: 0 !important;
+      border-right: 0 !important;
+      margin-left: 10px;
+      .task-right-info-inner {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: $theme-main-extra-color-dark;
+        font-size: $theme-main-small-font;
+        font-weight: 400;
+        line-height: 18px;
+        justify-content: flex-end;
+        img {
+          display: block;
+        }
+        .timer {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+        }
+        .task-right-info-child {
+          display: flex;
+          align-items: center;
+          background-color: $theme-color-grey;
+          border-radius: $small-card-radius;
+          padding: 6px 10px;
+          min-width: 110px;
+          .worked-hours {
+            display: block;
+          }
+        }
+      }
+    }
+  }
+  .task-row + .task-row {
+    border-top: 1px solid $theme-border-color-gray;
+  }
+}
+
+.disable-item {
+  pointer-events: none;
+}
+
+.not-allowed-cursor {
+  cursor: not-allowed;
+}
+
+.view-all-task {
+  font-size: $theme-main-small-font;
+  font-weight: 400;
+  line-height: 15px;
+  color: $theme-main-color-light;
+  cursor: pointer;
+  margin-top: 0;
+  position: absolute;
+  right: 5px;
+  top: 3px;
+  z-index: 99;
+}
+
+.cpy-task-link-img {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}

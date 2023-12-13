@@ -1,0 +1,69 @@
+<mat-toolbar class="header">
+  <a class="navbar-brand" routerLink="dashboard">
+    <img src="assets/images/logo1.svg" alt="homepage" class="ccc-logo" />
+  </a>
+
+  <div class="header-right">
+    <div class="hours-daily">
+      <span class="mat-subheading-2 pointer" [routerLink]="['/users/timing-history', encryptedUserId]">
+        <div *ngIf="dailyHoursConfig">
+          <span>Daily Hours</span>
+          <countdown #dhCountdown [config]="dailyHoursConfig"></countdown>
+        </div>
+        <mat-progress-bar mode="determinate" [value]="dhSpinValue" [class.red-progress-bar]="isLateLogin"></mat-progress-bar>
+        <!-- <mat-spinner color="primary" diameter="55" strokeWidth="3" mode="determinate"> </mat-spinner> -->
+      </span>
+      <span class="mat-subheading-2 pointer" [routerLink]="['/users/timing-history', encryptedUserId]">
+        <div *ngIf="weeklyHoursConfig">
+          <span>Weekly Hours</span>
+          <countdown #whCountdown [config]="weeklyHoursConfig"></countdown>
+        </div>
+        <mat-progress-bar mode="determinate" [value]="whSpinValue" [class.red-progress-bar]="isLateForWeeklyHours"></mat-progress-bar>
+        <!-- <mat-progress-spinner class="example-margin" diameter="55" [value]="whSpinValue" mode="determinate" strokeWidth="3"> </mat-progress-spinner> -->
+      </span>
+      <!-- <div class="toggle">
+        <label class="switch">
+          <input [formControl]="breakControl" type="checkbox" (change)="onBreakMark()" id="togBtn" />
+          <div class="slider round">
+            <span class="on">Back from Break</span>
+            <span class="off">Take a Break</span>
+          </div>
+        </label>
+      </div> -->
+      <div class="break-time-icon-wrapper">
+        <img src="/assets/images/take-a-break-3.svg" matTooltip="Take Break Time" alt="" (click)="onBreakMark()" />
+      </div>
+    </div>
+    <mat-list-item (click)="redirectToProfile()" matTooltip="View Profile" class="view-profile">
+      <div class="person-header">
+        <div *ngIf="userData && userData.user_image">
+          <img class="img-circle" #img [src]="baseUrl + userData.user_image" (error)="img.src = 'assets/images/default.png'" alt="Image" />
+        </div>
+        <div class="mat-subheading-2">
+          <strong>
+            {{ userData?.user_firstname + ' ' + userData?.user_lastname }}
+
+            <span>
+              {{ userData?.user_designation }}
+            </span></strong
+          >
+        </div>
+      </div>
+    </mat-list-item>
+    <div class="header-profile-menu" (click)="onLogOut()" matTooltip="Click to logout">
+      <img src="assets/images/logout1.svg" alt="Image" matTooltip="Click to logout" />
+    </div>
+    <!-- <mat-menu #profilemenu="matMenu" xPosition="before" yPosition="below">
+      <div class="header-menu">
+        <button mat-menu-item routerLinkActive="active" [routerLink]="['users', 'profile']">
+          <span><img src="assets/images/profile.svg" alt="Image" />My Profile</span>
+        </button>
+        <mat-divider></mat-divider>
+        <button mat-menu-item (click)="onLogOut()" class="logout-blk">
+          <img class="img-logout" src="assets/images/logout.svg" alt="Image" />
+          <span> Log Out</span>
+        </button>
+      </div>
+    </mat-menu> -->
+  </div>
+</mat-toolbar>

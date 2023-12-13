@@ -1,0 +1,39 @@
+<div class="user-role">
+  <div class="role-header">
+    <strong> <a class="pr-form-top-header" style="margin-top: 0"> Preferences </a><span> / Notification</span></strong>
+
+    <div>
+      <button class="cancel secondary-button" (click)="onCancelClick()">Cancel</button>
+      <button color="primary" class="save primary-button" (click)="onSaveClick()">Save</button>
+    </div>
+  </div>
+
+  <mat-card>
+    <div class="card-content">
+      <div class="left-section">
+        <mat-card-header>
+          <mat-card-title
+            >Notification Settings.
+            <br />
+            <span style="font-weight: 300; font-size: 12px">Select the kind of notification you get about your activities.</span>
+          </mat-card-title>
+        </mat-card-header>
+      </div>
+      <mat-card-content>
+        <div class="right-section">
+          <div class="right-section-content" *ngFor="let item of notificationPrefList; let i = index">
+            <div class="options-list">
+              <div class="notification-toggle">
+                <mat-slide-toggle [(ngModel)]="item.is_notify" id="{{ item.key }}">
+                  <strong>{{ item.action_name }}</strong
+                  ><br />
+                  <span style="font-style: italic">{{ item.content }}</span>
+                </mat-slide-toggle>
+              </div>
+            </div>
+          </div>
+        </div>
+      </mat-card-content>
+    </div>
+  </mat-card>
+</div>

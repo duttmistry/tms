@@ -1,0 +1,278 @@
+@import 'apps/angular/main-app/src/variables';
+@import 'apps/angular/main-app/src/mixins';
+@import 'apps/angular/main-app/src/assets/fonts/fonts.scss';
+.hidden-date-picker-input {
+  position: absolute;
+  z-index: -1;
+}
+
+.task-color {
+  width: 8px;
+  height: 8px;
+  display: block;
+  min-width: 8px;
+  max-width: 8px;
+  border-radius: 2px;
+}
+
+.red-svg {
+  filter: invert(14%) sepia(100%) saturate(6536%) hue-rotate(359deg) brightness(97%) contrast(110%);
+}
+
+.empty-status-indication {
+  border: 1px solid red;
+  border-radius: 2px;
+}
+
+.task-save-button-wrapper {
+  .save-button {
+    border-radius: 20px;
+    background: $theme-main-color;
+    color: $theme-color-white;
+    font-family: $theme-main-font-family;
+    border: 0;
+    padding: 6px 16px;
+    font-size: $theme-main-small-font;
+    line-height: 16px;
+    font-weight: 500;
+  }
+}
+
+.add-new-list-task {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: $theme-color-white;
+  border: 1px solid $theme-main-color;
+  margin-top: 1px;
+  gap: 10px;
+  .add-new-task-left {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    padding: 10px;
+    flex: 1;
+    .mat-mdc-form-field:hover .mat-mdc-form-field-focus-overlay {
+      opacity: 0;
+    }
+    .mat-mdc-form-field {
+      margin-bottom: 0;
+      min-width: unset;
+      width: 100%;
+      border: 0 !important;
+    }
+    .mat-mdc-text-field-wrapper {
+      border: 0;
+    }
+    .mdc-text-field__input,
+    .mat-mdc-text-field-wrapper:not(.mdc-text-field--outlined) .mat-mdc-form-field-infix {
+      min-height: 28px !important;
+      width: 100%;
+      font-size: 12px;
+    }
+    .mat-mdc-text-field-wrapper {
+      height: 28px !important;
+    }
+  }
+  .add-new-task-right {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    padding: 6px 10px;
+    justify-content: end;
+    .project-wrapper {
+      .project-name {
+        display: flex;
+        align-items: center;
+        height: 20px;
+      }
+    }
+    .project-inner {
+      height: 20px;
+      display: flex;
+      align-items: center;
+      .task-left-label-heading {
+        display: flex;
+        align-items: center;
+      }
+    }
+    .project-wrapper {
+      overflow: unset !important;
+    }
+    .task-type-wrapper,
+    .priroty-wrapper,
+    .due-wrapper,
+    .eta-wrapper,
+    .project-wrapper,
+    .status-wrapper,
+    .assignee-wrapper {
+      height: 20px;
+      display: flex;
+      align-items: center;
+    }
+    .status-wrapper .status-icon,
+    .assignee-wrapper .assignee-block {
+      display: flex;
+      height: 20px;
+      align-items: center;
+    }
+    .task-cancel-svg {
+      height: 25px;
+    }
+    .task-type-wrapper {
+      .mat-mdc-menu-trigger {
+        display: flex;
+        align-items: center;
+      }
+    }
+    .assignee-wrapper {
+      height: 20px;
+      width: 20px;
+      .hover-chip {
+        display: flex;
+      }
+      .hover-chip .chip-position {
+        top: unset;
+        bottom: 32px;
+      }
+    }
+    .mat-mdc-chip:hover .mat-mdc-chip-focus-overlay {
+      opacity: 0;
+    }
+    .name-icon-wrapper {
+      position: relative;
+      display: flex;
+      .hover-chip {
+        position: relative;
+        .mdc-evolution-chip__action {
+          padding: 0 !important;
+        }
+      }
+      position: relative;
+      .filter-close {
+        background-color: $theme-main-color-light;
+        color: $theme-color-white;
+        font-size: $theme-main-small-font !important;
+        width: 16px;
+        height: 16px;
+        border-radius: 100%;
+        position: absolute;
+        right: -6px;
+        top: -6px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+    }
+  }
+}
+
+.assignee-dropdown {
+  border-radius: $button-radius;
+  border: 1px solid $theme-border-color-dropdown;
+  background: $theme-color-white;
+  box-shadow: $box-shadow-dropdown;
+  .input-wrapper {
+    position: relative;
+    margin: 10px !important;
+    input {
+      border: 1px solid $theme-border-color-gray;
+      width: 100%;
+      border-radius: $button-radius;
+      outline: none;
+      font-size: $theme-main-medium-font;
+      font-weight: 400;
+      font-family: $theme-main-font-family;
+      padding: 10px 10px 10px 35px;
+    }
+    img {
+      display: block;
+      position: absolute;
+      top: 11px;
+      left: 10px;
+    }
+  }
+}
+
+::ng-deep .mat-mdc-menu-panel.mat-mdc-menu-panel.task-type-list {
+  border-radius: $button-radius;
+  border: 1px solid $theme-border-color-dropdown;
+  background: $theme-color-white;
+  box-shadow: $box-shadow-dropdown;
+  padding: 10px;
+  .task-type-listing {
+    min-height: unset;
+    margin-top: 0;
+    padding: 0;
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.04);
+    }
+    &:first-child {
+      margin-top: 0;
+    }
+  }
+}
+
+.empty-labels-selection {
+  border-bottom: none !important;
+  padding-bottom: 0px !important;
+  margin: 0px !important;
+}
+
+.disable-container {
+  cursor: not-allowed;
+  opacity: 0.3;
+}
+
+.disable-item {
+  pointer-events: none;
+}
+
+.label-wrapper-outer {
+  display: flex;
+  gap: 2px;
+  align-items: center;
+  .label-wrapper {
+    color: $theme-main-extra-color-dark;
+    font-size: $theme-main-small-font;
+    font-weight: 400;
+    line-height: 16px;
+    padding: 3px 10px;
+    border-radius: 20px;
+  }
+  .count {
+    background-color: #f3f3f3;
+    border-radius: 20px;
+    color: $theme-main-extra-color-dark;
+    padding: 3px 10px;
+  }
+}
+
+.add-new-task-wrapper-table {
+  width: 100%;
+  border-spacing: 0;
+  border-collapse: collapse;
+  td {
+    padding: 0 !important;
+    border-right: unset !important;
+  }
+  .add-new-list-task {
+    .add-new-task-left {
+      .mat-mdc-text-field-wrapper {
+        height: auto !important;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: $extra-extra-large) {
+  .add-new-list-task .add-new-task-left .mat-mdc-form-field {
+    min-width: auto;
+  }
+  .add-new-list-task .add-new-task-left .mdc-text-field__input {
+    min-width: auto;
+  }
+  .add-new-list-task .add-new-task-right {
+    gap: 12px;
+  }
+}

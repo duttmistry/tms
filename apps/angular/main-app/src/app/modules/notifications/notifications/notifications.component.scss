@@ -1,0 +1,106 @@
+@import 'apps/angular/main-app/src/variables';
+@import 'apps/angular/main-app/src/mixins';
+@import 'apps/angular/main-app/src/assets/fonts/fonts.scss';
+.notification-wrap {
+  .notification-image {
+    padding-bottom: 14px;
+  }
+  .img-circle {
+    vertical-align: middle;
+    width: 32px;
+    border-radius: 50%;
+    height: 32px;
+    object-fit: cover;
+  }
+  .workspace-border {
+    padding: 20px 0;
+    margin: 0 20px;
+  }
+  mat-card {
+    padding: 0;
+  }
+  .viewmore {
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 15px;
+    color: $theme-font-color-dark-grey;
+    margin-left: 42px;
+    cursor: pointer;
+    display: inline-block;
+  }
+  .pr-form-top-header {
+    margin: 0;
+  }
+  .notification-subline {
+    font-size: 11px;
+    margin-bottom: 20px;
+  }
+  .notification-item {
+    margin-top: 16px;
+    border-bottom: 1px solid #dfdfdf;
+    padding: 0 20px 13px 20px;
+    &:last-child {
+      border-bottom: 0;
+    }
+    &.task-notification {
+      margin-top: 25px;
+    }
+  }
+  .notification-inner.last-row-notification {
+    .notification-border {
+      border-bottom: 0;
+      padding-bottom: 11px;
+    }
+    .notification-image {
+      padding-bottom: 11px;
+    }
+  }
+  .notification-inner {
+    @include flex;
+    @include flex-align-center;
+    gap: 10px;
+    cursor: pointer;
+    .notification-dark {
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 15px;
+      color: $theme-font-color-black;
+    }
+    .notification-light {
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 15px;
+      color: $theme-font-color-dark-grey;
+    }
+    .notification-time {
+      font-size: 12px;
+      font-weight: 400;
+      line-height: 15px;
+      color: $theme-main-color-light;
+    }
+    p {
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 17px;
+      margin: 0 0 0 0;
+    }
+    .notification-border {
+      line-height: initial;
+      width: 100%;
+      border-bottom: 1px solid $theme-border-color-gray;
+      padding-bottom: 14px;
+    }
+  }
+  .notification-inner+.notification-inner {
+    .notification-border {
+      margin-top: 15px;
+    }
+  }
+}
+
+.notification-border-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+}

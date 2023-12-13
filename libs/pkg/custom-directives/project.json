@@ -1,0 +1,33 @@
+{
+  "name": "pkg-custom-directives",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "library",
+  "sourceRoot": "libs/pkg/custom-directives/src",
+  "prefix": "tms-workspace",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/angular:ng-packagr-lite",
+      "outputs": ["{workspaceRoot}/dist/{projectRoot}"],
+      "options": {
+        "project": "libs/pkg/custom-directives/ng-package.json"
+      },
+      "configurations": {
+        "production": {
+          "tsConfig": "libs/pkg/custom-directives/tsconfig.lib.prod.json"
+        },
+        "development": {
+          "tsConfig": "libs/pkg/custom-directives/tsconfig.lib.json"
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/pkg/custom-directives/**/*.ts", "libs/pkg/custom-directives/**/*.html"]
+      }
+    }
+  },
+  "tags": []
+}

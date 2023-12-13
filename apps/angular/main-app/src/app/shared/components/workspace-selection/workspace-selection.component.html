@@ -1,0 +1,36 @@
+<div class="close-icon-wrapper">
+    <mat-form-field [ngClass]="workspaceSelect.panelOpen ? 'arrow-up' : 'arrow-down'" class="small-dropdown">
+        <mat-label *ngIf="!workspaceControl.value || workspaceControl?.value?.length === 0">Workspace</mat-label>
+
+        <mat-label class="select-value" *ngIf="workspaceControl?.value?.length !== 0">
+            <span class="value">{{workspaceControl.value?.[0]?.title || ''}}</span>
+            <span *ngIf="(workspaceControl.value?.length || 0) > 1" class="add-value"> +{{ (workspaceControl.value?.length || 0) - 1 }} </span>
+        </mat-label>
+        <mat-select placeholder="Workspace" #workspaceSelect [formControl]="workspaceControl" multiple (selectionChange)="onSelectWorkspace($event)" panelClass="project-filter-wrappe custome-width">
+            <div class="menu-container">
+                <div class="input-wrapper">
+                    <input type="text" [formControl]="searchControl" placeholder="Search" (keyup)="onChangeSearch($event)" />
+                    <img src="assets/images/search.svg" alt="search" class="search" />
+                </div>
+                <div class="button-wrapper">
+                    <label class="count"> {{ workspaceControl.value?.length ? workspaceControl.value?.length : 0 }} Selected </label>
+                    <div>
+                        <span (click)="selectAllWorkspace()">Select All</span>
+                        <span (click)="clearAllWorkspace()">Clear All</span>
+                    </div>
+                </div>
+            </div>
+            <mat-select-trigger class="select-value">
+                <span class="value">{{workspaceControl.value?.[0]?.title || ''}}</span>
+                <span *ngIf="(workspaceControl.value?.length || 0) > 1" class="add-value"> +{{ (workspaceControl.value?.length || 0) - 1 }} </span>
+            </mat-select-trigger>
+            <mat-option *ngFor="let item of workspaceList" [value]="item">{{ item?.title }}</mat-option>
+        </mat-select>
+    </mat-form-field>
+    <svg (click)="clearAllWorkspace()" *ngIf="workspaceControl?.value?.length > 0" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" class="filter-close">
+    <path
+      d="M8.00065 1.3335C4.32732 1.3335 1.33398 4.32683 1.33398 8.00016C1.33398 11.6735 4.32732 14.6668 8.00065 14.6668C11.674 14.6668 14.6673 11.6735 14.6673 8.00016C14.6673 4.32683 11.674 1.3335 8.00065 1.3335ZM10.2407 9.5335C10.434 9.72683 10.434 10.0468 10.2407 10.2402C10.1407 10.3402 10.014 10.3868 9.88732 10.3868C9.76065 10.3868 9.63398 10.3402 9.53399 10.2402L8.00065 8.70683L6.46732 10.2402C6.36732 10.3402 6.24065 10.3868 6.11398 10.3868C5.98732 10.3868 5.86065 10.3402 5.76065 10.2402C5.56732 10.0468 5.56732 9.72683 5.76065 9.5335L7.29398 8.00016L5.76065 6.46683C5.56732 6.2735 5.56732 5.9535 5.76065 5.76016C5.95398 5.56683 6.27398 5.56683 6.46732 5.76016L8.00065 7.2935L9.53399 5.76016C9.72732 5.56683 10.0473 5.56683 10.2407 5.76016C10.434 5.9535 10.434 6.2735 10.2407 6.46683L8.70732 8.00016L10.2407 9.5335Z"
+      fill="#86969D"
+    />
+  </svg>
+</div>

@@ -1,0 +1,107 @@
+@import 'apps/angular/main-app/src/variables';
+@import 'apps/angular/main-app/src/mixins';
+@import 'apps/angular/main-app/src/assets/fonts/fonts.scss';
+
+.Preferences {
+  min-height: 100vh;
+  .double-tik {
+    width: 23px;
+  }
+  .Preferences-blk {
+    position: relative;
+    ul {
+      @include flex;
+      @include flex-align-center;
+      @include flex-justify-space-between;
+      margin: 0;
+      padding: 0;
+      border-bottom: 1px solid $theme-border-color-gray;
+      text-align: left;
+    }
+    li {
+      list-style: none;
+      @include flex;
+      @include flex-align-center;
+      width: 8.8%;
+      @include flex-justify-center;
+      font-size: $theme-main-medium-font;
+      font-weight: 400;
+      line-height: 19px;
+      gap: 6px;
+      padding: 21px 0;
+      height: 68px;
+    }
+    img {
+      cursor: pointer;
+    }
+    .top-ul {
+      background-color: $theme-bg-color-drawer-container;
+      .double-tik {
+        opacity: 0;
+        transition: all 0.5s ease;
+        position: absolute;
+        left: -30px;
+      }
+
+      li {
+        font-size: $theme-main-medium-font;
+        font-weight: 600;
+        line-height: 19px;
+        color: $theme-font-color-black;
+        span {
+          position: relative;
+        }
+        &:hover {
+          .double-tik {
+            opacity: 1;
+          }
+        }
+      }
+    }
+    .scroll-blk {
+      border-bottom: 1px solid $theme-font-color-black;
+      ul:last-child {
+        border-bottom: unset;
+      }
+    }
+    .big-width {
+      width: 20.8%;
+      justify-content: flex-start;
+      padding-left: 10px;
+      .double-tik {
+        opacity: 0;
+        transition: all 0.5s ease;
+      }
+      &:hover {
+        .double-tik {
+          opacity: 1;
+        }
+      }
+    }
+    .gray-width {
+      background-color: #f4f4f4;
+    }
+    .multiple-data {
+      width: 100.4%;
+    }
+  }
+}
+
+.stepper-button-section {
+  margin-top: 20px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+@media screen and (max-width: $extra-extra-large-device) {
+  .Preferences-responsive {
+    overflow-x: auto;
+    .Preferences-wrap {
+      width: 1600px;
+    }
+    &::-webkit-scrollbar {
+      height: 5px;
+      background-color: $theme-color-white;
+    }
+  }
+}

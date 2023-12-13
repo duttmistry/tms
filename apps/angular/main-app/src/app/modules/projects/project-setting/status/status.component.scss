@@ -1,0 +1,246 @@
+@import 'apps/angular/main-app/src/variables';
+@import 'apps/angular/main-app/src/mixins';
+@import 'apps/angular/main-app/src/assets/fonts/fonts.scss';
+.status-project {
+   ::ng-deep .saturation-lightness {
+    display: none;
+  }
+  .filter-close {
+    right: 15px;
+    top: 32px;
+  }
+  .mat-mdc-form-field {
+    margin-bottom: 0;
+    margin-top: 20px;
+    width: 100%;
+    background-color: #fff;
+    button.workspace-disable {
+      cursor: not-allowed;
+    }
+    button {
+      position: absolute;
+      top: 6px;
+      right: 0;
+      border: unset;
+      background-color: unset;
+      padding: 0;
+      cursor: pointer;
+      img {
+        width: 20px;
+        height: 20px;
+      }
+    }
+  }
+   ::ng-deep .mat-mdc-text-field-wrapper {
+    background-color: transparent !important;
+  }
+  .no-record {
+    font-size: $theme-main-small-font;
+  }
+  .no-border {
+    @include flex;
+    @include flex-justify-space-between;
+    width: 100%;
+     ::ng-deep .mat-mdc-form-field:not(.mat-form-field-no-animations) .mdc-text-field__input {
+      min-height: unset !important;
+      height: unset !important;
+    }
+    span {
+      color: $theme-font-color-black;
+      font-size: 14px;
+      font-weight: 600;
+      line-height: 17px;
+    }
+  }
+  .status-flex {
+    @include flex;
+    @include flex-justify-space-between;
+    @include flex-align-center;
+  }
+  .cross-icon {
+    border: 1px solid #c3c3c3;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: all 0.5s ease;
+    color: #b7b7b7;
+    font-size: $theme-main-extra-extra-large-font;
+    @include flex;
+    @include flex-align-center;
+    @include flex-justify-center;
+    height: 14px;
+    width: 14px;
+    padding: 4px;
+    &:hover {
+      background-color: #eeeeee;
+    }
+  }
+  .right-icon {
+    border: 1px solid #c3c3c3;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: all 0.5s ease;
+    color: #b7b7b7;
+    font-size: $theme-main-extra-extra-large-font;
+    @include flex;
+    @include flex-align-center;
+    @include flex-justify-center;
+    height: 14px;
+    width: 14px;
+    padding: 4px;
+    margin-left: 10px;
+    &:hover {
+      background-color: #eeeeee;
+    }
+  }
+   ::ng-deep .hue-alpha {
+    display: none;
+  }
+   ::ng-deep .hex-text {
+    display: none !important;
+  }
+   ::ng-deep .preset-area {
+    hr {
+      display: none;
+    }
+  }
+   ::ng-deep .type-policy {
+    display: none;
+  }
+   ::ng-deep .color-picker .preset-area .preset-color {
+    width: 20px !important;
+    height: 20px !important;
+    margin: 4px 4px 4px !important;
+  }
+  .role-header {
+    margin: 25px 0 20px;
+  }
+  .add-button {
+    /* border: 1px solid $theme-main-color-light;
+    border-radius: $button-radius;
+    cursor: pointer;
+    transition: all 0.5s ease;
+    color: $theme-main-color-light;
+    @include flex;
+    @include flex-align-center;
+    @include flex-justify-center;
+    height: 18px;
+    width: 18px;
+    padding: 0;
+    font-size: $theme-main-large-font;*/
+    cursor: pointer;
+  }
+  .mat-mdc-tab-group {
+    width: 100%;
+  }
+   ::ng-deep [mat-align-tabs='center']>.mat-mdc-tab-header .mat-mdc-tab-labels {
+    justify-content: flex-start !important;
+    border-bottom: 1px solid #0000001f;
+  }
+   ::ng-deep .mat-mdc-tab.mdc-tab {
+    height: 35px !important;
+    padding: 0 18px;
+  }
+   ::ng-deep .mat-mdc-tab .mdc-tab__text-label {
+    font-size: 12px !important;
+    font-weight: 600 !important;
+    // color: $theme-main-color-light;
+  }
+  .status-wrap {
+    .flex-child-element {
+      .status-back {
+        background-color: #f9f9f9;
+        width: 415px;
+        border-radius: 5px;
+        padding: 15px;
+        margin-bottom: 15px;
+      }
+    }
+    .mdc-list-item.mdc-list-item--with-one-line {
+      height: 40px;
+      .mdc-list-item__primary-text {
+        &:hover {
+          color:$theme-main-color;
+        }
+      }
+    }
+    .status-item {
+       ::ng-deep span {
+        font-size: $theme-main-medium-font;
+        cursor: pointer;
+        &:hover {
+          color:$theme-main-color;
+        }
+      }
+    }
+    .active-status {
+       ::ng-deep span {
+        color: $theme-main-color !important;
+      }
+    }
+    .color-box {
+      width: 8px;
+      height: 8px;
+      border: initial;
+      border-radius: 2px;
+      margin-right: 10px;
+      outline: none;
+    }
+     ::ng-deep .mdc-text-field--no-label:not(.mdc-text-field--textarea) .mat-mdc-form-field-input-control.mdc-text-field__input,
+    .mat-mdc-text-field-wrapper .mat-mdc-form-field-input-control {
+      height: 100% !important;
+    }
+    form {
+      .close-icon-wrapper {
+        @include flex;
+        align-items: flex-start;
+        width: 100%;
+      }
+    }
+  }
+}
+
+::ng-deep .status-color-menu {
+  .mdc-list {
+    padding-top: 0 !important;
+  }
+  .mat-mdc-menu-item {
+    transition: all 0.5s ease;
+    padding: 0 10px;
+    font-size: 12px !important;
+    min-height: 38px;
+    &:hover {
+      span {
+        color: $theme-font-color-black;
+        transition: all 0.5s ease;
+      }
+      img {
+        filter: invert(30%) grayscale(100%) brightness(70%) contrast(2);
+      }
+      .mat-icon {
+        filter: invert(30%) grayscale(100%) brightness(70%) contrast(2);
+      }
+    }
+    span {
+      font-size: 12px !important;
+    }
+    img {
+      margin-right: 8px;
+      width: 20px;
+      transition: all 0.5s ease;
+    }
+    .mat-icon {
+      margin-right: 8px;
+      width: 20px;
+      transition: all 0.5s ease;
+      margin-left: -2px;
+    }
+  }
+  .mdc-list-item__primary-text {
+    @include flex;
+    @include flex-align-center;
+    font-size: 14px !important;
+    font-weight: 400 !important;
+    color: $theme-main-color-light !important;
+    transition: all 0.5s ease;
+  }
+}

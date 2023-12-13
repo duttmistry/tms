@@ -1,0 +1,41 @@
+<div class="user-role">
+    <div class="role-header">
+        <strong> <a class="pr-form-top-header" style="margin-top: 0"> Preferences </a><span> / Task</span></strong>
+        <div>
+            <button class="cancel" (click)="onCancelClick()">Cancel</button>
+            <button color="primary" class="save" (click)="onSaveClick()">Save</button>
+        </div>
+    </div>
+
+    <mat-card>
+        <mat-card-header>
+            <mat-card-title>Task Notification Settings.
+                <br />
+                <span style="font-weight: 300; font-size: 12px">Select the kind of task notification you get about your activities.</span>
+            </mat-card-title>
+        </mat-card-header>
+        <div class="grid-container" *ngIf="taskPrefList.length; else no_preference">
+            <mat-accordion class="grid-item" *ngFor="let item of taskPrefList">
+                <div>
+                    <mat-expansion-panel>
+                        <mat-expansion-panel-header>
+                            <mat-checkbox [(ngModel)]="item.is_notify" (click)="$event.stopPropagation()"> {{ item.project_title }}</mat-checkbox>
+                        </mat-expansion-panel-header>
+                        <div class="options-list" *ngFor="let opt of item.actions" style="margin: 10px 0px 10px 33px">
+                            <div class="notification-toggle">
+                                <mat-slide-toggle [(ngModel)]="opt.is_notify" [disabled]="!item.is_notify">
+                                    <strong>{{ opt.action_name }}</strong
+                  ><br />
+                  <span style="font-style: italic">{{ opt.content }}</span>
+                </mat-slide-toggle>
+              </div>
+            </div>
+          </mat-expansion-panel>
+        </div>
+      </mat-accordion>
+    </div>
+    <ng-template #no_preference>
+      <div class="no-record-section">No records found.</div>
+    </ng-template>
+  </mat-card>
+</div>

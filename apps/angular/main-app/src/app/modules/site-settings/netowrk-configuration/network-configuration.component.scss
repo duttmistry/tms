@@ -1,0 +1,255 @@
+@import 'apps/angular/main-app/src/variables';
+@import 'apps/angular/main-app/src/mixins';
+@import 'apps/angular/main-app/src/assets/fonts/fonts.scss';
+.timing-config {
+  ::ng-deep .mat-mdc-text-field-wrapper.mdc-text-field--outlined .mat-mdc-form-field-infix {
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    min-height: 46px !important;
+    @include flex;
+    @include flex-align-center;
+    font-size: $theme-main-medium-font;
+    font-weight: 500;
+  }
+  ::ng-deep .mat-mdc-form-field-icon-suffix {
+    padding: 0 !important;
+    @include flex;
+    @include flex-align-center;
+  }
+  ::ng-deep .mat-mdc-form-field-icon-suffix > .mat-icon {
+    padding: 0 !important;
+    margin-right: 5px;
+    cursor: pointer;
+    font-size: 21px;
+    @include flex;
+    @include flex-align-center;
+  }
+  ::ng-deep .mat-mdc-form-field {
+    width: 100%;
+  }
+  table {
+    border: 1px solid #e9e9e9;
+    box-shadow: initial !important;
+    .mat-mdc-header-row {
+      height: 45px;
+      background-color: $theme-bg-color-drawer-container;
+    }
+    td {
+      font-size: $theme-main-medium-font;
+      font-weight: 500;
+      img {
+        width: 25px;
+        cursor: pointer;
+        border-radius: 50%;
+        transition: all 0.5s ease;
+        vertical-align: middle;
+        height: 25px;
+        &:hover {
+          background-color: $theme-bg-color-drawer-container;
+        }
+      }
+    }
+    th {
+      font-size: $theme-main-medium-font;
+      font-weight: 400;
+    }
+  }
+  ::ng-deep .mdc-data-table__header-cell {
+    border-bottom-width: 0px !important;
+  }
+  .timing-config-header {
+    @include flex;
+    @include flex-justify-space-between;
+    @include flex-align-center;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #e9e9e9;
+    padding: 15px 20px 15px 20px;
+    p {
+      margin: 0;
+      font-weight: 400;
+      font-size: 17px;
+      margin-bottom: 0;
+      color: #494949;
+    }
+  }
+  ::ng-deep .mat-mdc-form-field {
+    width: 300px;
+    margin-bottom: 0;
+  }
+  form {
+    position: relative;
+    margin-top: 25px;
+    .mat-icon {
+      // position: absolute;
+      right: 5px;
+      top: 6px;
+    }
+  }
+  .days-label {
+    width: 180px;
+    font-size: $theme-main-medium-font;
+  }
+  .days-off {
+    ::ng-deep .mat-button-toggle-appearance-standard .mat-button-toggle-label-content {
+      line-height: 17px;
+      font-size: $theme-main-medium-font;
+      width: 150px;
+      font-weight: 400;
+      height: 36px;
+      @include flex;
+      @include flex-align-center;
+      @include flex-justify-center;
+    }
+  }
+  .tming-form-control-section {
+    margin-bottom: 30px;
+    @include flex;
+    @include flex-align-center;
+  }
+  .timing-config-table {
+    box-shadow: initial !important;
+    width: 100%;
+    text-align: left;
+    color: #9c9e9d;
+    border-collapse: collapse;
+    font-family: $theme-main-font-family;
+    th,
+    td {
+      padding: 10px 15px;
+      font-weight: 500;
+      font-size: $theme-main-medium-font;
+      border-top: 1px solid #e0e0e0;
+    }
+    th {
+      border-top: initial;
+    }
+    img {
+      width: 25px;
+      height: 25px;
+      border-radius: 50%;
+    }
+    p {
+      margin: 0 0 0 8px;
+    }
+  }
+  .pr-form-top-header {
+    font-size: $theme-main-large-font;
+    margin-bottom: 20px;
+  }
+  .confi-form {
+    margin-top: 25px;
+    margin-bottom: 40px;
+  }
+}
+
+.mat-button-toggle {
+  background-color: $theme-color-grey;
+  color: $theme-main-color-light;
+  height: 36px;
+  display: block;
+}
+
+.green-check {
+  .mat-button-toggle-checked {
+    background-color: $theam-color-green !important;
+    color: $theme-color-white;
+  }
+}
+
+.red-check {
+  .mat-button-toggle-checked {
+    background-color: $theme-color-error !important;
+    color: $theme-color-white;
+  }
+}
+
+.mat-button-toggle-group-appearance-standard {
+  border: initial !important;
+}
+
+.mat-button-toggle-group-appearance-standard .mat-button-toggle + .mat-button-toggle {
+  border-left: initial !important;
+}
+
+.leave-admin-button {
+  margin-top: 25px;
+  margin-bottom: 10px;
+}
+
+.pr-form-desc {
+  font-size: 11px;
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.leave-admin-button {
+  display: flex;
+  justify-content: end;
+}
+
+.divider-bm {
+  margin-top: 20px;
+}
+
+.ip-form {
+  display: flex;
+  // align-items: center;
+  // justify-content: space-around;
+  // gap: 50%;
+  margin-bottom: 20px;
+}
+
+.fixed-ip {
+  display: flex;
+  // justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  width: 520px;
+}
+
+.ip-patterns {
+  display: flex;
+  // justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  width: 500px;
+  margin-left: 10px;
+}
+
+.ip-pattern-input {
+  margin-left: 30px;
+  margin-top: 25px;
+}
+
+.fixed-ip-input {
+  margin-left: 20px;
+  margin-top: 25px;
+}
+
+.ip-patterns-input-container {
+  display: flex;
+}
+
+.vertical-divider-ip {
+  margin: 0px 60px;
+}
+
+.dialog-mat-icon {
+  border: 1px solid $theme-border-color-gray;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: all 0.5s ease;
+  color: $theme-font-color-black;
+  font-size: $theme-main-extra-extra-large-font;
+  @include flex;
+  @include flex-align-center;
+  @include flex-justify-center;
+  height: 40px;
+  width: 40px;
+  // margin-right: 14px;
+  margin-left: 10px;
+  &:hover {
+    background-color: $theme-bg-color-gray;
+  }
+}

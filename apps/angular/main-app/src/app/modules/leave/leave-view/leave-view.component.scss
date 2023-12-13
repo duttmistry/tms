@@ -1,0 +1,188 @@
+@import 'apps/angular/main-app/src/variables';
+@import 'apps/angular/main-app/src/mixins';
+@import 'apps/angular/main-app/src/assets/fonts/fonts.scss';
+.leaves {
+  min-height: 100vh;
+  .mat-mdc-form-field {
+    margin-bottom: 0;
+  }
+  .leave-form {
+    @include flex;
+    gap: 13px;
+    @include flex-align-center;
+    margin-bottom: 15px;
+    .mat-mdc-form-field {
+      width: 180px;
+    }
+    .mat-mdc-icon-button.mat-mdc-button-base {
+      width: 28px;
+      height: 28px;
+      padding: 0;
+    }
+  }
+  .leave-balance {
+    .balance-top {
+      @include flex;
+      @include flex-justify-space-between;
+      @include flex-align-center;
+      button {
+        padding: 0 !important;
+        height: 23px;
+        width: 23px;
+      }
+    }
+    ::ng-deep canvas {
+      height: 118px !important;
+      width: unset !important;
+    }
+    mat-icon {
+      color: $theme-main-color-light;
+    }
+  }
+  .leave-bottom {
+    @include flex;
+    gap: 15px;
+    .leaves-holiday {
+      width: 24%;
+      padding-top: 20px;
+      strong {
+        padding: 15px 15px;
+        display: block;
+        position: absolute;
+        top: -40px;
+        width: 100%;
+      }
+      p {
+        margin: 0;
+      }
+      ::ng-deep .mat-mdc-list-item-unscoped-content {
+        @include flex;
+        @include flex-justify-space-between;
+        @include flex-align-center;
+        padding: 0 20px 15px 20px;
+        margin-bottom: 15px;
+        border-bottom: 1px solid $theme-border-color-gray;
+        p {
+          font-size: $theme-main-medium-font;
+          font-weight: 400;
+          line-height: 20px;
+        }
+        span {
+          color: $theme-main-color-light;
+          font-size: $theme-main-small-font;
+          font-weight: 400;
+        }
+        ::ng-deep .mat-mdc-chip {
+          background-color: $theme-bg-color-darkgray !important;
+          border-radius: $card-radius;
+        }
+        ::ng-deep .mdc-evolution-chip__text-label {
+          font-size: $theme-main-medium-font;
+          font-weight: 400;
+        }
+      }
+      ::ng-deep .mat-mdc-list-item {
+        height: initial !important;
+      }
+    }
+  }
+  .mat-grid-list {
+    padding-bottom: 160px !important;
+  }
+  .leaves-image {
+    width: 120px;
+    text-align: left !important;
+    img {
+      margin-right: 7px;
+      cursor: pointer;
+      vertical-align: middle;
+      &:last-child {
+        margin-right: 0;
+      }
+    }
+  }
+  ::ng-deep .mat-form-field-wrapper {
+    padding-bottom: 0 !important;
+  }
+  .leave-table {
+    box-shadow: initial !important;
+    width: 100%;
+    text-align: left;
+    border-collapse: collapse;
+    p {
+      margin: 0;
+      font-size: 13px;
+      font-weight: 400;
+      color: $theme-main-color-light;
+    }
+    strong {
+      margin-top: 7px;
+    }
+    .applied-table {
+      @include flex;
+      @include flex-justify-space-between;
+      padding-top: 30px;
+    }
+  }
+  .leaves-graph {
+    @include flex;
+    flex-wrap: wrap;
+    margin-top: 10px;
+    gap: 15px;
+    padding-bottom: 30px;
+    .leaves-graph-item {
+      border: 1px solid $theme-border-color-gray;
+      border-radius: $card-radius;
+      padding: 15px;
+      background-color: $theme-bg-color-gray;
+      width: 24%;
+    }
+  }
+}
+
+.leave-bottom-balance {
+  width: 75%;
+}
+
+.table-top {
+  margin-top: 15px;
+}
+
+@media screen and (max-width: $extra-extra-large-device) {
+  .leaves {
+    .leaves-graph {
+      .leaves-graph-item {
+        width: 49%;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: $extra-large-device) {
+  .leaves {
+    .leave-bottom {
+      display: block;
+      .leaves-holiday {
+        width: 100%;
+      }
+      .leave-bottom-balance {
+        width: 100%;
+      }
+    }
+    .leave-table {
+      p {
+        display: none;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: $lerge-device) {
+  .leaves {
+    .leaves-graph {
+      .leaves-graph-item {
+        width: 48.5%;
+      }
+    }
+  }
+}

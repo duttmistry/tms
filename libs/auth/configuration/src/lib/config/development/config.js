@@ -1,0 +1,22 @@
+export default {
+  PORT: '3000',
+  LEAVE_APIS_PORT: '3502',
+  MAIN_APIS_PORT: '3500',
+  PROJECT_DOC_APIS_PORT: '3501',
+  TASKS_APIS_PORT: '3503',
+  SECRET_KEY: 'tmscccnx',
+  ACCESS_TOKEN_EXPIRES_IN: '24h',
+  REFRESH_TOKEN_EXPIRES_IN: '1d',
+  JWT_ALGORITHM: 'HS256',
+  CREDENTIALS: true,
+  LOG_FORMAT: 'dev',
+  LOG_DIR: '../logs',
+  ORIGIN: '*',
+  HALF_WORKING_MINITES: 240,
+  DAILY_WORKING_MINUTES: 510, // 60m * 8.5h
+  WEEKLY_WORKING_MINUTES: 2550, // 60m * 8.5h * 5d
+  WINDOWMS: 5 * 60 * 1000,
+  MAX_REQUESTS_PER_WINDOW: 100,
+  LIMITER_MESSAGE: 'Too many requests from this IP, please try again after a break',
+  LIMITER:false,
+};

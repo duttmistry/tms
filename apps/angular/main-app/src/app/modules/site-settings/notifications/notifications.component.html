@@ -1,0 +1,38 @@
+<div class="notification-wraper">
+    <div class="notification-wraper-header">
+        <p>Notifications</p>
+        <div>
+            <button color="accent" class="cancel" (click)="onCancel()"><mat-icon> close</mat-icon></button>
+            <button color="primary" class="save" type="submit" (click)="onSave()"><mat-icon> done</mat-icon></button>
+        </div>
+    </div>
+    <div style="padding: 0; margin: 0 20px">
+        <form class="example-form" #form="ngForm" [formGroup]="notificationForm">
+            <div class="option-list">
+                <p>Send task update emails</p>
+                <mat-slide-toggle [color]="toggleColor" [disabled]="disabled" (change)="onToggleChange($event)" name="updateEmail" formControlName="sendTaskUpdateEmail"></mat-slide-toggle><span>{{ notificationForm.controls['sendTaskUpdateEmail'].value === true ? 'On' : 'Off' }}</span>
+                <p>Send leave emails</p>
+                <mat-slide-toggle [color]="toggleColor" [disabled]="disabled" (change)="onToggleChange($event)" name="leaveEmail" formControlName="sendLeaveEmail"></mat-slide-toggle><span>{{ notificationForm.controls['sendLeaveEmail'].value === true ? 'On' : 'Off' }}</span>
+                <p>Send instruction emails</p>
+                <mat-slide-toggle [color]="toggleColor" [disabled]="disabled" (change)="onToggleChange($event)" name="leaveEmail" formControlName="sendInstructionEmail"></mat-slide-toggle><span>{{ notificationForm.controls['sendInstructionEmail'].value === true ? 'On' : 'Off' }}</span>
+                <p>Other Notifications</p>
+                <mat-slide-toggle [color]="toggleColor" [disabled]="disabled" name="otherEmail" formControlName="otherEmail" (change)="onToggleChange($event)"></mat-slide-toggle><span>{{ notificationForm.controls['otherEmail'].value === true ? 'On' : 'Off' }}</span>
+                <!-- <p>extra</p>
+        <mat-slide-toggle [checked]="isChecked" [color]="toggleColor" [disabled]="disabled" (change)="onToggleChange($event)">
+          <ng-template matSlideToggleThumbIcon>
+            <mat-icon>{{ isChecked ? 'check_box' : 'check_box_outline_blank' }}</mat-icon>
+          </ng-template>
+          <ng-template matSlideToggleCheckedThumbIcon>
+            <mat-icon>{{ isChecked ? 'star' : 'star_border' }}</mat-icon>
+          </ng-template>
+          <ng-template matSlideToggleUnCheckedThumbIcon>
+            <mat-icon>{{ isChecked ? 'star_border' : 'star' }}</mat-icon>
+          </ng-template>
+          <ng-template matSlideToggleBarIcon>
+            <mat-icon>{{ isChecked ? 'done' : 'clear' }}</mat-icon>
+          </ng-template>
+        </mat-slide-toggle> -->
+            </div>
+        </form>
+    </div>
+</div>

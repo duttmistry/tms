@@ -1,0 +1,36 @@
+<div class="add-workspace container-wrapper">
+    <div class="workspace-blk">
+        <span><a routerLink="/holiday">Holiday</a> <strong>/{{ holidayID ? 'Update Holiday' : 'Add Holiday' }}</strong></span
+    >
+  </div>
+  <div class="add-update-holiday-section">
+    <span class="holiday-title"
+      ><strong>{{ holidayID ? 'Update Holiday' : 'Add Holiday' }}</strong></span
+    >
+    <form [formGroup]="holidayForm" (ngSubmit)="onSubmitForm()">
+      <mat-form-field>
+        <mat-label>Holiday Date</mat-label>
+        <input matInput [matDatepicker]="dp1" formControlName="holidayDate" [min]="_todayDate" [matDatepickerFilter]="weekendDaysFilter" />
+
+        <mat-datepicker-toggle matIconSuffix [for]="dp1"></mat-datepicker-toggle>
+        <mat-datepicker #dp1></mat-datepicker>
+        <mat-error *ngIf="holidayForm.controls['holidayDate'].hasError('required')">Please enter a holiday name.</mat-error>
+        <mat-error *ngIf="!holidayForm.controls['holidayDate'].hasError('required') && holidayForm.controls['holidayDate'].invalid"
+          >Please select a valid holiday date (MM/DD/YYYY).</mat-error
+        >
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Holiday Name</mat-label>
+        <input type="text" matInput formControlName="holidayName" />
+        <mat-error *ngIf="holidayForm.controls['holidayName'].hasError('required')">Please enter the holiday name.</mat-error>
+      </mat-form-field>
+
+      <mat-divider></mat-divider>
+      <div class="form-button-section">
+        <button class="primary" (click)="navigateToHolidayList()">Cancel</button>
+        <button color="primary" type="submit">{{ holidayID ? 'Update Holiday' : 'Add Holiday' }}</button>
+      </div>
+    </form>
+  </div>
+</div>

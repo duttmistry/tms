@@ -1,0 +1,67 @@
+@import 'apps/angular/main-app/src/variables';
+@import 'apps/angular/main-app/src/mixins';
+@import 'apps/angular/main-app/src/assets/fonts/fonts';
+
+.administration {
+  min-height: 100vh;
+  .administration-blk {
+    @include flex;
+    @include flex-justify-space-between;
+    @include flex-align-center;
+    mat-icon {
+      margin-right: 0;
+      margin-left: 0;
+    }
+    strong {
+      font-weight: 500;
+      font-size: $theme-main-extra-large-font;
+      margin-bottom: 0;
+
+      span {
+        margin-left: 5px;
+        font-weight: 400;
+      }
+    }
+  }
+  .administration-wrap {
+    .administration-flex {
+      @include flex;
+      @include flex-wrap;
+      margin-top: 20px;
+      margin-left: -10px;
+      margin-right: -10px;
+      .administration-item {
+        margin: 0px 9px 20px;
+        width: calc(25% - 18px);
+        position: relative;
+        display: flex;
+        ::ng-deep .mat-mdc-card-header-text {
+          display: none;
+        }
+      }
+      .item-title {
+        font-size: $theme-main-medium-font;
+        font-weight: 400;
+        padding: 0 17px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        height: 55px;
+        margin-top: 5px;
+      }
+      .item-description {
+        font-size: $theme-main-medium-font;
+        font-weight: 400;
+      }
+      .administration-bottom {
+        @include flex;
+        @include flex-justify-space-between;
+        align-items: flex-end;
+        width: 100%;
+      }
+    }
+    ::ng-deep .mat-card-header-text {
+      display: none !important;
+    }
+  }
+}

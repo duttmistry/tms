@@ -1,0 +1,25 @@
+@import 'apps/angular/main-app/src/variables';
+@import 'apps/angular/main-app/src/mixins';
+@import 'apps/angular/main-app/src/assets/fonts/fonts';
+.messaging-template {
+  .table-responsive {
+    margin-top: 25px;
+  }
+  .action-column {
+    img {
+      width: 25px;
+      height: 25px;
+      border: 1px solid $theme-border-color-gray;
+      margin: 0 5px;
+      border-radius: $button-radius;
+      padding: 3px;
+      cursor: pointer;
+    }
+  }
+  .action1 {
+    width: 100px;
+  }
+  .subject1 {
+    width: 300px;
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "name": "utils-notifications",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/utils/notifications/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/utils/notifications",
+        "main": "libs/utils/notifications/src/index.ts",
+        "tsConfig": "libs/utils/notifications/tsconfig.lib.json",
+        "assets": ["libs/utils/notifications/*.md"]
+      }
+    },
+    "publish": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "node tools/scripts/publish.mjs utils-notifications {args.ver} {args.tag}"
+      },
+      "dependsOn": ["build"]
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/utils/notifications/**/*.ts"]
+      }
+    }
+  },
+  "tags": []
+}

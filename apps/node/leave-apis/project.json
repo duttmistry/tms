@@ -1,0 +1,41 @@
+{
+  "name": "node-leave-apis",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/node/leave-apis/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/esbuild:esbuild",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/apps/node/leave-apis",
+        "format": ["cjs"],
+        "main": "apps/node/leave-apis/src/server.ts",
+        "tsConfig": "apps/node/leave-apis/tsconfig.app.json",
+        "assets": ["apps/node/leave-apis/src/assets"]
+      }
+    },
+    "serve": {
+      "executor": "@nrwl/js:node",
+      "options": {
+        "buildTarget": "node-leave-apis:build"
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/node/leave-apis/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "apps/node/leave-apis/jest.config.ts",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": ["node"]
+}

@@ -1,0 +1,10 @@
+<div class="task-list-wrapper container-wrapper">
+  <div class="container-inner">
+    <mat-card class="container-child">
+      <div class="task-header-wrapper">
+        <main-app-task-header (navigationChange)="navigateToSelectedPath($event)"></main-app-task-header>
+        <router-outlet></router-outlet>
+      </div>
+    </mat-card>
+  </div>
+</div>

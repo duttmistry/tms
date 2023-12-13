@@ -1,0 +1,178 @@
+@import 'apps/angular/main-app/src/variables';
+@import 'apps/angular/main-app/src/mixins';
+@import 'apps/angular/main-app/src/assets/fonts/fonts.scss';
+.holiday {
+  .mat-mdc-card {
+    padding-bottom: 0;
+  }
+   ::ng-deep .custom-tooltip {
+    .is-holiday {
+      .holiday-title::before {
+        top: 6px;
+      }
+    }
+  }
+  .holiday-height {
+    max-height: 280px;
+    overflow-x: auto;
+    .no-record {
+      margin-bottom: 12px;
+    }
+    .holiday-item:last-child {
+      .days {
+        border-bottom: 0;
+        margin-bottom: 0;
+        padding-bottom: 12px;
+      }
+    }
+    .special-day-item:last-child {
+      .days {
+        border-bottom: 0;
+        margin-bottom: 0;
+        padding-bottom: 12px;
+      }
+    }
+  }
+  .leaves-holiday-wrap {
+    position: relative;
+  }
+  .leaves-holiday-wrap:after {
+    content: '';
+    position: absolute;
+    border-bottom: 1px solid #DFDFDF;
+    bottom: -4px;
+    width: 100%;
+  }
+  .leaves-holiday-wrap:last-child {
+    margin-top: 20px;
+  }
+  .workspace-table {
+    gap: 15px;
+    @include flex;
+    height: 100%;
+    .holiday-day {
+      font-size: $theme-main-large-font;
+      font-weight: 600;
+      color: $theme-font-color-black;
+      line-height: 20px;
+    }
+    .holiday-blk {
+      padding: 0 0 20px 0;
+      @include flex-justify-space-between;
+      @include flex;
+      @include flex-align-center;
+      span {
+        color:$theme-main-color;
+        text-decoration: underline;
+        font-size: $theme-main-small-font;
+        line-height: 16px;
+        cursor: pointer;
+      }
+    }
+    .holiday-calender {
+      width: 75%;
+      border-right: 1px solid $theme-border-color-gray;
+      padding: 15px 15px 15px 0;
+       ::ng-deep .fc .fc-scroller-harness {
+        overflow: unset;
+      }
+    }
+    p {
+      color: $theme-main-color-light;
+      font-size: $theme-main-small-font;
+      font-weight: 400;
+      line-height: 20px;
+      margin: 0;
+    }
+    .holiday-img {
+      margin-right: 15px;
+      margin-top: -22px;
+    }
+    h2 {
+      font-size: $theme-main-medium-font;
+      font-weight: 500;
+      line-height: 23px;
+      margin: 0;
+      color: $theme-font-color-black;
+      white-space: break-spaces;
+    }
+    .days {
+      width: 100%;
+      padding-bottom: 16px;
+      border-bottom: 1px solid $theme-border-color-gray;
+      margin-bottom: 16px;
+    }
+    .leaves-holiday {
+      width: 24%;
+      padding: 23px 0;
+       ::ng-deep .mat-mdc-list-item-unscoped-content {
+        @include flex;
+        font-size: $theme-main-medium-font;
+      }
+       ::ng-deep .mat-mdc-list-item {
+        height: initial !important;
+      }
+    }
+  }
+  .holiday-calender {
+    position: relative;
+  }
+  .holiday-color {
+    position: absolute;
+    top: 28px;
+    right: 17px;
+    @include flex;
+    gap: 42px;
+  }
+}
+
+.disabled-span {
+  pointer-events: none;
+  color: gray !important;
+}
+
+::ng-deep .is-special-day {
+  .holiday-title {
+    font-size: 10px !important;
+    margin: 10px 0 0 0;
+    &::before {
+      top: 2px;
+    }
+  }
+}
+
+::ng-deep .is-holiday {
+  .holiday-title {
+    font-size: 10px !important;
+    &::before {
+      top: 2px;
+    }
+  }
+  .holiday-title+.holiday-title {
+    margin-top: 4px;
+  }
+}
+
+@media screen and (max-width: $extra-large-device) {
+  .holiday {
+    .workspace-table {
+      flex-direction: column;
+      .holiday-calender {
+        width: 100%;
+        border-right: unset;
+        padding-right: 0;
+      }
+      .leaves-holiday {
+        width: 100%;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: $lerge-device) {
+  .holiday {
+    .holiday-color {
+      gap: 30px;
+    }
+  }
+}

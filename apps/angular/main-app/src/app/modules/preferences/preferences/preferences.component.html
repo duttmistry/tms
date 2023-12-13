@@ -1,0 +1,146 @@
+<div class="container-wrapper Preferences">
+  <div class="container-inner">
+    <mat-card class="container-child">
+      <div class="workspace-blk workspace-border">
+        <strong> Preferences </strong>
+      </div>
+      <div class="Preferences-blk Preferences-responsive">
+        <ng-container *ngIf="showSpinner">
+          <div [mainAppSpinner]="showSpinner"></div>
+        </ng-container>
+        <div
+          class="Preferences-wrap"
+          *ngIf="
+            (projectPreferenceList && projectPreferenceList.length) || (leavesPreferenceList?.actions && leavesPreferenceList?.actions.length);
+            else no_preference
+          "
+        >
+          <div class="scroll-blk">
+            <ul class="top-ul" *ngIf="projectPreferenceList && projectPreferenceList?.length">
+              <li class="big-width sticky-width">
+                Project Alerts <img src="assets/images/info.svg" alt="info" matTooltip="Get notification of project" />
+              </li>
+              <!-- Preference Header Section Start-->
+              <ng-container *ngFor="let item of preferenceHeader">
+                <li class="{{ item.isGrayBackground ? 'gray-width sticky-width' : '' }}" id="{{ item.key }}">
+                  <span>
+                    <img
+                      src="{{ item?.allowAllNotification ? 'assets/images/check-blue.svg' : 'assets/images/check-sky.svg' }}"
+                      alt="check-sky"
+                      class="double-tik"
+                      (click)="updateAllProjectAction(item)"
+                    />{{ item.label }}</span
+                  >
+                  <img src="assets/images/info.svg" alt="info" matTooltip="{{ item.tooltip_message }}" />
+                </li>
+              </ng-container>
+              <!-- Preference Header Section Start-->
+            </ul>
+            <div *ngIf="projectPreferenceList && projectPreferenceList?.length">
+              <ul *ngFor="let item of projectPreferenceList">
+                <li class="big-width">
+                  {{ getProjectName(item?.project_id) }}
+                  <img
+                    src="{{ item?.is_notify ? 'assets/images/check-blue.svg' : 'assets/images/check-sky.svg' }}"
+                    alt="check-sky"
+                    class="double-tik"
+                    (click)="changeProjectNotification(item)"
+                  />
+                </li>
+                <li class="gray-width">
+                  <img
+                    src="{{ item?.is_notify_email ? 'assets/images/single-blue.svg' : 'assets/images/single-sky.svg' }}"
+                    alt="check-blue"
+                    (click)="changeProjectNotificationStatus(item.project_id, 'is_notify_email')"
+                  />
+                </li>
+                <li class="gray-width">
+                  <img
+                    src="{{ item?.is_notify_push ? 'assets/images/single-blue.svg' : 'assets/images/single-sky.svg' }}"
+                    alt="check-blue"
+                    (click)="changeProjectNotificationStatus(item.project_id, 'is_notify_push')"
+                  />
+                </li>
+                <li class="gray-width">
+                  <img
+                    src="{{ item?.is_notify_chat ? 'assets/images/single-blue.svg' : 'assets/images/single-sky.svg' }}"
+                    alt="check-blue"
+                    (click)="changeProjectNotificationStatus(item.project_id, 'is_notify_chat')"
+                  />
+                </li>
+                <li *ngFor="let action of item.actions" id="{{ action.key }}">
+                  <img
+                    src="{{ action?.is_notify ? 'assets/images/single-blue.svg' : 'assets/images/single-sky.svg' }}"
+                    alt="check-blue"
+                    (click)="changeProjectActionNotificationStatus(item.project_id, action.key)"
+                  />
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <ng-container *ngIf="leavesPreferenceList?.actions && leavesPreferenceList?.actions.length">
+            <div class="leave-div">
+              <ul class="top-ul" style="justify-content: unset">
+                <li class="big-width">Leaves <img src="assets/images/info.svg" alt="info" matTooltip="Get notification of leaves" /></li>
+                <!-- Preference Header Section Start-->
+                <ng-container *ngFor="let item of preferenceLeaveHeader">
+                  <li class="gray-width" id="{{ item.key }}">
+                    <span>
+                      <img
+                        src="{{ item?.allowAllNotification ? 'assets/images/check-blue.svg' : 'assets/images/check-sky.svg' }}"
+                        alt="check-sky"
+                        class="double-tik"
+                        (click)="updateAllLeaveAction(item)"
+                      />{{ item.label }}</span
+                    >
+                    <img src="assets/images/info.svg" alt="info" matTooltip="{{ item.tooltip_message }}" />
+                  </li>
+                </ng-container>
+                <!-- Preference Header Section Start-->
+              </ul>
+              <ul *ngFor="let item of leavesPreferenceList?.actions">
+                <li class="big-width">
+                  {{ item.action_name }}
+                  <!-- <img src="assets/images/check-blue.svg" alt="check-sky" class="double-tik" /> -->
+                </li>
+                <li class="gray-width" id="{{ item.key }}">
+                  <img
+                    src="{{ item.is_notify_email ? 'assets/images/single-blue.svg' : 'assets/images/single-sky.svg' }}"
+                    alt="check-blue"
+                    (click)="changeLeaveNotificationStatus(item?.key, 'is_notify_email')"
+                  />
+                </li>
+                <li class="gray-width" id="{{ item?.key }}">
+                  <img
+                    src="{{ item?.is_notify_push ? 'assets/images/single-blue.svg' : 'assets/images/single-sky.svg' }}"
+                    alt="check-blue"
+                    (click)="changeLeaveNotificationStatus(item?.key, 'is_notify_push')"
+                  />
+                </li>
+                <li class="gray-width" id="{{ item.key }}">
+                  <img
+                    src="{{ item?.is_notify_chat ? 'assets/images/single-blue.svg' : 'assets/images/single-sky.svg' }}"
+                    alt="check-blue"
+                    (click)="changeLeaveNotificationStatus(item?.key, 'is_notify_chat')"
+                  />
+                </li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+              </ul>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+    </mat-card>
+  </div>
+</div>
+<ng-template #no_preference>
+  <div class="Preferences-wrap" *ngIf="!showSpinner">
+    <p>Preferences not found.</p>
+  </div>
+</ng-template>

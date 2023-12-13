@@ -1,0 +1,149 @@
+<div class="container-wrapper leave-history">
+    <mat-card>
+        <div class="workspace-blk workspace-border">
+            <strong>
+        <a routerLink="/leave"> Leave Balance Summary</a>
+      </strong>
+            <div (click)="redirectBack()" class="tertiary-button">Back</div>
+        </div>
+        <div class="user-info" *ngIf="!showSpinnerUserDetails; else spinnerSection">
+            <div class="user-info-flex">
+                <img #img (error)="img.src = 'assets/images/default.png'" [src]="baseUrl + userInformation?.employee_image || 'assets/images/default.png'" alt="Image" />
+                <div>
+                    <span>{{ fullName || '-' }}</span>
+                    <p>{{ userInformation?.designation || '-' }}</p>
+                    <!-- <span *ngIf="projectManagerName"
+            >Project Manager : <label> {{ projectManagerName || '-' }} </label></span
+          >
+          <span *ngIf="teamLeadName"
+            >Team Leader : <label> {{ teamLeadName || '-' }} </label></span
+          > -->
+                    <!-- <span
+            >Leave Balance :
+            <div *ngFor="let item of userInformation?.leaveBalance">
+              <label>{{ item?.leave_type }} : {{ item?.current_balance || '0' }}</label>
+            </div>
+          </span> -->
+                </div>
+            </div>
+            <div class="leave-count-attedance">
+                <div *ngFor="let item of userInformation?.leaveBalance" [ngClass]="item.leave_type == 'CL' ? 'leave-count-green' : item.leave_type == 'PL' ? 'leave-count-red' : 'leave-count-blue'">
+                    <strong>{{ item?.current_balance || '0' }}</strong>
+                    <span>{{ item.leave_type == 'CL' ? 'Casual Leave' : item.leave_type == 'PL' ? 'Privilege Leave' : 'Leave Without Pay' }}</span>
+                </div>
+            </div>
+        </div>
+        <mat-divider></mat-divider>
+        <div>
+            <div>
+                <div class="filter-section">
+                    <div class="search-input">
+                        <div class="close-icon-wrapper input-close-wrapper">
+                            <mat-form-field class="medium-height-wrapper input-field-wrapper">
+                                <mat-label>Search</mat-label>
+                                <input #searchInput matInput [formControl]="searchControl" (keydown.enter)="searchLeave()" />
+                                <img matPrefix (click)="searchLeave()" src="assets/images/search.svg" alt="search" class="search" />
+                                <!-- <mat-icon *ngIf="searchControl.value" matSuffix (click)="searchControl.reset(); searchLeave()" class="filter-close">close</mat-icon> -->
+                            </mat-form-field>
+                            <svg *ngIf="searchControl.value" (click)="searchControl.reset(); searchLeave()" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" class="filter-close">
+                <path
+                  d="M8.00065 1.3335C4.32732 1.3335 1.33398 4.32683 1.33398 8.00016C1.33398 11.6735 4.32732 14.6668 8.00065 14.6668C11.674 14.6668 14.6673 11.6735 14.6673 8.00016C14.6673 4.32683 11.674 1.3335 8.00065 1.3335ZM10.2407 9.5335C10.434 9.72683 10.434 10.0468 10.2407 10.2402C10.1407 10.3402 10.014 10.3868 9.88732 10.3868C9.76065 10.3868 9.63398 10.3402 9.53399 10.2402L8.00065 8.70683L6.46732 10.2402C6.36732 10.3402 6.24065 10.3868 6.11398 10.3868C5.98732 10.3868 5.86065 10.3402 5.76065 10.2402C5.56732 10.0468 5.56732 9.72683 5.76065 9.5335L7.29398 8.00016L5.76065 6.46683C5.56732 6.2735 5.56732 5.9535 5.76065 5.76016C5.95398 5.56683 6.27398 5.56683 6.46732 5.76016L8.00065 7.2935L9.53399 5.76016C9.72732 5.56683 10.0473 5.56683 10.2407 5.76016C10.434 5.9535 10.434 6.2735 10.2407 6.46683L8.70732 8.00016L10.2407 9.5335Z"
+                  fill="#86969D"
+                />
+              </svg>
+                        </div>
+                    </div>
+                    <div class="history-filter">
+                        <div class="close-icon-wrapper">
+                            <mat-form-field (click)="leaveDatePicker.open()" appearance="fill" class="calender-icon form-field-width medium-height-wrapper input-field-wrapper">
+                                <mat-label>Date</mat-label>
+                                <mat-date-range-input [min]="minDate" [formGroup]="filterDateGroup" [rangePicker]="leaveDatePicker">
+                                    <input (dateChange)="onFilterDateChange($event)" matStartDate formControlName="fromDateControl" readonly />
+                                    <input (dateChange)="onFilterDateChange($event)" matEndDate formControlName="toDateControl" readOnly />
+                                </mat-date-range-input>
+                                <mat-error *ngIf="filterDateGroup.controls['toDateControl'].hasError('endDateReq')">Please add end date.</mat-error>
+
+                                <mat-datepicker-toggle matIconPrefix [for]="leaveDatePicker"></mat-datepicker-toggle>
+                                <mat-date-range-picker #leaveDatePicker></mat-date-range-picker>
+                                <!-- <mat-icon
+                *ngIf="filterDateGroup.controls['fromDateControl'].value || filterDateGroup.controls['toDateControl'].value"
+                matSuffix
+                class="filter-close"
+                (click)="filterDateGroup.reset(); onFilterDateChange($event)"
+                >close</mat-icon
+              > -->
+                            </mat-form-field>
+                            <svg *ngIf="filterDateGroup.controls['fromDateControl'].value || filterDateGroup.controls['toDateControl'].value" (click)="filterDateGroup.reset(); onFilterDateChange($event)" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"
+                                class="filter-close">
+                <path
+                  d="M8.00065 1.3335C4.32732 1.3335 1.33398 4.32683 1.33398 8.00016C1.33398 11.6735 4.32732 14.6668 8.00065 14.6668C11.674 14.6668 14.6673 11.6735 14.6673 8.00016C14.6673 4.32683 11.674 1.3335 8.00065 1.3335ZM10.2407 9.5335C10.434 9.72683 10.434 10.0468 10.2407 10.2402C10.1407 10.3402 10.014 10.3868 9.88732 10.3868C9.76065 10.3868 9.63398 10.3402 9.53399 10.2402L8.00065 8.70683L6.46732 10.2402C6.36732 10.3402 6.24065 10.3868 6.11398 10.3868C5.98732 10.3868 5.86065 10.3402 5.76065 10.2402C5.56732 10.0468 5.56732 9.72683 5.76065 9.5335L7.29398 8.00016L5.76065 6.46683C5.56732 6.2735 5.56732 5.9535 5.76065 5.76016C5.95398 5.56683 6.27398 5.56683 6.46732 5.76016L8.00065 7.2935L9.53399 5.76016C9.72732 5.56683 10.0473 5.56683 10.2407 5.76016C10.434 5.9535 10.434 6.2735 10.2407 6.46683L8.70732 8.00016L10.2407 9.5335Z"
+                  fill="#86969D"
+                />
+              </svg>
+                        </div>
+                        <span *ngIf="filterDateGroup.controls['fromDateControl'].value || filterDateGroup.controls['toDateControl'].value; else disableFilter">
+              <button color="primary" mat-icon-button matTooltip="Turn the filters off" (click)="resetAllFilters()">
+                <mat-icon>filter_list</mat-icon>
+              </button>
+            </span>
+                        <ng-template #disableFilter>
+                            <button disabled mat-icon-button (click)="resetAllFilters()">
+                <mat-icon>filter_list_off</mat-icon>
+              </button>
+                        </ng-template>
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table mat-table [dataSource]="transactionHistoryDataSource.data.length > 0 ? transactionHistoryDataSource : emptyData" *ngIf="!showSpinner; else spinnerSection">
+                        <ng-container matColumnDef="leaveType">
+                            <th mat-header-cell *matHeaderCellDef>Leave type</th>
+                            <td mat-cell *matCellDef="let element">{{ element.leave_type || '-' }}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="credit">
+                            <th mat-header-cell *matHeaderCellDef>Credit</th>
+                            <td mat-cell *matCellDef="let element">{{ element.credit || '0' }}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="debit">
+                            <th mat-header-cell *matHeaderCellDef>Debit</th>
+                            <td mat-cell *matCellDef="let element">{{ element.debit || '0' }}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="remainingBalance">
+                            <th mat-header-cell *matHeaderCellDef class="history-1">Remaining Balance</th>
+                            <td mat-cell *matCellDef="let element">
+                                {{ element.after_balance }}
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="remarks">
+                            <th mat-header-cell *matHeaderCellDef class="history-2">Remarks</th>
+                            <td mat-cell *matCellDef="let element">
+                                {{ element.remarks }}
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="actionDateTime">
+                            <th mat-header-cell *matHeaderCellDef class="history-3">Action Date Time</th>
+                            <td mat-cell *matCellDef="let element">
+                                {{ formateDate(element.created_date) }}
+                            </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="empty-row">
+                            <mat-cell *matCellDef="let element">No Records Found</mat-cell>
+                        </ng-container>
+
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: transactionHistoryDataSource.data.length > 0 ? displayedColumns : ['empty-row']"></tr>
+                    </table>
+                </div>
+                <mat-paginator [pageSize]="limit" [length]="totalRecords" [pageIndex]="currentPage - 1" [pageSizeOptions]="[5, 10, 25, 100]" (page)="onTransactionPageSelectionChange($event)" aria-label="Select page of users" class="pagination"></mat-paginator>
+            </div>
+        </div>
+    </mat-card>
+</div>
+
+<ng-template #spinnerSection>
+    <div [mainAppSpinner]="showSpinner"></div>
+</ng-template>

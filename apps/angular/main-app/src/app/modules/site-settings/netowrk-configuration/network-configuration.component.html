@@ -1,0 +1,85 @@
+<div class="timing-config">
+    <div>
+        <form class="example-form" [formGroup]="networkConfigformGroup">
+            <span class="add-h2">Office IP:</span>
+            <p class="pr-form-desc">
+                This IP address assists the system in distinguishing between individual working from home and those working from office.
+            </p>
+            <mat-form-field appearance="fill" class="medium-height-wrapper input-field-wrapper">
+                <mat-label>Office IP</mat-label>
+
+                <input formControlName="officeIp" matInput placeholder="Placeholder" />
+                <mat-error *ngIf="_networkConfigformGroup['officeIp'].hasError('required')">Office ip is required.</mat-error>
+                <mat-error *ngIf="!_networkConfigformGroup['officeIp'].hasError('required') && _networkConfigformGroup['officeIp'].hasError('pattern')">Please enter valid ipv4.</mat-error>
+            </mat-form-field>
+        </form>
+    </div>
+    <mat-divider class="divider-bm"></mat-divider>
+    <div>
+        <form [formGroup]="selectedIpsForm">
+            <span class="add-h2">Whitelisted IPs:</span>
+            <div class="ip-form">
+                <div formArrayName="fixed">
+                    <div class="fixed-ip">
+                        <span style="font-size: 11px">Add Fixed IP to Whitelist: </span>
+                        <img src="assets/images/help-icon.svg" matTooltip="Users are required to input the specific fixed IP address they wish to whitelist. This could be the IP address of a device, server, or network that requires unrestricted access" width="20px" />
+                        <!-- <button   color="primary" class="add-btn"  (click)="addIp()">Add IP</button> -->
+                    </div>
+                    <div *ngFor="let ip of fixedIps.controls; let i = index" class="fixed-ip-input" [formGroupName]="i" style="display: flex; align-items: center">
+                        <mat-form-field appearance="fill" class="medium-height-wrapper">
+                            <!-- <mat-label>Office IP</mat-label> -->
+                            <div class="ip-patterns-input-container">
+                                <input formControlName="ip" matInput placeholder="Add Fixed IP" />
+                                <button mat-icon-button color="warn" (click)="removeIp(i)" *ngIf="i !== 0 || (i === 0 && fixedIps.controls.length > 1)">
+                  <mat-icon>delete</mat-icon>
+                </button>
+                            </div>
+                            <mat-error *ngIf="ip.get('ip')?.hasError('required')">Fixed ip is required.</mat-error>
+                            <mat-error *ngIf="!ip.get('ip')?.hasError('required') && ip.get('ip')?.hasError('pattern')">Please enter valid ip.</mat-error>
+                        </mat-form-field>
+                        <!-- <button *ngIf="i == fixedIps.controls.length - 1" mat-icon-button color="primary"  (click)="addIp()" style="margin-left: 10px !important;">
+              <mat-icon>add</mat-icon>
+            </button> -->
+                        <div>
+                            <mat-icon *ngIf="i == fixedIps.controls.length - 1" (click)="addIp()" class="dialog-mat-icon">add</mat-icon>
+                        </div>
+                    </div>
+                </div>
+                <mat-divider vertical class="vertical-divider-ip"></mat-divider>
+                <div formArrayName="pattern">
+                    <div class="ip-patterns">
+                        <span style="font-size: 11px">Add IP Address or Pattern to Whitelist:</span>
+                        <img src="assets/images/help-icon.svg" matTooltip="Users can specify an IP pattern. Use X for dynamic range. (e.g., 192.168.0.X  or 10.123.X.X or 10.X.X.X) " width="20px" />
+                        <!-- <button   color="primary" class="add-btn" (click)="addIpPattern()">Add IP Patterns</button> -->
+                    </div>
+                    <div *ngFor="let ip of IpPatterns?.controls; let i = index" class="ip-pattern-input" [formGroupName]="i" style="display: flex; align-items: center">
+                        <mat-form-field appearance="fill" class="medium-height-wrapper">
+                            <!-- <mat-label>Office IP</mat-label> -->
+                            <div class="ip-patterns-input-container">
+                                <input formControlName="ip" matInput placeholder="Add IP Patterns" (input)="ip?.get('ip')?.setValue(ip?.get('ip')?.value?.toUpperCase())" />
+
+                                <button mat-icon-button color="warn" (click)="removeIpPattern(i)" *ngIf="i !== 0 || (i === 0 && IpPatterns.controls.length > 1)">
+                  <mat-icon>delete</mat-icon>
+                </button>
+                            </div>
+                            <mat-error *ngIf="ip.get('ip')?.hasError('required')">IP Pattern is required.</mat-error>
+                            <mat-error *ngIf="!ip.get('ip')?.hasError('required') && ip.get('ip')?.hasError('pattern')">Please enter valid ip.</mat-error>
+                        </mat-form-field>
+                        <!-- <button *ngIf="i == IpPatterns.controls.length - 1" mat-icon-button color="primary" (click)="addIpPattern()" style="margin-left: 10px !important;">
+              <mat-icon>add</mat-icon>
+            </button> -->
+                        <div *ngIf="i == IpPatterns.controls.length - 1">
+                            <mat-icon (click)="addIpPattern()" class="dialog-mat-icon">add</mat-icon>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <mat-divider class="divider-bm"></mat-divider>
+    <div class="leave-admin-button btn-flex" *ngIf="isAllowedToUpdate">
+        <button color="primary" class="next primary-button" type="submit" (click)="_onSave()">Save</button>
+        <button (click)="onCancel()" class="cancel secondary-button">Cancel</button>
+    </div>
+</div>

@@ -1,0 +1,26 @@
+{
+  "name": "utils-enum-data",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/utils/enum-data/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/utils/enum-data",
+        "main": "libs/utils/enum-data/src/index.ts",
+        "tsConfig": "libs/utils/enum-data/tsconfig.lib.json",
+        "assets": ["libs/utils/enum-data/*.md"]
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/utils/enum-data/**/*.ts"]
+      }
+    }
+  },
+  "tags": ["node", "angular"]
+}

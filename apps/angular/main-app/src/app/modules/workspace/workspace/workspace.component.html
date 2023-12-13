@@ -1,0 +1,143 @@
+<div class="workspace container-wrapper" #uiElement (scroll)="onScroll()">
+    <div class="container-inner">
+        <mat-card class="container-child">
+            <div class="workspace-blk workspace-border">
+                <strong>Workspace
+          <p *ngIf="workspaceList && workspaceList.length >= 0">({{ workspaceList ? workspaceList.length : 0 }})</p></strong
+        >
+        <span>
+          <button *ngIf="allowAdd" routerLink="/workspace/add" color="primary" class="next primary-button">Create Workspace</button>
+        </span>
+      </div>
+      <div class="filter-section">
+        <div class="search-input close-icon-wrapper input-close-wrapper">
+          <mat-form-field class="medium-height-wrapper input-field-wrapper">
+            <mat-label>Search</mat-label>
+            <input
+              matInput
+              placeholder="Search"
+              [formControl]="searchWorkspaceControl"
+              (keyup)="onSearchKeyUp($event)"
+              (keydown.enter)="searchWorkSpace($event)"
+            />
+            <img matPrefix (click)="searchWorkSpace($event)" src="assets/images/search.svg" alt="search" class="search" />
+            <!-- <mat-icon
+              matSuffix
+              *ngIf="searchWorkspaceControl.value"
+              (click)="$event.stopPropagation(); searchWorkspaceControl.reset(); searchWorkSpace($event)"
+              class="filter-close"
+              style="cursor: pointer"
+              >close</mat-icon
+            > -->
+          </mat-form-field>
+          <svg
+            *ngIf="searchWorkspaceControl.value"
+            (click)="$event.stopPropagation(); searchWorkspaceControl.reset(); searchWorkSpace($event)"
+            width="16"
+            height="16"
+            viewBox="0 0 16 16"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            class="filter-close"
+          >
+            <path
+              d="M8.00065 1.3335C4.32732 1.3335 1.33398 4.32683 1.33398 8.00016C1.33398 11.6735 4.32732 14.6668 8.00065 14.6668C11.674 14.6668 14.6673 11.6735 14.6673 8.00016C14.6673 4.32683 11.674 1.3335 8.00065 1.3335ZM10.2407 9.5335C10.434 9.72683 10.434 10.0468 10.2407 10.2402C10.1407 10.3402 10.014 10.3868 9.88732 10.3868C9.76065 10.3868 9.63398 10.3402 9.53399 10.2402L8.00065 8.70683L6.46732 10.2402C6.36732 10.3402 6.24065 10.3868 6.11398 10.3868C5.98732 10.3868 5.86065 10.3402 5.76065 10.2402C5.56732 10.0468 5.56732 9.72683 5.76065 9.5335L7.29398 8.00016L5.76065 6.46683C5.56732 6.2735 5.56732 5.9535 5.76065 5.76016C5.95398 5.56683 6.27398 5.56683 6.46732 5.76016L8.00065 7.2935L9.53399 5.76016C9.72732 5.56683 10.0473 5.56683 10.2407 5.76016C10.434 5.9535 10.434 6.2735 10.2407 6.46683L8.70732 8.00016L10.2407 9.5335Z"
+              fill="#86969D"
+            />
+          </svg>
+        </div>
+        <div class="filter-right-wrap">
+          <button (click)="workspaceOrderBy()" class="sort-button-section up-down-arrow">
+            <img *ngIf="filterObject.orderBy === 'asc'" src="assets/images/up-arrow.png" alt="asc" />
+            <img *ngIf="filterObject.orderBy === 'desc'" src="assets/images/down-arrow.png" alt="desc" />
+          </button>
+          <!-- <button  class="sort-button-section">
+            <img src="assets/images/filter.svg" alt="filter" />
+          </button> -->
+        </div>
+      </div>
+
+      <div class="workspace-wrap">
+        <div class="workspace-flex workspace-autoscroll" *ngIf="workspaceList && workspaceList?.length !== 0; else noRecordFound">
+          <div *ngFor="let workspace of allWorkSpaceData" class="workspace-item">
+            <!-- <mat-menu #moreMenu="matMenu" [overlapTrigger]="false" class="project-mat-menu">
+              <div mat-menu-item (click)="editWorkspace(workspace.id)" *ngIf="allowEdit"><img src="assets/images/edit-bg.svg" /> Edit</div>
+
+              <div mat-menu-item (click)="redirectToTask(workspace)" *ngIf="allowTasks"><img src="assets/images/app.svg" /> Task</div>
+              <div *ngIf="allowSettings" mat-menu-item (click)="redirectToSettings(workspace)">
+                <img class="" src="assets/images/settinggray.svg" alt="Settings" /> Settings
+              </div>
+            </mat-menu> -->
+            <mat-card [ngClass]="workspace?.is_active ? '' : 'workspace-disable'">
+              <mat-card-header class="cursor-pointer" (click)="redirectToProjects(workspace.id)">
+                <div class="workspace-header-item">
+                  <div mat-card-avatar class="example-header-image">
+                    <ng-container *ngIf="workspace?.avatar">
+                      <div class="image-wrapper">
+                        <img crossorigin="anonymous" [src]="baseUrl + workspace.avatar" />
+                      </div>
+                    </ng-container>
+                    <ng-container *ngIf="!workspace?.avatar">
+                      <div class="image-wrapper">
+                        <img class="img-circle" src="assets/images/default_image.png" />
+                      </div>
+                    </ng-container>
+                  </div>
+
+                  <mat-card-title
+                    >{{ workspace?.title || '' }}
+                    <div [innerHTML]="workspace?.description" class="item-title"></div
+                  ></mat-card-title>
+                </div>
+                <!-- <img
+                  *ngIf="workspace.is_active && (allowEdit || allowDelete)"
+                  [matMenuTriggerFor]="moreMenu"
+                  (click)="$event.stopPropagation()"
+                  src="assets/images/dots.svg"
+                  class="dots"
+                /> -->
+              </mat-card-header>
+
+              <div class="workspace-bottom">
+                <div class="workspace-bottom-text">
+                  <a
+                    [ngStyle]="(workspace?.project_count || 0) > 0 ? {} : { cursor: 'not-allowed' }"
+                    class="mat-body-2 workspace-link"
+                    (click)="(workspace?.project_count || 0) > 0 ? redirectToProjects(workspace?.id) : $event.preventDefault()"
+                    >Projects :&nbsp;
+                    <span> {{ workspace?.project_count || 0 }}</span>
+                  </a>
+                  <a
+                    [ngStyle]="(workspace?.workspace_total_task || 0) > 0 ? {} : { cursor: 'not-allowed' }"
+                    (click)="(workspace?.workspace_total_task || 0) > 0 ? redirectToTask(workspace) : $event.preventDefault()"
+                    class="mat-body-2 workspace-link"
+                    >Task :&nbsp; <span>{{ workspace?.workspace_total_task || 0 }}</span>
+                  </a>
+                </div>
+                <div class="bottom-toggle">
+                  <img class="dots" *ngIf="allowEdit" (click)="editWorkspace(workspace?.id)" src="assets/images/pencil.svg" />
+                  <!-- <div *ngIf="userRole == 'Super Admin'" class="side-toggle-blk">
+                    <mat-slide-toggle
+                      color="primary"
+                      (change)="updateWorkspaceStatus(workspace.id)"
+                      [checked]="workspace.is_active"
+                    ></mat-slide-toggle>
+                  </div> -->
+                </div>
+              </div>
+            </mat-card>
+          </div>
+        </div>
+        <ng-container *ngIf="showSpinner">
+          <div [mainAppSpinner]="showSpinner"></div>
+        </ng-container>
+      </div>
+
+      <ng-template #noRecordFound>
+        <div class="no-rerocord-section" *ngIf="!showSpinner">
+          {{ searchWorkspaceControl?.value ? 'No records found.' : 'There are currently no assigned workspace.' }}
+        </div>
+      </ng-template>
+    </mat-card>
+  </div>
+</div>

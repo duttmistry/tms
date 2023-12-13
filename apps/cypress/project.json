@@ -1,0 +1,25 @@
+{
+  "name": "cypress",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/cypress/src",
+  "projectType": "application",
+  "targets": {
+    "e2e": {
+      "executor": "@nrwl/cypress:cypress",
+      "options": {
+        "cypressConfig": "apps/cypress/cypress.config.ts",
+        "baseUrl": "cypress-tests:5606",
+        "testingType": "e2e"
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/cypress/**/*.js"]
+      }
+    }
+  },
+  "tags": [],
+  "implicitDependencies": ["angular-main-app"]
+}

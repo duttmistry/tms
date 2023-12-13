@@ -1,0 +1,93 @@
+<div class="container-wrapper">
+    <div class="group-by-wrapper task-right-filter">
+        <mat-form-field appearance="fill" [ngClass]="projectSelect.panelOpen ? 'arrow-up' : 'arrow-down'" class="small-dropdown">
+            <mat-select #projectSelect [formControl]="selectedProjectControl" (selectionChange)="onProjectSelection()" placeholder="Project">
+                <input matInput [(ngModel)]="searchValue" placeholder="Search Projects" />
+                <mat-select-trigger><span class="group-label">Projects : </span>{{ getSelectedProjectName() }}</mat-select-trigger>
+                <mat-option *ngFor="let item of projectsData | searchFilter : searchValue" [value]="item.id">{{ item?.name }}</mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <!-- Material Date Picker - From Date -->
+        <mat-form-field class="small-dropdown">
+            <mat-label>From Date</mat-label>
+            <input matInput [matDatepicker]="fromDatePicker" [formControl]="fromDateControl" (click)="fromDatePicker.open()" [max]="maxDate" readonly />
+            <mat-datepicker #fromDatePicker></mat-datepicker>
+        </mat-form-field>
+
+        <!-- Material Date Picker - To Date -->
+        <mat-form-field class="small-dropdown">
+            <mat-label>To Date</mat-label>
+            <input matInput [matDatepicker]="toDatePicker" [formControl]="toDateControl" (click)="toDatePicker.open()" [max]="maxDate" readonly />
+            <mat-datepicker #toDatePicker></mat-datepicker>
+        </mat-form-field>
+
+        <button color="primary" class="next" (click)="onSave()" [disabled]="exportingData">Save</button>
+
+        <button color="primary" class="next" (click)="exportUserReports()" [disabled]="exportingData">
+      <span *ngIf="exportingData; else exportButtonContent">
+        <mat-spinner diameter="20" color="white"></mat-spinner>
+        <!-- You can customize the loader here -->
+      </span>
+      <ng-template #exportButtonContent>
+        <ng-container> Export Report</ng-container>
+      </ng-template>
+    </button>
+
+        <!-- <button color="primary" class="next" *ngIf="isLinkVisible" (click)="redirectToLink()">Click Here To Download</button> -->
+    </div>
+    <ng-container *ngIf="userReportData && userReportData.length > 0; else noDataFound">
+        <ng-container *ngFor="let user of userReportData">
+            <div class="task-list-table-outer">
+                <mat-accordion togglePosition="before" class="task-wrap title">
+                    <mat-expansion-panel #taskGroupPanel [expanded]="false">
+                        <mat-expansion-panel-header *ngIf="!taskGroupPanel.expanded" class="task-wrap-header" (click)="getUserWiseTaskReportList(user)">
+                            <span class="heading">{{ user?.user_name }} <span>({{ user?.total_time || 0 }})</span>
+                            </span>
+                        </mat-expansion-panel-header>
+                        <table class="task-list-table-wrapper">
+                            <tr>
+                                <th class="title title-wrapper">
+                                    <mat-expansion-panel-header *ngIf="taskGroupPanel.expanded" class="task-wrap-header">
+                                        <span class="heading">{{ user?.user_name }} <span>({{ user?.total_time || 0 }})</span></span>
+                                    </mat-expansion-panel-header>
+                                </th>
+                                <th class="subtask-wrapper">Date</th>
+                                <th class="priority-wrapper">Title</th>
+                                <th class="project-wrapper">Description</th>
+                                <th class="project-wrapper">Person</th>
+                                <th class="project-wrapper">Assign By</th>
+                                <th class="project-wrapper">Time</th>
+                            </tr>
+                            <tbody *ngIf="!showSpinner; else showSpinnerSection">
+                                <ng-container *ngIf="user.data && user.data.length > 0; else noDataFound">
+                                    <tr *ngFor="let userData of user.data">
+                                        <td></td>
+                                        <td>{{ userData?.start_time | date : 'dd/MM/yyyy' || '--' }}</td>
+                                        <td>{{ userData?.task?.title || '--' }}</td>
+                                        <td [innerHTML]="userData?.task?.description || '--'"></td>
+                                        <td>{{ userData?.user_name || '--' }}</td>
+                                        <td>{{ userData?.task?.assignedByUser?.first_name || '--' }}</td>
+                                        <td>{{ calculateDuration(userData?.start_time, userData?.end_time) }}</td>
+                                    </tr>
+                                </ng-container>
+                            </tbody>
+                        </table>
+                    </mat-expansion-panel>
+                </mat-accordion>
+            </div>
+        </ng-container>
+    </ng-container>
+    <ng-template #noDataFound>
+        <div class="table-responsive" *ngIf="!isNoRecordFound && showSpinner === false; else showSpinnerSection">
+            <mat-list cdkDropList class="example-list norecordFound mat-elevation-z2">
+                <mat-list-item class="example-box">
+                    <p class="no-records">No records found</p>
+                </mat-list-item>
+            </mat-list>
+        </div>
+    </ng-template>
+    <ng-template #showSpinnerSection>
+        <div mat-row [mainAppSpinner]="showSpinner"></div>
+    </ng-template>
+</div>

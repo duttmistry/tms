@@ -1,0 +1,16 @@
+<div class="container-wrapper team-leave">
+  <mat-card>
+    <div class="workspace-blk workspace-border">
+      <strong><a routerLink="/leave">Team Leaves</a></strong>
+      <div routerLink="/leave" class="tertiary-button">Back</div>
+    </div>
+    <ng-container>
+      <main-app-team-leave
+        [allEmployee]="allEmployee"
+        [allUsers]="allUsers"
+        [initialCalendarDate]="initialCalendarDate"
+        (onCalendarMonthChangeEvent)="getMonthWiseCalendarData($event)"
+      ></main-app-team-leave>
+    </ng-container>
+  </mat-card>
+</div>

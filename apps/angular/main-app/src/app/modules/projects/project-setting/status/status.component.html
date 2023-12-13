@@ -1,0 +1,118 @@
+<div class="flex-parent-element status-project">
+    <div class="role-header">
+        <p class="pr-form-top-header">Create Sub Status</p>
+    </div>
+    <div class="status-wrap">
+        <div class="flex-child-element">
+            <div *ngFor="let state of projectState" class="status-back">
+                <div class="status-flex">
+                    <input disabled #colorTmp class="color-box" [style.background]="state.color" [style]="'cursor:default !important'" />
+                    <!-- [(colorPicker)]="defaultColor"
+            (colorPickerChange)="onColorPickerChange(state.value, $event)"
+            [cpCancelButton]="false"
+            [cpPresetColors]="presetColors"
+            [cpAddColorButton]="false"
+            [cpAddColorButtonClass]="'btn btn-primary btn-xs'" -->
+
+                    <div class="no-border">
+                        <span>
+              <!-- [style.color]="state.color + '!important'" -->
+              {{ state.title }}
+            </span>
+
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" (click)="onAddMoreStatusClick(state.value)" class="add-button">
+              <path d="M6.66699 10H13.3337" stroke="#86969D" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+              <path d="M10 13.3332V6.6665" stroke="#86969D" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+              <path
+                d="M7.50033 18.3332H12.5003C16.667 18.3332 18.3337 16.6665 18.3337 12.4998V7.49984C18.3337 3.33317 16.667 1.6665 12.5003 1.6665H7.50033C3.33366 1.6665 1.66699 3.33317 1.66699 7.49984V12.4998C1.66699 16.6665 3.33366 18.3332 7.50033 18.3332Z"
+                stroke="#86969D"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+                    </div>
+
+                    <!-- <mat-form-field class="no-border">
+            <input matInput #inputTmp [value]="state.title" [style.color]="state.color + '!important'" [disabled]="true" readonly />
+            <mat-icon matSuffix (click)="onAddMoreStatusClick(state.value)" class="add-button"> add </mat-icon>
+          </mat-form-field> -->
+                </div>
+
+                <form [formGroup]="statusForm" class="no-record" (keydown.enter)="$event.preventDefault()">
+                    <ng-container *ngIf="_statusForm.controls && _statusForm.controls.length > 0; else noRecordsTemplate">
+                        <div *ngFor="let formGroupObject of _statusForm.controls; let i = index" [formGroup]="formGroupObject">
+                            <ng-container *ngIf="formGroupObject.get('state').value == state.value">
+                                <div class="close-icon-wrapper">
+                                    <mat-form-field class="medium-height-wrapper input-field-wrapper">
+                                        <input matInput #inputTmp (blur)="onStatusAddOrUpdate(formGroupObject)" formControlName="status" (keyup.enter)="onStatusAddOrUpdate(formGroupObject); inputTmp.blur()" />
+                                        <!-- <button *ngIf="!formGroupObject.get('id').value" (click)="onCancelStatus(formGroupObject, i)">
+                    <img src="assets/images/cross.png" alt="cross" class="cross-icon" />
+                  </button> -->
+                                        <!-- <svg
+                    *ngIf="!formGroupObject.get('id').value"
+                    (click)="onCancelStatus(formGroupObject, i)"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 16 16"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="filter-close"
+                  >
+                    <path
+                      d="M8.00065 1.3335C4.32732 1.3335 1.33398 4.32683 1.33398 8.00016C1.33398 11.6735 4.32732 14.6668 8.00065 14.6668C11.674 14.6668 14.6673 11.6735 14.6673 8.00016C14.6673 4.32683 11.674 1.3335 8.00065 1.3335ZM10.2407 9.5335C10.434 9.72683 10.434 10.0468 10.2407 10.2402C10.1407 10.3402 10.014 10.3868 9.88732 10.3868C9.76065 10.3868 9.63398 10.3402 9.53399 10.2402L8.00065 8.70683L6.46732 10.2402C6.36732 10.3402 6.24065 10.3868 6.11398 10.3868C5.98732 10.3868 5.86065 10.3402 5.76065 10.2402C5.56732 10.0468 5.56732 9.72683 5.76065 9.5335L7.29398 8.00016L5.76065 6.46683C5.56732 6.2735 5.56732 5.9535 5.76065 5.76016C5.95398 5.56683 6.27398 5.56683 6.46732 5.76016L8.00065 7.2935L9.53399 5.76016C9.72732 5.56683 10.0473 5.56683 10.2407 5.76016C10.434 5.9535 10.434 6.2735 10.2407 6.46683L8.70732 8.00016L10.2407 9.5335Z"
+                      fill="#86969D"
+                    />
+                  </svg>-->
+
+                                        <button *ngIf="formGroupObject.get('id').value" [ngClass]="deleteIconDisabled(formGroupObject) ? 'workspace-disable' : ''" [disabled]="deleteIconDisabled(formGroupObject)" (click)="openDeleteStatusDialog($event, formGroupObject)">
+                      <!-- <img src="assets/images/trash.svg"  draggable="false"/> -->
+                      <mat-icon
+                        ><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                          <path
+                            d="M17.5 4.98356C14.725 4.70856 11.9333 4.56689 9.15 4.56689C7.5 4.56689 5.85 4.65023 4.2 4.81689L2.5 4.98356"
+                            stroke="#FF5959"
+                            stroke-width="1.5"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          />
+                          <path
+                            d="M7.08301 4.1415L7.26634 3.04984C7.39967 2.25817 7.49967 1.6665 8.90801 1.6665H11.0913C12.4997 1.6665 12.608 2.2915 12.733 3.05817L12.9163 4.1415"
+                            stroke="#FF5959"
+                            stroke-width="1.5"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          />
+                          <path
+                            d="M15.7087 7.6167L15.167 16.0084C15.0753 17.3167 15.0003 18.3334 12.6753 18.3334H7.32533C5.00033 18.3334 4.92533 17.3167 4.83366 16.0084L4.29199 7.6167"
+                            stroke="#FF5959"
+                            stroke-width="1.5"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          />
+                          <path d="M8.6084 13.75H11.3834" stroke="#FF5959" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                          <path d="M7.91699 10.4165H12.0837" stroke="#FF5959" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                      </mat-icon>
+                    </button>
+                                        <mat-error *ngIf="formGroupObject.get('status')?.errors">
+                                            <ng-container *ngIf="formGroupObject.get('status').hasError('alreadyExists')">A Project Status with this title already exists.</ng-container>
+                                            <ng-container *ngIf="formGroupObject.get('status')?.errors?.['required']">Status is required.</ng-container>
+                                        </mat-error>
+                                    </mat-form-field>
+                                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" *ngIf="!formGroupObject.get('id').value" (click)="onCancelStatus(formGroupObject, i)" class="filter-close">
+                    <path
+                      d="M8.00065 1.3335C4.32732 1.3335 1.33398 4.32683 1.33398 8.00016C1.33398 11.6735 4.32732 14.6668 8.00065 14.6668C11.674 14.6668 14.6673 11.6735 14.6673 8.00016C14.6673 4.32683 11.674 1.3335 8.00065 1.3335ZM10.2407 9.5335C10.434 9.72683 10.434 10.0468 10.2407 10.2402C10.1407 10.3402 10.014 10.3868 9.88732 10.3868C9.76065 10.3868 9.63398 10.3402 9.53399 10.2402L8.00065 8.70683L6.46732 10.2402C6.36732 10.3402 6.24065 10.3868 6.11398 10.3868C5.98732 10.3868 5.86065 10.3402 5.76065 10.2402C5.56732 10.0468 5.56732 9.72683 5.76065 9.5335L7.29398 8.00016L5.76065 6.46683C5.56732 6.2735 5.56732 5.9535 5.76065 5.76016C5.95398 5.56683 6.27398 5.56683 6.46732 5.76016L8.00065 7.2935L9.53399 5.76016C9.72732 5.56683 10.0473 5.56683 10.2407 5.76016C10.434 5.9535 10.434 6.2735 10.2407 6.46683L8.70732 8.00016L10.2407 9.5335Z"
+                      fill="#86969D"
+                    />
+                  </svg>
+                                </div>
+                            </ng-container>
+                        </div>
+                    </ng-container>
+                    <ng-template #noRecordsTemplate>No Record(s) found</ng-template>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,24 @@
+<div class="section-menu-wrapper task-right-label-popup" [ngClass]="hasSelctedLables ? '' : 'empty-selection'">
+  <mat-list>
+    <div class="input-add-wrapper">
+      <mat-list-item class="input-wrapper">
+        <input tmsWorkspaceAutoFocusInput id="myInput" [placeholder]="placeHolder" [formControl]="labelFormControl" autocomplete="off" />
+        <mat-error *ngIf="labelFormControl.hasError('maxlength')">maximum length can be 25 characters allowed.</mat-error>
+      </mat-list-item>
+      <mat-list-item class="add-wrapper">
+        <!-- <ng-container *ngIf="isShowCreateLabelTemplate"> -->
+        <span [ngClass]="isShowCreateLabelTemplate ? '' : 'disable-item'" (click)="onSelectItem(labelFormControl.value)" class="icon-wrapper"
+          ><mat-icon>add</mat-icon>
+          <!--{{ messageToCreateNewItem || 'create item for ' }} {{ labelFormControl.value || '' }}--></span
+        >
+        <!-- </ng-container> -->
+      </mat-list-item>
+    </div>
+    <div class="section-dropdown-list-outer">
+      <mat-list-item class="section-dropdown-list" *ngFor="let item of filteredItems | async" (click)="onSelectItem(item)">
+        <span *ngIf="isIntaskList" class="label-name" [ngStyle]="{ color: item?.color?.color }"> {{ item.title }} </span>
+        <span *ngIf="!isIntaskList" class="label-name" [ngStyle]="{ 'background-color': item?.color?.bgColor }"> {{ item.title }} </span>
+      </mat-list-item>
+    </div>
+  </mat-list>
+</div>

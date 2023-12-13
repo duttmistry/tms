@@ -1,0 +1,22 @@
+@import 'apps/angular/main-app/src/variables';
+@import 'apps/angular/main-app/src/mixins';
+@import 'apps/angular/main-app/src/assets/fonts/fonts.scss';
+.super-admin {
+  text-align: center;
+  padding: 25px;
+  p {
+    font-size: 15px;
+    font-weight: 400;
+    margin-bottom: 15px;
+    color: $theme-font-color-black;
+    line-height: 20px;
+  }
+   ::ng-deep .mat-mdc-dialog-actions {
+    @include flex-justify-center;
+    padding: 0;
+    min-height: unset;
+  }
+  .mat-mdc-dialog-content {
+    padding: 0;
+  }
+}

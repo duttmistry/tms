@@ -1,0 +1,77 @@
+@import 'apps/angular/main-app/src/variables';
+@import 'apps/angular/main-app/src/mixins';
+@import 'apps/angular/main-app/src/assets/fonts/fonts';
+
+.report-table {
+  margin-top: 20px;
+  .report-table-wrap {
+    @include flex;
+    @include flex-align-center;
+    @include flex-justify-space-between;
+    margin-bottom: 20px;
+  }
+  .mat-mdc-form-field {
+    margin-bottom: 0;
+  }
+  .report-field {
+    @include flex;
+    gap: 15px;
+  }
+  ::ng-deep .mat-mdc-table .mdc-data-table__row {
+    height: 46px;
+  }
+  .table-align {
+    width: 50px;
+  }
+
+  .blue-text-position {
+    position: relative;
+    width: 300px;
+    .blue-text {
+      color: #0052cc;
+      text-decoration: underline;
+      font-size: $theme-main-small-font;
+      font-weight: 400;
+      line-height: 15px;
+      position: absolute;
+      right: 10px;
+      span {
+        margin-left: 10px;
+      }
+    }
+  }
+  .report-running {
+    position: relative;
+    width: 110px;
+
+    .report-running-img {
+      position: absolute;
+      right: 10px;
+    }
+  }
+  .red-running {
+    background-color: #ffeeee;
+  }
+}
+.report-input {
+  width: 93%;
+  border: 1px solid $theme-border-color-gray;
+  padding: 10px;
+  color: $theme-main-color-light;
+  font-size: $theme-main-small-font;
+  line-height: 17px;
+  outline: none;
+  @include flex;
+  @include flex-justify-center;
+  margin: 0 auto 10px;
+  border-radius: 5px;
+  font-family: $theme-main-font-family;
+}
+
+@media screen and (max-width: $extra-extra-large-device) {
+  .table-responsive {
+    table {
+      width: 1800px;
+    }
+  }
+}

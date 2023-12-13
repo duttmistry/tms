@@ -1,0 +1,23 @@
+<div class="container-wrapper">
+  <mat-card>
+    <div class="workspace-blk workspace-border">
+      <strong>Activity Reports</strong>
+      <div class="tertiary-button" routerLink="/reports">Back</div>
+    </div>
+    <main-app-tms-workspace-working-user-list
+      [loggedInUserId]="loggedInUserId"
+      (handleUserButtonClicked)="onUserButtonClicked($event)"
+      (taskStopButtonClicked)="stopTask()"
+    ></main-app-tms-workspace-working-user-list>
+    <div class="report-tabel-flex">
+      <main-app-tms-workspace-free-user-list
+        class="report-tabel-flex-item"
+        [loggedInUserId]="loggedInUserId"
+        (handleUserButtonClicked)="onUserButtonClicked($event)"
+      ></main-app-tms-workspace-free-user-list>
+      <main-app-tms-workspace-logged-out-user-list class="report-tabel-flex-item"></main-app-tms-workspace-logged-out-user-list>
+    </div>
+    <main-app-tms-workspace-not-logged-in-user-list></main-app-tms-workspace-not-logged-in-user-list>
+    <!-- <main-app-tms-workspace-on-leave-user-list></main-app-tms-workspace-on-leave-user-list> -->
+  </mat-card>
+</div>

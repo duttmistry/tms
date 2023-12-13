@@ -1,0 +1,86 @@
+<mat-sidenav-container class="example-container">
+  <mat-sidenav [ngStyle]="{ 'width.em': isSidenavOpened ? 16 : 0 }" #sidenav mode="side" opened="true" class="sidenav-blk">
+    <mat-nav-list style="display: flex; min-height: 100%; flex-direction: column; justify-content: space-between">
+      <ng-container>
+        <div>
+          <ng-container *ngIf="isSidenavOpened">
+            <div class="top-nav">
+              <mat-list-item *ngFor="let section of sidebarSection.sideBarFirstSection" routerLinkActive="active" [routerLink]="section.route">
+                <mat-icon
+                  *ngIf="section?.label == 'Notifications' && isNotification"
+                  style="position: absolute; margin-left: 13px; margin-bottom: 7px; color: red; font-size: 10px"
+                  >fiber_manual_record</mat-icon
+                >
+                <mat-icon><img [src]="section.imageSource" [alt]="section.imageAltText" class="img-circle" /></mat-icon>
+                <span>{{ section.label }}</span>
+              </mat-list-item>
+            </div>
+            <mat-divider></mat-divider>
+
+            <mat-expansion-panel
+              *ngIf="sidebarSection.sideBarSecondSection && sidebarSection.sideBarSecondSection.length > 0"
+              [class.mat-elevation-z0]="true"
+              [expanded]="isExpandedPenal"
+            >
+              <mat-expansion-panel-header> My Space </mat-expansion-panel-header>
+              <mat-list-item *ngFor="let section of sidebarSection.sideBarSecondSection" routerLinkActive="active" [routerLink]="section.route">
+                <mat-icon><img [src]="section.imageSource" [alt]="section.imageAltText" class="img-circle" /></mat-icon>
+                <span>{{ section.label }}</span>
+              </mat-list-item>
+            </mat-expansion-panel>
+
+            <mat-divider></mat-divider>
+
+            <mat-expansion-panel
+              *ngIf="sidebarSection.sideBarThirdSection && sidebarSection.sideBarThirdSection.length > 0"
+              [class.mat-elevation-z0]="true"
+              [expanded]="isExpandedPenal"
+            >
+              <mat-expansion-panel-header> Organization </mat-expansion-panel-header>
+              <mat-list-item *ngFor="let section of sidebarSection.sideBarThirdSection" routerLinkActive="active" [routerLink]="section.route">
+                <mat-icon><img [src]="section.imageSource" [alt]="section.imageAltText" class="img-circle" /></mat-icon>
+                <span>{{ section.label }}</span>
+              </mat-list-item>
+            </mat-expansion-panel>
+
+            <mat-divider></mat-divider>
+
+            <mat-expansion-panel
+              *ngIf="sidebarSection.sideBarFourthSection && sidebarSection.sideBarFourthSection.length > 0"
+              [class.mat-elevation-z0]="true"
+              [expanded]="isExpandedPenal"
+            >
+              <mat-expansion-panel-header> Administration </mat-expansion-panel-header>
+              <mat-list-item *ngFor="let section of sidebarSection.sideBarFourthSection" routerLinkActive="active" [routerLink]="section.route">
+                <mat-icon><img [src]="section.imageSource" [alt]="section.imageAltText" class="img-circle" /></mat-icon>
+                <span>{{ section.label }}</span>
+              </mat-list-item>
+            </mat-expansion-panel>
+
+            <mat-divider *ngIf="sidebarSection.sideBarFourthSection && sidebarSection.sideBarFourthSection.length > 0"></mat-divider>
+
+            <div class="help-class">
+              <mat-list-item *ngFor="let section of sidebarSection.sideBarFifthSection" routerLinkActive="active" [routerLink]="section.route">
+                <mat-icon><img [src]="section.imageSource" [alt]="section.imageAltText" class="img-circle" /></mat-icon>
+                <span>{{ section.label }}</span>
+              </mat-list-item>
+            </div>
+          </ng-container>
+        </div>
+
+        <div *ngIf="appVersion" class="footer">
+          <footer>{{ 'v' + appVersion }}</footer>
+        </div>
+      </ng-container>
+    </mat-nav-list>
+  </mat-sidenav>
+
+  <mat-sidenav-content class="example-sidenav-content" [style]="isSidenavOpened ? 'margin-left:255px' : 'margin-left:0px'">
+    <button (click)="toggleSidenav()" [ngClass]="isSidenavOpened ? 'side-button-toggle' : 'callspaan-open'">
+      <img src="assets/images/side-arrow.svg" alt="homepage" *ngIf="isSidenavOpened" />
+      <img src="assets/images/side-menu1.svg" alt="homepage" *ngIf="!isSidenavOpened" />
+    </button>
+
+    <ng-content></ng-content>
+  </mat-sidenav-content>
+</mat-sidenav-container>

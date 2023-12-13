@@ -1,0 +1,361 @@
+@import 'apps/angular/main-app/src/variables';
+@import 'apps/angular/main-app/src/mixins';
+@import 'apps/angular/main-app/src/assets/fonts/fonts';
+.cursor-not-allowed {
+  cursor: not-allowed;
+}
+
+.disabled-report {
+  pointer-events: none;
+}
+
+.error,
+::ng-deep .error,
+mat-error {
+  font-family: $theme-main-font-family;
+  color: $theme-color-error;
+  font-size: $theme-main-small-font;
+  margin-top: 8px;
+  display: block;
+  font-weight: 400;
+  letter-spacing: 0;
+  margin-top: 4px !important;
+}
+
+.change-form {
+  .common-width {
+    width: 384px;
+    display: block;
+  }
+  .mat-mdc-form-field {
+    margin-bottom: 0;
+  }
+  .blue-button-wrapper.mat-mdc-form-field {
+    background-color: $theam-color-blue;
+    border: 0 !important;
+    &:after {
+      background: url('data:image/svg+xml,<svg width="14" height="8" viewBox="0 0 14 8" fill="none" xmlns="http://www.w3.org/2000/svg"><path id="Vector 4" d="M1 1L6.82322 6.82322C6.92085 6.92085 7.07915 6.92085 7.17678 6.82322L13 1" stroke="%23fff" stroke-width="2" stroke-linecap="round"/></svg>');
+      background-repeat: no-repeat !important;
+      background-position: center center;
+    }
+  }
+  .blue-button-wrapper.mat-mdc-form-field.mat-focused:after {
+    background: url('data:image/svg+xml,<svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="vuesax/linear/arrow-down"><g id="arrow-down"><path id="Vector" d="M14.9401 11.2876L10.0501 6.3976C9.47256 5.8201 8.52756 5.8201 7.95006 6.3976L3.06006 11.2876" stroke="%23fff" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/></g></g></svg>');
+  }
+}
+
+.task-add-wrap {
+  margin-top: 20px;
+  display: flex;
+  .project-dropdown-wrapper {
+    .mat-focused {
+      border: 1px solid #0052CC !important;
+    }
+  }
+  .comon-gap-wrapper {
+    margin-bottom: 20px;
+    margin-right: 20px !important;
+    mat-form-field {
+      .mat-mdc-text-field-wrapper {
+        justify-content: center;
+        display: flex;
+        .mat-mdc-form-field-flex {
+          .dropdown-border-input-wrapper {
+            display: flex;
+          }
+        }
+      }
+      &::after {
+        right: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+      }
+    }
+  }
+  .task-left {
+    width: 73%;
+    .task-name-wrapper {
+      position: relative;
+      .error {
+        position: absolute;
+      }
+      .input-field {
+        font-family: $theme-main-font-family;
+        height: 50px;
+        padding: 18px 12px;
+        border-radius: $button-radius;
+        border: 1px solid $theme-border-color-gray;
+        font-weight: 400 !important;
+        font-size: $theme-main-medium-font !important;
+        line-height: 18px !important;
+        &::placeholder {
+          font-weight: 400 !important;
+          font-size: $theme-main-medium-font !important;
+          line-height: 18px !important;
+          color: $theme-main-color-light;
+        }
+        &:focus-visible {
+          outline: none;
+        }
+      }
+    }
+    .task-type-dropdown-wrapper {
+      padding: 0;
+    }
+    .attached-document-wrapper {
+      .common-width {
+        width: 100%;
+        .dropzone {
+          max-width: 366px;
+          width: 100%;
+        }
+      }
+      .filezone {
+        padding: 0;
+        column-gap: 10px;
+        .filezone-file {
+          max-width: 366px;
+          margin-top: 10px;
+        }
+      }
+    }
+    .task-activities {
+      max-width: 783px;
+       ::ng-deep .ql-toolbar.ql-snow+.ql-container.ql-snow {
+        height: 59px;
+         ::ng-deep .ql-editor {
+          padding: 19px 15px;
+           ::ng-deep pre.ql-syntax {
+            color: #0052cc;
+            background-color: transparent;
+            border: 0;
+            font-family: $theme-main-font-family;
+            font-size: $theme-main-large-font;
+            margin-top: 8px;
+            margin-bottom: 0;
+          }
+        }
+      }
+       ::ng-deep .mat-mdc-tab-body.mat-mdc-tab-body-active {
+        overflow: unset !important;
+        min-height: 206px;
+      }
+       ::ng-deep .mat-mdc-tab-body-content {
+        margin-top: 15px;
+      }
+       ::ng-deep .mat-mdc-tab-header {
+        position: relative;
+        padding-left: 50px;
+        &:before {
+          content: 'Show:';
+          position: absolute;
+          font-size: 13px;
+          color: rgba(0, 0, 0, 50%);
+          left: 0;
+          top: 5px;
+        }
+      }
+       ::ng-deep .mdc-button {
+        color:$theme-main-color;
+        font-weight: 500;
+        font-size: $theme-main-medium-font;
+        @include flex;
+        @include flex-align-center;
+        background-color: #3333661a;
+        cursor: pointer;
+        line-height: 16px;
+        @include flex-justify-center;
+        box-shadow: unset !important;
+        letter-spacing: 0;
+        // margin-left: auto;
+        margin-top: 10px;
+        float: right;
+        padding: 0 10px;
+        height: 32px;
+      }
+    }
+  }
+}
+
+.task-right-dropdown-wrapper {
+  .dropdown-wrapper {
+    margin-bottom: 20px;
+  }
+}
+
+.change-form .task-right-label-wrapper {
+  .mat-mdc-form-field {
+    width: 100% !important;
+  }
+}
+
+.task-label-outer {
+  display: flex;
+  gap: 2px;
+  align-items: center;
+  .label-wrapper {
+    color: $theme-main-extra-color-dark;
+    font-size: $theme-main-small-font;
+    font-weight: 400;
+    line-height: 16px;
+    padding: 3px 10px;
+    border-radius: 20px;
+  }
+  .count {
+    background-color: #f3f3f3;
+    border-radius: 20px;
+    color: $theme-main-extra-color-dark;
+    padding: 1px 10px;
+    height: 22px;
+    font-size: $theme-main-small-font;
+    line-height: 20px;
+  }
+}
+
+@media screen and (max-width: $extra-extra-large) {
+  .task-add-wrap {
+    display: flex;
+    gap: 2%;
+    .task-left {
+      width: 65%;
+    }
+    .task-right {
+      width: 33%;
+    }
+  }
+}
+
+.custom-block-wrapper {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  row-gap: 0;
+  .comon-gap-wrapper {
+    width: 383px;
+    p {
+      margin: 0;
+    }
+    textarea {
+      width: 384px !important;
+      margin-top: 0;
+      border: 1px solid $theme-border-color-gray !important;
+      border-radius: $button-radius;
+      color: $theme-font-color-black;
+      font-family: $theme-main-font-family;
+      padding: 10px;
+      display: block;
+      box-sizing: border-box;
+      height: 70px;
+      &:hover {
+        background-color: rgba(0, 0, 0, 0.04);
+      }
+      &:focus {
+        border: 1px solid #333366 !important;
+      }
+      &:focus-visible {
+        outline: none;
+      }
+    }
+  }
+}
+
+.custom-group-wrapper {
+  margin-top: 20px;
+}
+
+.ext-link {
+  display: block;
+  word-break: break-all;
+  padding-right: 15px !important;
+}
+
+.comments-btn {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.priority-blk-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  border: 1px solid transparent;
+}
+
+.set-pri-block {
+  border: 1px solid transparent;
+}
+
+.priority-blk-wrapper.focus-details,
+.set-pri-block.focus-details {
+  border: 1px solid #0052cc !important;
+  border-radius: 5px !important;
+}
+
+.editor-container {
+  position: relative;
+  /* Set the container to a relative position */
+  display: inline-block;
+  /* Allow the container to shrink to its content */
+  width: 100% !important;
+}
+
+.quill-editor {
+  width: 100%;
+  /* Ensure the Quill editor takes up the entire container */
+  padding: 8px 8px 8px 0;
+  /* Add padding for spacing */
+  min-height: 50px;
+}
+
+.resize-handle {
+  position: absolute;
+  /* Set the icon to an absolute position within the container */
+  bottom: 0;
+  /* Position it at the bottom */
+  right: 0;
+  /* Position it at the right */
+  cursor: n-resize;
+  /* Use the col-resize cursor to indicate resizing */
+}
+
+.resize-icon {
+  font-size: 18px;
+  margin-right: 7px;
+  transform: rotate(133deg);
+  color: #ccc;
+}
+
+.user-indication {
+  width: 26px !important;
+  height: 26px !important;
+  border-width: 2px !important;
+  border-style: solid !important;
+  border-color: white !important;
+}
+
+.user-wfh {
+  border-color: orange !important;
+}
+
+.user-wfo {
+  border-color: green !important;
+}
+
+.user-not-loggedIn {
+  border-color: grey !important;
+}
+
+.arrow-status {
+  .arrow-down::after {
+    background-color: grey !important;
+    /* defines the background color of the image */
+    background: none;
+    -webkit-mask: url('data:image/svg+xml,<svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="vuesax/linear/arrow-down"><g id="arrow-down"><path id="Vector" d="M14.9401 6.7124L10.0501 11.6024C9.47256 12.1799 8.52756 12.1799 7.95006 11.6024L3.06006 6.7124" stroke="%2386969D" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/></g></g></svg>') no-repeat center / contain;
+  }
+  .arrow-down-white::after {
+    background-color: white !important;
+    /* defines the background color of the image */
+  }
+}

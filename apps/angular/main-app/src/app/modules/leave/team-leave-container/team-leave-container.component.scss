@@ -1,0 +1,155 @@
+@import 'apps/angular/main-app/src/variables';
+@import 'apps/angular/main-app/src/mixins';
+@import 'apps/angular/main-app/src/assets/fonts/fonts.scss';
+
+h2 {
+  margin: 0;
+  font-size: $theme-main-large-font;
+}
+
+ul {
+  margin: 0;
+  padding: 0 0 0 1.5em;
+}
+
+li {
+  margin: 1.5em 0;
+  padding: 0;
+}
+
+b {
+  margin-right: 3px;
+}
+.team-leave {
+  min-height: 100vh;
+  mat-card {
+    padding: 0;
+    box-shadow: unset;
+  }
+  .workspace-border {
+    margin: 25px 15px;
+    padding-top: 0;
+    padding-bottom: 22px;
+  }
+  .fc {
+    max-width: 100%;
+    margin: 0 auto;
+  }
+
+  .team-right {
+    @include flex;
+    @include flex-align-center;
+    @include flex-justify-end;
+    width: 100%;
+  }
+  ::ng-deep .fc-h-event .fc-event-main {
+    padding-left: 0;
+    div {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 55px;
+    }
+  }
+  ::ng-deep .fc-scrollgrid-sync-inner {
+    padding: 0;
+    font-size: 15px;
+  }
+  .leave-img {
+    & div {
+      @include flex;
+      @include flex-align-center;
+      margin-left: 60px;
+      position: relative;
+      color: $theme-font-color-black;
+      &::before {
+        position: absolute;
+        content: ' ';
+        right: -31px;
+        width: 0.5px;
+        height: 30px;
+        background-color: $theme-border-color-gray;
+        top: 50%;
+        transform: translate(-50%, -50%);
+      }
+      img {
+        margin-right: 10px;
+      }
+    }
+  }
+  ::ng-deep .fc-datagrid-header {
+    // width: 240px !important;
+    // min-width: 240px;
+    tr {
+      background-color: $theme-color-white !important;
+    }
+  }
+  ::ng-deep .fc-scrollgrid-liquid {
+    tbody {
+      .fc-scroller-harness {
+        background-color: $card-background;
+      }
+    }
+  }
+  ::ng-deep .fc-timeline-lane-frame {
+    height: 59px !important;
+  }
+  .leave-img div:last-child::before {
+    display: none;
+  }
+  .mat-mdc-select {
+    margin-top: 10px !important;
+  }
+  ::ng-deep .mat-mdc-select-arrow {
+    margin-top: 0 !important;
+  }
+}
+// ::ng-deep .fc-datagrid-header {
+//   ::ng-deep .fc .fc-datagrid-cell-cushion {
+//     padding: 0;
+//   }
+//   ::ng-deep .fc-scrollgrid-sync-inner {
+//     font-size: 20px;
+//   }
+// }
+
+@media screen and (max-width: $extra-large-device) {
+  .team-leave {
+    .team-right {
+      justify-content: center;
+      margin-bottom: 35px;
+    }
+    .leave-img {
+      width: initial !important;
+      & div {
+        margin-right: 60px;
+        margin-left: 0;
+      }
+    }
+    .leave-img div:last-child {
+      margin-right: 0;
+    }
+    ::ng-deep .fc .fc-toolbar.fc-header-toolbar {
+      top: 89px;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+  }
+}
+
+@media screen and (max-width: $lerge-device) {
+  .team-leave {
+    .leave-img {
+      & div {
+        margin-right: 20px;
+        &::before {
+          right: -11px;
+        }
+        img {
+          height: 20px !important;
+          width: 20px !important;
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,91 @@
+@import 'apps/angular/main-app/src/variables';
+@import 'apps/angular/main-app/src/mixins';
+@import 'apps/angular/main-app/src/assets/fonts/fonts.scss';
+.timing-history {
+  .profile-blk {
+    @include flex;
+    @include flex-align-center;
+    justify-content: flex-end;
+    gap: 15px;
+    margin: 25px 0 20px;
+    .mat-mdc-form-field {
+      margin-bottom: 0;
+      width: 250px;
+    }
+  }
+  .mat-mdc-header-row {
+    min-height: 35px !important;
+    background-color: $theme-bg-color-drawer-container !important;
+    border-radius: 5px;
+    .mdc-data-table__header-cell {
+      padding: 0 10px;
+      font-size: $theme-main-small-font !important;
+      font-weight: 400 !important;
+      border-right: 1px solid $theme-border-color-gray;
+      &:last-child {
+        border-right: unset;
+      }
+    }
+  }
+  .mat-mdc-cell {
+    padding: 0 10px;
+    font-size: $theme-main-small-font !important;
+    font-weight: 400 !important;
+    border-right: 1px solid $theme-border-color-gray;
+    color: $theme-font-color-black;
+    word-break: break-all;
+    &:last-child {
+      border-right: unset;
+    }
+  }
+   ::ng-deep .mat-mdc-select-value {
+    font-size: 13px;
+  }
+}
+
+.timing-history-count {
+  justify-content: end;
+  // margin-top: 15px;
+}
+
+.user-name {
+  margin: 10px 0px;
+}
+
+.user-info {
+  font-size: $theme-main-small-font;
+  margin-top: 20px;
+  @include flex;
+  @include flex-justify-space-between;
+  .user-info-flex {
+    @include flex;
+    @include flex-align-center;
+    gap: 15px;
+    span {
+      font-size: 18px;
+      line-height: 21px;
+      font-weight: 600;
+      color: $theme-font-color-black;
+      margin-bottom: 3px;
+      display: block;
+    }
+    p {
+      font-size: 16px;
+      line-height: 19px;
+      font-weight: 400;
+      color: $theme-main-color-light;
+      font-style: italic;
+      margin: 0;
+    }
+    img {
+      width: 75px;
+      border-radius: 50%;
+      height: 75px;
+      object-fit: cover;
+    }
+  }
+}
+
+.user-detail-divider {
+  margin-top: 20px;
+}

@@ -1,0 +1,47 @@
+<div class="timing-config">
+    <div>
+        <form class="example-form" #form="ngForm" [formGroup]="timingConfigForm">
+            <p class="pr-form-top-header">Total working time</p>
+            <div class="confi-form">
+                <mat-form-field class="medium-height-wrapper input-field-wrapper">
+                    <mat-label>Total working time </mat-label>
+                    <input matInput formControlName="dailyHours" placeholder="HH:MM" />
+                    <mat-icon matSuffix>access_time</mat-icon>
+                    <mat-error *ngIf="timingConfigForm.get('dailyHours')?.errors?.['pattern']"> Allowed format - hh:mm </mat-error>
+                </mat-form-field>
+            </div>
+            <mat-divider class="divider-top"></mat-divider>
+            <p class="pr-form-top-header">Threshold login time</p>
+
+            <div class="confi-form-late-arrival">
+                <mat-form-field class="medium-height-wrapper input-field-wrapper">
+                    <mat-label> Threshold login time </mat-label>
+                    <input matInput formControlName="lateArrivalThreshold" placeholder="HH:MM" />
+                    <mat-icon matSuffix>access_time</mat-icon>
+                    <mat-error *ngIf="timingConfigForm.get('lateArrivalThreshold')?.errors?.['pattern']"> Allowed format - hh:mm </mat-error>
+                </mat-form-field>
+                <!-- <button  color="primary" class="next" type="submit" (click)="onSave()">Save</button> -->
+            </div>
+            <mat-divider class="divider-bottom"></mat-divider>
+
+            <p class="pr-form-top-header">Working Days</p>
+            <div class="tming-form-control-section" *ngFor="let item of weekOfDayData">
+                <div class="days-label">
+                    <mat-label>{{ item.day }}</mat-label>
+                </div>
+                <div class="days-off">
+                    <mat-button-toggle-group formControlName="{{ item.formControlName }}">
+                        <div *ngFor="let opt of item.option" [ngClass]="opt.value == false ? 'red-check' : 'green-check'">
+                            <mat-button-toggle [value]="opt.value">{{ opt.label }}</mat-button-toggle>
+                        </div>
+                    </mat-button-toggle-group>
+                </div>
+            </div>
+            <mat-divider class="divider-bm"></mat-divider>
+            <div class="button-group btn-flex">
+                <button color="primary" class="next primary-button" type="submit" (click)="onSave()">Save</button>
+                <button (click)="onCancel()" class="cancel secondary-button">Cancel</button>
+            </div>
+        </form>
+    </div>
+</div>

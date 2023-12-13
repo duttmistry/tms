@@ -1,0 +1,91 @@
+<div class="container-wrapper notification-wrap">
+    <div class="container-inner">
+        <mat-card class="container-child">
+            <div class="workspace-blk workspace-border">
+                <strong>Notifications</strong>
+            </div>
+            <div class="notification">
+                <div class="notification-item task-notification">
+                    <h2 class="pr-form-top-header">Task Notifications</h2>
+                    <p class="notification-subline">Efficiency at Your Fingertips: Streamlined Task Notifications for Seamless Productivity.</p>
+                    <ng-container *ngIf="showSpinner">
+                        <div [mainAppSpinner]="showSpinner"></div>
+                    </ng-container>
+                    <ng-container *ngIf="TaskNotificatiionData && TaskNotificatiionData?.length > 0 && !showSpinner; else noNotificationYet" style="margin-top: 12px">
+                        <div (click)="redirectToTaskPage(notification)" *ngFor="let notification of TaskNotificatiionData; let rowNo = index" class="notification-inner" [ngClass]="rowNo === TaskNotificatiionData?.length - 1 ? 'last-row-notification' : ''">
+                            <div class="notification-border-wrapper">
+                                <div class="notification-image">
+                                    <img #img (error)="img.src = 'assets/images/default.png'" class="img-circle" [src]="_base_url + notification.employeeImage" alt="" matTooltip="{{ notification?.action_user }}" />
+                                </div>
+                                <div class="notification-border">
+                                    <p *ngIf="
+                      notification?.notificationTitleSplitted[0]?.length > 0 &&
+                        notification?.notificationTitleSplitted[1]?.length > 0 &&
+                        notification?.notificationTitleSplitted[2]?.length > 0;
+                      else nonotificationTitleSplitted
+                    ">
+                                        <span class="notification-dark">{{ notification?.notificationTitleSplitted[0] }}</span>
+                                        <span class="notification-light">{{ notification?.notificationTitleSplitted[1] }}</span>
+                                        <span class="notification-dark">{{ notification?.notificationTitleSplitted[2] }}</span>
+                                    </p>
+                                    <ng-template #nonotificationTitleSplitted>
+                                        <p>{{ notification?.notificationTitle }}</p>
+                                    </ng-template>
+                                    <span class="notification-time">
+                    {{ notification.time }}
+                  </span>
+                                </div>
+                            </div>
+                        </div>
+                    </ng-container>
+
+                    <span *ngIf="TaskNotificatiionData?.length < notificationTasksCount && !showSpinner" (click)="onViewMoreTask()" class="viewmore">View All</span
+          >
+        </div>
+
+        <div class="notification-item">
+          <h2 class="pr-form-top-header" style="margin-bottom: 0px">Leave Notifications</h2>
+          <p style="font-size: 11px; margin-bottom: 20px">Empowering Collaboration: Leave Notifications to Keep Your Team Informed and Organized.</p>
+          <ng-container *ngIf="showSpinner">
+            <div [mainAppSpinner]="showSpinner"></div>
+          </ng-container>
+          <ng-container *ngIf="LeaveNotificatiionData && LeaveNotificatiionData?.length > 0 && !showSpinner; else noNotificationYet">
+            <div
+              *ngFor="let notification of LeaveNotificatiionData; let rowNo = index"
+              (click)="redirectToNotification(notification)"
+              class="notification-inner"
+              [ngClass]="rowNo === LeaveNotificatiionData?.length - 1 ? 'last-row-notification' : ''"
+            >
+              <div class="notification-border-wrapper">
+                <div class="notification-image">
+                  <img
+                    #img
+                    (error)="img.src = 'assets/images/default.png'"
+                    class="img-circle"
+                    [src]="_base_url + notification.employeeImage"
+                    alt=""
+                    matTooltip="{{ notification?.action_user }}"
+                  />
+                </div>
+                <div class="notification-border">
+                  <p class="notification-dark">
+                    {{ notification.notificationTitle }}
+                  </p>
+                  <span class="notification-time">
+                    {{ notification.time }}
+                  </span>
+                </div>
+            </div>
+    </div>
+    </ng-container>
+
+    <span *ngIf="LeaveNotificatiionData?.length < notificationLeavesCount && !showSpinner" (click)="onViewMoreLeave()" class="viewmore">View All</span
+          >
+        </div>
+      </div>
+    </mat-card>
+  </div>
+</div>
+<ng-template #noNotificationYet>
+  <p *ngIf="!showSpinner">Currently, there are no notifications to display. Stay tuned for updates!</p>
+</ng-template>

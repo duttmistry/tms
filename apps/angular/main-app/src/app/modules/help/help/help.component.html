@@ -1,0 +1,78 @@
+<div class="container-wrapper">
+    <mat-card style="min-height: 100% !important">
+        <div class="workspace-blk workspace-border">
+            <strong>
+        <a> Help </a>
+      </strong>
+        </div>
+        <div>
+            <div *ngIf="helpVideos?.length > 0" style="margin-top: 15px">
+                <h2 class="pr-form-top-header" style="margin-bottom: 0px">User Guide Video Library</h2>
+                <p style="font-size: 11px; margin-bottom: 20px">
+                    These videos are created to provide you with clear, step-by-step guidance, making it easy to use TMS to its full potential.
+                </p>
+            </div>
+            <ng-container *ngIf="showSpinner; else helpSection">
+                <div [mainAppSpinner]="showSpinner"></div>
+            </ng-container>
+            <ng-template #helpSection>
+                <div class="">
+                    <ng-container *ngIf="helpVideos?.length > 0; else noRecordsFound">
+                        <div *ngFor="let helpData of helpVideos; let _index = index">
+                            <div class="image-container-2" (click)="navigateToURL(helpData?.url)">
+                                <div class="image-parent">
+                                    <img #img mat-card-image-2 class="img-help-2 cursor-pointer" (error)="img.src = 'assets/images/play_circle.svg'" [src]="helpData?.imageUrl || 'assets/images/play_circle.svg'" alt="Not Found" />
+                                </div>
+                                <div class="content">
+                                    <p class="title-2 cursor-pointer">
+                                        {{ helpData.Title }}
+                                    </p>
+                                    <p class="help-description-2">
+                                        {{ helpData.description }}
+                                    </p>
+                                </div>
+                            </div>
+                            <hr *ngIf="_index != helpVideos?.length - 1" class="custome-hr" />
+                        </div>
+                    </ng-container>
+                </div>
+                <ng-template #noRecordsFound>
+                    <div class="no-record">No records found</div>
+                </ng-template>
+            </ng-template>
+
+            <!-- <ng-template #helpSection>
+        <div class="trending-container grid-cards grid-cards-table">
+          <ng-container *ngIf="helpVideos?.length > 0; else noRecordsFound">
+            <div *ngFor="let helpData of helpVideos">
+              <mat-card class="example-card cursor-pointer" (click)="navigateToURL(helpData?.url)">
+                <div class="image-container">
+                  <img
+                    #img
+                    mat-card-image
+                    class="img-help cursor-pointer"
+                    (error)="img.src = 'assets/images/play_circle.svg'"
+                    [src]="helpData?.imageUrl || 'assets/images/play_circle.svg'"
+                    alt="Not Found"
+                  />
+                </div>
+
+                <mat-card-content>
+                  <p class="title cursor-pointer">
+                    {{ helpData.Title }}
+                  </p>
+                  <p class="cursor-pointer help-description">
+                    {{ helpData.description }}
+                  </p>
+                </mat-card-content>
+              </mat-card>
+            </div>
+          </ng-container>
+        </div>
+        <ng-template #noRecordsFound>
+          <div class="no-record">No records found</div>
+        </ng-template>
+      </ng-template> -->
+        </div>
+    </mat-card>
+</div>

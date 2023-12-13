@@ -1,0 +1,81 @@
+@import 'apps/angular/main-app/src/variables';
+@import 'apps/angular/main-app/src/mixins';
+@import 'apps/angular/main-app/src/assets/fonts/fonts';
+.administration-dashboard {
+  .administration-dashboard-wrap {
+    @include flex;
+    flex-wrap: wrap;
+    margin-left: 15px;
+    margin-right: 15px;
+    margin-top: 25px;
+    .box-item {
+      margin: 0px 9px 20px;
+      width: calc(25% - 18px);
+      background-color: $theme-color-white;
+      padding: 15px;
+      border: 1px solid $theme-border-color-gray;
+      border-radius: $button-radius;
+      cursor: pointer;
+    }
+    .icon {
+      @include flex;
+      @include flex-align-center;
+      gap: 13px;
+      h3 {
+        font-size: $theme-main-large-font;
+        font-weight: 400;
+        line-height: 19px;
+      }
+    }
+    .content {
+      p {
+        font-size: $theme-main-medium-font;
+        font-weight: 400;
+        line-height: 21px;
+        color: $theme-main-color-light;
+        margin: 10px 0 0 0;
+        text-align: justify;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: $extra-large-device) {
+  .administration-dashboard {
+    .administration-dashboard-wrap {
+      .box-item {
+        width: calc(33.3% - 18px);
+      }
+    }
+  }
+}
+
+@media screen and (max-width: $lerge-device) {
+  .administration-dashboard {
+    .administration-dashboard-wrap {
+      .box-item {
+        width: calc(50% - 18px);
+      }
+    }
+  }
+}
+
+@media screen and (max-width: $medium-device) {
+  .administration-dashboard {
+    .administration-dashboard-wrap {
+      .box-item {
+        width: calc(50% - 18px);
+      }
+    }
+  }
+}
+
+@media screen and (max-width: $small-device) {
+  .administration-dashboard {
+    .administration-dashboard-wrap {
+      .box-item {
+        width: calc(100% - 18px);
+      }
+    }
+  }
+}

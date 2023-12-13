@@ -1,0 +1,130 @@
+@import 'apps/angular/main-app/src/variables';
+@import 'apps/angular/main-app/src/mixins';
+@import 'apps/angular/main-app/src/assets/fonts/fonts';
+.comment-box {
+  padding: 0;
+  margin-bottom: 12px;
+  box-shadow: unset;
+  border-radius: $button-radius !important;
+  .ql-editor {
+    overflow: unset;
+    p {
+      font-size: 12px;
+      line-height: 16px;
+      font-weight: 400;
+      color: #000000;
+      font-family: Inter;
+    }
+  }
+  .mat-mdc-card-content {
+    padding: 0 0 0 10px;
+    @include flex;
+    @include flex-justify-space-between;
+    align-items: flex-start;
+    margin-left: 27px;
+  }
+   ::ng-deep .ql-snow * {
+    padding: 0 !important;
+  }
+  .comment-options {
+    float: right;
+  }
+}
+
+.view-task-edit-inner {
+  padding: 0 0 0 10px;
+  display: block;
+  word-wrap: break-word;
+}
+
+.cursor-not-allowed {
+  cursor: not-allowed;
+}
+
+.comment-box-blk {
+  display: block !important;
+  padding: 0;
+  box-shadow: unset;
+  .mat-mdc-card-content {
+    padding: 0 10px;
+  }
+  .comments-btn {
+    @include flex;
+    justify-content: flex-start;
+    margin-top: 20px;
+  }
+  .mdc-button {
+    margin-right: 10px !important;
+  }
+}
+
+.comment-container {
+  .icon-hour-wrapper {
+    display: flex;
+    align-items: center;
+    margin-bottom: 2px;
+    .mat-mdc-chip-set {
+      // height: 40px;
+      .mat-chip-wrapper {
+        display: flex;
+      }
+    }
+    .comment-on,
+    .edited-on {
+      color: $theme-main-color-light;
+      font-size: $theme-main-medium-font;
+      font-weight: 400;
+      margin-left: 8px;
+      margin-top: 0;
+    }
+  }
+}
+
+.comment-container+.comment-container {
+  margin-top: 8px;
+  padding-top: 10px;
+  border-top: 1px solid $theme-border-color-gray;
+}
+
+.comments-btn {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  button {
+    background-color: transparent;
+    color: $theme-main-color-light;
+    padding: 0 !important;
+    margin: 0 !important;
+    min-width: unset !important;
+    letter-spacing: 0;
+    height: auto;
+    &:hover {
+      background-color: transparent;
+      --mat-mdc-button-persistent-ripple-color: unset;
+    }
+  }
+}
+
+.comment-container {
+  clear: both;
+}
+.quill-editor-form {
+  position: relative;
+}
+.comments-quill-editor{
+  width: 100% !important;
+}
+.quill-editor-button {
+  margin-top: 8px;
+  float: right;
+  background-color: #FFF3EA;
+  padding: 8px 16px;
+  font-size: 14px;
+  line-height: 16px;
+  font-weight: 500;
+  color: #FD822E;
+  font-family: Inter;
+  border: 0;
+  border-radius: 0;
+  margin-bottom: 20px;
+}

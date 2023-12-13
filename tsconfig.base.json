@@ -1,0 +1,38 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "rootDir": ".",
+    "sourceMap": true,
+    "declaration": false,
+    "moduleResolution": "node",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "importHelpers": true,
+    "target": "es2015",
+    "module": "ES2022",
+    "lib": ["es2017", "dom"],
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
+    "baseUrl": ".",
+    "paths": {
+      "@tms-workspace/": ["libs/utils/encryption/src/index.js"],
+      "@tms-workspace/apis-core": ["libs/utils/apis-core/src/index.ts"],
+      "@tms-workspace/auth/user-authentication": ["libs/auth/user-authentication/src/index.ts"],
+      "@tms-workspace/configurations": ["libs/auth/configuration/src/index.js"],
+      "@tms-workspace/custom-directives": ["libs/pkg/custom-directives/src/index.ts"],
+      "@tms-workspace/encryption": ["libs/utils/encryption/src/index.ts"],
+      "@tms-workspace/enum-data": ["libs/utils/enum-data/src/index.ts"],
+      "@tms-workspace/file-upload": ["libs/utils/file-upload/src/index.ts"],
+      "@tms-workspace/material-controls": ["libs/ui/material-controls/src/index.ts"],
+      "@tms-workspace/notifications": ["libs/utils/notifications/src/index.ts"],
+      "@tms-workspace/popup": ["libs/pkg/popup/src/index.ts"],
+      "@tms-workspace/preference": ["libs/preference/src/index.ts"],
+      "@tms-workspace/project-documents": ["libs/pkg/project-documents/src/index.ts"],
+      "@tms-workspace/ui-header": ["libs/ui/header/src/index.ts"],
+      "@tms-workspace/ui-sidebar": ["libs/ui/sidebar/src/index.ts"],
+      "@tms-workspace/ui-stylesheets": ["libs/ui/stylesheets/src/index.ts"],
+      "@uss/site-settings": ["libs/site-settings/site-settings/src/index.ts"]
+    }
+  },
+  "exclude": ["node_modules", "tmp"]
+}

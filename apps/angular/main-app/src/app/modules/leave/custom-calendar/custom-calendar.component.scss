@@ -1,0 +1,127 @@
+@import 'apps/angular/main-app/src/variables';
+@import 'apps/angular/main-app/src/mixins';
+@import 'apps/angular/main-app/src/assets/fonts/fonts.scss';
+.fc-direction-ltr .fc-daygrid-event .fc-event-time {
+  display: none;
+}
+
+// .selected-range {
+//   color: $theam-color-orange !important;
+//   // background-color: $theme-color-orange !important;
+// }
+// .weekend-cell {
+//   background-color: rgb(226, 241, 225);
+// }
+::ng-deep .fc-daygrid-day {
+  height: auto;
+  /* adjust as desired */
+}
+
+.is-holiday {
+  color: $theme-color-purple;
+  // color: #ea6060;
+}
+
+.is-specialday {
+  // color: #a1d8ff;
+  color: $theme-color-yellowish-brown;
+}
+
+.is-birthday {
+  color: $theme-color-babypink;
+}
+
+.is-workany {
+  color: $theme-color-skyblue;
+}
+
+.bg-holiday {
+  // background-color: #edbbbb;
+  background-color: #ecdcfd;
+}
+
+.bg-specialday {
+  // background-color: $theme-color-skyblue;
+  background-color: #fbe1ca;
+}
+
+.bg-birthday {
+  background-color: #f7e7ef;
+}
+
+.bg-workany {
+  background-color: #d9edfb;
+}
+
+.fc-highlight {
+  background-color: #f6e8c3 !important;
+}
+
+// .event-day {
+//   height: 7px;
+//   width: 7px;
+//   background-color: red;
+//   border-radius: 50%;
+//   // margin-left: 30%;
+//   // span {
+//   //   color: $theme-color-white;
+//   // }
+// }
+.fc-daygrid-day-events {
+  height: auto;
+  width: 100%;
+  .fc-daygrid-event-harness {
+    .is-event-day {
+      // background-color: $calendar-event-bg !important;
+      .event-day {
+        height: 10px;
+        width: 10px;
+        // background-color: $calendar-event-bg !important;
+        // margin-left: 30%;
+        // span {
+        //   color: $theme-color-white;
+        // }
+      }
+    }
+  }
+}
+
+
+/* Tooltip container */
+
+[data-tooltip] {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+}
+
+
+/* Tooltip text */
+
+[data-tooltip]::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #333;
+  /* Customize the background color */
+  color: #fff;
+  /* Customize the text color */
+  padding: 3px 2px;
+  border-radius: 5px;
+  white-space: pre-line;
+  font-size: 10px;
+  /* Customize the font size */
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s ease-in-out;
+}
+
+
+/* Tooltip on hover */
+
+[data-tooltip]:hover::after {
+  opacity: 1;
+  visibility: visible;
+}

@@ -1,0 +1,35 @@
+@import 'apps/angular/main-app/src/variables';
+@import 'apps/angular/main-app/src/mixins';
+@import 'apps/angular/main-app/src/assets/fonts/fonts';
+.messaging-template {
+  .action-column {
+    @include flex;
+    @include flex-align-center;
+    height: 52px;
+    @include flex-justify-center;
+    img {
+      width: 25px;
+      height: 25px;
+      border: 1px solid $theme-border-color-gray;
+      margin: 0 5px;
+      border-radius: $button-radius;
+      padding: 3px;
+      cursor: pointer;
+    }
+  }
+  .action1 {
+    width: 100px;
+  }
+  .actions {
+    width: 400px;
+  }
+  .mat-mdc-form-field {
+    margin-bottom: 0;
+  }
+  form {
+    display: flex;
+    justify-content: flex-end;
+    margin: 25px 0 20px;
+    gap: 15px;
+  }
+}

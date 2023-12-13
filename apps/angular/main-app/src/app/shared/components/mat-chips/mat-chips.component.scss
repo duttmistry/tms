@@ -1,0 +1,39 @@
+@import 'apps/angular/main-app/src/variables';
+@import 'apps/angular/main-app/src/mixins';
+@import 'apps/angular/main-app/src/assets/fonts/fonts';
+.loading-card {
+  width: 150px;
+  height: 30px;
+}
+
+.loader-container {
+  @include flex;
+  @include flex-justify-center;
+  @include flex-align-center;
+}
+
+.close {
+  width: unset !important;
+  height: unset !important;
+}
+
+.user-indication {
+  width: 26px;
+  height: 26px;
+  border-width: 2px;
+  border-style: solid;
+  border-color: white;
+}
+.user-wfh {
+  border-color: orange;
+}
+.user-wfo {
+  border-color: green;
+}
+.user-not-loggedIn {
+  border-color: grey;
+}
+
+.hover-chip.mat-chip-wrapper {
+  line-height: 1;
+}

@@ -1,0 +1,33 @@
+{
+  "name": "pkg-popup",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "library",
+  "sourceRoot": "libs/pkg/popup/src",
+  "prefix": "tms-workspace",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/angular:package",
+      "outputs": ["{workspaceRoot}/dist/{projectRoot}"],
+      "options": {
+        "project": "libs/pkg/popup/ng-package.json"
+      },
+      "configurations": {
+        "production": {
+          "tsConfig": "libs/pkg/popup/tsconfig.lib.prod.json"
+        },
+        "development": {
+          "tsConfig": "libs/pkg/popup/tsconfig.lib.json"
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/pkg/popup/**/*.ts", "libs/pkg/popup/**/*.html"]
+      }
+    }
+  },
+  "tags": []
+}

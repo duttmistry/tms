@@ -1,0 +1,1386 @@
+<div class="container-wrapper task-add">
+    <div class="container-inner">
+        <mat-card class="container-child">
+            <form [formGroup]="addTaskForm" class="change-form">
+                <div class="workspace-blk workspace-border">
+                    <strong>Create Task</strong>
+                    <div class="button-wrapper btn-flex">
+                        <button class="cancel secondary-button" (click)="onCloseTask()">Close</button>
+                        <button color="primary" (click)="onSubmitTask()" class="next primary-button">Save Task</button>
+                    </div>
+                </div>
+
+                <div class="task-add-wrap">
+                    <div class="task-left">
+                        <div class="project-dropdown-wrapper comon-gap-wrapper">
+                            <mat-form-field class="arrow-down common-width big-height-wrapper">
+                                <mat-select panelClass="project-wrapper dropdown-border-input-wrapper" formControlName="project" placeholder="Project" #singleSelect (selectionChange)="getSelectedProject(singleSelect)">
+                                    <mat-option class="input-outer-wrapper dropdown-input-outer-wrapper">
+                                        <div class="input-wrapper">
+                                            <ngx-mat-select-search [formControl]="projectSearchControl" [noEntriesFoundLabel]="'No record found'" [placeholderLabel]="'Search'"></ngx-mat-select-search>
+                                            <img src="assets/images/search.svg" alt="search" class="search" />
+                                        </div>
+                                    </mat-option>
+                                    <div class="dropdown-border-listing-wrapper">
+                                        <mat-option *ngFor="let project of filteredProjects | async" [value]="project">
+                                            {{ project.name }}
+                                        </mat-option>
+                                    </div>
+                                </mat-select>
+                                <ng-container *ngIf="_addTaskForm['project']?.errors?.['required'] && (_addTaskForm['project']?.touched || isTaskSubmitted)">
+                                    <div class="error error-left">Please select project.</div>
+                                </ng-container>
+                            </mat-form-field>
+                        </div>
+                        <div class="task-type-wrapper comon-gap-wrapper">
+                            <mat-form-field class="arrow-down common-width">
+                                <mat-select panelClass="task-type-dropdown-wrapper" formControlName="taskType" placeholder="Task type" #taskTypeSelect (selectionChange)="getSelectedTaskType(taskTypeSelect)" [compareWith]="attributeDisplayForTaskType">
+                                    <mat-option *ngFor="let taskTypeObject of taskTypeList" [value]="taskTypeObject">
+                                        {{ taskTypeObject.name }}
+                                    </mat-option>
+                                </mat-select>
+                                <ng-container *ngIf="_addTaskForm['taskType']?.errors?.['required'] &&  ( _addTaskForm['taskType']?.touched || isTaskSubmitted)">
+                                    <div class="error error-left">Please select task Type</div>
+                                </ng-container>
+                            </mat-form-field>
+                        </div>
+                        <div class="task-name-wrapper comon-gap-wrapper">
+                            <input type="text" tmsWorkspaceAutoFocusInput formControlName="title" placeholder="Name" #taskTitleInput class="input-field common-width" (blur)="onTaskTitleBlur()" />
+                            <ng-container *ngIf="_addTaskForm['title'].errors && (isTaskSubmitted || _addTaskForm['title'].touched)">
+                                <ng-container *ngIf="_addTaskForm['title'].errors?.['minlength']">
+                                    <div class="error">{{ taskTitleMinLengthErrorMessage }}</div>
+                                </ng-container>
+                                <ng-container *ngIf="_addTaskForm['title'].errors?.['maxlength']">
+                                    <div class="error">{{ taskTitleMaxLengthErrorMessage }}</div>
+                                </ng-container>
+                                <ng-container *ngIf="_addTaskForm['title'].errors?.['required']">
+                                    <div class="error">{{ taskTitleRequiredErrorMessage }}</div>
+                                </ng-container>
+                            </ng-container>
+                        </div>
+                        <div class="description-wrapper comon-gap-wrapper">
+                            <div class="add-h2">Description</div>
+                            <div class="editor-container">
+                                <!-- <quill-editor
+                  #descriptionEditor
+                  placeholder="Task Description"
+                  formControlName="description"
+                  [modules]="quillConfiguration"
+                  (onContentChanged)="onEditorContentChange($event)"
+                  (click)="checkContentOnBlur()"
+                  class="quill-editor"
+                ></quill-editor> -->
+                                <!-- <div class="resize-handle">
+                  <mat-icon class="resize-icon">drag_handle</mat-icon>
+                </div> -->
+                                <form role="form" #myForm="ngForm" accept-charset="UTF-8" novalidate>
+                                    <div class="form-group has-feedback" [ngClass]="{ 'has-error': ckeditor.invalid && ckeditor.touched }">
+                                        <ckeditor [(ngModel)]="mycontent" #ckeditor="ngModel" name="ckeditor" required [config]="ckeConfig" debounce="500" (ngModelChange)="onChange($event)">
+                                        </ckeditor>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <!-- descriptive fields will be on left side -->
+                        <div formArrayName="descriptiveFormFieldArray" class="inner-content-blk custom-block-wrapper">
+                            <div *ngFor="let group of descriptiveFormFieldArray.controls; let i = index" class="comon-gap-wrapper">
+                                <div [formGroupName]="i" class="custom-field-wrapper">
+                                    <!-- FOR INPUT TYPE TEXT -->
+                                    <ng-container *ngIf="group.get('otherFieldProperties')?.value?.type === 'text'">
+                                        <p>
+                                            <strong class="add-h2">{{ group.get('otherFieldProperties')?.value?.label }}</strong>
+                                            <strong class="red-star">{{ group.get('otherFieldProperties')?.value?.is_required ? '*' : '' }}</strong>
+                                        </p>
+                                        <mat-form-field>
+                                            <input matInput type="text" [name]="group.get('otherFieldProperties')?.value?.label" [id]="group.get('otherFieldProperties')?.value?.label" [required]="group.get('otherFieldProperties')?.value?.is_required" formControlName="fieldControl" />
+                                        </mat-form-field>
+                                        <mat-error *ngIf="group.get('otherFieldProperties')?.value?.is_required">
+                                            <ng-container *ngIf="group.get('fieldControl')?.errors && (isTaskSubmitted || group.get('fieldControl')?.touched)">
+                                                <span>{{ group.get('otherFieldProperties')?.value?.label + ' is required' }}</span>
+                                            </ng-container>
+                                        </mat-error>
+                                    </ng-container>
+
+                                    <!-- FOR INPUT TYPE TEXTAREA -->
+                                    <ng-container *ngIf="group.get('otherFieldProperties')?.value?.type === 'textarea'">
+                                        <p>
+                                            <strong class="add-h2">{{ group.get('otherFieldProperties')?.value?.label }}</strong>
+                                            <strong class="red-star">{{ group.get('otherFieldProperties')?.value?.is_required ? '*' : '' }}</strong>
+                                        </p>
+                                        <textarea [name]="group.get('otherFieldProperties')?.value?.label" [id]="group.get('otherFieldProperties')?.value?.label" [required]="group.get('otherFieldProperties')?.value?.is_required" formControlName="fieldControl"></textarea>
+                                        <mat-error *ngIf="group.get('otherFieldProperties')?.value?.is_required">
+                                            <ng-container *ngIf="group.get('fieldControl')?.errors && (isTaskSubmitted || group.get('fieldControl')?.touched)">
+                                                <span>{{ group.get('otherFieldProperties')?.value?.label + ' is required' }}</span>
+                                            </ng-container>
+                                        </mat-error>
+                                    </ng-container>
+
+                                    <!-- FOR INPUT TYPE DATE -->
+
+                                    <ng-container *ngIf="group.get('otherFieldProperties')?.value?.type === 'date'">
+                                        <p>
+                                            <strong class="add-h2">{{ group.get('otherFieldProperties')?.value?.label }}</strong>
+                                            <strong class="red-star">{{ group.get('otherFieldProperties')?.value?.is_required ? '*' : '' }}</strong>
+                                        </p>
+                                        <mat-form-field>
+                                            <input matInput [matDatepicker]="startpicker" formControlName="fieldControl" (dateInput)="validateDate($event)" (dateChange)="validateDate($event)" autocomplete="off" />
+
+                                            <mat-datepicker-toggle matSuffix [for]="startpicker"></mat-datepicker-toggle>
+                                            <mat-datepicker #startpicker></mat-datepicker>
+                                        </mat-form-field>
+                                        <mat-error *ngIf="group.get('otherFieldProperties')?.value?.is_required">
+                                            <ng-container *ngIf="group.get('fieldControl')?.errors && (isTaskSubmitted || group.get('fieldControl')?.touched)">
+                                                <span>{{ group.get('otherFieldProperties')?.value?.label + ' is required' }}</span>
+                                            </ng-container>
+                                        </mat-error>
+                                    </ng-container>
+
+                                    <!-- FOR INPUT TYPE NUMBER -->
+                                    <ng-container *ngIf="group.get('otherFieldProperties')?.value?.type === 'number'">
+                                        <p>
+                                            <strong class="add-h2">{{ group.get('otherFieldProperties')?.value?.label }}</strong>
+                                            <strong class="red-star">{{ group.get('otherFieldProperties')?.value?.is_required ? '*' : '' }}</strong>
+                                        </p>
+                                        <mat-form-field>
+                                            <input matInput type="number" min="1" [name]="group.get('otherFieldProperties')?.value?.label" [id]="group.get('otherFieldProperties')?.value?.label" [required]="group.get('otherFieldProperties')?.value?.is_required" formControlName="fieldControl" />
+                                        </mat-form-field>
+                                        <mat-error *ngIf="group.get('otherFieldProperties')?.value?.is_required">
+                                            <ng-container *ngIf="group.get('fieldControl')?.errors && (isTaskSubmitted || group.get('fieldControl')?.touched)">
+                                                <span>{{ group.get('otherFieldProperties')?.value?.label + ' is required' }}</span>
+                                            </ng-container>
+                                        </mat-error>
+                                    </ng-container>
+
+                                    <!-- FOR INPUT TYPE DROPDOWN -->
+                                    <ng-container *ngIf="group.get('otherFieldProperties')?.value?.type === 'dropdown'">
+                                        <p>
+                                            <strong class="add-h2">{{ group.get('otherFieldProperties')?.value?.label }}</strong>
+                                            <strong class="red-star">{{ group.get('otherFieldProperties')?.value?.is_required ? '*' : '' }}</strong>
+                                        </p>
+                                        <mat-form-field class="arrow-down">
+                                            <mat-select formControlName="fieldControl" (selectionChange)="onSelectionChange($event)">
+                                                <mat-option *ngFor="let item of group.get('otherFieldProperties')?.value?.options" [value]="item.id">
+                                                    {{ item.value }}
+                                                </mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+                                        <mat-error *ngIf="group.get('otherFieldProperties')?.value?.is_required">
+                                            <ng-container *ngIf="group.get('fieldControl')?.errors && (isTaskSubmitted || group.get('fieldControl')?.touched)">
+                                                <span>{{ group.get('otherFieldProperties')?.value?.label + ' is required' }}</span>
+                                            </ng-container>
+                                        </mat-error>
+                                    </ng-container>
+
+                                    <!-- FOR INPUT TYPE CHECKBOX -->
+                                    <ng-container *ngIf="group.get('otherFieldProperties')?.value?.type === 'checkbox'">
+                                        <p>
+                                            <strong class="add-h2">{{ group.get('otherFieldProperties')?.value?.label }}</strong>
+                                            <strong class="red-star">{{ group.get('otherFieldProperties')?.value?.is_required ? '*' : '' }}</strong>
+                                        </p>
+                                        <mat-checkbox [inputMode]="'checkbox'" formControlName="fieldControl"></mat-checkbox>
+                                        <mat-error *ngIf="group.get('otherFieldProperties')?.value?.is_required">
+                                            <ng-container *ngIf="group.get('fieldControl')?.errors && (isTaskSubmitted || group.get('fieldControl')?.touched)">
+                                                <span>{{ group.get('otherFieldProperties')?.value?.label + ' is required' }}</span>
+                                            </ng-container>
+                                        </mat-error>
+                                    </ng-container>
+
+                                    <!-- FOR INPUT TYPE RADIO -->
+                                    <ng-container *ngIf="group.get('otherFieldProperties')?.value?.type === 'radio'">
+                                        <p>
+                                            <strong class="add-h2">{{ group.get('otherFieldProperties')?.value?.label }}</strong>
+                                            <strong class="red-star">{{ group.get('otherFieldProperties')?.value?.is_required ? '*' : '' }}</strong>
+                                        </p>
+                                        <mat-radio-group formControlName="fieldControl">
+                                            <mat-radio-button color="primary" *ngFor="let item of group.get('otherFieldProperties')?.value?.options" [value]="item.value">{{ item.value }}
+                                            </mat-radio-button>
+                                        </mat-radio-group>
+                                        <mat-error *ngIf="group.get('otherFieldProperties')?.value?.is_required">
+                                            <ng-container *ngIf="group.get('fieldControl')?.errors && (isTaskSubmitted || group.get('fieldControl')?.touched)">
+                                                <span>{{ group.get('otherFieldProperties')?.value?.label + ' is required' }}</span>
+                                            </ng-container>
+                                        </mat-error>
+                                    </ng-container>
+
+                                    <!-- FOR INPUT TYPE URL -->
+                                    <ng-container *ngIf="group.get('otherFieldProperties')?.value?.type === 'url'">
+                                        <p>
+                                            <strong class="add-h2">{{ group.get('otherFieldProperties')?.value?.label }}</strong>
+                                            <strong class="red-star">{{ group.get('otherFieldProperties')?.value?.is_required ? '*' : '' }}</strong>
+                                        </p>
+                                        <mat-form-field>
+                                            <input matInput type="url" [name]="group.get('otherFieldProperties')?.value?.label" [id]="group.get('otherFieldProperties')?.value?.label" [required]="group.get('otherFieldProperties')?.value?.is_required" formControlName="fieldControl" />
+                                        </mat-form-field>
+                                        <mat-error *ngIf="group.get('otherFieldProperties')?.value?.is_required">
+                                            <ng-container *ngIf="group.get('fieldControl')?.errors && (isTaskSubmitted || group.get('fieldControl')?.touched)">
+                                                <span>{{ group.get('otherFieldProperties')?.value?.label + ' is required' }}</span>
+                                            </ng-container>
+                                        </mat-error>
+                                    </ng-container>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="attached-document-wrapper comon-gap-wrapper">
+                            <div class="add-h2">Attached Documents</div>
+
+                            <div class="common-width">
+                                <div class="dropzone document-filezone" (dragover)="onDragover($event)" (dragleave)="onDragLeave($event)" (drop)="onDrop($event)">
+                                    <input type="file" multiple #fileDropRef id="fileDropRef" [disabled]="isDisableDocumentsUpload" (change)="documentFileBrowseHandler($event)" hidden />
+
+                                    <label for="fileDropRef" class="mat-body-2"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="svg">
+                      <path
+                        d="M16.44 8.90002C20.04 9.21002 21.51 11.06 21.51 15.11V15.24C21.51 19.71 19.72 21.5 15.25 21.5H8.73998C4.26998 21.5 2.47998 19.71 2.47998 15.24V15.11C2.47998 11.09 3.92998 9.24002 7.46998 8.91002"
+                        stroke="#333366"
+                        stroke-width="1.5"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                      <path d="M12 15V3.62" stroke="#333366" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                      <path
+                        d="M15.3499 5.85L11.9999 2.5L8.6499 5.85"
+                        stroke="#333366"
+                        stroke-width="1.5"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                    </svg>
+                    &nbsp;&nbsp;Browse &nbsp;
+                    <span>Or Drag and drop file here</span></label
+                  >
+                </div>
+                <div class="filezone document-filezone">
+                  <ng-container *ngIf="attachedDocuments && attachedDocuments.length > 0">
+                    <div *ngFor="let document of attachedDocuments; index as i" class="filezone-file">
+                      <i class="{{ document.name | FileExtension }}" dg></i>
+                      <div (click)="previewFile(document)" class="upload-file-blk">
+                        <span>{{ document.name }} </span>
+                      </div>
+                      <button mat-icon-button (click)="removeDocument(i)">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path
+                            d="M12 22C17.5 22 22 17.5 22 12C22 6.5 17.5 2 12 2C6.5 2 2 6.5 2 12C2 17.5 6.5 22 12 22Z"
+                            stroke="#86969D"
+                            stroke-width="1.5"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          />
+                          <path
+                            d="M9.16992 14.8299L14.8299 9.16992"
+                            stroke="#86969D"
+                            stroke-width="1.5"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          />
+                          <path
+                            d="M14.8299 14.8299L9.16992 9.16992"
+                            stroke="#86969D"
+                            stroke-width="1.5"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          />
+                        </svg>
+                      </button>
+                    </div>
+                  </ng-container>
+                </div>
+              </div>
+            </div>
+            <!-- <div class="sub-task common-width comon-gap-wrapper">
+              <div class="add-h2">Sub Task</div>
+
+              <mat-form-field>
+                <mat-select
+                  formControlName="taskType"
+                  placeholder="Add Sub Task"
+                  #taskTypeSelect
+                  (selectionChange)="getSelectedTaskType(taskTypeSelect)"
+                  [compareWith]="attributeDisplayForTaskType"
+                >
+                </mat-select>
+              </mat-form-field>
+            </div> -->
+            <!-- <div class="task-activities comon-gap-wrapper">
+              <div class="comon-gap-wrapper">
+                <div class="add-h2">Task Activities</div>
+
+                <mat-tab-group
+                  mat-stretch-tabs="false"
+                  animationDuration="0ms"
+                  mat-align-tabs="start"
+                  (selectedTabChange)="onTaskActivityTabChanged($event)"
+                  class="tab-section task-tab-section"
+                >
+                  <mat-tab label="Comments">
+                    <main-app-tms-workspace-comments
+                      #commentsComponentReference
+                      [loggedInUserId]="loggedInUserId"
+                      [projectTeamMemberList]="reportToBindList"
+                      (commentsToBePostedEmmiter)="onCommentsToBePosted($event)"
+                    ></main-app-tms-workspace-comments>
+                  </mat-tab>
+                  <mat-tab label="Commit">
+                    <main-app-tms-workspace-commits
+                      #commitsComponentReference
+                      [loggedInUserId]="loggedInUserId"
+                      [projectTeamMemberList]="reportToBindList"
+                      (commitsToBePostedEmmiter)="onCommitsToBePosted($event)"
+                    ></main-app-tms-workspace-commits>
+                  </mat-tab>
+                  <mat-tab label="Change Log">
+                    <ng-container *ngIf="taskChangeLogsResponseList && taskChangeLogsResponseList.length > 0; else noTaskChangeLogsTemplate">
+                      <main-app-tms-workspace-change-log
+                        [taskChangeLogsResponseList]="taskChangeLogsResponseList"
+                        [loggedInUserId]="loggedInUserId"
+                        [projectTeamData]="reportToBindList"
+                        [taskChangeLogTotalRecords]="taskChangeLogTotalRecords"
+                        [taskStatusList]="taskStatusList"
+                        [labelsList]="taskLabels"
+                        [sectionsList]="sectionsList"
+                        [projectNameList]="projectNameList"
+                        (emitLoadMoreEvent)="onLoadMoreChangeLogs($event)"
+                      >
+                      </main-app-tms-workspace-change-log>
+                    </ng-container>
+                    <ng-template #noTaskChangeLogsTemplate>No records found</ng-template>
+                  </mat-tab>
+                </mat-tab-group>
+              </div>
+            </div> -->
+          </div>
+
+          <div class="task-right">
+            <div class="task-left" style="width: 100% !important">
+              <div class="project-dropdown-wrapper comon-gap-wrapper arrow-status" style="margin-right: 0px !important">
+                <mat-form-field
+                  cdkOverlayOrigin
+                  #triggerStatusSelection="cdkOverlayOrigin"
+                  style="width: 100%"
+                  class="arrow-down common-width cursor-pointer"
+                  [ngClass]="selectedStatusToDisplay ? 'arrow-down-white' : ''"
+                  (click)="_onClickStatuSelection()"
+                  [ngStyle]="{
+                    'background-color': getTaskBackgroundColor() ? getTaskBackgroundColor() : ''
+                  }"
+                  style="width: 55% !important; margin-left: auto"
+                >
+                  <input
+                    class="cursor-pointer"
+                    [value]="selectedStatusToDisplay"
+                    placeholder="Status"
+                    matInput
+                    readonly
+                    style="color: white !important"
+                  />
+                  <ng-container *ngIf="_addTaskForm['taskStatus'].errors && (isTaskSubmitted || _addTaskForm['taskStatus'].touched)">
+                    <ng-container *ngIf="_addTaskForm['taskStatus'].errors?.['required']">
+                      <div class="error">Status is required</div>
+                    </ng-container>
+                  </ng-container>
+                </mat-form-field>
+
+                <ng-template
+                  cdkConnectedOverlay
+                  (overlayOutsideClick)="statusSelectionOpen = false"
+                  (detach)="statusSelectionOpen = false"
+                  (backdropClick)="statusSelectionOpen = false"
+                  [cdkConnectedOverlayOrigin]="triggerStatusSelection"
+                  [cdkConnectedOverlayOpen]="statusSelectionOpen"
+                  cdkConnectedOverlayBackdropClass="cdk-overlay-transparent-backdrop"
+                  [cdkConnectedOverlayHasBackdrop]="true"
+                >
+                  <main-app-status-popup
+                    [listInput]="taskStatusList"
+                    (statusEmmiter)="_onSelectedStatusChange($event); statusSelectionOpen = false"
+                  ></main-app-status-popup>
+                </ng-template>
+              </div>
+
+              <!-- <span class="dropdown-wrapper">
+                <mat-form-field class="arrow-down blue-button-wrapper" [class.cursor-not-allowed]="isTaskStateDisabled">
+                  <mat-select
+                    formControlName="taskState"
+                    placeholder="Task Status"
+                    #stateSelect
+                    (selectionChange)="onSelectState(stateSelect)"
+                    [compareWith]="attributeDisplayForTaskStatus"
+                  >
+                    <mat-option *ngFor="let stateObject of taskStateList" [value]="stateObject">
+                      {{ stateObject.name }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </span>
+              <span class="dropdown-wrapper right-btn">
+                <mat-form-field class="arrow-down" [class.cursor-not-allowed]="isTaskStateDisabled">
+                  <mat-select
+                    formControlName="taskStatus"
+                    placeholder="Task Sub Status"
+                    #statusSelect
+                    (selectionChange)="getSelectedTaskStatus(statusSelect)"
+                  >
+                    <mat-option *ngFor="let statusObject of taskStatusList" [value]="statusObject">
+                      {{ statusObject.name }}
+                    </mat-option>
+                  </mat-select>
+                  <ng-container *ngIf="_addTaskForm['taskStatus'].errors && (isTaskSubmitted || _addTaskForm['taskStatus'].touched)">
+                    <ng-container *ngIf="_addTaskForm['taskStatus'].errors?.['required']">
+                      <div class="error">Sub status is required</div>
+                    </ng-container>
+                  </ng-container>
+                </ng-container>
+              </span> -->
+            </div>
+            <div class="task-right-inner">
+              <div class="task-right-header"><h3>Details</h3></div>
+              <div>
+                <div class="task-right-label-wrapper">
+                  <span class="task-left-label">
+                    <strong>Assign To </strong>
+                  </span>
+                  <span class="task-right-label" [ngClass]="isOverlayOpenForAssignTo ? 'focus-details' : ''">
+                    <span class="cursor-pointer" (click)="toggleOverlayAssignedTo()" cdkOverlayOrigin #triggerdialog="cdkOverlayOrigin">
+                      <ng-container *ngIf="!_addTaskForm['assignTo'].value; else assignToTemplate">
+                        <p class="name-icon-wrapper">None</p>
+                      </ng-container>
+                      <ng-template #assignToTemplate>
+                        <span class="name-icon-wrapper"
+                          >{{ _addTaskForm['assignTo'].value.name || '' }}
+                          <span *ngIf="loggedInUserId && loggedInUserId === _addTaskForm['assignTo']?.value?.id">(Me)</span>
+                          <svg
+                            width="16"
+                            height="16"
+                            viewBox="0 0 16 16"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                            (click)="$event.stopPropagation(); checkIfUserHasPermission('assignTo')"
+                            class="filter-close"
+                          >
+                            <g id="vuesax/linear/close-circle">
+                              <g id="close-circle">
+                                <path
+                                  id="Vector"
+                                  d="M8.00065 14.6668C11.6673 14.6668 14.6673 11.6668 14.6673 8.00016C14.6673 4.3335 11.6673 1.3335 8.00065 1.3335C4.33398 1.3335 1.33398 4.3335 1.33398 8.00016C1.33398 11.6668 4.33398 14.6668 8.00065 14.6668Z"
+                                  stroke="#86969D"
+                                  stroke-width="1.5"
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                />
+                                <path
+                                  id="Vector_2"
+                                  d="M6.11328 9.88661L9.88661 6.11328"
+                                  stroke="#86969D"
+                                  stroke-width="1.5"
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                />
+                                <path
+                                  id="Vector_3"
+                                  d="M9.88661 9.88661L6.11328 6.11328"
+                                  stroke="#86969D"
+                                  stroke-width="1.5"
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                />
+                              </g>
+                            </g>
+                          </svg>
+                        </span>
+                        <ng-container *ngIf="isAssignToMeVisible">
+                          <a href="#" (click)="$event.stopPropagation(); $event.preventDefault(); onAssignToMe()" class="assign-me">Assign to Me</a>
+                        </ng-container>
+                      </ng-template>
+                    </span>
+
+                    <!-- This template displays the overlay content and is connected to the button -->
+                    <ng-template
+                      cdkConnectedOverlay
+                      (overlayOutsideClick)="isOverlayOpenForAssignTo = false"
+                      [cdkConnectedOverlayOrigin]="triggerdialog"
+                      [cdkConnectedOverlayOpen]="isOverlayOpenForAssignTo"
+                      cdkConnectedOverlayBackdropClass="cdk-overlay-transparent-backdrop"
+                      [cdkConnectedOverlayHasBackdrop]="true"
+                    >
+                      <main-app-user-dialog
+                        [listInput]="reportToBindList"
+                        [isShowSearchBox]="true"
+                        [searchText]="'Search Assign to'"
+                        (emmitSelectedUser)="getSelectedAssignedTo($event)"
+                        [isUsers]="true"
+                      ></main-app-user-dialog>
+                    </ng-template>
+                  </span>
+                </div>
+                <div class="task-right-label-wrapper">
+                  <span class="task-left-label">
+                    <strong>Assign By </strong>
+                  </span>
+                  <span class="task-right-label" [ngClass]="isOverlayOpenForAssignedBy ? 'focus-details' : ''">
+                    <span class="cursor-pointer" (click)="toggleOverlayForAssignedBy()" cdkOverlayOrigin #triggerAssignedBy="cdkOverlayOrigin">
+                      <ng-container *ngIf="!_addTaskForm['assignedBy'].value; else assignedByTemplate">
+                        <p class="name-icon-wrapper">None</p>
+                      </ng-container>
+                      <ng-template #assignedByTemplate>
+                        <span class="name-icon-wrapper"
+                          >{{ _addTaskForm['assignedBy'].value.name || '' }}
+                          <span *ngIf="loggedInUserId && loggedInUserId === _addTaskForm['assignedBy']?.value?.id">(Me)</span>
+                          <svg
+                            width="16"
+                            height="16"
+                            viewBox="0 0 16 16"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                            (click)="$event.stopPropagation(); checkIfUserHasPermission('assignedBy')"
+                            class="filter-close"
+                          >
+                            <g id="vuesax/linear/close-circle">
+                              <g id="close-circle">
+                                <path
+                                  id="Vector"
+                                  d="M8.00065 14.6668C11.6673 14.6668 14.6673 11.6668 14.6673 8.00016C14.6673 4.3335 11.6673 1.3335 8.00065 1.3335C4.33398 1.3335 1.33398 4.3335 1.33398 8.00016C1.33398 11.6668 4.33398 14.6668 8.00065 14.6668Z"
+                                  stroke="#86969D"
+                                  stroke-width="1.5"
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                />
+                                <path
+                                  id="Vector_2"
+                                  d="M6.11328 9.88661L9.88661 6.11328"
+                                  stroke="#86969D"
+                                  stroke-width="1.5"
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                />
+                                <path
+                                  id="Vector_3"
+                                  d="M9.88661 9.88661L6.11328 6.11328"
+                                  stroke="#86969D"
+                                  stroke-width="1.5"
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                />
+                              </g>
+                            </g>
+                          </svg>
+                        </span>
+                      </ng-template>
+                    </span>
+                    <ng-template
+                      cdkConnectedOverlay
+                      (overlayOutsideClick)="isOverlayOpenForAssignedBy = false"
+                      [cdkConnectedOverlayOrigin]="triggerAssignedBy"
+                      [cdkConnectedOverlayOpen]="isOverlayOpenForAssignedBy"
+                      cdkConnectedOverlayBackdropClass="cdk-overlay-transparent-backdrop"
+                      [cdkConnectedOverlayHasBackdrop]="true"
+                    >
+                      <main-app-user-dialog
+                        [listInput]="reportToBindList"
+                        [isShowSearchBox]="true"
+                        [searchText]="'Search Assigned by'"
+                        (emmitSelectedUser)="getSelectedAssignedBy($event)"
+                        [isUsers]="true"
+                      ></main-app-user-dialog>
+                    </ng-template>
+                  </span>
+                </div>
+                <div class="task-right-label-wrapper">
+                  <span class="task-left-label"> <strong>Reporter </strong></span>
+                  <span
+                    class="task-right-label"
+                    [ngClass]="{
+                      'disabled-report': isResponsiblePerson
+                    }"
+                  >
+                    <span [ngClass]="isOverlayOpenForReportTo ? 'focus-details' : ''">
+                      <span class="cursor-pointer" (click)="toggleOverlayForReportTo()" cdkOverlayOrigin #triggerReportTo="cdkOverlayOrigin">
+                        <ng-container *ngIf="!_addTaskForm['reportTo'].value; else reportToTemplate">
+                          <p class="name-icon-wrapper">None</p>
+                        </ng-container>
+                        <ng-template #reportToTemplate>
+                          <span class="name-icon-wrapper"
+                            >{{ _addTaskForm['reportTo'].value.name || '' }}
+                            <span *ngIf="loggedInUserId && loggedInUserId === _addTaskForm['reportTo']?.value?.id">(Me)</span>
+                            <!-- <mat-icon (click)="$event.stopPropagation(); checkIfUserHasPermission('reportTo')" class="filter-close"
+                            >close</mat-icon
+                          > -->
+                          </span>
+                        </ng-template>
+                      </span>
+                      <ng-template
+                        cdkConnectedOverlay
+                        (overlayOutsideClick)="isOverlayOpenForReportTo = false"
+                        [cdkConnectedOverlayOrigin]="triggerReportTo"
+                        [cdkConnectedOverlayOpen]="isOverlayOpenForReportTo"
+                        cdkConnectedOverlayBackdropClass="cdk-overlay-transparent-backdrop"
+                        [cdkConnectedOverlayHasBackdrop]="true"
+                      >
+                        <main-app-user-dialog
+                          [listInput]="reportToBindList"
+                          [isShowSearchBox]="true"
+                          [searchText]="'Search report to'"
+                          (emmitSelectedUser)="getSelectedReportTo($event)"
+                          [isUsers]="true"
+                        ></main-app-user-dialog>
+                      </ng-template>
+                    </span>
+                  </span>
+                </div>
+                <div class="task-right-label-wrapper">
+                  <span class="task-left-label"> <strong>Priority </strong></span>
+                  <span class="task-right-label Priority-blk">
+                    <!-- <span class="cursor-pointer" (click)="toggleOverlayForPriority()" cdkOverlayOrigin #triggerPriority="cdkOverlayOrigin">
+                      <ng-container *ngIf="!_addTaskForm['taskPriority'].value; else priorityTemplate"></ng-container>
+                      <ng-template #priorityTemplate>
+                        <span class="name-icon-wrapper">{{ _addTaskForm['taskPriority'].value || '' }} </span>
+                      </ng-template>
+                    </span> -->
+                    <span
+                      class="cursor-pointer priority-blk-wrapper"
+                      *ngIf="_addTaskForm['taskPriority'].value; else noPrioritySelected"
+                      [matMenuTriggerFor]="priorityMenu"
+                      [ngClass]="trigger.menuOpen ? 'focus-details' : ''"
+                      #trigger="matMenuTrigger"
+                    >
+                      <img [src]="'assets/images/' + _addTaskForm['taskPriority'].value.priorityImg" />
+                      <span class="name-icon-wrapper" class="name-icon-wrapper">{{ _addTaskForm['taskPriority'].value.name }} </span>
+                    </span>
+                    <ng-template #noPrioritySelected>
+                      <a
+                        [matMenuTriggerFor]="priorityMenu"
+                        (click)="$event.preventDefault()"
+                        class="set-pri-block"
+                        [ngClass]="trigger.menuOpen ? 'focus-details' : ''"
+                        #trigger="matMenuTrigger"
+                        >Set Priority</a
+                      >
+                    </ng-template>
+
+                    <mat-menu #priorityMenu="matMenu" yPosition="below" class="priority-menu-wrapper dropdown-border-input-wrapper">
+                      <div
+                        class="prirority-dropdown-list"
+                        mat-menu-item
+                        *ngFor="let priority of taskPriorityList; let i = index"
+                        (click)="getSelectedTaskPriority(priority)"
+                      >
+                        <img [src]="'assets/images/' + priority.priorityImg" />
+                        <span class="priority-name">{{ priority.name }}</span>
+                      </div>
+                      <div class="prirority-dropdown-list clear-list" mat-menu-item (click)="clearPriority()">
+                        <img [src]="'assets/images/clear.svg'" />
+                        <span class="priority-name">Clear</span>
+                      </div>
+                    </mat-menu>
+                    <!-- <ng-template
+                      cdkConnectedOverlay
+                      (overlayOutsideClick)="isOverlayOpenForPriority = false"
+                      [cdkConnectedOverlayOrigin]="triggerPriority"
+                      [cdkConnectedOverlayOpen]="isOverlayOpenForPriority"
+                    >
+                      <main-app-user-dialog [listInput]="taskPriorityList" (emmitSelectedUser)="getSelectedTaskPriority($event)">
+                      </main-app-user-dialog>
+                    </ng-template> -->
+                    <!-- <ng-container *ngIf="!_addTaskForm['taskPriority'].value">
+                      <div class="error">Please select task priority</div>
+                    </ng-container> -->
+                  </span>
+                </div>
+
+                <div class="task-right-label-wrapper">
+                  <span class="task-left-label"><strong>Section</strong> </span>
+                  <span class="task-right-label details-field">
+                    <ng-container *ngIf="!isSectionControlVisible; else selectSectionTemplate">
+                      <p class="name-icon-wrapper cursor-pointer" (click)="openSelectSectionControl()">
+                        {{ (_addTaskForm['section'].value && _addTaskForm['section'].value.title) || 'None' }}
+                      </p>
+                      <svg
+                        *ngIf="_addTaskForm['section'].value && _addTaskForm['section'].value.title"
+                        (click)="$event.stopPropagation(); resetSectionField()"
+                        class="filter-close"
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="16"
+                        height="16"
+                        viewBox="0 0 16 16"
+                        fill="none"
+                      >
+                        <path
+                          d="M8.00065 14.6668C11.6673 14.6668 14.6673 11.6668 14.6673 8.00016C14.6673 4.3335 11.6673 1.3335 8.00065 1.3335C4.33398 1.3335 1.33398 4.3335 1.33398 8.00016C1.33398 11.6668 4.33398 14.6668 8.00065 14.6668Z"
+                          stroke="#86969D"
+                          stroke-width="1.5"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                        <path
+                          d="M6.11328 9.88661L9.88661 6.11328"
+                          stroke="#86969D"
+                          stroke-width="1.5"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                        <path
+                          d="M9.88661 9.88661L6.11328 6.11328"
+                          stroke="#86969D"
+                          stroke-width="1.5"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                      </svg>
+                    </ng-container>
+                    <ng-template #selectSectionTemplate class="task-section-wrapper">
+                      <mat-form-field>
+                        <mat-select
+                          formControlName="section"
+                          placeholder="Select section"
+                          #sectionselect
+                          (selectionChange)="onSectionSelect(sectionselect)"
+                          [compareWith]="attributeDisplayForTaskSection"
+                          (openedChange)="sectionClosed()"
+                          panelClass="dropdown-border-input-wrapper"
+                        >
+                          <mat-option class="input-outer-wrapper">
+                            <div class="input-wrapper">
+                              <ngx-mat-select-search
+                                [formControl]="sectionSearchControl"
+                                [noEntriesFoundLabel]="''"
+                                [placeholderLabel]="'Search'"
+                              ></ngx-mat-select-search>
+                              <img src="assets/images/search.svg" alt="search" class="search" />
+                            </div>
+                          </mat-option>
+                          <div class="dropdown-border-listing-wrapper">
+                            <mat-option *ngFor="let section of filteredSections | async" [value]="section">
+                              {{ section.title }}
+                            </mat-option>
+                            <mat-option *ngIf="isShowCreateNewSection">Create {{ sectionSearchControl.value }} section</mat-option>
+                          </div>
+                        </mat-select>
+                      </mat-form-field>
+                    </ng-template>
+                  </span>
+                </div>
+                <div class="task-right-label-wrapper">
+                  <span class="task-left-label"
+                    ><strong
+                      >Start Date
+                      <span class="red-star">*</span>
+                    </strong>
+                  </span>
+                  <div class="task-right-label details-field date-details-field">
+                    <ng-container *ngIf="!isStartDateControlVisible; else selectStartDateTemplate">
+                      <p class="name-icon-wrapper cursor-pointer" (click)="openStartDatePickerControl()">
+                        {{ _addTaskForm['taskStartDate'].value ? (_addTaskForm['taskStartDate'].value | date : 'dd/MM/yyyy') : 'Date' }}
+                      </p>
+                      <ng-container *ngIf="_addTaskForm['taskStartDate'].errors && (isTaskSubmitted || _addTaskForm['taskStartDate'].touched)">
+                        <ng-container *ngIf="_addTaskForm['taskStartDate'].errors?.['required']">
+                          <div class="error">Start date is required</div>
+                        </ng-container>
+                        <ng-container *ngIf="_addTaskForm['taskStartDate'].errors?.['isStartDateGreaterThanDueDate']">
+                          <div class="error">The start date must be equal to or earlier than due date.</div>
+                        </ng-container>
+                      </ng-container>
+                    </ng-container>
+                    <ng-template #selectStartDateTemplate>
+                      <mat-form-field class="task-right-label">
+                        <input
+                          formControlName="taskStartDate"
+                          matInput
+                          [matDatepicker]="taskStartDatePicker"
+                          (click)="taskStartDatePicker.open()"
+                          (dateChange)="onTaskDateChange()"
+                          autocomplete="off"
+                          readonly
+                        />
+                        <mat-datepicker #taskStartDatePicker (closed)="closeStartDatePickerControl()"></mat-datepicker>
+                      </mat-form-field>
+                      <mat-error *ngIf="_addTaskForm['taskStartDate'].errors && (isTaskSubmitted || _addTaskForm['taskStartDate']?.touched)">
+                        <ng-container *ngIf="_addTaskForm['taskStartDate'].errors?.['required']">
+                          <div class="error">Start date is required</div>
+                        </ng-container>
+                        <ng-container *ngIf="_addTaskForm['taskStartDate'].errors?.['isStartDateGreaterThanDueDate']">
+                          <div class="error">The start date must be earlier than due date.</div>
+                        </ng-container>
+                      </mat-error>
+                    </ng-template>
+                  </div>
+                </div>
+                <div class="task-right-label-wrapper">
+                  <span class="task-left-label"
+                    ><strong
+                      >Due Date
+                      <span class="red-star">*</span>
+                    </strong></span
+                  >
+                  <div class="task-right-label details-field date-details-field">
+                    <ng-container *ngIf="!isDueDateControlVisible; else selectDueDateTemplate">
+                      <p class="name-icon-wrapper cursor-pointer" (click)="openDueDatePickerControl()">
+                        {{ _addTaskForm['taskDueDate'].value ? (_addTaskForm['taskDueDate'].value | date : 'dd/MM/yyyy') : 'Date' }}
+                      </p>
+                      <ng-container *ngIf="_addTaskForm['taskDueDate'].errors && (isTaskSubmitted || _addTaskForm['taskDueDate']?.touched)">
+                        <ng-container *ngIf="_addTaskForm['taskDueDate'].errors?.['required']">
+                          <div class="error">Due date is required</div>
+                        </ng-container>
+                      </ng-container>
+                    </ng-container>
+                    <ng-template #selectDueDateTemplate>
+                      <mat-form-field>
+                        <input
+                          matInput
+                          formControlName="taskDueDate"
+                          [matDatepicker]="taskDueDatePicker"
+                          (click)="taskDueDatePicker.open()"
+                          (dateChange)="onTaskDateChange()"
+                          autocomplete="off"
+                          readonly
+                        />
+                        <mat-datepicker #taskDueDatePicker (closed)="closeDueDatePickerControl()"></mat-datepicker>
+                      </mat-form-field>
+                    </ng-template>
+                  </div>
+                </div>
+                <div class="task-right-label-wrapper">
+                  <span class="task-left-label"
+                    ><strong
+                      >ETA
+                      <span class="red-star">*</span>
+                    </strong></span
+                  >
+                  <div class="task-right-label" [ngClass]="isOverlayOpenForETA ? 'focus-details' : ''">
+                    <span>
+                      <span class="cursor-pointer" (click)="toggleETAOverlay()" cdkOverlayOrigin #triggerETAOverlay="cdkOverlayOrigin">
+                        <ng-container *ngIf="!_addTaskForm['estimatedTime'].value; else ETATemplate">
+                          <p class="name-icon-wrapper">None</p>
+                        </ng-container>
+                        <ng-template #ETATemplate>
+                          <span class="name-icon-wrapper">{{ _addTaskForm['estimatedTime'].value || '' | replaceh }} </span>
+                        </ng-template>
+                      </span>
+                      <ng-template
+                        cdkConnectedOverlay
+                        (overlayOutsideClick)="isOverlayOpenForETA = false"
+                        [cdkConnectedOverlayOrigin]="triggerETAOverlay"
+                        [cdkConnectedOverlayOpen]="isOverlayOpenForETA"
+                        cdkConnectedOverlayBackdropClass="cdk-overlay-transparent-backdrop"
+                        [cdkConnectedOverlayHasBackdrop]="true"
+                      >
+                        <tms-workspace-eta-popup
+                          [ETAInput]="_addTaskForm['estimatedTime'].value || ''"
+                          (ETAEmmiter)="getSelectedETA($event)"
+                        ></tms-workspace-eta-popup>
+                      </ng-template>
+                    </span>
+                    <ng-container *ngIf="_addTaskForm['estimatedTime'].errors && (isTaskSubmitted || _addTaskForm['estimatedTime']?.touched)">
+                      <ng-container *ngIf="_addTaskForm['estimatedTime'].errors?.['required']">
+                        <div class="error">ETA is required</div>
+                      </ng-container>
+                    </ng-container>
+                  </div>
+                </div>
+                <div class="task-right-label-wrapper">
+                  <span class="task-left-label"><strong>Parent Task</strong></span>
+                  <div class="task-right-label details-field parent-task-wrapper">
+                    <ng-container *ngIf="_addTaskForm['parentTask'].value; else showParentTaskLinkTemplate">
+                      <a
+                        [href]="_addTaskForm['parentTask'].value.taskURL"
+                        target="_blank"
+                        [matTooltip]="_addTaskForm['parentTask'].value ? _addTaskForm['parentTask'].value?.title : ''"
+                        >{{
+                          _addTaskForm['parentTask'].value.title?.length > 25
+                            ? _addTaskForm['parentTask'].value.title.slice(0, 25) + '...'
+                            : _addTaskForm['parentTask'].value.title
+                        }}
+                      </a>
+                      <svg
+                        width="16"
+                        height="16"
+                        viewBox="0 0 16 16"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                        (click)="$event.stopPropagation(); removeParentTask()"
+                        matTooltip="Remove the parent task"
+                        class="filter-close"
+                      >
+                        <g id="vuesax/linear/close-circle">
+                          <g id="close-circle">
+                            <path
+                              id="Vector"
+                              d="M8.00065 14.6668C11.6673 14.6668 14.6673 11.6668 14.6673 8.00016C14.6673 4.3335 11.6673 1.3335 8.00065 1.3335C4.33398 1.3335 1.33398 4.3335 1.33398 8.00016C1.33398 11.6668 4.33398 14.6668 8.00065 14.6668Z"
+                              stroke="#86969D"
+                              stroke-width="1.5"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                            />
+                            <path
+                              id="Vector_2"
+                              d="M6.11328 9.88661L9.88661 6.11328"
+                              stroke="#86969D"
+                              stroke-width="1.5"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                            />
+                            <path
+                              id="Vector_3"
+                              d="M9.88661 9.88661L6.11328 6.11328"
+                              stroke="#86969D"
+                              stroke-width="1.5"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                            />
+                          </g>
+                        </g>
+                      </svg>
+                    </ng-container>
+                    <ng-template #showParentTaskLinkTemplate>
+                      <a href="#" (click)="$event.preventDefault(); openParentTaskModal()">Set Parent Task</a>
+                    </ng-template>
+                  </div>
+                  <main-app-tms-workspace-parent-task-list-modal
+                    *ngIf="isShowParentTaskListModal"
+                    [projectId]="this._addTaskForm['project'].value.id"
+                    (emitModal)="onParentTaskListModalClose($event)"
+                  ></main-app-tms-workspace-parent-task-list-modal>
+                </div>
+
+                <div class="task-right-label-wrapper">
+                  <span class="task-left-label"><strong>External Task Link</strong></span>
+                  <div class="task-right-label">
+                    <p *ngIf="!isExternalTaskLinkControlVisible" class="name-icon-wrapper cursor-pointer" (click)="toggleExternalTaskLinkControl()">
+                      <a
+                        (click)="$event.stopPropagation()"
+                        *ngIf="_addTaskForm['externalTaskLinkInput'].value; else noExternalTaskLinkTemplate"
+                        [href]="_addTaskForm['externalTaskLinkInput'].value"
+                        target="_blank"
+                        class="ext-link"
+                        >{{ _addTaskForm['externalTaskLinkInput'].value }}</a
+                      >
+                      <svg
+                        width="16"
+                        height="16"
+                        viewBox="0 0 16 16"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                        *ngIf="_addTaskForm['externalTaskLinkInput'].value"
+                        (click)="$event.stopPropagation(); checkIfUserHasPermission('externalTaskLinkInput')"
+                        class="filter-close"
+                      >
+                        <g id="vuesax/linear/close-circle">
+                          <g id="close-circle">
+                            <path
+                              id="Vector"
+                              d="M8.00065 14.6668C11.6673 14.6668 14.6673 11.6668 14.6673 8.00016C14.6673 4.3335 11.6673 1.3335 8.00065 1.3335C4.33398 1.3335 1.33398 4.3335 1.33398 8.00016C1.33398 11.6668 4.33398 14.6668 8.00065 14.6668Z"
+                              stroke="#86969D"
+                              stroke-width="1.5"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                            />
+                            <path
+                              id="Vector_2"
+                              d="M6.11328 9.88661L9.88661 6.11328"
+                              stroke="#86969D"
+                              stroke-width="1.5"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                            />
+                            <path
+                              id="Vector_3"
+                              d="M9.88661 9.88661L6.11328 6.11328"
+                              stroke="#86969D"
+                              stroke-width="1.5"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                            />
+                          </g>
+                        </g>
+                      </svg>
+
+                      <ng-template #noExternalTaskLinkTemplate>
+                        <span>None</span>
+                      </ng-template>
+                    </p>
+                    <ng-container *ngIf="isExternalTaskLinkControlVisible">
+                      <mat-form-field class="external-input-wrapper">
+                        <input
+                          matInput
+                          type="url"
+                          formControlName="externalTaskLinkInput"
+                          autoFocusDirective
+                          (blur)="toggleExternalTaskLinkControl()"
+                        />
+                      </mat-form-field>
+                    </ng-container>
+                    <ng-container *ngIf="_addTaskForm['externalTaskLinkInput'].errors">
+                      <ng-container *ngIf="_addTaskForm['externalTaskLinkInput'].errors?.['pattern']">
+                        <div class="error">Please enter valid URL</div>
+                      </ng-container>
+                    </ng-container>
+                  </div>
+                </div>
+
+                <div class="task-right-label-wrapper">
+                  <span class="task-left-label"><strong>Labels</strong> </span>
+                  <!-- Labels -->
+                  <div
+                    class="task-right-label"
+                    matTooltip="Labels"
+                    [ngClass]="[_addTaskForm['project'].value ? '' : 'disable-container', openQuickTaskLabelsSection ? 'labels-edit-mode' : '']"
+                    mat-button
+                    cdkOverlayOrigin
+                    #triggerQuickTaskLabels="cdkOverlayOrigin"
+                    (click)="editTaskLables()"
+                  >
+                    <span
+                      class="name-icon-wrapper cursor-pointer"
+                      [ngClass]="_addTaskForm['project'].value ? '' : 'disable-item'"
+                      *ngIf="_addTaskForm['taskLabelControl']?.value && _addTaskForm['taskLabelControl']?.value.length === 0"
+                      >Task Label</span
+                    >
+                    <div class="task-label-outer">
+                      <span
+                        *ngFor="let label of _addTaskForm['taskLabelControl']?.value?.slice(0, 1)"
+                        class="task-info label-wrapper"
+                        [ngStyle]="{ 'background-color': label?.color?.bgColor, color: label?.color?.color }"
+                      >
+                        {{ label.title }}
+                      </span>
+                      <div class="count" *ngIf="_addTaskForm['taskLabelControl']?.value?.length > 1">
+                        +{{ _addTaskForm['taskLabelControl'].value?.length - 1 }}
+                      </div>
+                    </div>
+                  </div>
+                  <ng-template
+                    class="ios"
+                    cdkConnectedOverlay
+                    cdkConnectedOverlayBackdropClass="cdk-overlay-transparent-backdrop"
+                    [cdkConnectedOverlayHasBackdrop]="true"
+                    [cdkConnectedOverlayOrigin]="triggerQuickTaskLabels"
+                    [cdkConnectedOverlayOpen]="openQuickTaskLabelsSection"
+                    (detach)="openQuickTaskLabelsSection = false; saveLabels()"
+                    (backdropClick)="openQuickTaskLabelsSection = false"
+                  >
+                    <span class="task-right-label custom-overlay">
+                      <div class="section-menu-wrapper-outer">
+                        <div
+                          class="section-menu-wrapper-outer-inner"
+                          [ngClass]="tempLabelStorage && tempLabelStorage.length > 0 ? '' : 'empty-labels-selection'"
+                        >
+                          <ng-container *ngIf="tempLabelStorage && tempLabelStorage.length > 0" style="display: flex; width: 100%">
+                            <span
+                              *ngFor="let item of tempLabelStorage"
+                              [ngStyle]="{ 'background-color': item?.color?.bgColor, color: item?.color?.color }"
+                              class="label-wrapper"
+                            >
+                              {{ item?.title || '' }}
+                              <mat-icon (click)="$event.stopPropagation(); onRemoveTaskLabel(item)">cancel</mat-icon>
+                            </span>
+                            <span
+                              [cpFallbackColor]="'#800101'"
+                              [cpPresetColors]="presetColors"
+                              [(cpToggle)]="toggle"
+                              [(colorPicker)]="color"
+                              (colorPickerChange)="onLabelColorChange($event)"
+                            ></span>
+                          </ng-container>
+                        </div>
+                        <tms-workspace-labels-popup
+                          [placeHolder]="'Search or Create New'"
+                          [isIntaskList]="true"
+                          [listInput]="filteredAvailableLabels"
+                          (itemEmmiter)="onTaskLabelSelect($event)"
+                          [messageToCreateNewItem]="createLabelForMessage"
+                          [hasSelctedLables]="tempLabelStorage?.length > 0"
+                        ></tms-workspace-labels-popup>
+                      </div>
+                    </span>
+                  </ng-template>
+                </div>
+                <div class="task-right-label-wrapper">
+                  <span class="task-left-label"><strong>Task Subscribers</strong></span>
+                  <div class="task-right-label more-list">
+                    <ng-container *ngIf="_addTaskForm['taskSubscribers'].value && _addTaskForm['taskSubscribers'].value.length > 0">
+                      <div>
+                        <ng-container *ngIf="_addTaskForm['taskSubscribers'].value.length > 5; else lessThanFiveSub">
+                          <div
+                            class="document-round"
+                            *ngFor="let person of _addTaskForm['taskSubscribers'].value.slice(0, 4)"
+                            [matTooltip]="person?.name || ''"
+                          >
+                            <img
+                              [ngClass]="
+                                person && person?.login_capture_data
+                                  ? person?.login_capture_data?.isWfo === true
+                                    ? 'user-indication user-wfo'
+                                    : person?.login_capture_data?.isWfo === false
+                                    ? 'user-indication user-wfh'
+                                    : 'user-indication user-not-loggedIn'
+                                  : 'user-indication user-not-loggedIn'
+                              "
+                              [src]="baseURL + (person.employee_image ? person.employee_image : person.avatar)"
+                              #img
+                              (error)="img.src = 'assets/images/default.png'"
+                              alt=""
+                            />
+                          </div>
+                          <!-- customToolTip
+                      [contentTemplate]="extraSubTooltip" -->
+                          <div class="document-round single-icon" *ngIf="_addTaskForm['taskSubscribers'].value.length > 4">
+                            <span>+{{ _addTaskForm['taskSubscribers'].value.length - 4 }}</span>
+                          </div>
+                        </ng-container>
+                        <ng-template #lessThanFiveSub>
+                          <div class="document-round" *ngFor="let person of _addTaskForm['taskSubscribers'].value" [matTooltip]="person?.name || ''">
+                            <img
+                              [ngClass]="
+                                person && person?.login_capture_data
+                                  ? person?.login_capture_data?.isWfo === true
+                                    ? 'user-indication user-wfo'
+                                    : person?.login_capture_data?.isWfo === false
+                                    ? 'user-indication user-wfh'
+                                    : 'user-indication user-not-loggedIn'
+                                  : 'user-indication user-not-loggedIn'
+                              "
+                              [src]="baseURL + (person.employee_image ? person.employee_image : person.avatar)"
+                              #img
+                              (error)="img.src = 'assets/images/default.png'"
+                              alt=""
+                            />
+                          </div>
+                        </ng-template>
+                        <!-- <ng-template #extraSubTooltip>
+                          <span *ngFor="let sub of _addTaskForm['taskSubscribers'].value.slice(4)">
+                            {{sub.name}}
+                          </span>
+
+                        </ng-template> -->
+                        <div class="document-round single-icon">
+                          <mat-icon class="cursor-pointer" (click)="toggleSubscriberOverlay()">add</mat-icon>
+                        </div>
+                      </div>
+                    </ng-container>
+                    <div class="document-round">
+                      <span class="cursor-pointer" (click)="toggleSubscriberOverlay()" cdkOverlayOrigin #triggerSubscribersOverlay="cdkOverlayOrigin"
+                        ><p
+                          class="name-icon-wrapper"
+                          *ngIf="!_addTaskForm['taskSubscribers'].value || _addTaskForm['taskSubscribers'].value.length === 0"
+                        >
+                          Task Subscribers
+                        </p></span
+                      >
+                      <ng-template
+                        cdkConnectedOverlay
+                        (overlayOutsideClick)="isOverlayOpenForSubscriber = false"
+                        [cdkConnectedOverlayOrigin]="triggerSubscribersOverlay"
+                        [cdkConnectedOverlayOpen]="isOverlayOpenForSubscriber"
+                        cdkConnectedOverlayBackdropClass="cdk-overlay-transparent-backdrop"
+                        [cdkConnectedOverlayHasBackdrop]="true"
+                      >
+                        <tms-workspace-multi-user-selection-popup
+                          [listInput]="reportToBindList"
+                          [selectedList]="_addTaskForm['taskSubscribers'].value || []"
+                          (emitList)="getSelectedSubscribers($event)"
+                        ></tms-workspace-multi-user-selection-popup>
+                      </ng-template>
+                    </div>
+                  </div>
+                </div>
+
+                <div>
+                  <div formArrayName="contextFormFieldArray" class="custom-group-wrapper">
+                    <div *ngFor="let group of contextFormFieldArray.controls; let i = index">
+                      <div [formGroupName]="i" class="task-right-label-wrapper">
+                        <!-- FOR INPUT TYPE TEXT -->
+                        <ng-container *ngIf="group.get('otherFieldProperties')?.value?.type === 'text'">
+                          <div class="task-left-label">
+                            <p>
+                              <strong class="pr-form-top-header">{{ group.get('otherFieldProperties')?.value?.label }}:</strong>
+                              <strong class="red-star">{{ group.get('otherFieldProperties')?.value?.is_required ? '*' : '' }}</strong>
+                            </p>
+                          </div>
+                          <mat-form-field class="task-right-label">
+                            <input
+                              matInput
+                              type="text"
+                              [name]="group.get('otherFieldProperties')?.value?.label"
+                              [id]="group.get('otherFieldProperties')?.value?.label"
+                              [required]="group.get('otherFieldProperties')?.value?.is_required"
+                              formControlName="fieldControl"
+                            />
+                            <mat-error *ngIf="group.get('otherFieldProperties')?.value?.is_required">
+                              <ng-container *ngIf="group.get('fieldControl')?.errors && (isTaskSubmitted || group.get('fieldControl')?.touched)">
+                                <span>{{ group.get('otherFieldProperties')?.value?.label + ' is required' }}</span>
+                              </ng-container>
+                            </mat-error>
+                          </mat-form-field>
+                        </ng-container>
+
+                        <!-- FOR INPUT TYPE TEXTAREA -->
+                        <ng-container *ngIf="group.get('otherFieldProperties')?.value?.type === 'textarea'">
+                          <div class="task-left-label">
+                            <p>
+                              <strong class="pr-form-top-header">{{ group.get('otherFieldProperties')?.value?.label }}:</strong>
+                              <strong class="red-star">{{ group.get('otherFieldProperties')?.value?.is_required ? '*' : '' }}</strong>
+                            </p>
+                          </div>
+                          <textarea
+                            [name]="group.get('otherFieldProperties')?.value?.label"
+                            [id]="group.get('otherFieldProperties')?.value?.label"
+                            [required]="group.get('otherFieldProperties')?.value?.is_required"
+                            placeholder="Task description will be here..."
+                            formControlName="fieldControl"
+                            class="task-right-label"
+                          ></textarea>
+                          <mat-error *ngIf="group.get('otherFieldProperties')?.value?.is_required">
+                            <ng-container *ngIf="group.get('fieldControl')?.errors && (isTaskSubmitted || group.get('fieldControl')?.touched)">
+                              <span>{{ group.get('otherFieldProperties')?.value?.label + ' is required' }}</span>
+                            </ng-container>
+                          </mat-error>
+                        </ng-container>
+
+                        <!-- FOR INPUT TYPE DATE -->
+
+                        <ng-container *ngIf="group.get('otherFieldProperties')?.value?.type === 'date'">
+                          <div class="task-left-label">
+                            <p>
+                              <strong class="pr-form-top-header">{{ group.get('otherFieldProperties')?.value?.label }}:</strong>
+                              <strong class="red-star">{{ group.get('otherFieldProperties')?.value?.is_required ? '*' : '' }}</strong>
+                            </p>
+                          </div>
+                          <mat-form-field class="task-right-label">
+                            <input
+                              matInput
+                              [matDatepicker]="startpicker"
+                              formControlName="fieldControl"
+                              (dateInput)="validateDate($event)"
+                              (dateChange)="validateDate($event)"
+                              autocomplete="off"
+                            />
+
+                            <mat-datepicker-toggle matSuffix [for]="startpicker"></mat-datepicker-toggle>
+                            <mat-datepicker #startpicker></mat-datepicker>
+                          </mat-form-field>
+                          <mat-error *ngIf="group.get('otherFieldProperties')?.value?.is_required">
+                            <ng-container *ngIf="group.get('fieldControl')?.errors && (isTaskSubmitted || group.get('fieldControl')?.touched)">
+                              <span>{{ group.get('otherFieldProperties')?.value?.label + ' is required' }}</span>
+                            </ng-container>
+                          </mat-error>
+                        </ng-container>
+
+                        <!-- FOR INPUT TYPE NUMBER -->
+                        <ng-container *ngIf="group.get('otherFieldProperties')?.value?.type === 'number'">
+                          <div class="task-left-label">
+                            <p>
+                              <strong class="pr-form-top-header">{{ group.get('otherFieldProperties')?.value?.label }}:</strong>
+                              <strong class="red-star">{{ group.get('otherFieldProperties')?.value?.is_required ? '*' : '' }}</strong>
+                            </p>
+                          </div>
+                          <mat-form-field class="task-right-label">
+                            <input
+                              matInput
+                              type="number"
+                              min="1"
+                              [name]="group.get('otherFieldProperties')?.value?.label"
+                              [id]="group.get('otherFieldProperties')?.value?.label"
+                              [required]="group.get('otherFieldProperties')?.value?.is_required"
+                              formControlName="fieldControl"
+                            />
+                          </mat-form-field>
+                          <mat-error *ngIf="group.get('otherFieldProperties')?.value?.is_required">
+                            <ng-container *ngIf="group.get('fieldControl')?.errors && (isTaskSubmitted || group.get('fieldControl')?.touched)">
+                              <span>{{ group.get('otherFieldProperties')?.value?.label + ' is required' }}</span>
+                            </ng-container>
+                          </mat-error>
+                        </ng-container>
+
+                        <!-- FOR INPUT TYPE DROPDOWN -->
+                        <ng-container *ngIf="group.get('otherFieldProperties')?.value?.type === 'dropdown'">
+                          <div class="task-left-label">
+                            <p>
+                              <strong class="pr-form-top-header">{{ group.get('otherFieldProperties')?.value?.label }}:</strong>
+                              <strong class="red-star">{{ group.get('otherFieldProperties')?.value?.is_required ? '*' : '' }}</strong>
+                            </p>
+                          </div>
+                          <mat-form-field class="task-right-label">
+                            <mat-select formControlName="fieldControl" (selectionChange)="onSelectionChange($event)">
+                              <mat-option *ngFor="let item of group.get('otherFieldProperties')?.value?.options" [value]="item.id">
+                                {{ item.value }}
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                          <mat-error *ngIf="group.get('otherFieldProperties')?.value?.is_required">
+                            <ng-container *ngIf="group.get('fieldControl')?.errors && (isTaskSubmitted || group.get('fieldControl')?.touched)">
+                              <span>{{ group.get('otherFieldProperties')?.value?.label + ' is required' }}</span>
+                            </ng-container>
+                          </mat-error>
+                        </ng-container>
+
+                        <!-- FOR INPUT TYPE CHECKBOX -->
+                        <ng-container *ngIf="group.get('otherFieldProperties')?.value?.type === 'checkbox'">
+                          <div class="task-left-label">
+                            <p>
+                              <strong class="pr-form-top-header">{{ group.get('otherFieldProperties')?.value?.label }}:</strong>
+                              <strong class="red-star">{{ group.get('otherFieldProperties')?.value?.is_required ? '*' : '' }}</strong>
+                            </p>
+                          </div>
+                          <mat-checkbox [inputMode]="'checkbox'" formControlName="fieldControl" class="task-right-label"></mat-checkbox>
+                          <mat-error *ngIf="group.get('otherFieldProperties')?.value?.is_required">
+                            <ng-container *ngIf="group.get('fieldControl')?.errors && (isTaskSubmitted || group.get('fieldControl')?.touched)">
+                              <span>{{ group.get('otherFieldProperties')?.value?.label + ' is required' }}</span>
+                            </ng-container>
+                          </mat-error>
+                        </ng-container>
+
+                        <!-- FOR INPUT TYPE RADIO -->
+                        <ng-container *ngIf="group.get('otherFieldProperties')?.value?.type === 'radio'">
+                          <div class="task-left-label">
+                            <p>
+                              <strong class="pr-form-top-header">{{ group.get('otherFieldProperties')?.value?.label }}:</strong>
+                              <strong class="red-star">{{ group.get('otherFieldProperties')?.value?.is_required ? '*' : '' }}</strong>
+                            </p>
+                          </div>
+                          <mat-radio-group class="task-right-label">
+                            <mat-radio-button
+                              color="primary"
+                              *ngFor="let item of group.get('otherFieldProperties')?.value?.options"
+                              [value]="item.id"
+                              >{{ item.value }}</mat-radio-button
+                            >
+                          </mat-radio-group>
+                          <mat-error *ngIf="group.get('otherFieldProperties')?.value?.is_required">
+                            <ng-container *ngIf="group.get('fieldControl')?.errors && (isTaskSubmitted || group.get('fieldControl')?.touched)">
+                              <span>{{ group.get('otherFieldProperties')?.value?.label + ' is required' }}</span>
+                            </ng-container>
+                          </mat-error>
+                        </ng-container>
+
+                        <!-- FOR INPUT TYPE URL -->
+                        <ng-container *ngIf="group.get('otherFieldProperties')?.value?.type === 'url'">
+                          <div class="task-left-label">
+                            <p>
+                              <strong class="pr-form-top-header">{{ group.get('otherFieldProperties')?.value?.label }}:</strong>
+                              <strong class="red-star">{{ group.get('otherFieldProperties')?.value?.is_required ? '*' : '' }}</strong>
+                            </p>
+                          </div>
+                          <mat-form-field class="task-right-label">
+                            <input
+                              matInput
+                              type="url"
+                              [name]="group.get('otherFieldProperties')?.value?.label"
+                              [id]="group.get('otherFieldProperties')?.value?.label"
+                              [required]="group.get('otherFieldProperties')?.value?.is_required"
+                              formControlName="fieldControl"
+                            />
+                          </mat-form-field>
+                          <mat-error *ngIf="group.get('otherFieldProperties')?.value?.is_required">
+                            <ng-container *ngIf="group.get('fieldControl')?.errors && (isTaskSubmitted || group.get('fieldControl')?.touched)">
+                              <span>{{ group.get('otherFieldProperties')?.value?.label + ' is required' }}</span>
+                            </ng-container>
+                          </mat-error>
+                        </ng-container>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </mat-card>
+  </div>
+</div>

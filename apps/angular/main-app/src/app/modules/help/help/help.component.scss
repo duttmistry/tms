@@ -1,0 +1,107 @@
+@import 'apps/angular/main-app/src/variables';
+
+.no-record {
+  margin-top: 15px !important;
+}
+
+.example-card {
+  // max-width: 400px;
+  height: 100%;
+  margin-right: 15px;
+  margin-top: 15px;
+  text-align: left;
+  border-radius: 0px !important;
+  // box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2), 0px 6px 10px 0px rgba(0, 0, 0, 0.14), 0px 1px 18px 0px rgba(0, 0, 0, 0.12) !important;
+}
+
+// .trending-container {
+//   display: flex;
+//   flex-wrap: wrap;
+//   margin: 0 auto;
+//   padding: 20px;
+//   overflow-y: auto; /* Enable vertical scrolling */
+//   max-height: 700px; /* Set a maximum height for scrolling */
+// }
+
+.title {
+  font-weight: bold;
+  font-size: $theme-main-medium-font;
+}
+
+.img-help {
+  width: 100%;
+}
+
+.image-container {
+  height: 160px;
+  overflow: hidden;
+}
+
+//mobile
+.grid-cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+  gap: 25px;
+}
+.help-description {
+  font-size: $theme-main-small-font;
+  text-align: justify;
+}
+
+/* Add media query for responsiveness */
+@media (min-width: 747px) {
+  .grid-cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 25px;
+  }
+}
+// @media only screen and (min-width: 600px) {
+//   .grid-cards {
+//     display: grid;
+//     grid-template-columns: 1fr 1fr;
+//     gap: px;
+//   }
+// }
+// @media only screen and (min-width: 768px) {
+//   .grid-cards {
+//     display: grid;
+//     grid-template-columns: 1fr 1fr 1fr;
+//     gap: 25px;
+//   }
+// }
+
+.image-container-2 {
+  content: '';
+  clear: both;
+  display: table;
+  padding: 20px;
+}
+
+.content {
+  margin-left: 20px;
+}
+
+.help-description-2 {
+  font-size: $theme-main-small-font;
+}
+
+.img-help-2 {
+  float: left;
+  margin-right: 10px;
+  width: 10vw;
+  overflow: hidden;
+}
+.image-parent {
+  height: 10vh;
+  overflow: hidden;
+  display: inline;
+}
+.title-2 {
+  margin-top: 0px;
+  font-size: $theme-main-medium-font;
+}
+
+.custome-hr {
+  border: 1px solid #d2e5f5;
+}

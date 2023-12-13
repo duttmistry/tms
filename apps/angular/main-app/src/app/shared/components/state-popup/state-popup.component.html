@@ -1,0 +1,10 @@
+<div class="state-popup-wrapper">
+  <mat-list>
+    <mat-list-item *ngFor="let item of listInput" (click)="selected(item)">
+      <div class="state-container">
+        <span class="task-color" [style.background]="item.color"></span>
+        {{ item.name }}
+      </div>
+    </mat-list-item>
+  </mat-list>
+</div>

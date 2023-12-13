@@ -1,0 +1,26 @@
+<div class="administration-dashboard container-wrapper">
+  <div class="container-inner">
+    <mat-card class="container-child">
+      <div class="workspace-blk workspace-border">
+        <strong>Admin Dashboard</strong>
+      </div>
+      <div class="administration-dashboard-wrap">
+        <!-- <div class="box-item" *ngFor="let item of boxData" (click)="onClickBox(item)">
+          <div class="icon">
+            <img src="{{ item.icon }}" alt="icon" />
+            <h3 class="box-title">{{ item.title }}</h3>
+          </div>
+          <div class="content">
+            <p class="box-description">{{ item.description }}</p>
+          </div>
+        </div> -->
+        <div class="box-item">
+          <main-app-tms-workspace-projects-chart></main-app-tms-workspace-projects-chart>
+          <div style="width: 50%">
+            <main-app-tms-workspace-activity-chart></main-app-tms-workspace-activity-chart>
+          </div>
+        </div>
+      </div>
+    </mat-card>
+  </div>
+</div>

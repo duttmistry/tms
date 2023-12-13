@@ -1,0 +1,76 @@
+.table-container {
+  height: 500px;
+  // width: 1500px;
+  max-width: 100%;
+  overflow-y: auto;
+}
+
+.header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 35px;
+}
+
+.header-container span {
+  padding-top: 20px;
+}
+
+.close-button {
+  position: absolute;
+  top: 6px;
+  right: 10px;
+}
+
+.red-border {
+  border: 2px solid red;
+}
+.green-border {
+  border: 2px solid green;
+}
+
+.bg-red {
+  background-color: rgb(247, 137, 137) !important;
+}
+.bg-green {
+  background-color: rgb(136, 230, 136) !important;
+}
+
+.blue-text-position {
+  position: relative;
+  width: 300px;
+  .blue-text {
+    color: #0052cc;
+    text-decoration: underline;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 20px;
+    position: absolute;
+    right: 10px;
+    span {
+      margin-left: 10px;
+    }
+  }
+}
+
+.no-underline {
+  text-decoration: none;
+}
+
+.mdc-data-table__row:last-child .mdc-data-table__cell {
+  border-bottom: ridge;
+}
+
+table {
+  td {
+    padding: 5px 5px !important;
+  }
+}
+
+::ng-deep .user-details-container .mdc-data-table__row:last-child .mdc-data-table__cell.red-border,
+.mdc-data-table__row:last-child .mdc-data-table__cell.bg-red {
+  border-bottom: 2px solid red !important;
+}
+::ng-deep .user-details-container .mdc-data-table__row:last-child .mdc-data-table__cell.green-border {
+  border-bottom: 2px solid green !important;
+}

@@ -1,0 +1,5 @@
+export default {
+  USERNAME: 'TMSAPI',
+  PASSWORD: 'TMSAPICCC@123',
+  HRMSBASEURL: 'http://192.168.0.204:3007',
+};

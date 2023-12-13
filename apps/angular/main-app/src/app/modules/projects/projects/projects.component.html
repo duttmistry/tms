@@ -1,0 +1,261 @@
+<div class="workspace container-wrapper project" #uiElement (scroll)="onScroll()">
+  <div class="container-inner">
+    <mat-card class="container-child">
+      <div class="workspace-blk workspace-border">
+        <strong
+          >Projects
+          <p *ngIf="totalCount !== undefined">({{ totalCount ? totalCount + '' : '0' }})</p></strong
+        >
+        <span>
+          <button *ngIf="allowAdd" color="primary" routerLink="/project/add" class="next primary-button">Create Project</button>
+        </span>
+      </div>
+      <div class="filter-section">
+        <div class="search-input input-close-wrapper input-field-wrapper">
+          <mat-form-field class="medium-height-wrapper">
+            <mat-label>Search</mat-label>
+            <input
+              matInput
+              placeholder="Search"
+              [formControl]="searchProjectControl"
+              (keyup)="onSearchKeyUp($event)"
+              (keydown.enter)="searchProject($event)"
+            />
+            <img matPrefix (click)="searchProject($event)" src="assets/images/search.svg" alt="search" class="search" />
+            <!-- <mat-icon matSuffix *ngIf="searchProjectControl.value" (click)="searchProjectControl.reset(); searchProject($event)" class="filter-close"
+            >close</mat-icon
+          > -->
+          </mat-form-field>
+          <svg
+            *ngIf="searchProjectControl.value"
+            (click)="searchProjectControl.reset(); searchProject($event)"
+            width="16"
+            height="16"
+            viewBox="0 0 16 16"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            class="filter-close"
+          >
+            <path
+              d="M8.00065 1.3335C4.32732 1.3335 1.33398 4.32683 1.33398 8.00016C1.33398 11.6735 4.32732 14.6668 8.00065 14.6668C11.674 14.6668 14.6673 11.6735 14.6673 8.00016C14.6673 4.32683 11.674 1.3335 8.00065 1.3335ZM10.2407 9.5335C10.434 9.72683 10.434 10.0468 10.2407 10.2402C10.1407 10.3402 10.014 10.3868 9.88732 10.3868C9.76065 10.3868 9.63398 10.3402 9.53399 10.2402L8.00065 8.70683L6.46732 10.2402C6.36732 10.3402 6.24065 10.3868 6.11398 10.3868C5.98732 10.3868 5.86065 10.3402 5.76065 10.2402C5.56732 10.0468 5.56732 9.72683 5.76065 9.5335L7.29398 8.00016L5.76065 6.46683C5.56732 6.2735 5.56732 5.9535 5.76065 5.76016C5.95398 5.56683 6.27398 5.56683 6.46732 5.76016L8.00065 7.2935L9.53399 5.76016C9.72732 5.56683 10.0473 5.56683 10.2407 5.76016C10.434 5.9535 10.434 6.2735 10.2407 6.46683L8.70732 8.00016L10.2407 9.5335Z"
+              fill="#86969D"
+            />
+          </svg>
+        </div>
+        <div class="filter-right-wrap">
+          <mat-form-field class="small-dropdown medium-height-wrapper">
+            <mat-label *ngIf="!projectStatusControl?.value || projectStatusControl?.value?.length == 0">Project Status</mat-label>
+            <mat-label class="select-value" *ngIf="projectStatusControl?.value?.length !== 0">
+              <span class="value">{{projectStatusControl.value?.[0]?.title || ''}}</span>
+              <span *ngIf="(projectStatusControl.value?.length || 0) > 1" class="add-value">
+                +{{ (projectStatusControl.value?.length || 0) - 1 }}
+              </span>
+            </mat-label>
+            <mat-select
+              placeholder="Project Status"
+              #statusSelect
+              [formControl]="projectStatusControl"
+              multiple
+              (selectionChange)="onSelectProjectStatus($event)"
+              panelClass="custome-width"
+              [ngClass]="statusSelect.panelOpen ? 'arrow-up' : 'arrow-down'"
+            >
+              <div class="menu-container">
+                <div class="button-wrapper">
+                  <label class="count"> {{ projectStatusControl.value?.length ? projectStatusControl.value?.length : 0 }} Selected </label>
+                  <div>
+                    <span (click)="selectAllProjectStatus(); statusSelect.close()">Select All</span>
+                    <span (click)="clearAllProjectStatus(); statusSelect.close()">Clear All</span>
+                  </div>
+                </div>
+              </div>
+              <mat-select-trigger class="select-value" style="display: none">
+                <span class="value">{{projectStatusControl.value?.[0]?.title || ''}}</span>
+                <span *ngIf="(projectStatusControl.value?.length || 0) > 1" class="add-value">
+                  +{{ (projectStatusControl.value?.length || 0) - 1 }}
+                </span>
+              </mat-select-trigger>
+              <mat-option *ngFor="let status of projectStatusOptions" [value]="status">{{ status.title }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field class="small-dropdown medium-height-wrapper">
+            <mat-label *ngIf="!workspaceControl.value || workspaceControl?.value?.length == 0">Workspace</mat-label>
+            <mat-label class="select-value" *ngIf="workspaceControl?.value?.length !== 0">
+              <span class="value">{{workspaceControl.value?.[0]?.title || ''}}</span>
+              <span *ngIf="(workspaceControl.value?.length || 0) > 1" class="add-value"> +{{ (workspaceControl.value?.length || 0) - 1 }} </span>
+            </mat-label>
+            <mat-select
+              placeholder="Workspace"
+              #workspaceSelect
+              [formControl]="workspaceControl"
+              multiple
+              (selectionChange)="onSelectWorkspace($event)"
+              panelClass="custome-width"
+              [ngClass]="workspaceSelect.panelOpen ? 'arrow-up' : 'arrow-down'"
+            >
+              <div class="menu-container">
+                <div class="button-wrapper">
+                  <label class="count"> {{ workspaceControl.value?.length ? workspaceControl.value?.length : 0 }} Selected </label>
+                  <div>
+                    <span (click)="selectAllWorkspace(); workspaceSelect.close()">Select All</span>
+                    <span (click)="clearAllWorkspace(); workspaceSelect.close()">Clear All</span>
+                  </div>
+                </div>
+              </div>
+              <mat-select-trigger class="select-value" style="display: none">
+                <span class="value">{{workspaceControl.value?.[0]?.title || ''}}</span>
+                <span *ngIf="(workspaceControl.value?.length || 0) > 1" class="add-value"> +{{ (workspaceControl.value?.length || 0) - 1 }} </span>
+              </mat-select-trigger>
+              <mat-option *ngFor="let item of workspaceList" [value]="item">{{ item?.title }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field class="small-dropdown medium-height-wrapper">
+            <mat-label *ngIf="!tagsControl?.value || tagsControl?.value?.length == 0">Tags</mat-label>
+            <mat-label class="select-value" *ngIf="tagsControl?.value?.length !== 0">
+              <span class="value">{{tagsControl.value?.[0]?.title || ''}}</span>
+              <span *ngIf="(tagsControl.value?.length || 0) > 1" class="add-value"> +{{ (tagsControl.value?.length || 0) - 1 }} </span>
+            </mat-label>
+            <mat-select
+              placeholder="Tags"
+              #tagsSelect
+              [formControl]="tagsControl"
+              multiple
+              (selectionChange)="onSelectTags($event)"
+              panelClass="custome-width"
+              [ngClass]="tagsSelect.panelOpen ? 'arrow-up' : 'arrow-down'"
+            >
+              <div class="menu-container">
+                <div class="button-wrapper">
+                  <label class="count"> {{ tagsControl.value?.length ? tagsControl.value?.length : 0 }} Selected </label>
+                  <div>
+                    <span (click)="selectAllTags(); tagsSelect.close()">Select All</span>
+                    <span (click)="clearAllTags(); tagsSelect.close()">Clear All</span>
+                  </div>
+                </div>
+              </div>
+              <mat-select-trigger class="select-value" style="display: none">
+                <span class="value">{{tagsControl.value?.[0]?.title || ''}}</span>
+                <span *ngIf="(tagsControl.value?.length || 0) > 1" class="add-value"> +{{ (tagsControl.value?.length || 0) - 1 }} </span>
+              </mat-select-trigger>
+              <mat-option *ngFor="let item of tagList" [value]="item">{{ item.title }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <button (click)="projectOrderBy()" class="sort-button-section up-down-arrow">
+            <img *ngIf="orderBy === 'asc'" src="assets/images/up-arrow.png" alt="asc" />
+            <img *ngIf="orderBy === 'desc'" src="assets/images/down-arrow.png" alt="asc" />
+          </button>
+        </div>
+      </div>
+
+      <div class="workspace-wrap">
+        <div class="workspace-flex project-autoscroll" *ngIf="allProjectsData && allProjectsData.length > 0; else noRecordFound">
+          <div
+            *ngFor="let item of allProjectsData"
+            class="workspace-item"
+            [ngClass]="
+              item.projectStatus == UNDER_MAINTENANCE ? 'orange-top-border' : item.projectStatus == ON_GOING ? 'green-top-border' : 'red-top-border'
+            "
+          >
+            <mat-card>
+              <mat-card-header (click)="redirectToTask(item)" class="cursor-pointer">
+                <mat-card-title class="project-h2">
+                  {{ item.project_title.length > 20 ? item.project_title.slice(0, 19) + '...' : item.project_title }}
+                  <mat-card-subtitle>
+                    <a class="workspace-link" (click)="redirectToTask(item)">
+                      <span>({{ item?.project_complete_task_count || 0 }}/{{ item?.project_task_count || 0 }})</span></a
+                    >
+                  </mat-card-subtitle>
+                </mat-card-title>
+
+                <div class="button-wrap">
+                  <ng-container *ngIf="item.project_tags.length > 0">
+                    <!-- <ng-container *ngIf="item.project_tags[0] && item.project_tags[1]"> -->
+                    <button *ngIf="item.project_tags[0]" class="purple-l project-pill">
+                      {{ item.project_tags[0] }}
+                    </button>
+                    <button *ngIf="item.project_tags[1]" class="sky-l project-pill">
+                      {{ item.project_tags[1] }}
+                    </button>
+                    <button *ngIf="item.project_tags.length == 3" class="orange-l project-pill">
+                      {{ item.project_tags[2] }}
+                    </button>
+                    <button
+                      *ngIf="item.project_tags.length > 3"
+                      (click)="$event.stopPropagation()"
+                      class="light-gray-l project-pill"
+                      customToolTip
+                      [contentTemplate]="extraTagTooltip"
+                    >
+                      + {{ item.project_tags.length - 2 }}more
+                    </button>
+
+                    <ng-template #extraTagTooltip>
+                      <div class="ios-mat-menu">
+                        <button *ngFor="let tag of item.otherTags" class="light-gray-l project-pill">
+                          {{ tag }}
+                        </button>
+                      </div>
+                    </ng-template>
+                    <!-- </ng-container> -->
+                  </ng-container>
+                  <!-- <ng-template #projectTags>
+                  <ng-container *ngFor="let tag of item.project_tags">
+                    <ng-container *ngIf="tag">
+                      <button class="orange-l">
+                        {{ tag }}
+                      </button>
+                    </ng-container>
+                  </ng-container>
+                </ng-template> -->
+                </div>
+              </mat-card-header>
+
+              <mat-card-content>
+                <div class="card-height">
+                  <div>
+                    <mat-card-subtitle>
+                      Team <span>{{ item?.project_team_count || 0 }}</span>
+                    </mat-card-subtitle>
+                    <mat-card-subtitle (click)="filterProjectsByWorkspace(item.project_workspace_id)">
+                      Workspace
+                      <a class="workspace-link">
+                        <span>{{ item?.project_workspace || '-' }}</span>
+                      </a>
+                    </mat-card-subtitle>
+                  </div>
+
+                  <div>
+                    <img
+                      class="dots"
+                      src="assets/images/setting2.svg"
+                      *ngIf="allowSettings"
+                      matTooltip="Settings"
+                      (click)="redirectToSettings(item.id)"
+                    />
+                    <img
+                      class="dots"
+                      src="assets/images/pencil.svg"
+                      (click)="editProject(item.id)"
+                      matTooltip="Edit"
+                      *ngIf="allowEdit && (item.projectStatus == 'closed' ? userRole == 'Super Admin' : true)"
+                    />
+                  </div></div
+              ></mat-card-content>
+            </mat-card>
+          </div>
+        </div>
+        <ng-container *ngIf="showSpinner">
+          <div [mainAppSpinner]="showSpinner"></div>
+        </ng-container>
+      </div>
+
+      <ng-template #noRecordFound>
+        <div class="no-record-section" *ngIf="!showSpinner">
+          {{ searchProjectControl.value ? 'No records found.' : 'There are currently no assigned projects.' }}
+        </div>
+      </ng-template>
+    </mat-card>
+  </div>
+</div>

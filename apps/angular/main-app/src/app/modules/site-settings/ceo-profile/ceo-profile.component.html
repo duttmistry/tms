@@ -1,0 +1,28 @@
+<div class="container">
+  <p class="pr-form-top-header">CEO Member</p>
+  <p class="pr-form-desc">This person will be considered as CEO in this entire application.</p>
+  <!-- <form [formGroup]="profileForm" (ngSubmit)="onSubmit()"> -->
+  <div *ngIf="teamMembersList && teamMembersList.length && !showSpinner; else spinnerSection" class="admin-field">
+    <!-- <span class="add-h2">CEO Person</span> -->
+    <tms-workspace-ceo-select
+      (emmitSelectedTeamMates)="selectLeaveresponsiblePerson($event)"
+      (emmitDeletedTeamMates)="deleteLeaveResponsiblePerson($event)"
+      [isDisabledTeam]="false"
+      [dataId]="leaveResponsiblePersons"
+      [teamMembersList]="teamMembersList"
+      [module]="module"
+      class="site-chip"
+    ></tms-workspace-ceo-select>
+    <!-- <mat-divider></mat-divider> -->
+    <mat-error *ngIf="!(leaveResponsiblePersons?.length > 0) && !showError"> Please select a User </mat-error>
+  </div>
+</div>
+<mat-divider class="divider-bm"></mat-divider>
+<div class="button-group btn-flex">
+  <button color="primary" class="next primary-button" type="submit" (click)="onSubmit()">Save</button>
+  <button (click)="onCancel()" class="cancel secondary-button">Cancel</button>
+</div>
+
+<ng-template #spinnerSection>
+  <div [mainAppSpinner]="showSpinner"></div>
+</ng-template>

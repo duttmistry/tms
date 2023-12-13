@@ -1,0 +1,127 @@
+<div class="login-back">
+    <div class="login">
+        <div class="login-inner" style="background: url(assets/images/login-left.svg) no-repeat">
+            <div class="login-form">
+                <img src="assets/images/logo.svg" alt="homepage" class="ccc-logo" />
+
+                <form [formGroup]="loginForm" (ngSubmit)="submitLoginForm()">
+                    <mat-form-field>
+                        <mat-label>Account ID</mat-label>
+                        <span matPrefix>
+              <img src="assets/images/login-user.svg" alt="profilelogo" />
+            </span>
+                        <input matInput formControlName="accountId" maxlength="64" (blur)="trimInput()" [disabled]="isDialogOpen" />
+                        <mat-error *ngIf="_loginForm['accountId'].hasError('required') && _loginForm['accountId'].touched"> Please enter Account Id </mat-error>
+                        <mat-error *ngIf="_loginForm['accountId'].hasError('invalidInput') && _loginForm['accountId'].touched">
+                            Please enter valid Account ID or Email
+                        </mat-error>
+                    </mat-form-field>
+                    <mat-form-field>
+                        <mat-label>Password</mat-label>
+                        <span matPrefix>
+              <img src="assets/images/login-lock.svg" alt="locklogo" />
+            </span>
+                        <input [type]="hide ? 'password' : 'text'" matInput formControlName="password" maxlength="16" [disabled]="isDialogOpen" />
+                        <mat-icon mat-icon-button matSuffix (click)="togglePassword($event)">{{ hide ? 'visibility_off' : 'visibility' }}</mat-icon>
+                        <mat-error *ngIf="_loginForm['password'].errors && _loginForm['password'].touched">
+                            <ng-container *ngIf="_loginForm['password'].errors['required']">Please enter Password </ng-container>
+                        </mat-error>
+                    </mat-form-field>
+
+                    <button type="submit" color="primary" [disabled]="isDialogOpen" class="primary-button login-button">
+            <span *ngIf="!showLoginSpinner">Login</span>
+            <ng-container *ngIf="showLoginSpinner">
+              <div [mainAppSpinner]="showLoginSpinner" [border]="'4px solid white'" [border_Top]="'4px solid rgb(51 51 102)'"></div>
+            </ng-container>
+          </button>
+                    <!-- <a href="#" class="forgot-pass">Forgot Password?</a> -->
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- <button (click)="openDialogWithTemplateRef()" [disabled]="isDialogOpen">click</button> -->
+    <div class="carousel-section" style="width: 50%; height: 100%">
+        <!-- <div [mainAppSpinner]="showSpinner" class="login-spinner" *ngIf="showSpinner" ></div> -->
+        <div *ngIf="showSpinner" class="login-spinner">
+            <mat-spinner diameter="50" color="accent"></mat-spinner>
+        </div>
+        <div class="login-anniversary" *ngIf="!showSpinner && !bannerData.length; else sliderSection">
+            <h3 class="login-heading">Welcome to Cybercom Creation</h3>
+            <p class="login-desc">{{ greetingMessage }}</p>
+            <img src="assets/images/login-logo.svg" alt="locklogo" />
+        </div>
+    </div>
+</div>
+<ng-template #sliderSection style="width: 50%">
+    <owl-carousel-o [options]="customOptions" class="" style="width: 50%">
+        <ng-container *ngFor="let item of bannerData; let i = index">
+            <ng-template carouselSlide [id]="i.toString()">
+                <div class="{{ +item.isBirthday === 1 ? 'login-birthday' : 'login-anniversary' }}">
+                    <div class="login-inner-bg" [style.background-image]="+item.isBirthday === 1 ? 'url(assets/images/login-birthday.svg)' : 'url(assets/images/login-anniversary.svg)'">
+                        <img *ngIf="+item.isBirthday !== 1" src="assets/images/Congratulations.svg" alt="birthday-image" class="Congratulations" />
+                        <img *ngIf="+item.isBirthday === 1" src="assets/images/birthday-wish.svg" class="birthday-wish" />
+                        <div class="birthday-img">
+                            <div class="birthday-back" style="background: url(assets/images/profile-back.svg)"></div>
+                            <img src="{{ item.employee_image ? _base_url + item.employee_image : 'assets/images/default.png' }}" #img (error)="img.src = 'assets/images/default.png'" class="birthday-image" />
+                        </div>
+                        <h1 *ngIf="+item.isBirthday !== 1">{{ 'Happy' + calculateAnniversary(item) + '&nbsp;Work Anniversary!' }}</h1>
+                        <span>{{ item.title }}</span>
+                        <p>
+                            {{ +item.isBirthday === 1 ? birthdayMessage : anniversaryMessage }}
+                        </p>
+                        <!-- <img src="assets/images/slider.svg" alt="birthday-image" class="slider" /> -->
+                    </div>
+                </div>
+            </ng-template>
+        </ng-container>
+    </owl-carousel-o>
+</ng-template>
+
+<!-- <ng-template #dialogContent>
+  <div >
+    <h1 mat-dialog-title >Reason For Late Login</h1>
+    <div mat-dialog-content>
+      <mat-form-field>
+        <mat-label>Reason</mat-label>
+        <textarea matInput [formControl]="reason" rows="4"></textarea>
+      </mat-form-field>
+  
+      <mat-error *ngIf="isSubmited">Reason is required</mat-error>
+    </div>
+    <div mat-dialog-actions>
+    
+      <button (click)="checkForlateLogin()" color="primary" [mat-dialog-close]="null">
+        <span>Confirm</span>
+      </button>
+    </div>
+  </div>
+</ng-template> -->
+<ng-template #dialogContent>
+    <div class="large-dialog-container">
+        <!-- <h1 mat-dialog-title>Reason For Late Login</h1>
+    <div style="padding:0px 20px">
+
+        <textarea matInput [formControl]="reason" rows="6" class="textarea-reason"></textarea>
+      <mat-error *ngIf="isSubmitted">Reason is required</mat-error>
+    </div>
+    <div mat-dialog-actions>
+      <button (click)="checkForLateLogin()" color="primary" [mat-dialog-close]="isDialogOpen" class="button-reason next" color="primary">
+        <span>Confirm</span>
+      </button>
+    </div> -->
+        <h1>Reason For Late Login</h1>
+        <div class="login-dialog-wrapper">
+            <textarea rows="6" [formControl]="reason" class="reason-text-area" matInput [ngClass]="{ 'is-invalid': isSubmitted && reason.errors }" (blur)="trimInput()"></textarea>
+            <div *ngIf="!isSubmitted && reason.errors" class="invalid-feedback">
+                <div *ngIf="reason.errors['required'] && reason.touched" class="error">Reason is required</div>
+                <div *ngIf="reason.errors['notOnlyWhitespace'] && reason.touched" class="error">Extra white space is not allowed</div>
+                <div *ngIf="!reason.errors['notOnlyWhitespace'] && reason.errors['minlength'] && reason.touched" class="error">
+                    Reason must be at least 5 characters
+                </div>
+            </div>
+        </div>
+        <button color="primary" type="submit" class="next reason-confirm-button pointer cursor-pointer" (click)="confirmLateLogin()">
+      <span>Confirm</span>
+    </button>
+    </div>
+</ng-template>

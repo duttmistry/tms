@@ -1,0 +1,184 @@
+@import 'apps/angular/main-app/src/variables';
+@import 'apps/angular/main-app/src/mixins';
+@import 'apps/angular/main-app/src/assets/fonts/fonts';
+.report-table {
+  margin-top: 20px;
+  .report-table-wrap {
+    @include flex;
+    @include flex-align-center;
+    @include flex-justify-space-between;
+    margin-bottom: 20px;
+  }
+  .mat-mdc-form-field {
+    margin-bottom: 0;
+  }
+  .report-field {
+    @include flex;
+    gap: 15px;
+  }
+   ::ng-deep .mat-mdc-table .mdc-data-table__row {
+    height: 46px;
+  }
+  .table-align {
+    width: 50px;
+  }
+  .blue-text-position {
+    position: relative;
+    width: 300px;
+    .blue-text {
+      color: #0052cc;
+      text-decoration: underline;
+      font-size: $theme-main-small-font;
+      font-weight: 400;
+      line-height: 15px;
+      position: absolute;
+      right: 16px;
+      span {
+        margin-left: 10px;
+      }
+    }
+  }
+  .report-running {
+    position: relative;
+    width: 110px;
+    .report-running-img {
+      position: absolute;
+      right: 10px;
+    }
+  }
+  .red-running {
+    background-color: #ffeeee;
+  }
+}
+
+.report-input {
+  width: 93%;
+  border: 1px solid $theme-border-color-gray;
+  padding: 10px;
+  color: $theme-main-color-light;
+  font-size: $theme-main-small-font;
+  line-height: 17px;
+  outline: none;
+  @include flex;
+  @include flex-justify-center;
+  margin: 0 auto 10px;
+  border-radius: 5px;
+  font-family: $theme-main-font-family;
+}
+
+@media screen and (max-width: $extra-extra-large-device) {
+  .table-responsive {
+    table {
+      width: 1800px;
+    }
+  }
+}
+
+.red-border {
+  border: 2px solid red;
+}
+
+.green-border {
+  border: 2px solid green;
+}
+
+.bg-orange {
+  background-color: rgb(240, 196, 115);
+}
+
+.bg-yellow {
+  background-color: rgb(238, 238, 112);
+}
+
+.bg-red {
+  background-color: rgb(247, 137, 137);
+  border: 2px solid red;
+}
+
+.bg-project-name {
+  background-color: #f9f9f9;
+}
+
+.no-underline {
+  text-decoration: none;
+}
+
+.mat-column-taskname {
+  .no-underline {
+    width: 100%;
+    display: block;
+  }
+}
+
+table {
+  td {
+    padding: 5px 5px !important;
+  }
+}
+
+.report-table {
+  .blue-text-position.mat-column-taskname a.no-underline {
+    display: flex;
+    width: 100%;
+    position: relative;
+    align-items: flex-end;
+    .blue-text {
+      right: 1px;
+      bottom: 2px;
+    }
+  }
+}
+
+.mdc-data-table__row:last-child .mdc-data-table__cell.bg-red {
+  border-bottom: 2px solid red !important;
+}
+
+::ng-deep .report-table .mdc-data-table__row.border-indication .mdc-data-table__cell.green-border {
+  border-bottom: 2px solid green !important;
+}
+
+::ng-deep .report-table .mdc-data-table__row.border-indication+.mdc-data-table__row.border-indication .mdc-data-table__cell.green-border {
+  border-top: 0 !important;
+}
+
+::ng-deep .report-table .mdc-data-table__row.border-indication .mdc-data-table__cell.red-border {
+  border-bottom: 2px solid red !important;
+}
+
+::ng-deep .report-table .mdc-data-table__row.border-indication+.mdc-data-table__row.border-indication .mdc-data-table__cell.red-border {
+  border-top: 0 !important;
+}
+
+.wfh-details {
+  font-size: 12px;
+  display: inline;
+}
+
+.remove-wfh-filter {
+  font-size: 14px;
+  height: 14px;
+  width: 12px;
+  display: inline-block;
+  cursor: pointer;
+  color: #000;
+  vertical-align: middle;
+}
+
+.header-with-wfh-details {
+  display: block;
+}
+
+.wfh-icon {
+  font-size: 24px;
+  height: 20px;
+  width: 20px;
+  color: orange;
+}
+
+.wfm-image {
+  text-align: center !important;
+}
+
+.display-hide {
+  display: none;
+}
